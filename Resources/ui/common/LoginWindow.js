@@ -1,11 +1,12 @@
 var LoginWindow = function() {
-	var acs = require('lib/acs');
-	var action = 'login'; //action switcher between create/login
+	//var acs = require('lib/acs');
+	//var action = 'login'; //action switcher between create/login
 	
 	var lWin = Ti.UI.createWindow({
 		backgroundColor: '#333'
 	});
 	
+/*	
 	var lwDialog = Ti.UI.createView({
 		top:20,
 		width:'300dp',
@@ -165,6 +166,7 @@ var LoginWindow = function() {
 	});
 	
 	lWin.add(lwDialog);
+*/
 	return lWin;
 	
 };

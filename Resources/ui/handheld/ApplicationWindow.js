@@ -1,16 +1,16 @@
 
 function ApplicationWindow(_isCaptured) {
-	//var AddWindow = require('ui/common/AddWindow');
+	var LoginWindow = require('ui/common/LoginWindow');
 	
 	var self = Titanium.UI.createWindow({
 		backgroundColor: 'transparent',
 		backgroundImage: '/images/grain.png',
-		title: (_isCaptured)? L('captured'): L('fugitives'),
+		title: (_isCaptured)? 'captured': 'fugitives',
 		barColor: "#6d0a0c",
 		activity : {
 			onCreateOptionsMenu : function(e) {
 				var menu = e.menu;
-				var m1 = menu.add({ title : L('add') });
+				var m1 = menu.add({ title : 'add' });
 				m1.addEventListener('click', function(e) {
 				//open in tab group to get free title bar (android)
 					alert("open Add window in the tab");
@@ -25,8 +25,11 @@ function ApplicationWindow(_isCaptured) {
 	
 	bountyTable.addEventListener('click', function(_e) {
 		alert("show detail window");
-		//var DetailWindow = require('ui/common/DetailWindow');
-		//self.containingTab.open(new DetailWindow(_e.rowData, self.containingTab));
+		var LoginWin = require('ui/common/LoginWindow');
+		var loginwindow = new LoginWin();
+		self.containingTab.open(loginwindow);
+		
+		//self.containingTab.open(new LoginWindow);
 	});
 	
 	self.add(bountyTable);

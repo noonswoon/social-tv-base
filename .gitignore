@@ -1,3 +1,5 @@
 tmp
 .DS_Store
 Resources/.DS_Store
+build.log
+.fastdev.lock

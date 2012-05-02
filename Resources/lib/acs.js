@@ -7,9 +7,9 @@ var loggedIn = false;
 
 var Cloud = require('ti.cloud');
 // make sure you added your ACS keys to the tiapp.xml file!
-Cloud.apiKey = 'CHATTERBOX_APIKEY';
-Cloud.consumerKey = 'CHATTEBOX_KEY';
-Cloud.consumerSecret = 'CHATTERBOX_SECRET';
+Cloud.apiKey = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
+Cloud.consumerKey = 'K25ozMNbVQ0wH2xpQ5YR8YEWomFO5M61';
+Cloud.consumerSecret = '6HjCZezCRZcQQZrOlEDApl3G4FEBGvn7';
 
 
 exports.isLoggedIn = function() {
@@ -56,7 +56,7 @@ exports.logout = function() {
 	});
 };
 
-exports.createUser = function(username, password, callback) {
+exports.createUser = function(email,username, password,macAddress, callback) {
 /*
  * Write a function that will use the ACS Users API to create a user with the given name & password
  *   - on success, set currentUser equal to the user object returned by ACS and set
@@ -64,22 +64,47 @@ exports.createUser = function(username, password, callback) {
  *   - on failure, log a message to the console, set loggedIn to false, current user to null
  *   - and call the callback function, passing false
  */
-	Cloud.Users.create({
-		username:username,
-		password: password,
-		password_confirmation:password
-	}, function(e) {
-		if(e.success) {
-			Ti.API.info('user = '+JSON.stringify(e.users[0]));
-			currentUser = e.users[0];
-			loggedIn = true;
-			callback(currentUser);
-		} else {
-			Ti.API.info('Error'+JSON.stringify(e));
-			loggedIn = false;
-			currentUser = null;
-			callback(false);
-		}
+	Cloud.Objects.query({
+	    classname: 'BannedDevices',
+	    page: 1,
+	    per_page: 10,
+	    where: {
+	        mac_address: macAddress
+	    }
+	}, function (e) {
+	    if (e.success) {
+	    	Ti.API.info('user = '+JSON.stringify(e));
+	        if(e.BannedDevices.length > 0) {
+	        	alert("Sorry, your device has been banned.");
+	        } else {
+	    		Cloud.Users.create({
+					email:email,
+					username:username,
+					password: password,
+					password_confirmation:password,
+					custom_fields: {
+							        "mac_address": macAddress
+									}
+				}, function(e) {
+						if(e.success) {
+							Ti.API.info('user = '+JSON.stringify(e.users[0]));
+							currentUser = e.users[0];
+							loggedIn = true;
+							callback(currentUser);
+						} else {
+							Ti.API.info('Error'+JSON.stringify(e));
+							alert(e.message);
+							loggedIn = false;
+							currentUser = null;
+							callback(false);
+						}
+					}
+				);
+			}    	
+	    } else {
+	        alert('Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
 	});
 };
 

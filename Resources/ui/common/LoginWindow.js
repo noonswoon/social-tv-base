@@ -1,12 +1,12 @@
 var LoginWindow = function() {
-	//var acs = require('lib/acs');
-	//var action = 'login'; //action switcher between create/login
+	var acs = require('lib/acs');
+	var action = 'createuser'; //action switcher between create/login
 	
 	var lWin = Ti.UI.createWindow({
 		backgroundColor: '#333'
 	});
 	
-/*	
+
 	var lwDialog = Ti.UI.createView({
 		top:20,
 		width:'300dp',
@@ -31,7 +31,27 @@ var LoginWindow = function() {
 		color:'#ddd'
 	});
 	lwDialog.add(title);
-	
+
+	var email = Ti.UI.createTextField({
+		hintText:'Email',
+		autocorrect:false,
+		autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE,
+		top:5,
+		width:'90%',
+		height:40,
+		font: {
+			fontWeight: 'normal',
+			fontSize: '17'
+		},
+		textAlign: 'center',
+		color:'#333',
+		backgroundColor: '#ddd',
+		borderRadius:3,
+		paddingLeft:2, 
+		paddingRight:2
+	});
+	lwDialog.add(email);
+
 	var username = Ti.UI.createTextField({
 		hintText:'Username',
 		autocorrect:false,
@@ -91,7 +111,7 @@ var LoginWindow = function() {
 		borderRadius:3,
 		paddingLeft:2, 
 		paddingRight:2,
-		visible: false
+		visible: true
 	});
 	lwDialog.add(confirm);
 	
@@ -106,7 +126,6 @@ var LoginWindow = function() {
 		if(acs.isLoggedIn()===true) {
 			lWin.close();
 		} else {
-			alert('Something is wrong..cannot login');
 			loginButton.title = 'Login';
 			loginButton.enabled = true;
 		}
@@ -119,7 +138,9 @@ var LoginWindow = function() {
 		if(action==='login') {
 			acs.login(username.value,password.value,cb);
 		} else {
-			acs.createUser(username.value,password.value,cb);
+			if(password.value === confirm.value)
+				acs.createUser(email.value,username.value,password.value,Ti.Platform.macaddress,cb);
+			else alert("Passwords do not match. Try again.");
 		}
 	});
 	lwDialog.add(loginButton);
@@ -164,9 +185,9 @@ var LoginWindow = function() {
 			} catch(err) { }
 		}
 	});
-	
+
 	lWin.add(lwDialog);
-*/
+
 	return lWin;
 	
 };

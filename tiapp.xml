@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
+    <property name="acs-oauth-secret-development" type="string">6HjCZezCRZcQQZrOlEDApl3G4FEBGvn7</property>
+    <property name="acs-oauth-key-development" type="string">K25ozMNbVQ0wH2xpQ5YR8YEWomFO5M61</property>
+    <property name="acs-api-key-development" type="string">8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr</property>
+    <property name="acs-oauth-secret-production" type="string">nhpKlnrmp9nW6blY57LYnvM6mVHvSaQG</property>
+    <property name="acs-oauth-key-production" type="string">AKs6IoQoz7aq7j0X87007HeFoh83XrGu</property>
+    <property name="acs-api-key-production" type="string">5va2XsGjknLebugvozPZfZr9xhSVEZl1</property>
     <deployment-targets>
         <target device="mobileweb">false</target>
         <target device="iphone">true</target>
@@ -45,5 +51,7 @@
         </splash>
         <theme>default</theme>
     </mobileweb>
-    <modules/>
+    <modules>
+        <module platform="commonjs" version="2.0.1">ti.cloud</module>
+    </modules>
 </ti:app>

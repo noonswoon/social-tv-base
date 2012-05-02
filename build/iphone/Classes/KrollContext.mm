@@ -798,7 +798,7 @@ static TiValueRef StringFormatDecimalCallback (TiContextRef jsContext, TiObjectR
 {
 	if (stopped!=YES)
 	{
-		@throw [NSException exceptionWithName:@"org.chatterbox_alpha.kroll" 
+		@throw [NSException exceptionWithName:@"org.chatterbox.kroll" 
 									   reason:@"already started"
 									 userInfo:nil];
 	}

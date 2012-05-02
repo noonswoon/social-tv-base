@@ -14,7 +14,7 @@
 #import "TiViewController.h"
 
 /**
- chatterbox_alpha orientation flags.
+ chatterbox orientation flags.
  */
 typedef enum
 {

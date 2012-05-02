@@ -12,7 +12,7 @@
 @class TiHost;
 
 /**
- The base class for all chatterbox_alpha modules
+ The base class for all chatterbox modules
  */
 @interface TiModule : TiProxy 
 {
@@ -49,24 +49,24 @@
 // lifecycle
 
 /**
- chatterbox_alpha Platform calls this method on startup.
+ chatterbox Platform calls this method on startup.
  */
 -(void)startup;
 
 /**
- chatterbox_alpha Platform calls this method on shutdown.
+ chatterbox Platform calls this method on shutdown.
  @param sender The sender of the event.
  */
 -(void)shutdown:(id)sender;
 
 /**
- chatterbox_alpha Platform calls this method on suspend.
+ chatterbox Platform calls this method on suspend.
  @param sender The sender of the event.
  */
 -(void)suspend:(id)sender;
 
 /**
- chatterbox_alpha Platform calls this method on resume.
+ chatterbox Platform calls this method on resume.
  @param sender The sender of the event.
  */
 -(void)resume:(id)sender;

@@ -16,7 +16,7 @@
  */
 @protocol TiKeyboardFocusableView
 
-#pragma mark Public chatterbox_alpha APIs.
+#pragma mark Public chatterbox APIs.
 
 /**
  Tells the view to focus.

@@ -19,9 +19,9 @@
 
 #ifdef KROLL_COVERAGE
 # import "KrollCoverage.h"
-@interface chatterbox_alphaObject : KrollCoverageObject {
+@interface chatterboxObject : KrollCoverageObject {
 #else
-@interface chatterbox_alphaObject : KrollObject {
+@interface chatterboxObject : KrollObject {
 #endif
 @private
 	NSMutableDictionary *modules;
@@ -35,7 +35,7 @@
 -(TiModule*)moduleNamed:(NSString*)name context:(id<TiEvaluator>)context;
 @end
 
-extern NSString * chatterbox_alpha$ModuleRequireFormat;
+extern NSString * chatterbox$ModuleRequireFormat;
 
 @interface KrollBridge : Bridge<TiEvaluator,KrollDelegate> {
 @private
@@ -44,7 +44,7 @@ extern NSString * chatterbox_alpha$ModuleRequireFormat;
 	KrollContext *context;
 	NSDictionary *preload;
 	NSMutableDictionary *modules;
-	chatterbox_alphaObject *_chatterbox_alpha;
+	chatterboxObject *_chatterbox;
 	BOOL shutdown;
     BOOL evaluationError;
 	//NOTE: Do NOT treat registeredProxies like a mutableDictionary; mutable dictionaries copy keys,

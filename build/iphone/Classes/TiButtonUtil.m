@@ -16,23 +16,23 @@
 {
 	switch (type)
 	{
-		case UIchatterbox_alphaNativeItemInfoLight:
+		case UIchatterboxNativeItemInfoLight:
 		{
 			return [UIButton buttonWithType:UIButtonTypeInfoLight];
 		}
-		case UIchatterbox_alphaNativeItemInfoDark:
+		case UIchatterboxNativeItemInfoDark:
 		{
 			return [UIButton buttonWithType:UIButtonTypeInfoDark];
 		}
-		case UIchatterbox_alphaNativeItemDisclosure:
+		case UIchatterboxNativeItemDisclosure:
 		{
 			return [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
 		}
-		case UIchatterbox_alphaNativeItemContactAdd:
+		case UIchatterboxNativeItemContactAdd:
 		{
 			return [UIButton buttonWithType:UIButtonTypeContactAdd];
 		}
-		case UIchatterbox_alphaNativeItemSpinner:
+		case UIchatterboxNativeItemSpinner:
 		{
 			UIActivityIndicatorView *button = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite] autorelease];
 			[button startAnimating];

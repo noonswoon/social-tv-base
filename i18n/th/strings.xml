@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+	<string name="fugitives">นักโทษ</string>
+	<string name="captured">จับได้แล้ว</string>
+	<string name="at_large">ยังลอยนวล</string>
+	<string name="busted">จับแล้ว</string>
+	<string name="capture">Capture</string>
+	<string name="delete">Delete</string>	
+	<string name="new_fugitive">New Fugitive</string>
+	<string name="add">Add</string>
+</resources>

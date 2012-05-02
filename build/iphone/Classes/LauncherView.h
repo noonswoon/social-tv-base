@@ -9,9 +9,9 @@
 
 
 // A good bit of this code was derived from the Three20 project
-// and was customized to work inside chatterbox_alpha
+// and was customized to work inside chatterbox
 //
-// All modifications by chatterbox_alpha are licensed under 
+// All modifications by chatterbox are licensed under 
 // the Apache License, Version 2.0
 //
 //

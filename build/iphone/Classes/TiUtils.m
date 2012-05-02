@@ -1,6 +1,6 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2009-2012 by chatterbox_alpha, Inc. All Rights Reserved.
+ * Copyright (c) 2009-2012 by chatterbox, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  * 
@@ -33,7 +33,7 @@ extern NSString * const TI_APPLICATION_RESOURCE_DIR;
 static NSDictionary* encodingMap = nil;
 static NSDictionary* typeMap = nil;
 static NSDictionary* sizeMap = nil;
-static NSString* kAppUUIDString = @"com.chatterbox_alpha.uuid"; // don't obfuscate
+static NSString* kAppUUIDString = @"com.chatterbox.uuid"; // don't obfuscate
 
 
 @implementation TiUtils

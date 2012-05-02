@@ -706,7 +706,7 @@ DEFINE_EXCEPTIONS
 		{
 			NSMutableDictionary *errorDetail = [NSMutableDictionary dictionary];
 			[errorDetail setValue:@"Response returned nil" forKey:NSLocalizedDescriptionKey];
-			NSError *error = [NSError errorWithDomain:@"com.chatterbox_alpha._chatterbox_alpha.imageloader" code:1 userInfo:errorDetail];
+			NSError *error = [NSError errorWithDomain:@"com.chatterbox._chatterbox.imageloader" code:1 userInfo:errorDetail];
 			[[req delegate] imageLoadFailed:req error:error];
 			[request setUserInfo:nil];
 			[request release];
@@ -766,7 +766,7 @@ DEFINE_EXCEPTIONS
                  
 			NSMutableDictionary* errorDetail = [NSMutableDictionary dictionary];
 			[errorDetail setValue:@"Returned invalid image data" forKey:NSLocalizedDescriptionKey];
-			NSError* error = [NSError errorWithDomain:@"com.chatterbox_alpha._chatterbox_alpha.imageloader" code:1 userInfo:errorDetail];
+			NSError* error = [NSError errorWithDomain:@"com.chatterbox._chatterbox.imageloader" code:1 userInfo:errorDetail];
 			[[req delegate] imageLoadFailed:req error:error];
 			[request setUserInfo:nil];
 			[request release];

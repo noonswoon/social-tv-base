@@ -42,7 +42,7 @@ void ModifyScrollViewForKeyboardHeightAndContentHeightWithResponderRect(UIScroll
 @class TiViewProxy;
 
 /**
- Base class for all chatterbox_alpha views.
+ Base class for all chatterbox views.
  @see TiViewProxy
  */
 @interface TiUIView : UIView<TiProxyDelegate,LayoutAutosizing> 

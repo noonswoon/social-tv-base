@@ -206,13 +206,13 @@
         NSLog(@"[WARN] Invalid mode for audio recorder... setting to default.");
         newMode = kAudioSessionCategory_RecordAudio;
     }
-	NSLog(@"[WARN] 'chatterbox_alpha.Media.AudioRecorder.audioSessionMode' is deprecated; use 'chatterbox_alpha.Media.audioSessionMode'");
+	NSLog(@"[WARN] 'chatterbox.Media.AudioRecorder.audioSessionMode' is deprecated; use 'chatterbox.Media.audioSessionMode'");
 	[[TiMediaAudioSession sharedSession] setSessionMode:newMode];
 }
 
 -(NSNumber*)audioSessionMode
 {
-	NSLog(@"[WARN] 'chatterbox_alpha.Media.AudioRecorder.audioSessionMode' is deprecated; use 'chatterbox_alpha.Media.audioSessionMode'");	
+	NSLog(@"[WARN] 'chatterbox.Media.AudioRecorder.audioSessionMode' is deprecated; use 'chatterbox.Media.audioSessionMode'");	
     return [NSNumber numberWithUnsignedInt:[[TiMediaAudioSession sharedSession] sessionMode]];
 }
 

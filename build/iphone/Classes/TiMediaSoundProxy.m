@@ -295,13 +295,13 @@
         NSLog(@"[WARN] Invalid mode for audio player... setting to default.");
         newMode = kAudioSessionCategory_SoloAmbientSound;
     }
-	NSLog(@"[WARN] 'chatterbox_alpha.Media.Sound.audioSessionMode' is deprecated; use 'chatterbox_alpha.Media.audioSessionMode'");
+	NSLog(@"[WARN] 'chatterbox.Media.Sound.audioSessionMode' is deprecated; use 'chatterbox.Media.audioSessionMode'");
 	[[TiMediaAudioSession sharedSession] setSessionMode:newMode];
 }
 
 -(NSNumber*)audioSessionMode
 {
-	NSLog(@"[WARN] 'chatterbox_alpha.Media.Sound.audioSessionMode' is deprecated; use 'chatterbox_alpha.Media.audioSessionMode'");
+	NSLog(@"[WARN] 'chatterbox.Media.Sound.audioSessionMode' is deprecated; use 'chatterbox.Media.audioSessionMode'");
     return [NSNumber numberWithUnsignedInteger:[[TiMediaAudioSession sharedSession] sessionMode]];
 }
 

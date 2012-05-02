@@ -63,10 +63,10 @@
 {
 	switch(styleCache)
 	{
-		case UIchatterbox_alphaNativeItemInfoLight:
-		case UIchatterbox_alphaNativeItemInfoDark:
+		case UIchatterboxNativeItemInfoLight:
+		case UIchatterboxNativeItemInfoDark:
 			return 18;
-		case UIchatterbox_alphaNativeItemDisclosure:
+		case UIchatterboxNativeItemDisclosure:
 			return 29;
 		default: {
 			break;
@@ -79,10 +79,10 @@
 {
 	switch(styleCache)
 	{
-		case UIchatterbox_alphaNativeItemInfoLight:
-		case UIchatterbox_alphaNativeItemInfoDark:
+		case UIchatterboxNativeItemInfoLight:
+		case UIchatterboxNativeItemInfoDark:
 			return 19;
-		case UIchatterbox_alphaNativeItemDisclosure:
+		case UIchatterboxNativeItemDisclosure:
 			return 31;
 		default: {
 			break;
@@ -96,9 +96,9 @@
 {
 	switch (styleCache)
 	{
-		case UIchatterbox_alphaNativeItemInfoLight:
-		case UIchatterbox_alphaNativeItemInfoDark:
-		case UIchatterbox_alphaNativeItemDisclosure:
+		case UIchatterboxNativeItemInfoLight:
+		case UIchatterboxNativeItemInfoDark:
+		case UIchatterboxNativeItemDisclosure:
 			return suggestedResizing & ~(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
 		default: {
 			break;

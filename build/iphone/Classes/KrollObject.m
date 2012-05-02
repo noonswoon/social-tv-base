@@ -1,6 +1,6 @@
 /**
  * Appcelerator Titanium Mobile
- * Copyright (c) 2009-2011 by chatterbox_alpha, Inc. All Rights Reserved.
+ * Copyright (c) 2009-2011 by chatterbox, Inc. All Rights Reserved.
  * Licensed under the terms of the Apache Public License
  * Please see the LICENSE included with this distribution for details.
  * 
@@ -511,10 +511,10 @@ bool KrollSetProperty(TiContextRef jsContext, TiObjectRef object, TiStringRef pr
 
 // forward declare these
 
-//@interface chatterbox_alphaObject : NSObject
+//@interface chatterboxObject : NSObject
 //@end
 
-@interface chatterbox_alphaObject (Private)
+@interface chatterboxObject (Private)
 -(NSDictionary*)modules;
 @end
 
@@ -532,9 +532,9 @@ void KrollPropertyNames(TiContextRef ctx, TiObjectRef object, TiPropertyNameAccu
 	{
 		id target = [o target];
 		
-		if ([o isKindOfClass:[chatterbox_alphaObject class]])
+		if ([o isKindOfClass:[chatterboxObject class]])
 		{
-			for (NSString *key in [[(chatterbox_alphaObject*)o modules] allKeys])
+			for (NSString *key in [[(chatterboxObject*)o modules] allKeys])
 			{
 				TiStringRef value = TiStringCreateWithUTF8CString([key UTF8String]);
 				TiPropertyNameAccumulatorAddName(propertyNames,value);

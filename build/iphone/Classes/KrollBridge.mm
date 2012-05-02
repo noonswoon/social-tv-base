@@ -25,13 +25,13 @@
 
 extern BOOL const TI_APPLICATION_ANALYTICS;
 
-NSString * chatterbox_alpha$ModuleRequireFormat = @"(function(exports){"
+NSString * chatterbox$ModuleRequireFormat = @"(function(exports){"
 		"var __OXP=exports;var module={'exports':exports};%@;\n"
 		"if(module.exports !== __OXP){return module.exports;}"
 		"return exports;})({})";
 
 
-@implementation chatterbox_alphaObject
+@implementation chatterboxObject
 
 -(NSDictionary*)modules
 {
@@ -318,7 +318,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 	[self removeProxies];
 	RELEASE_TO_NIL(preload);
 	RELEASE_TO_NIL(context);
-	RELEASE_TO_NIL(_chatterbox_alpha);
+	RELEASE_TO_NIL(_chatterbox);
 	OSSpinLockLock(&krollBridgeRegistryLock);
 	CFSetRemoveValue(krollBridgeRegistry, self);
 	OSSpinLockUnlock(&krollBridgeRegistryLock);
@@ -539,7 +539,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 -(void)gc
 {
 	[context gc];
-	[_chatterbox_alpha gc];
+	[_chatterbox gc];
 }
 
 #pragma mark Delegate
@@ -551,17 +551,17 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 
 -(void)didStartNewContext:(KrollContext*)kroll
 {
-	// create chatterbox_alpha global object
+	// create chatterbox global object
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     
 	NSString *basePath = (url==nil) ? [TiHost resourcePath] : [[[url path] stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"."];
-	_chatterbox_alpha = [[chatterbox_alphaObject alloc] initWithContext:kroll host:host context:self baseURL:[NSURL fileURLWithPath:basePath]];
+	_chatterbox = [[chatterboxObject alloc] initWithContext:kroll host:host context:self baseURL:[NSURL fileURLWithPath:basePath]];
 	
 	TiContextRef jsContext = [kroll context];
-	TiValueRef tiRef = [KrollObject toValue:kroll value:_chatterbox_alpha];
+	TiValueRef tiRef = [KrollObject toValue:kroll value:_chatterbox];
 	
-	NSString *_chatterbox_alphaNS = [NSString stringWithFormat:@"T%sanium","it"];
-	TiStringRef prop = TiStringCreateWithCFString((CFStringRef) _chatterbox_alphaNS);
+	NSString *_chatterboxNS = [NSString stringWithFormat:@"T%sanium","it"];
+	TiStringRef prop = TiStringCreateWithCFString((CFStringRef) _chatterboxNS);
 	TiStringRef prop2 = TiStringCreateWithCFString((CFStringRef) [NSString stringWithFormat:@"%si","T"]);
 	TiObjectRef globalRef = TiContextGetGlobalObject(jsContext);
 	TiObjectSetProperty(jsContext, globalRef, prop, tiRef, NULL, NULL);
@@ -574,7 +574,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 	{
 		for (NSString *name in preload)
 		{
-			KrollObject *ti = (KrollObject*)[_chatterbox_alpha valueForKey:name];
+			KrollObject *ti = (KrollObject*)[_chatterbox valueForKey:name];
 			NSDictionary *values = [preload valueForKey:name];
 			for (id key in values)
 			{
@@ -610,7 +610,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 		NSNotification *notification = [NSNotification notificationWithName:kTiContextShutdownNotification object:self];
 		[[NSNotificationCenter defaultCenter] postNotification:notification];
 	}
-	[_chatterbox_alpha gc];
+	[_chatterbox gc];
 	
 	if (shutdownCondition)
 	{
@@ -625,7 +625,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 {
 	TiThreadPerformOnMainThread(^{[self unregisterForMemoryWarning];}, NO);
 	[self removeProxies];
-	RELEASE_TO_NIL(_chatterbox_alpha);
+	RELEASE_TO_NIL(_chatterbox);
 	RELEASE_TO_NIL(context);
 	RELEASE_TO_NIL(preload);
 	[self autorelease]; // Safe to release now that the context is done
@@ -713,7 +713,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 
 -(id)loadCommonJSModule:(NSString*)code withPath:(NSString*)path
 {
-	NSString *js = [[NSString alloc] initWithFormat:chatterbox_alpha$ModuleRequireFormat,code];
+	NSString *js = [[NSString alloc] initWithFormat:chatterbox$ModuleRequireFormat,code];
 
 	/* This most likely should be integrated with normal code flow, but to
 	 * minimize impact until a in-depth reconsideration of KrollContext can be
@@ -832,7 +832,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
         }
         
 		if (![module respondsToSelector:@selector(replaceValue:forKey:notification:)]) {
-			@throw [NSException exceptionWithName:@"org.chatterbox_alpha.kroll" reason:[NSString stringWithFormat:@"Module \"%@\" failed to leave a valid exports object",path] userInfo:nil];
+			@throw [NSException exceptionWithName:@"org.chatterbox.kroll" reason:[NSString stringWithFormat:@"Module \"%@\" failed to leave a valid exports object",path] userInfo:nil];
 		}
 		
 		// register it
@@ -852,7 +852,7 @@ CFMutableSetRef	krollBridgeRegistry = nil;
 		return module;
 	}
 	
-	@throw [NSException exceptionWithName:@"org.chatterbox_alpha.kroll" reason:[NSString stringWithFormat:@"Couldn't find module: %@",path] userInfo:nil];
+	@throw [NSException exceptionWithName:@"org.chatterbox.kroll" reason:[NSString stringWithFormat:@"Couldn't find module: %@",path] userInfo:nil];
 }
 
 + (NSArray *)krollBridgesUsingProxy:(id)proxy

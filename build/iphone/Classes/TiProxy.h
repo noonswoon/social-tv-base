@@ -28,7 +28,7 @@ extern NSString * const TiExceptionInternalInconsistency;
 //Should be rare, but also useful if arguments are used improperly.
 extern NSString * const TiExceptionInternalInconsistency;
 
-//Rare exceptions to indicate a bug in the _chatterbox_alpha code (Eg, function that a subclass should have implemented)
+//Rare exceptions to indicate a bug in the _chatterbox code (Eg, function that a subclass should have implemented)
 extern NSString * const TiExceptionUnimplementedFunction;
 
 @class TiHost;
@@ -94,7 +94,7 @@ void DoProxyDelegateReadValuesWithKeysFromProxy(UIView<TiProxyDelegate> * target
 
 
 /**
- The base class for chatterbox_alpha proxies.
+ The base class for chatterbox proxies.
  */
 @interface TiProxy : NSObject<KrollTargetable> {
 @private

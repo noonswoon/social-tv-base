@@ -44,7 +44,7 @@ extern "C" {
 	#define KMETHOD_DEBUG MEMORY_DEBUG
 #endif
 
-// in simulator we redefine to format for chatterbox_alpha Developer console
+// in simulator we redefine to format for chatterbox Developer console
 
 
 #define TI_INLINE static __inline__
@@ -280,14 +280,14 @@ void TiExceptionThrowWithNameAndReason(NSString * exceptionName, NSString * mess
 #define DEFINE_EXCEPTIONS \
 - (void) throwException:(NSString *) reason subreason:(NSString*)subreason location:(NSString *)location\
 {\
-	NSString * exceptionName = [@"org.chatterbox_alpha." stringByAppendingString:NSStringFromClass([self class])];\
+	NSString * exceptionName = [@"org.chatterbox." stringByAppendingString:NSStringFromClass([self class])];\
 	NSString * message = [NSString stringWithFormat:@"%@. %@ %@",reason,(subreason!=nil?subreason:@""),(location!=nil?location:@"")];\
 	TiExceptionThrowWithNameAndReason(exceptionName,message);\
 }\
 \
 + (void) throwException:(NSString *) reason subreason:(NSString*)subreason location:(NSString *)location\
 {\
-	NSString * exceptionName = @"org.chatterbox_alpha";\
+	NSString * exceptionName = @"org.chatterbox";\
 	NSString * message = [NSString stringWithFormat:@"%@. %@ %@",reason,(subreason!=nil?subreason:@""),(location!=nil?location:@"")];\
 	TiExceptionThrowWithNameAndReason(exceptionName,message);\
 }\
@@ -388,28 +388,28 @@ NSLog(@"[WARN] Ti%@.%@ DEPRECATED in %@, in favor of %@.",@"tanium",api,in,newap
 
  //MUST BE NEGATIVE, as it inhabits the same space as UIBarButtonSystemItem
 enum {
-	UIchatterbox_alphaNativeItemNone = -1, 
-	UIchatterbox_alphaNativeItemSpinner = -2,
-	UIchatterbox_alphaNativeItemProgressBar = -3,
+	UIchatterboxNativeItemNone = -1, 
+	UIchatterboxNativeItemSpinner = -2,
+	UIchatterboxNativeItemProgressBar = -3,
 	
-	UIchatterbox_alphaNativeItemSlider = -4,
-	UIchatterbox_alphaNativeItemSwitch = -5,
-	UIchatterbox_alphaNativeItemMultiButton = -6,
-	UIchatterbox_alphaNativeItemSegmented = -7,
+	UIchatterboxNativeItemSlider = -4,
+	UIchatterboxNativeItemSwitch = -5,
+	UIchatterboxNativeItemMultiButton = -6,
+	UIchatterboxNativeItemSegmented = -7,
 	
-	UIchatterbox_alphaNativeItemTextView = -8,
-	UIchatterbox_alphaNativeItemTextField = -9,
-	UIchatterbox_alphaNativeItemSearchBar = -10,
+	UIchatterboxNativeItemTextView = -8,
+	UIchatterboxNativeItemTextField = -9,
+	UIchatterboxNativeItemSearchBar = -10,
 	
-	UIchatterbox_alphaNativeItemPicker = -11,
-	UIchatterbox_alphaNativeItemDatePicker = -12,
+	UIchatterboxNativeItemPicker = -11,
+	UIchatterboxNativeItemDatePicker = -12,
 	
-	UIchatterbox_alphaNativeItemInfoLight = -13,
-	UIchatterbox_alphaNativeItemInfoDark = -14,
+	UIchatterboxNativeItemInfoLight = -13,
+	UIchatterboxNativeItemInfoDark = -14,
 	
-	UIchatterbox_alphaNativeItemDisclosure = -15,
+	UIchatterboxNativeItemDisclosure = -15,
 	
-	UIchatterbox_alphaNativeItemContactAdd = -16
+	UIchatterboxNativeItemContactAdd = -16
 };
 
 
@@ -567,7 +567,7 @@ void incrementKrollCounter();
 void decrementKrollCounter();
     
 /**
- *	TiThreadPerformOnMainThread should replace all chatterbox_alpha instances of
+ *	TiThreadPerformOnMainThread should replace all chatterbox instances of
  *	performSelectorOnMainThread, ESPECIALLY if wait is to be yes. That way,
  *	exceptional-case main thread activities can process them outside of the
  *	standard event loop.

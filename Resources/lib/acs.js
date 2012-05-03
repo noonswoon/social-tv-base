@@ -16,7 +16,11 @@ exports.isLoggedIn = function() {
 	return loggedIn;
 };
 
-exports.login = function(username, password, callback) {
+exports.setLoggedInStatus = function(isLoggedIn) {
+	loggedIn = isLoggedIn;
+};
+
+exports.login = function(usernameOrEmail, password, callback) {
 /*
  * Write a function that will use the ACS Users API to log in a user.
  *   - upon successful login, set currentUser equal to the user object returned by ACS
@@ -24,15 +28,16 @@ exports.login = function(username, password, callback) {
  *   - if login fails, write the error message to the console, set loggedIn=false and currentUser=null
  *   - then call the callback function passing the loggedIn variable
  */
+
+	//later, need to write the function to check whether the user is banned or not
 	Cloud.Users.login({
-		login:username,
+		login:usernameOrEmail,
 		password:password
 	},function(e) {
 		if(e.success) {
 			currentUser = e.users[0];
 			loggedIn = true;
 			Ti.API.info('user = '+JSON.stringify(e));
-			
 			callback(loggedIn);
 		} else {
 			Ti.API.info('Error:\\n' + ((e.error &&e.message) || JSON.stringify(e)));
@@ -83,7 +88,8 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 					password: password,
 					password_confirmation:password,
 					custom_fields: {
-							        "mac_address": macAddress
+							        "mac_address": macAddress,
+							        "banned": false
 									}
 				}, function(e) {
 						if(e.success) {

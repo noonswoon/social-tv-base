@@ -1,13 +1,31 @@
 var LoginWindow = function() {
 	var acs = require('lib/acs');
-	var action = 'createuser'; //action switcher between create/login
-	
+	var Cloud = require('ti.cloud');
+	Cloud.Users.showMe(function (e) {
+		if (e.success) {
+	        acs.setLoggedInStatus(true);
+	   }
+	    else {
+			acs.setLoggedInStatus(false);
+		}
+		alert(acs.isLoggedIn());
+	});
+			
 	var lWin = Ti.UI.createWindow({
-		backgroundColor: '#333'
+		backgroundColor: '#333',
+		top:10,
+		width:'300dp',
+		height:'400dp',
+		borderWidth:2,
+		borderRadius: 6, 
+		borderColor:'#ddd',
+		backgroundColor:'#999',
+		layout:'vertical',
+		title: 'Login'
 	});
 	
 
-	var lwDialog = Ti.UI.createView({
+	/*var lwDialog = Ti.UI.createView({
 		top:20,
 		width:'300dp',
 		height:'300dp',
@@ -16,24 +34,10 @@ var LoginWindow = function() {
 		borderColor:'#ddd',
 		backgroundColor:'#999',
 		layout:'vertical'
-	});
+	});*/
 	
-	var title = Ti.UI.createLabel({
-		text:'Login',
-		top:5,
-		width:Ti.UI.FILL,
-		height:Ti.UI.SIZE,
-		font: {
-			fontWeight: 'bold',
-			fontSize: '24'
-		},
-		textAlign: 'center',
-		color:'#ddd'
-	});
-	lwDialog.add(title);
-
-	var email = Ti.UI.createTextField({
-		hintText:'Email',
+	var usernameOrEmail = Ti.UI.createTextField({
+		hintText:'Username/email',
 		autocorrect:false,
 		autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE,
 		top:5,
@@ -50,27 +54,7 @@ var LoginWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	lwDialog.add(email);
-
-	var username = Ti.UI.createTextField({
-		hintText:'Username',
-		autocorrect:false,
-		autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE,
-		top:5,
-		width:'90%',
-		height:40,
-		font: {
-			fontWeight: 'normal',
-			fontSize: '17'
-		},
-		textAlign: 'center',
-		color:'#333',
-		backgroundColor: '#ddd',
-		borderRadius:3,
-		paddingLeft:2, 
-		paddingRight:2
-	});
-	lwDialog.add(username);
+	lWin.add(usernameOrEmail);
 	
 	var password = Ti.UI.createTextField({
 		hintText:'Password',
@@ -91,103 +75,208 @@ var LoginWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	lwDialog.add(password);
-	
-	var confirm = Ti.UI.createTextField({
-		hintText:'Confirm Password',
-		passwordMask:true,
-		autocorrect:false,
-		autocapitalization:Ti.UI.TEXT_AUTOCAPITALIZATION_NONE,
-		top:5,
-		width:'90%',
-		height:40,
-		font: {
-			fontWeight: 'normal',
-			fontSize: '17'
-		},
-		textAlign: 'center',
-		color:'#333',
-		backgroundColor: '#ddd',
-		borderRadius:3,
-		paddingLeft:2, 
-		paddingRight:2,
-		visible: true
-	});
-	lwDialog.add(confirm);
+	lWin.add(password);
 	
 	var loginButton = Ti.UI.createButton({
 		title:'Login',
 		top:15,
 		width: 200,
-		height: Ti.UI.SIZE
+		height: Ti.UI.SIZE,
+		visible: true
 	});
 	
-	function cb() {
-		if(acs.isLoggedIn()===true) {
-			lWin.close();
+	function cb(status) {
+		if(acs.isLoggedIn()) {
+		/*
+			var PlaceholderWindow = require('ui/common/PlaceholderWindow');
+			var placeholderwin = new PlaceholderWindow();
+			lWin.containingTab.open(placeholderwin);
+		*/
+		
 		} else {
-			loginButton.title = 'Login';
-			loginButton.enabled = true;
+			alert("nope..wrong username/password");
 		}
 	}
-	
 	loginButton.addEventListener('click',function() {
-		loginButton.title = 'Please wait...';
-		loginButton.enabled = false;
-			
-		if(action==='login') {
-			acs.login(username.value,password.value,cb);
-		} else {
-			if(password.value === confirm.value)
-				acs.createUser(email.value,username.value,password.value,Ti.Platform.macaddress,cb);
-			else alert("Passwords do not match. Try again.");
-		}
+		acs.login(usernameOrEmail.value,password.value,cb);
 	});
-	lwDialog.add(loginButton);
+	lWin.add(loginButton);
 	
-	var switchAction = Ti.UI.createLabel({
-		text:'Create User',
+	var logoutButton = Ti.UI.createButton({
+		title:'Logout',
 		top:15,
-		width:Ti.UI.SIZE,
-		height:Ti.UI.SIZE,
-		font: {
-			fontWeight: 'normal',
-			fontSize:'17'
-		},
-		textAlign: 'center',
-		color: 'red',
-		touchEnabled: true
+		width: 200,
+		height: Ti.UI.SIZE,
+		visible: false
 	});
+	logoutButton.addEventListener('click',function() {
+		acs.logout();
+	});
+	lWin.add(logoutButton);
 	
-	switchAction.addEventListener('click',function() {
-		if(action=='login') { //do the swap if login go to create user and vice versa
-			title.text = 'Create User';
-			switchAction.text = 'Login';
-			loginButton.title = 'Create User';
-			lWin.title = 'Create User';
-			confirm.visible = true;
-			action = 'createuser';
-		} else {
-			title.text = 'Login';
-			switchAction.text = 'Create User';
-			loginButton.title = 'Login';
-			lWin.title = 'Login';
-			confirm.visible = false;
-			action = 'login';
-		}
+	var signupButton = Ti.UI.createButton({
+		title:'Signup',
+		top:15,
+		width: 200,
+		height: Ti.UI.SIZE
 	});
-	lwDialog.add(switchAction);
+	signupButton.addEventListener('click',function() {
+		//lWin.close();
+		var SignupWindow = require('ui/common/SignupWindow');
+		var signupwin = new SignupWindow();
+		signupwin.open();
+	});
+	lWin.add(signupButton);
 	
-	lWin.addEventListener('click',function() {
-		for(var i=0, j=lwDialog.children.length;i<j;i++) {
-			try {
-				lwDialog.children[i].blur();
-			} catch(err) { }
-		}
+	var checkUserStatusButton = Ti.UI.createButton({
+		title:'Check Login Status',
+		top:15,
+		width: 200,
+		height: Ti.UI.SIZE
 	});
-
-	lWin.add(lwDialog);
-
+	checkUserStatusButton.addEventListener('click',function() {
+		Cloud.Users.showMe(function (e) {
+		    if (e.success) {
+		        var user = e.users[0];
+		        alert('Success:\\n' +
+		            'id: ' + user.id + '\\n' +
+		            'first name: ' + user.first_name + '\\n' +
+		            'last name: ' + user.last_name);
+		    } else {
+		        alert('Error:\\n' +
+		            ((e.error && e.message) || JSON.stringify(e)));
+		    }
+		});
+	});
+	lWin.add(checkUserStatusButton);
+	
+	//***************FACEBOOK STUFF
+	Titanium.Facebook.appid = "197422093706392";
+	Titanium.Facebook.permissions = ['publish_stream', 'read_stream'];
+	//
+	// Login Status
+	//
+	var label = Ti.UI.createLabel({
+		text:'Logged In = ' + Titanium.Facebook.loggedIn,
+		font:{fontSize:14},
+		height:'auto',
+		top:10,
+		textAlign:'center'
+	});
+	lWin.add(label);
+	
+	var fbLoginButton = Ti.UI.createButton({
+			title:'Login with Facebook',
+			top:10,
+			width:200,
+			height:40,
+			visible:true
+		});
+		
+	fbLoginButton.addEventListener('click', function() {
+		Ti.Facebook.authorize();
+		fbLoginButton.visible = false;
+		fbLogoutButton.visible = true;
+		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
+	});
+	lWin.add(fbLoginButton);
+	
+	var fbLogoutButton = Ti.UI.createButton({
+			title:'Logout from Facebook',
+			top:10,
+			width:200,
+			height:40,
+			visible:false
+		});
+	fbLogoutButton.addEventListener('click', function() {
+		Ti.Facebook.logout();
+		fbLoginButton.visible = true;
+		fbLogoutButton.visible = false;
+		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
+	});
+	lWin.add(fbLogoutButton);
+	
+	if(Titanium.Facebook.loggedIn) {
+		fbLoginButton.visible = false;
+		fbLogoutButton.visible = true;
+	} else {
+		fbLoginButton.visible = true;
+		fbLogoutButton.visible = false;
+	}
+	
+	if(acs.isLoggedIn()) {
+		loginButton.visible = false;
+		logoutButton.visible = true;
+	} else {
+		loginButton.visible = true;
+		logoutButton.visible = false;
+	}
+/*	var forceButton = Ti.UI.createButton({
+		title:'Force dialog: '+Titanium.Facebook.forceDialogAuth,
+		top:10,
+		width:160,
+		height:40
+	});
+	forceButton.addEventListener('click', function() {
+		Titanium.Facebook.forceDialogAuth = !Titanium.Facebook.forceDialogAuth;
+		forceButton.title = "Force dialog: "+Titanium.Facebook.forceDialogAuth;
+	});
+	lWin.add(forceButton);
+*/	
+	function updateLoginStatus() {
+		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
+	}
+		
+	Titanium.Facebook.addEventListener('login', function(e) {
+		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
+		if (e.success) {
+/*	        var PlaceholderWindow = require('ui/common/PlaceholderWindow');
+			var placeholderwin = new PlaceholderWindow();
+			lWin.containingTab.open(placeholderwin); */
+			Cloud.Users.showMe(function (e) {
+			    if (e.success) {
+			        var user = e.users[0];
+			        alert('Success:\\n' +
+			            'id: ' + user.id + '\\n' +
+			            'first name: ' + user.first_name + '\\n' +
+			            'last name: ' + user.last_name);
+			    } else {
+			        alert('Error:\\n' +
+			            ((e.error && e.message) || JSON.stringify(e)));
+			    }
+			});
+			fbLoginButton.visible = false;
+			fbLogoutButton.visible = true;
+	    } else if (e.error) {
+	        alert(e.error);
+			fbLoginButton.visible = true;
+			fbLogoutButton.visible = false;
+	    } else if (e.cancelled) {
+	        alert("Canceled");
+			fbLoginButton.visible = true;
+			fbLogoutButton.visible = false;
+	    }
+	});
+	Titanium.Facebook.addEventListener('logout', updateLoginStatus);
+	
+	//
+	// Login Button
+	//
+/*	
+	if(Titanium.Platform.name == 'iPhone OS'){
+		lWin.add(Titanium.Facebook.createLoginButton({
+			style:Ti.Facebook.BUTTON_STYLE_WIDE,
+			bottom:30
+		}));
+	}
+	else{
+		lWin.add(Titanium.Facebook.createLoginButton({
+			style:'wide',
+			bottom:30
+		}));
+	}
+*/
+	
 	return lWin;
 	
 };

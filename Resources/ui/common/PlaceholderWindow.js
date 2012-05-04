@@ -1,5 +1,12 @@
 var PlaceholderWindow = function() {
 	
+	//SETUP 
+	var acs = require('lib/acs');
+	var Cloud = require('ti.cloud');
+	Titanium.Facebook.appid = "197422093706392";
+	Titanium.Facebook.permissions = ['publish_stream', 'read_stream', 'email'];
+
+	//UI COMPONENTS DECLARATION
 	var pWin = Ti.UI.createWindow({
 		backgroundColor: '#ffff',
 		top:16,
@@ -24,22 +31,35 @@ var PlaceholderWindow = function() {
 		textAlign: 'center',
 		color:'black'
 	});
-	pWin.add(title);
-	
-	//
-	// Login Button
-	//
-	Titanium.Facebook.appid = "197422093706392";
-	Titanium.Facebook.permissions = ['publish_stream', 'read_stream'];
-	
+
 	var b1 = Ti.UI.createButton({
 		title:'Run Query',
 		width:200,
 		height:40,
 		top:10
 	});
-	pWin.add(b1);
 	
+	var searchFriendsWithApp = Ti.UI.createButton({
+		title:'FbFriends with an App',
+		width:200,
+		height:40,
+		top:10
+	});
+	
+	var graphAPI = Ti.UI.createButton({
+		title:'GraphAPI Call',
+		width:200,
+		height:40,
+		top:10
+	});
+	
+	//ADDING UI COMPONENTS
+	pWin.add(title);
+	pWin.add(b1);
+	pWin.add(searchFriendsWithApp);
+	pWin.add(graphAPI);
+	
+	//FUNCTION CALLBACK
 	function runQuery()
 	{
 		b1.title = 'Loading...';
@@ -69,9 +89,9 @@ var PlaceholderWindow = function() {
 		{
 			if (!r.success) {
 				if (r.error) {
-					alert(r.error);
+					Ti.API.info(r.error);
 				} else {
-					alert("call was unsuccessful");
+					Ti.API.info("call was unsuccessful");
 				}
 				return;
 			}
@@ -93,7 +113,6 @@ var PlaceholderWindow = function() {
 					width:50,
 					height:50
 				});
-	
 				tvRow.add(imageView);
 	
 				var userLabel = Ti.UI.createLabel({
@@ -117,31 +136,56 @@ var PlaceholderWindow = function() {
 					text:(!row.status || !row.status.message ? 'No status message' : row.status.message)
 				});
 				tvRow.add(statusLabel);
-	
 				tvRow.uid = row.uid;
-	
 				data[c] = tvRow;
 			}
 			
 			tableView.setData(data, { animationStyle : Titanium.UI.iPhone.RowAnimationStyle.DOWN });
-			
 			win.open({modal:true});
 			b1.title = 'Run Query';
 		});
 	}
 	
+	//EVENT REGISTERING
 	b1.addEventListener('click', function()
 	{
 		if (!Titanium.Facebook.loggedIn)
 		{
-			Ti.UI.createAlertDialog({title:'Facebook', message:'Login before running query'}).show();
+			Ti.UI.createAlertDialog({title:'Chatterbox', message:'Login before running query'}).show();
 			return;
 		}
-	
 		runQuery();
-	});
-
+	});	
 	
+	searchFriendsWithApp.addEventListener('click', function() { 
+			Cloud.SocialIntegrations.searchFacebookFriends(function (e) {
+			    if (e.success) {
+			        Ti.API.info('Friends Count: ' + e.users.length);
+			        for (var i = 0; i < e.users.length; i++) {
+			            var user = e.users[i];
+			            alert('id: ' + user.id + '\\n' +
+			                'first name: ' + user.first_name + '\\n' +
+			                'last name: ' + user.last_name);
+			         }
+			    } else {
+			        Ti.API.info('searchFriendsWithApp Error:\\n' +
+			            ((e.error && e.message) || JSON.stringify(e)));
+			    }
+			});
+		});
+		
+	graphAPI.addEventListener('click', function() {
+		Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function(e) {
+		    if (e.success) {
+		        alert(e.result);
+		        alert(JSON.parse(e.result).email);
+		    } else if (e.error) {
+		        alert(e.error);
+		    } else {
+		        alert('Unknown response');
+		    }
+		});
+	});
 	return pWin;
 	
 };

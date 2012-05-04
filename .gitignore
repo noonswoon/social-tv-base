@@ -6,3 +6,4 @@ build.log
 build/iphone/build
 build/iphone/Classes
 build/iphone
+.settings

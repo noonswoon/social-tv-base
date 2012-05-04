@@ -104,6 +104,15 @@ var LoginWindow = function() {
 		textAlign:'center'
 	});
 	
+	var nextPageBtn = Ti.UI.createButton({
+		title:'Next page',
+		top:5,
+		width:200,
+		height:20,
+		visible:true
+	});
+	
+	
 	//ADDING UI COMPONENTS TO WINDOW
 	lWin.add(usernameOrEmail);
 	lWin.add(password);
@@ -113,15 +122,14 @@ var LoginWindow = function() {
 	lWin.add(fbLoginButton);
 	lWin.add(fbLogoutButton);
 	lWin.add(fbLoginStatuslbl);
+	lWin.add(nextPageBtn);
 	
 	//CALLBACK FUNCTIONS
 	function cb(status) {
 		if(acs.isLoggedIn()) {
-		/*
 			var PlaceholderWindow = require('ui/common/PlaceholderWindow');
 			var placeholderwin = new PlaceholderWindow();
 			lWin.containingTab.open(placeholderwin);
-		*/
 			Ti.API.info("successfully logged in");
 			loginButton.visible = false;
 			logoutButton.visible = true;
@@ -153,12 +161,10 @@ var LoginWindow = function() {
 		Cloud.Users.showMe(function (e) {
 		    if (e.success) {
 		        var user = e.users[0];
-		        alert('Success:\\n' +
-		            'id: ' + user.id + '\\n' +
-		            'first name: ' + user.first_name + '\\n' +
-		            'last name: ' + user.last_name);
+		        Ti.API.info('currently logged in: ' +
+		            'id: ' + user.id + ',FN: ' + user.first_name + 'LN: ' + user.last_name);
 		    } else {
-		        alert('Error:\\n' +
+		        Ti.API.info('Error: ' +
 		            ((e.error && e.message) || JSON.stringify(e)));
 		    }
 		});
@@ -175,15 +181,23 @@ var LoginWindow = function() {
 		fbLogoutButton.visible = false;
 	});
 	
+	nextPageBtn.addEventListener('click', function() {
+		var PlaceholderWindow = require('ui/common/PlaceholderWindow');
+		var placeholderwin = new PlaceholderWindow();
+		lWin.containingTab.open(placeholderwin);
+	});
+	
 	Titanium.Facebook.addEventListener('login', function(e) {
 		fbLoginStatuslbl.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
 		if (e.success) {
-/*	        var PlaceholderWindow = require('ui/common/PlaceholderWindow');
+	        var PlaceholderWindow = require('ui/common/PlaceholderWindow');
 			var placeholderwin = new PlaceholderWindow();
-			lWin.containingTab.open(placeholderwin); */
+			lWin.containingTab.open(placeholderwin); 
 			fbLoginStatuslbl.text = 'Fb Logged In = ' + Titanium.Facebook.loggedIn;
 			fbLoginButton.visible = false;
 			fbLogoutButton.visible = true;
+			
+			//CREATING/LOGGIN IN TO CHATTERBOX VIA THIRD-PARTY METHOD
 			Cloud.SocialIntegrations.externalAccountLogin({
 	    		type: 'facebook',
 	    		token: Ti.Facebook.accessToken
@@ -191,13 +205,37 @@ var LoginWindow = function() {
 			    if (e.success) {
 			    	fbLoginButton.visible = false;
 					fbLogoutButton.visible = true;
-			        var user = e.users[0];
-			        alert('Success:\\n' +
-			            'id: ' + user.id + '\\n' +
-			            'first name: ' + user.first_name + '\\n' +
-			            'last name: ' + user.last_name);
+			        
+			        //GETTING EMAIL ADDRESS
+					Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function(e) {
+					    if (e.success) {
+					    	var fbGraphObj = JSON.parse(e.result)
+					        var email = fbGraphObj.email;
+					        var username = fbGraphObj.username;
+					        //UPDATING THE ACCOUNT WITH EMAIL PROVIDED BY FB GRAPH API
+					        Cloud.Users.update({
+									username: username,
+						    		email: email
+						    	} , function (e) {
+							    if (e.success) {
+							        var user = e.users[0];
+							        Ti.API.info('Success:\\n' +
+							            'id: ' + user.id + '\\n' +
+							            'first name: ' + user.first_name + '\\n' +
+							            'last name: ' + user.last_name);
+							    } else {
+							        Ti.API.info('UPDATE Error:\\n' +
+							            ((e.error && e.message) || JSON.stringify(e)));
+							    }
+							});
+					    } else if (e.error) {
+					        Ti.API.info(e.error);
+					    } else {
+					        Ti.API.info('Unknown response');
+					    }
+					});
 			    } else {
-			        alert('Error:\\n' +
+			        Ti.API.info('Error:\\n' +
 			            ((e.error && e.message) || JSON.stringify(e)));
 			    }
 			});

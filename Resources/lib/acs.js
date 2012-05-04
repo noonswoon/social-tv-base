@@ -48,7 +48,7 @@ exports.login = function(usernameOrEmail, password, callback) {
 	});
 };
 
-exports.logout = function() {
+exports.logout = function(callback) {
 /*
  * Write a function that will use the ACS Users API to log out the current user
  *   - on success, set currentUser=null and loggedIn=false
@@ -57,6 +57,7 @@ exports.logout = function() {
 		if(e.success) {
 			currentUser = null;
 			loggedIn  = false;
+			callback(e)
 		}
 	});
 };

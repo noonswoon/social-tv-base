@@ -1,21 +1,15 @@
 var LoginWindow = function() {
 	var acs = require('lib/acs');
 	var Cloud = require('ti.cloud');
-	Cloud.Users.showMe(function (e) {
-		if (e.success) {
-	        acs.setLoggedInStatus(true);
-	   }
-	    else {
-			acs.setLoggedInStatus(false);
-		}
-		alert(acs.isLoggedIn());
-	});
-			
+	Titanium.Facebook.appid = "197422093706392";
+	Titanium.Facebook.permissions = ['publish_stream', 'read_stream', 'email'];
+		
+	//UI STUFF
 	var lWin = Ti.UI.createWindow({
-		backgroundColor: '#333',
+		backgroundColor: 'transparent',
 		top:10,
 		width:'300dp',
-		height:'400dp',
+		height:'450dp',
 		borderWidth:2,
 		borderRadius: 6, 
 		borderColor:'#ddd',
@@ -23,18 +17,6 @@ var LoginWindow = function() {
 		layout:'vertical',
 		title: 'Login'
 	});
-	
-
-	/*var lwDialog = Ti.UI.createView({
-		top:20,
-		width:'300dp',
-		height:'300dp',
-		borderWidth:2,
-		borderRadius: 6, 
-		borderColor:'#ddd',
-		backgroundColor:'#999',
-		layout:'vertical'
-	});*/
 	
 	var usernameOrEmail = Ti.UI.createTextField({
 		hintText:'Username/email',
@@ -54,7 +36,6 @@ var LoginWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	lWin.add(usernameOrEmail);
 	
 	var password = Ti.UI.createTextField({
 		hintText:'Password',
@@ -75,16 +56,65 @@ var LoginWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	lWin.add(password);
-	
+
 	var loginButton = Ti.UI.createButton({
 		title:'Login',
-		top:15,
+		top:5,
 		width: 200,
 		height: Ti.UI.SIZE,
 		visible: true
+	});	
+	
+	var logoutButton = Ti.UI.createButton({
+		title:'Logout',
+		top:5,
+		width: 200,
+		height: Ti.UI.SIZE,
+		visible: false
 	});
 	
+	var checkUserStatusButton = Ti.UI.createButton({
+		title:'Check Login Status',
+		top:5,
+		width: 200,
+		height: Ti.UI.SIZE
+	});
+	
+	var fbLoginButton = Ti.UI.createButton({
+		title:'Login using Facebook',
+		top:5,
+		width:200,
+		height:20,
+		visible:true
+	});
+	
+	var fbLogoutButton = Ti.UI.createButton({
+			title:'Logout from Chatterbox/Fb',
+			top:5,
+			width:200,
+			height:20,
+			visible:true
+	});
+	
+	var fbLoginStatuslbl = Ti.UI.createLabel({
+		text:'Fb Logged In = ' + Titanium.Facebook.loggedIn,
+		font:{fontSize:14},
+		height:'auto',
+		top:10,
+		textAlign:'center'
+	});
+	
+	//ADDING UI COMPONENTS TO WINDOW
+	lWin.add(usernameOrEmail);
+	lWin.add(password);
+	lWin.add(loginButton);
+	lWin.add(logoutButton);
+	lWin.add(checkUserStatusButton);
+	lWin.add(fbLoginButton);
+	lWin.add(fbLogoutButton);
+	lWin.add(fbLoginStatuslbl);
+	
+	//CALLBACK FUNCTIONS
 	function cb(status) {
 		if(acs.isLoggedIn()) {
 		/*
@@ -92,48 +122,33 @@ var LoginWindow = function() {
 			var placeholderwin = new PlaceholderWindow();
 			lWin.containingTab.open(placeholderwin);
 		*/
-		
+			Ti.API.info("successfully logged in");
+			loginButton.visible = false;
+			logoutButton.visible = true;
 		} else {
 			alert("nope..wrong username/password");
 		}
 	}
+	
+	function logoutCallback(event) {
+		if(event.success) {
+			Ti.API.info("successfully logged out");
+			loginButton.visible = true;
+			logoutButton.visible = false;
+		} else {
+			Ti.API.info("something wrong with logout mechanism");
+		}
+	}
+	
+	//EVENTS REGISTERING
 	loginButton.addEventListener('click',function() {
 		acs.login(usernameOrEmail.value,password.value,cb);
 	});
-	lWin.add(loginButton);
 	
-	var logoutButton = Ti.UI.createButton({
-		title:'Logout',
-		top:15,
-		width: 200,
-		height: Ti.UI.SIZE,
-		visible: false
-	});
 	logoutButton.addEventListener('click',function() {
-		acs.logout();
+		acs.logout(logoutCallback);
 	});
-	lWin.add(logoutButton);
 	
-	var signupButton = Ti.UI.createButton({
-		title:'Signup',
-		top:15,
-		width: 200,
-		height: Ti.UI.SIZE
-	});
-	signupButton.addEventListener('click',function() {
-		//lWin.close();
-		var SignupWindow = require('ui/common/SignupWindow');
-		var signupwin = new SignupWindow();
-		signupwin.open();
-	});
-	lWin.add(signupButton);
-	
-	var checkUserStatusButton = Ti.UI.createButton({
-		title:'Check Login Status',
-		top:15,
-		width: 200,
-		height: Ti.UI.SIZE
-	});
 	checkUserStatusButton.addEventListener('click',function() {
 		Cloud.Users.showMe(function (e) {
 		    if (e.success) {
@@ -148,93 +163,34 @@ var LoginWindow = function() {
 		    }
 		});
 	});
-	lWin.add(checkUserStatusButton);
 	
-	//***************FACEBOOK STUFF
-	Titanium.Facebook.appid = "197422093706392";
-	Titanium.Facebook.permissions = ['publish_stream', 'read_stream'];
-	//
-	// Login Status
-	//
-	var label = Ti.UI.createLabel({
-		text:'Logged In = ' + Titanium.Facebook.loggedIn,
-		font:{fontSize:14},
-		height:'auto',
-		top:10,
-		textAlign:'center'
-	});
-	lWin.add(label);
-	
-	var fbLoginButton = Ti.UI.createButton({
-			title:'Login with Facebook',
-			top:10,
-			width:200,
-			height:40,
-			visible:true
-		});
-		
 	fbLoginButton.addEventListener('click', function() {
 		Ti.Facebook.authorize();
-		fbLoginButton.visible = false;
-		fbLogoutButton.visible = true;
-		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
 	});
-	lWin.add(fbLoginButton);
 	
-	var fbLogoutButton = Ti.UI.createButton({
-			title:'Logout from Facebook',
-			top:10,
-			width:200,
-			height:40,
-			visible:false
-		});
 	fbLogoutButton.addEventListener('click', function() {
-		Ti.Facebook.logout();
+		Ti.Facebook.logout(); //logout from fb
+		acs.logout(logoutCallback); //logout from chatterbox
 		fbLoginButton.visible = true;
 		fbLogoutButton.visible = false;
-		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
 	});
-	lWin.add(fbLogoutButton);
 	
-	if(Titanium.Facebook.loggedIn) {
-		fbLoginButton.visible = false;
-		fbLogoutButton.visible = true;
-	} else {
-		fbLoginButton.visible = true;
-		fbLogoutButton.visible = false;
-	}
-	
-	if(acs.isLoggedIn()) {
-		loginButton.visible = false;
-		logoutButton.visible = true;
-	} else {
-		loginButton.visible = true;
-		logoutButton.visible = false;
-	}
-/*	var forceButton = Ti.UI.createButton({
-		title:'Force dialog: '+Titanium.Facebook.forceDialogAuth,
-		top:10,
-		width:160,
-		height:40
-	});
-	forceButton.addEventListener('click', function() {
-		Titanium.Facebook.forceDialogAuth = !Titanium.Facebook.forceDialogAuth;
-		forceButton.title = "Force dialog: "+Titanium.Facebook.forceDialogAuth;
-	});
-	lWin.add(forceButton);
-*/	
-	function updateLoginStatus() {
-		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
-	}
-		
 	Titanium.Facebook.addEventListener('login', function(e) {
-		label.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
+		fbLoginStatuslbl.text = 'Logged In = ' + Titanium.Facebook.loggedIn;
 		if (e.success) {
 /*	        var PlaceholderWindow = require('ui/common/PlaceholderWindow');
 			var placeholderwin = new PlaceholderWindow();
 			lWin.containingTab.open(placeholderwin); */
-			Cloud.Users.showMe(function (e) {
+			fbLoginStatuslbl.text = 'Fb Logged In = ' + Titanium.Facebook.loggedIn;
+			fbLoginButton.visible = false;
+			fbLogoutButton.visible = true;
+			Cloud.SocialIntegrations.externalAccountLogin({
+	    		type: 'facebook',
+	    		token: Ti.Facebook.accessToken
+			}, function (e) {
 			    if (e.success) {
+			    	fbLoginButton.visible = false;
+					fbLogoutButton.visible = true;
 			        var user = e.users[0];
 			        alert('Success:\\n' +
 			            'id: ' + user.id + '\\n' +
@@ -245,37 +201,47 @@ var LoginWindow = function() {
 			            ((e.error && e.message) || JSON.stringify(e)));
 			    }
 			});
-			fbLoginButton.visible = false;
-			fbLogoutButton.visible = true;
 	    } else if (e.error) {
-	        alert(e.error);
+	        Ti.API.info("fb login error: "+e.error);
 			fbLoginButton.visible = true;
 			fbLogoutButton.visible = false;
 	    } else if (e.cancelled) {
-	        alert("Canceled");
+	        Ti.API.info("fb login Canceled");
 			fbLoginButton.visible = true;
 			fbLogoutButton.visible = false;
 	    }
 	});
-	Titanium.Facebook.addEventListener('logout', updateLoginStatus);
 	
-	//
-	// Login Button
-	//
-/*	
-	if(Titanium.Platform.name == 'iPhone OS'){
-		lWin.add(Titanium.Facebook.createLoginButton({
-			style:Ti.Facebook.BUTTON_STYLE_WIDE,
-			bottom:30
-		}));
+	Titanium.Facebook.addEventListener('logout', function() {
+		fbLoginStatuslbl.text = 'Fb Logged In = ' + Titanium.Facebook.loggedIn;
+		fbLoginButton.visible = true;
+		fbLogoutButton.visible = false;
+	});
+	
+	//MISCELLENOUS
+		
+	Cloud.Users.showMe(function (e) {
+		if (e.success) {
+			Ti.API.info("currently logged in");
+	        acs.setLoggedInStatus(true);
+	        loginButton.visible = false;
+			logoutButton.visible = true;
+	   }
+	    else {
+			Ti.API.info("currently NOT logged in");
+			acs.setLoggedInStatus(false);
+			loginButton.visible = true;
+			logoutButton.visible = false;
+		}
+	});
+	
+	if(Titanium.Facebook.loggedIn) {
+		fbLoginButton.visible = false;
+		fbLogoutButton.visible = true;
+	} else {
+		fbLoginButton.visible = true;
+		fbLogoutButton.visible = false;
 	}
-	else{
-		lWin.add(Titanium.Facebook.createLoginButton({
-			style:'wide',
-			bottom:30
-		}));
-	}
-*/
 	
 	return lWin;
 	

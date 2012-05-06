@@ -8,28 +8,11 @@ var PlaceholderWindow = function() {
 
 	//UI COMPONENTS DECLARATION
 	var pWin = Ti.UI.createWindow({
-		backgroundColor: '#ffff',
-		top:16,
-		width:'300dp',
-		height:'400dp',
-		borderWidth:2,
-		borderRadius: 2, 
-		borderColor:'#fff',
-		backgroundColor:'#fff',
-		layout:'vertical'
-	});
-	
-	var title = Ti.UI.createLabel({
-		text:'Anything here',
-		top:5,
-		width:Ti.UI.FILL,
-		height:Ti.UI.SIZE,
-		font: {
-			fontWeight: 'bold',
-			fontSize: '10'
-		},
-		textAlign: 'center',
-		color:'black'
+		backgroundColor:'transparent',
+		backgroundImage: '/images/grain.png',
+		title: 'Random Stuff',
+		barColor: '#6d0a0c',
+		layout: 'vertical'
 	});
 
 	var b1 = Ti.UI.createButton({
@@ -54,7 +37,6 @@ var PlaceholderWindow = function() {
 	});
 	
 	//ADDING UI COMPONENTS
-	pWin.add(title);
 	pWin.add(b1);
 	pWin.add(searchFriendsWithApp);
 	pWin.add(graphAPI);

@@ -4,6 +4,11 @@ Titanium.UI.setBackgroundColor('#000');
 Ti.include('/lib/date.js');
 Ti.include('/model/topic.js');
 
+//GLOBAL VARIABLES DECARATION
+var acs = require('lib/acs');
+var Cloud = require('ti.cloud');
+Titanium.Facebook.appid = "197422093706392";
+Titanium.Facebook.permissions = ['publish_stream', 'read_stream', 'email'];
 
 
 //bootstrap and check dependencies
@@ -18,12 +23,12 @@ if (Ti.version < 1.8 ) {
 		version = Ti.Platform.version,
 		height = Ti.Platform.displayCaps.platformHeight,
 		width = Ti.Platform.displayCaps.platformWidth;
-	Ti.API.info('Welcome to TiBountyHunter for ' + osname);
+	Ti.API.info('Welcome to Chatterbox for ' + osname);
 	
 	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
 	//yourself what you consider a tablet form factor for android
 	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
-	
+
 	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 	new ApplicationTabGroup().open();
 })();

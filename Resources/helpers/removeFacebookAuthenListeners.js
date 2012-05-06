@@ -1,0 +1,1 @@
+Ti.Facebook.removeEventListener("login",facebookAuthenCallback);

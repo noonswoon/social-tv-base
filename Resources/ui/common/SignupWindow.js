@@ -1,18 +1,11 @@
-var SignupWindow = function() {
-	var acs = require('lib/acs');
-	
+var SignupWindow = function(_containingTab) {
+	//UI STUFF
 	var suWin = Ti.UI.createWindow({
-		backgroundColor: '#333',
-		top:50,
-		width:'300dp',
-		height:'450dp',
-		borderWidth:2,
-		borderRadius: 6, 
-		borderColor:'#ddd',
-		backgroundColor:'#999',
-		layout:'vertical',
-		title: 'Signup'
-		
+		backgroundColor:'transparent',
+		backgroundImage: '/images/grain.png',
+		title: "Signup",
+		barColor: '#6d0a0c',
+		layout: 'vertical'
 	});
 
 	var email = Ti.UI.createTextField({
@@ -33,7 +26,6 @@ var SignupWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	suWin.add(email);
 
 	var username = Ti.UI.createTextField({
 		hintText:'Username',
@@ -53,7 +45,6 @@ var SignupWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	suWin.add(username);
 	
 	var password = Ti.UI.createTextField({
 		hintText:'Password',
@@ -74,7 +65,6 @@ var SignupWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	suWin.add(password);
 	
 	var confirm = Ti.UI.createTextField({
 		hintText:'Confirm Password',
@@ -95,7 +85,6 @@ var SignupWindow = function() {
 		paddingLeft:2, 
 		paddingRight:2
 	});
-	suWin.add(confirm);
 	
 	var signupButton = Ti.UI.createButton({
 		title:'Signup',
@@ -104,6 +93,23 @@ var SignupWindow = function() {
 		height: Ti.UI.SIZE
 	});
 	
+	var fbConnectButton = Ti.UI.createButton({
+		title:'Connect with Facebook',
+		top:5,
+		width:200,
+		height:20,
+		visible:true
+	});
+
+	//ADDING UI COMPONENTS TO WINDOW
+	suWin.add(email);
+	suWin.add(username);
+	suWin.add(password);
+	suWin.add(confirm);
+	suWin.add(signupButton);
+	suWin.add(fbConnectButton);
+	
+	//CALLBACK FUNCTIONS
 	function cb() {
 		if(acs.isLoggedIn()===true) {
 			alert("successfully signup.")
@@ -111,30 +117,32 @@ var SignupWindow = function() {
 			alert('something wrong during signup process');
 		}
 	}
-	
+		
+	//EVENTS REGISTERING	
 	signupButton.addEventListener('click',function() {
 		if(password.value === confirm.value)
 			acs.createUser(email.value,username.value,password.value,Ti.Platform.macaddress,cb);
 		else alert("Passwords do not match. Try again.");
 	});
-	suWin.add(signupButton);
-
-	var loginButton = Ti.UI.createButton({
-		title:'Login',
-		top:15,
-		width: 200,
-		height: Ti.UI.SIZE
-	});
-	loginButton.addEventListener('click',function() {
-		suWin.close();
-		LoginWindow = require('ui/common/LoginWindow');
-		var loginwin = new LoginWindow();
-		loginwin.open();
-	});
-	suWin.add(loginButton);
 	
-	return suWin;
+	fbConnectButton.addEventListener('click', function() {
+		if(Ti.Facebook.loggedIn) {
+			Ti.Facebook.logout(); //logout from fb
+		}
+		Ti.Facebook.authorize();
+	});
 	
+	Ti.include('helpers/facebookAuthenListeners.js'); //fb authen functionality
+	Ti.Facebook.addEventListener('login', function(e) {
+		if (e.success) {
+			alert('SignupWindow.js FB login event cb');
+			var PlaceholderWindow = require('ui/common/PlaceholderWindow');
+			var placeholderwin = new PlaceholderWindow();
+			_containingTab.open(placeholderwin);
+		}
+	});
+	
+	return suWin;	
 };
 
 module.exports = SignupWindow;

@@ -5,37 +5,58 @@ function ApplicationTabGroup() {
     var self = Titanium.UI.createTabGroup();
 
     var LoginWindow = require('ui/common/LoginWindow');
-	var SignupWindow = require('ui/common/SignupWindow');
-	var WebboardMainWindow = require('ui/common/Wb_WebboardMainWindow');
+	var MessageBoardMainWindow = require('ui/common/Wb_WebboardMainWindow');
 	
+	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
+	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
+	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
+	
+	var chatwin = new ChatMainWindow();
+	var messageboardwin = new MessageBoardMainWindow();		
     var loginwin = new LoginWindow();
-    var signupwin = new SignupWindow();
-	var webboardwin = new WebboardMainWindow();
+	var productwin = new ProductMainWindow();
+	var profilewin = new ProfileMainWindow();
 
-    var tab1 = Titanium.UI.createTab({  
+    var chatTab = Titanium.UI.createTab({  
         icon:'/images/fugitives.png',
-        title:'Login',
-        window:loginwin
+        title:'Chat',
+        window:chatwin
     });
-    loginwin.containingTab = tab1;
+    chatwin.containingTab = chatTab;
 
-    var tab2 = Titanium.UI.createTab({  
+    var messageboardTab = Titanium.UI.createTab({  
         icon:'/images/captured.png',
-        title:'Signup',
-        window:signupwin
+        title:'Board',
+        window:messageboardwin
     });
-    signupwin.containingTab = tab2
+    messageboardwin.containingTab = messageboardTab;
 
-	var tabWebboard = Ti.UI.createTab({
+	var loginTab = Ti.UI.createTab({
 		icon: '/images/fugitives.png',
-		title: 'Webboard',
-		window: webboardwin
+		title: 'Login',
+		window: loginwin
 	});
-	webboardwin.containingTab = tabWebboard;
-		
-    self.addTab(tab1);  
-    self.addTab(tab2);  
-    self.addTab(tabWebboard)
+	loginwin.containingTab = loginTab;
+	
+	var productTab = Ti.UI.createTab({
+		icon: '/images/captured.png',
+		title: 'Product',
+		window: productwin
+	});
+	productwin.containingTab = productTab;
+	
+	var profileTab = Ti.UI.createTab({
+		icon: '/images/fugitives.png',
+		title: 'Profile',
+		window: profilewin
+	});
+	profilewin.containingTab = profileTab;
+	
+    self.addTab(chatTab);  
+    self.addTab(messageboardTab);  
+    self.addTab(loginTab);
+    self.addTab(productTab);
+    self.addTab(profileTab);
 
     // open tab group
     return self;

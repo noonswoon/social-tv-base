@@ -1,5 +1,8 @@
 //testing branch
 function WebboardMainWindow() {
+	var TopicACS = require('acs/topicACS');
+	var TopicDb = require('model/topicDb'); //will rename to Topic after cleanup
+	
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/grain.png',
@@ -33,14 +36,25 @@ function WebboardMainWindow() {
 		];
 		
 		var TopicTableViewRow = require('ui/common/Wb_TopicTableViewRow');
-		var topics = Topic.all();
-		for (var i=0;i<topics.length;i++) {
-			var row = new TopicTableViewRow();
-			row._setTopic(topics[i]);
-			data.push(row);
-		}
-	
-		table.setData(data);
+		
+		Ti.App.addEventListener("topicsLoadedComplete", function(e) {
+			//add to db
+			TopicDb.topicModel_updateTopicsFromACS(e.fetchedTopics,1); 
+			
+			//retrieve from db --> need to clear table by table.setData();
+			var allTopics = TopicDb.topicModel_fetchFromProgramId(1);
+			for (var i=0;i<allTopics.length;i++) {
+				var row = new TopicTableViewRow();
+				row._setTopic(allTopics[i]);
+				data.push(row);
+			}
+			table.setData(data);
+		});
+		
+		//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
+		TopicACS.topicACS_fetchAllTopicsOfProgramId(1);
+		
+		//Topic.fetchAllTopicsOfProgramId(1);
 		
 		Topic.addCreateListener(function(topic) {
 			Ti.API.warn('hello');

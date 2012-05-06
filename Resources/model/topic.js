@@ -1,5 +1,5 @@
 var Topic = {};
-
+var TopicACS = require('acs/topicACS');
 (function() {
 	
 	var runId = 0;
@@ -34,6 +34,7 @@ var Topic = {};
 	
 	
 	var data = {};
+	var topicsOfProgram = [];
 	var now = new Date();
 	
 	{
@@ -61,33 +62,50 @@ var Topic = {};
 		
 		data[topic.id] = topic;
 	}
-	
-	
-	
-	Topic.all = function() {
-		var returnData = [];
-		
+
+/*	
+	Topic.fetchAllTopicsOfProgramId = function(_programId) {
 		for (var id in data) {
-			returnData.push(data[id]);
+			topicsOfProgram.push(data[id]);
 		}
 		
-		return returnData;
+		Cloud.Posts.query({
+		    page: 1,
+		    per_page: 20,
+		    where: {
+		        program_id: _programId
+		    }
+		}, function (e) {
+		    if (e.success) {
+		        for (var i = 0; i < e.posts.length; i++) {
+		            var post = e.posts[i];
+		            var curTopic = {
+		            	id: post.id,
+		            	title: post.title,
+		            	created_at: post.updated_at
+		            }
+					topicsOfProgram.push(curTopic);
+				}
+		        Ti.App.fireEvent("topicsLoadedComplete",{fetchedTopics:topicsOfProgram});
+		    } else {
+		        Ti.API.info('Fetching Topic Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+		    }
+		});
 	}
+*/
 	
 	Topic.get = function(id) {
 		return data[id];
 	}
 	
-	Topic.create = function(title) {
-		var topic = mock({
-			title: title,
-			created_at: new Date()
-		});
-		
-		data[topic.id] = topic;
-		
-		if (Topic.createCallback !== undefined) Topic.createCallback(topic);
-	}
+	/*
+	Topic.create = function(_title,_programId) {
+		if (Topic.createCallback !== undefined) 
+			Topic.createCallback(topic);
+	
+		//connecting with Cloud
+		TopicACS.topicACS_create(_title,_programId);
+	}*/
 	
 	Topic.addCreateListener = function(block) {
 		Topic.createCallback = block;

@@ -17,14 +17,13 @@ function DiscoveryMainWindow(){
 	var tabHeader = Ti.UI.createView({
 		top: 0,
 		height: 50,
-		// backgroundColor: 'orange'
 		backgroundImage: '/images/bgheader.png'
 	});
 	
 	tabHeader.add(tabbar);
 	self.add(tabHeader);
 	
-//////////////////////
+/////////////////////////////
 
 	var info = [];
 	// var rowsArray = [];		
@@ -76,8 +75,7 @@ function DiscoveryMainWindow(){
 			width: 35,
 			height: 15
 		});
-		row.add(mockImage2);
-		
+		row.add(mockImage2);	
 		// rowsArray.push(row);		
 		info[c] = row;
 	}

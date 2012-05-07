@@ -63,10 +63,11 @@ function ApplicationTabGroup() {
 	
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  
+    self.addTab(discoveryTab);
     self.addTab(loginTab);
     self.addTab(productTab);
     self.addTab(profileTab);
-    self.addTab(discoveryTab);
+    
 
     // open tab group
     return self;

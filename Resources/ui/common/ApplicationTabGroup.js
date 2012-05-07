@@ -5,14 +5,14 @@ function ApplicationTabGroup() {
     var self = Titanium.UI.createTabGroup();
 
     var LoginWindow = require('ui/common/LoginWindow');
-	var MessageBoardMainWindow = require('ui/common/Wb_WebboardMainWindow');
+	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	
 	var chatwin = new ChatMainWindow();
-	var messageboardwin = new MessageBoardMainWindow();		
+	var messageboardwin = new MessageboardMainWindow();		
     var loginwin = new LoginWindow();
 	var productwin = new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();

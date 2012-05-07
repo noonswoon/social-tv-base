@@ -6,17 +6,21 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_postId) {
 	    per_page: 20
 	}, function (e) {
 	    if (e.success) {
-	        alert('Reviews Count: ' + e.reviews.length);
-	        /*for (var i = 0; i < e.reviews.length; i++) {
+	        Ti.API.info('Reviews Count: ' + e.reviews.length);
+	        for (var i = 0; i < e.reviews.length; i++) {
 	            var review = e.reviews[i];
-	            alert('id: ' + review.id + '\\n' +
-	                'id: ' + review.id + '\\n' +
-	                'rating: ' + review.rating + '\\n' +
-	                'content: ' + review.content + '\\n' +
-	                'updated_at: ' + review.updated_at);
-	        }*/
+	            var curComment = {
+	            	id: review.id,
+	            	post_id: _postId,
+	            	content: review.content,
+	            	user:review.user,
+	            	updated_at: review.updated_at
+	            }
+				commentsOfPost.push(curComment);
+	        }
+	       Ti.App.fireEvent("commentsLoadedComplete",{fetchedComments:commentsOfPost});
 	    } else {
-	        alert('Error:\\n' +
+	        Ti.API.info('Getting Review Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
@@ -27,13 +31,15 @@ exports.commentToPostACS_create = function(_comment,_postId) {
 	Cloud.Reviews.create({
 	    post_id: _postId,
 	    rating: 1,
-	    content: _comment
+	    content: _comment, 
+	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
-	        alert('Commenting Success: id ' + review.id);
+	        Ti.API.info('Commenting Success: id ' + review.id);
+	        Ti.App.fireEvent("commentCreatedACS",{newComment:review});
 	    } else {
-	        alert('Error:\\n' +
+	        Ti.API.info('Comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

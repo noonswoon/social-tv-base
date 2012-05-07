@@ -25,13 +25,12 @@ CommentHeaderTableViewRow = function() {
 	})
 	header.add(header.dateLabel);
 	
-		
 	header.replyTextField = Ti.UI.createTextField({
 		left: 5,
 		top: 55,
 		width: 310,
 		height: 30,
-		hintText: "Reply here...",
+		hintText: "Write your comment here...",
     	borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	})

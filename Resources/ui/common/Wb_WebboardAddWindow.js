@@ -20,13 +20,13 @@ function WebboardAddWindow(__args) {
 		//Topic.create(topicTextarea.value,1);
 		//connecting with Cloud
 		TopicACS.topicACS_create(topicTextarea.value,1);
-		
-		Ti.App.addEventListener('topicCreatedACS', function(e) {
-			self.close();
-			topicTextarea.value = "";
-			var newTopic = e.newTopic;	
-			Topic.topicModel_add(newTopic);
-		});
+	});
+	
+	Ti.App.addEventListener('topicCreatedACS', function(e) {
+		self.close();
+		topicTextarea.value = "";
+		var newTopic = e.newTopic;	
+		Topic.topicModel_add(newTopic);
 	});
 	
 	self.addEventListener('open', function(e) {

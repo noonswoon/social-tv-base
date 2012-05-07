@@ -40,16 +40,23 @@ function WebboardMainWindow() {
 		Ti.App.addEventListener("topicsLoadedComplete", function(e) {
 			//add to db
 			TopicDb.topicModel_updateTopicsFromACS(e.fetchedTopics,1); 
+		});
+		
+		Ti.App.addEventListener("topicsDbUpdated", function(e) {
+			//clear current data in the table
+			table.data = [];
+			var viewRowsData = [header];
 			
-			//retrieve from db --> need to clear table by table.setData();
+			//retrieve from db
 			var allTopics = TopicDb.topicModel_fetchFromProgramId(1);
 			for (var i=0;i<allTopics.length;i++) {
 				var row = new TopicTableViewRow();
 				row._setTopic(allTopics[i]);
-				data.push(row);
+				viewRowsData.push(row);
 			}
-			table.setData(data);
+			table.setData(viewRowsData);
 		});
+
 		
 		//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 		TopicACS.topicACS_fetchAllTopicsOfProgramId(1);

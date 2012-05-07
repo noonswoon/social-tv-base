@@ -25,10 +25,10 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 
 var add = function(_topic) {
 	var db = Ti.Database.open('Chatterbox');
-	db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", _topic.id,_topic.program_id,_topic.title,_topic.user.username,_topic.updated_at);
+	db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", _topic.id,_topic.custom_fields.program_id,_topic.title,_topic.user.username,_topic.updated_at);
 	db.close();
 	//fire message to let others know that database has changed
-	Ti.App.fireEvent("databaseUpdated");
+	Ti.App.fireEvent("topicsDbUpdated");
 };
 exports.topicModel_add = add;
 
@@ -42,9 +42,10 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 	
 	for(var i=0;i < _topicsCollection.length; i++) {
 		var curTopic = _topicsCollection[i];
-		db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", curTopic.id,curTopic.program_id,curTopic.title,curTopic.username,curTopic.updated_at);
+		db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", curTopic.id,curTopic.program_id,curTopic.title,curTopic.user.username,curTopic.updated_at);
 	}
 	db.close();
+	Ti.App.fireEvent("topicsDbUpdated");
 };
 /*
 exports.del = function(_id) {

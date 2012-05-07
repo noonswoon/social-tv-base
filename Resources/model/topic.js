@@ -1,4 +1,5 @@
 //bootstrap database
+
 var db = Ti.Database.open('Chatterbox');
 db.execute('CREATE TABLE IF NOT EXISTS topics(id TEXT PRIMARY KEY, program_id TEXT, title TEXT, username TEXT, updated_at TEXT);');
 db.close();

@@ -1,7 +1,7 @@
 //testing branch
 function WebboardMainWindow() {
+	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
-	var TopicDb = require('model/topicDb'); //will rename to Topic after cleanup
 	
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
@@ -31,15 +31,11 @@ function WebboardMainWindow() {
 			self.containingTab.open(addWindow);
 		});
 		
-		var data = [
-			header
-		];
-		
 		var TopicTableViewRow = require('ui/common/Wb_TopicTableViewRow');
 		
 		Ti.App.addEventListener("topicsLoadedComplete", function(e) {
 			//add to db
-			TopicDb.topicModel_updateTopicsFromACS(e.fetchedTopics,1); 
+			Topic.topicModel_updateTopicsFromACS(e.fetchedTopics,1); 
 		});
 		
 		Ti.App.addEventListener("topicsDbUpdated", function(e) {
@@ -48,7 +44,7 @@ function WebboardMainWindow() {
 			var viewRowsData = [header];
 			
 			//retrieve from db
-			var allTopics = TopicDb.topicModel_fetchFromProgramId(1);
+			var allTopics = Topic.topicModel_fetchFromProgramId(1);
 			for (var i=0;i<allTopics.length;i++) {
 				var row = new TopicTableViewRow();
 				row._setTopic(allTopics[i]);
@@ -60,19 +56,8 @@ function WebboardMainWindow() {
 		
 		//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 		TopicACS.topicACS_fetchAllTopicsOfProgramId(1);
-		
-		//Topic.fetchAllTopicsOfProgramId(1);
-		
-		Topic.addCreateListener(function(topic) {
-			Ti.API.warn('hello');
-			
-			var row = new TopicTableViewRow();
-			row._setTopic(topic);
-			data.push(row);
-			
-			table.setData(data);
-		});
-		
+
+		/*
 		var WebboardViewWindow = require('ui/common/Wb_WebboardViewWindow');
 		var viewWindow = new WebboardViewWindow();
 		table.addEventListener('click', function(e){
@@ -81,9 +66,10 @@ function WebboardMainWindow() {
 			viewWindow._setTopic(data[e.index].topic);
 			self.containingTab.open(viewWindow);
 		});
+		
+		*/
 	})();
 	
 	return self;
 }
-
 module.exports = WebboardMainWindow;

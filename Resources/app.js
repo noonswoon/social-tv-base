@@ -2,7 +2,6 @@
 Titanium.UI.setBackgroundColor('#000');
 
 Ti.include('/lib/date.js');
-Ti.include('/model/topic.js');
 
 //include xxxACS.js here
 //include xxx models here

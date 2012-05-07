@@ -1,5 +1,7 @@
 function WebboardAddWindow(__args) {
-	var Topic = require('model/topicDb');
+	var Topic = require('model/topic');
+	var TopicACS = require('acs/topicACS');
+	
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/grain.png',

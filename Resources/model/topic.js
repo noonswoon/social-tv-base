@@ -1,115 +1,77 @@
-var Topic = {};
-var TopicACS = require('acs/topicACS');
-(function() {
-	
-	var runId = 0;
-	function mock(options) {
-		var topic = {
-			id: "topic_" + (runId++),
-			title: (options.title || ""),
-			replies: (options.replies || []),
-			created_at: options.created_at
-		};
-		
-		topic.addReply = function(content) {
-			var reply = mockReply({
-				content: content
-			});
-			
-			topic.replies.push(reply);
-			return reply;
-		};
-		
-		return topic;
-	}
-	
-	function mockReply(options) {
-		return {
-			id: "reply_" + (runId++),
-			content: options.content || "",
-			created_at: options.created_at
-		};
-	}
-	
-	
-	
-	var data = {};
-	var topicsOfProgram = [];
-	var now = new Date();
-	
-	{
-		var topic = mock({
-			title: "What happened to Peter?",
-			replies: [
-				mockReply({ content: "I don't know", created_at: new Date(now.getTime() - 61 * 60 * 1000) }),
-				mockReply({ content: "He was killed, I believe", created_at: new Date(now.getTime() - 91 * 60 * 1000) })
-			],
-			created_at: new Date(now.getTime() - 25 * 60 * 1000)
-		});
-		
-		data[topic.id] = topic;
-	}
-	
-	{
-		var topic = mock({
-			title: "How did John die?",
-			replies: [
-				mockReply({ content: "Somebody hired a hit man", created_at: new Date(now.getTime() - 20 * 60 * 60 * 1000) }),
-				mockReply({ content: "He fell off the building", created_at: new Date(now.getTime() - 26 * 60 * 60 * 1000) })
-			],
-			created_at: new Date(now.getTime() -  2 * 24 * 60 * 60 * 1000)
-		});
-		
-		data[topic.id] = topic;
-	}
+//bootstrap database
+var db = Ti.Database.open('Chatterbox');
+db.execute('CREATE TABLE IF NOT EXISTS topics(id TEXT PRIMARY KEY, program_id TEXT, title TEXT, username TEXT, updated_at TEXT);');
+db.close();
 
-/*	
-	Topic.fetchAllTopicsOfProgramId = function(_programId) {
-		for (var id in data) {
-			topicsOfProgram.push(data[id]);
+exports.topicModel_fetchFromProgramId = function(_programId) {
+	var fetchedTopics = [];
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM topics WHERE program_id = ? ORDER BY updated_at DESC',_programId);
+	while(result.isValidRow()) {
+		fetchedTopics.push({
+			title: result.fieldByName('title'),
+			id: result.fieldByName('id'),
+			hasChild:true,
+			color: '#fff',
+			username: result.fieldByName('username'),
+			updated_at: result.fieldByName('updated_at')
+		});
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return fetchedTopics;
+};
+
+var add = function(_topic) {
+	var db = Ti.Database.open('Chatterbox');
+	db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", _topic.id,_topic.custom_fields.program_id,_topic.title,_topic.user.username,_topic.updated_at);
+	db.close();
+	//fire message to let others know that database has changed
+	Ti.App.fireEvent("topicsDbUpdated");
+};
+exports.topicModel_add = add;
+
+
+exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId) {
+	var fetchedTopics = [];
+	var db = Ti.Database.open('Chatterbox'); 
+	
+	//need to clear records with the given programId
+	var result = db.execute('DELETE FROM topics WHERE program_id = ?',_programId);
+	
+	for(var i=0;i < _topicsCollection.length; i++) {
+		var curTopic = _topicsCollection[i];
+		db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", curTopic.id,curTopic.program_id,curTopic.title,curTopic.user.username,curTopic.updated_at);
+	}
+	db.close();
+	Ti.App.fireEvent("topicsDbUpdated");
+};
+/*
+exports.del = function(_id) {
+	var db = Ti.Database.open('TiBountyHunter');
+	db.execute("DELETE FROM fugitives WHERE id = ?",_id);
+	db.close();
+	
+	Ti.App.fireEvent("databaseUpdated");
+};
+
+exports.bust  = function(_id,_lat,_long) {
+	var db = Ti.Database.open('TiBountyHunter');
+	db.execute("UPDATE fugitives SET captured = 1, capturedLat = ?, capturedLong = ? WHERE id = ?",_lat,_long,_id);
+	db.close();
+	
+	Ti.App.fireEvent("databaseUpdated");
+};
+
+if(!Ti.App.Properties.hasProperty('seeded')) {
+	var networkFn = require('/lib/network');
+	networkFn.getFugitives(function(list) {
+		for(var i=0;i<list.length;i++) {
+			var name = list[i]['name'];
+			add(name);
 		}
-		
-		Cloud.Posts.query({
-		    page: 1,
-		    per_page: 20,
-		    where: {
-		        program_id: _programId
-		    }
-		}, function (e) {
-		    if (e.success) {
-		        for (var i = 0; i < e.posts.length; i++) {
-		            var post = e.posts[i];
-		            var curTopic = {
-		            	id: post.id,
-		            	title: post.title,
-		            	created_at: post.updated_at
-		            }
-					topicsOfProgram.push(curTopic);
-				}
-		        Ti.App.fireEvent("topicsLoadedComplete",{fetchedTopics:topicsOfProgram});
-		    } else {
-		        Ti.API.info('Fetching Topic Error: ' + ((e.error && e.message) || JSON.stringify(e)));
-		    }
-		});
-	}
+		Ti.App.Properties.setString('seeded','already');
+	});
+}
 */
-	
-	Topic.get = function(id) {
-		return data[id];
-	}
-	
-	/*
-	Topic.create = function(_title,_programId) {
-		if (Topic.createCallback !== undefined) 
-			Topic.createCallback(topic);
-	
-		//connecting with Cloud
-		TopicACS.topicACS_create(_title,_programId);
-	}*/
-	
-	Topic.addCreateListener = function(block) {
-		Topic.createCallback = block;
-	}
-})();
-
-

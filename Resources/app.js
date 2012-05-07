@@ -1,7 +1,4 @@
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
-
-//Hello! world
-//kjkjkj
 Titanium.UI.setBackgroundColor('#000');
 
 Ti.include('/lib/date.js');

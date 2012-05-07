@@ -57,17 +57,16 @@ function WebboardMainWindow() {
 		//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 		TopicACS.topicACS_fetchAllTopicsOfProgramId(1);
 
-		/*
+		
 		var WebboardViewWindow = require('ui/common/Wb_WebboardViewWindow');
 		var viewWindow = new WebboardViewWindow();
 		table.addEventListener('click', function(e){
 			if (e.index == 0) return;
 			
-			viewWindow._setTopic(data[e.index].topic);
+			viewWindow._setTopic("Hey my friend");
 			self.containingTab.open(viewWindow);
 		});
 		
-		*/
 	})();
 	
 	return self;

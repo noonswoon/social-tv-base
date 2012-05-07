@@ -2,7 +2,7 @@ function DiscoveryMainWindow(){
 	
 	var self = Ti.UI.createWindow({
 		title: 'Discovery',
-		backgroundColor: 'white'
+		backgroundColor: 'black'
 	});
 	
 
@@ -17,18 +17,27 @@ function DiscoveryMainWindow(){
 	var tabHeader = Ti.UI.createView({
 		top: 0,
 		height: 50,
-		backgroundColor: 'orange'
+		// backgroundColor: 'orange'
+		backgroundImage: '/images/bgheader.png'
 	});
 	
 	tabHeader.add(tabbar);
 	self.add(tabHeader);
 	
+//////////////////////
+
 	var info = [];
 	// var rowsArray = [];		
 	for(var c=0;c<5;c++){
 		
 		var row = Ti.UI.createTableViewRow({
-			height: 100
+			height: 100,
+			backgroundGradient: {
+        		type: 'linear',
+        		startPoint: { x: '0%', y: '0%' },
+        		endPoint: { x: '0%', y: '100%' },
+        		colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ]
+    		} 
 		});
 		
 		var mockLabel = Ti.UI.createLabel({
@@ -59,6 +68,16 @@ function DiscoveryMainWindow(){
 			height:89
 		});
 		row.add(mockImage);
+		
+		var mockImage2 = Ti.UI.createImageView({
+			image: "http://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/200px-HBO_logo.svg.png",
+			bottom: 5,
+			left: 270,
+			width: 35,
+			height: 15
+		});
+		row.add(mockImage2);
+		
 		// rowsArray.push(row);		
 		info[c] = row;
 	}

@@ -1,4 +1,7 @@
-function CommentWindow() {
+function CommentWindow(_postId) {
+	var Topic = require('model/comment');
+	var TopicACS = require('acs/commentACS');
+	
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/grain.png',
@@ -28,13 +31,13 @@ function CommentWindow() {
 		var data = [];
 		
 		header.replyTextField.addEventListener('return', function(e) {
-			var reply = self.topic.addReply(header.replyTextField.value);
+			//var reply = self.topic.addReply(header.replyTextField.value);
 			
-			var row = new CommentTableViewRow(table);
-			row._setReply(reply);
-			data.push(row);
+			//var row = new CommentTableViewRow(table);
+			//row._setReply(reply);
+			//data.push(row);
 			
-			table.setData(data);	
+			//table.setData(data);	
 			
 			header.replyTextField.value = "";
 		});
@@ -42,7 +45,7 @@ function CommentWindow() {
 		
 		var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
 		
-		self._setTopic = function(topic) {
+		/*self._setTopic = function(topic) {
 			self.topic = Topic.get(topic.id);
 			
 			header.topicLabel.text = self.topic.title;
@@ -59,7 +62,7 @@ function CommentWindow() {
 			}
 			
 			table.setData(data);
-		};
+		};*/
 	})();
 	
 	return self;

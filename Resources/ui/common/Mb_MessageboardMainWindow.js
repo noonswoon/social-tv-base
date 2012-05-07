@@ -1,5 +1,5 @@
 //testing branch
-function MessageboardMainWindow() {
+function MessageboardMainWindow(_programId) {
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
 	
@@ -35,7 +35,7 @@ function MessageboardMainWindow() {
 		
 		Ti.App.addEventListener("topicsLoadedComplete", function(e) {
 			//add to db
-			Topic.topicModel_updateTopicsFromACS(e.fetchedTopics,1); 
+			Topic.topicModel_updateTopicsFromACS(e.fetchedTopics,_programId); 
 		});
 		
 		Ti.App.addEventListener("topicsDbUpdated", function(e) {
@@ -44,7 +44,7 @@ function MessageboardMainWindow() {
 			var viewRowsData = [header];
 			
 			//retrieve from db
-			var allTopics = Topic.topicModel_fetchFromProgramId(1);
+			var allTopics = Topic.topicModel_fetchFromProgramId(_programId);
 			for (var i=0;i<allTopics.length;i++) {
 				var row = new MessageboardTableViewRow();
 				row._setTopic(allTopics[i]);
@@ -55,15 +55,16 @@ function MessageboardMainWindow() {
 
 		
 		//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
-		TopicACS.topicACS_fetchAllTopicsOfProgramId(1);
+		TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
 
 		
 		var CommentWindow = require('ui/common/Mb_CommentWindow');
-		var commentwin = new CommentWindow();
+
 		table.addEventListener('click', function(e){
 			if (e.index == 0) return;
 			
-			commentwin._setTopic("Hey my friend");
+			var commentwin = new CommentWindow(e.row.topic.id);			
+			//commentwin._setTopic("Hey my friend");
 			self.containingTab.open(commentwin);
 		});
 		

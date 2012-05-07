@@ -1,45 +1,40 @@
-exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
-	var topicsOfProgram = [];
-	Cloud.Posts.query({
+exports.commentACS_fetchAllCommentsOfPostId = function(_postId) {
+	var commentsOfPost = [];
+	Cloud.Reviews.query({
+	    post_id: _postId,
 	    page: 1,
-	    per_page: 20,
-	    where: {
-	        program_id: _programId
-	    }
+	    per_page: 20
 	}, function (e) {
 	    if (e.success) {
-	        for (var i = 0; i < e.posts.length; i++) {
-	            var post = e.posts[i];
-	            var curTopic = {
-	            	id: post.id,
-	            	program_id: _programId,
-	            	title: post.title,
-	            	user:post.user,
-	            	updated_at: post.updated_at
-	            }
-				topicsOfProgram.push(curTopic);
-			}
-	        Ti.App.fireEvent("topicsLoadedComplete",{fetchedTopics:topicsOfProgram});
+	        alert('Reviews Count: ' + e.reviews.length);
+	        /*for (var i = 0; i < e.reviews.length; i++) {
+	            var review = e.reviews[i];
+	            alert('id: ' + review.id + '\\n' +
+	                'id: ' + review.id + '\\n' +
+	                'rating: ' + review.rating + '\\n' +
+	                'content: ' + review.content + '\\n' +
+	                'updated_at: ' + review.updated_at);
+	        }*/
 	    } else {
-	        Ti.API.info('Fetching Topic Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        alert('Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
 }
 	
-exports.topicACS_create = function(_title,_programId) {
+exports.commentToPostACS_create = function(_comment,_postId) {
 	//connecting with Cloud
-	Cloud.Posts.create({
-    		content: 'dummy text',
-			title: _title, 
-			custom_fields: {"program_id": _programId}
-		}, function (e) {
-			if (e.success) {
-		    	var post = e.posts[0];
-		    	Ti.API.info('Posting Success: id: ' + post.id);
-		    	Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
-		    } else {
-		        Ti.API.info('Posting Error: '+((e.error && e.message) || JSON.stringify(e)));
-		   	}
-		}
-	);
+	Cloud.Reviews.create({
+	    post_id: _postId,
+	    rating: 1,
+	    content: _comment
+	}, function (e) {
+	    if (e.success) {
+	        var review = e.reviews[0];
+	        alert('Commenting Success: id ' + review.id);
+	    } else {
+	        alert('Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
 }

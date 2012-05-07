@@ -12,7 +12,7 @@ function ApplicationTabGroup() {
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	
 	var chatwin = new ChatMainWindow();
-	var messageboardwin = new MessageboardMainWindow();		
+	var messageboardwin = new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
 	var productwin = new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();

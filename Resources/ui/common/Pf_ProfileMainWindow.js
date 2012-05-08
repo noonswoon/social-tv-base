@@ -5,159 +5,48 @@ function ProfileMainWindow() {
 		//barColor: '#61A598'
 	});
 /////////////////////////////////////
-	var data = [];	
-
 //NAVIGATION BAR//	
 	
 //HEADER//
-	var headerView = Ti.UI.createView({
-		 backgroundGradient: {
-        	type: 'linear',
-        	startPoint: { x: '0%', y: '0%' },
-        	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ],
-   			},
-		height: 120,
-	});
-	
-	headerView.thumbnail = Ti.UI.createImageView({
-		image: 'images/kuma100x100.png',
-		top: 10, left: 10,
-		width: 100,
-		height: 100,
-		border: 1,
-		borderColor: '#999',
-		backgroundColor: '#E2E5EE'	
-	});
-headerView.add(headerView.thumbnail);
-	
-	headerView.nameLabel = Ti.UI.createLabel({
-		text: 'Jaew Panisa', //name
-		top: 5,
-		left: 120,
-		width: 'auto',
-		height: 30,
-		font: { fontWeight: 'bold', fontSize: 14}
-	})
-headerView.add(headerView.nameLabel);
-//switch: login via ?
-	headerView.login = Ti.UI.createView({
-		top: 40,
-		left: 120,
-		width: 60,
-		height: 70,
-		border:1,
-		borderColor: '#999'
-	});
-headerView.add(headerView.login);
+var ProfileHeader = require('ui/common/Pf_ProfileHeader');
+var profileHeader = new ProfileHeader();
+var headerView = Ti.UI.createView({
+	height: 120});
+headerView.add(profileHeader);
 
-	//number of like
-	headerView.like = Ti.UI.createView({
-		top: 40,
-		left: 185,
-		width: 60,
-		height: 70,
-		backgroundColor: '#999',
-		opacity: 0.9
-	});
-	//	img
-	var likeImage = Ti.UI.createImageView({
-		image: 'images/KS_nav_ui.png',
-		width: 30,
-		height: 30,
-		top: 3
-	});
-	// count
-	var likeCount = Ti.UI.createLabel({
-		text: '59',
-		font: {fontSize: 26, fontStyle: 'bold'},
-		color: '#fff',
-		top: 30
-	});
-	headerView.like.add(likeImage);
-	headerView.like.add(likeCount);
-
-headerView.add(headerView.like);
-		
-	//number of post
-	headerView.post = Ti.UI.createView({
-		top: 40,
-		left: 250,
-		width: 60,
-		height: 70,
-		backgroundColor: '#999',
-		opacity: 0.9
-	});
-	//	img
-	var postImage = Ti.UI.createImageView({
-		image: 'images/KS_nav_views.png',
-		width: 30,
-		height: 30,
-		top: 3
-	});
-	// count
-	var postCount = Ti.UI.createLabel({
-		text: '27',
-		font: {fontSize: 26, fontStyle: 'bold'},
-		color: '#fff',
-		top: 30
-	});
-	
-	headerView.post.add(postImage);
-	headerView.post.add(postCount);
-
-headerView.add(headerView.post);		
-	
-//STAT//	
-var profileMenu = Ti.UI.createTableViewRow({
-	height: 50,
-	selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		 backgroundGradient: {
-        	type: 'linear',
-        	startPoint: { x: '0%', y: '0%' },
-        	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ],
-   			},
+//MENU//	
+var ProfileMenu = require('ui/common/Pf_ProfileMenu');
+var profileMenu = new ProfileMenu();
+var menuView = Ti.UI.createView({
+	height:50
 });
-	profileMenu.profileTab = Ti.UI.createTabbedBar({
-	labels:['Stats', 'Activity', 'Badges', 'Rewards'],
-	//backgroundColor:'#61A598',
-	style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
-	height:30,
-	width:300,
-	index:2
-	});	
-//TAB MENU
-//	
-var profileDetail = Ti.UI.createTableViewRow({
-	height: 198,
-	selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	backgroundColor: '#fff',
+//profileMenu.add(profileMenu.profileTab);
+menuView.add(profileMenu);
+
+
+//DETAIL//
+var ProfileDetail = require('ui/common/Pf_ProfileDetail');
+var profileDetail = new ProfileDetail();
+var detailView = Ti.UI.createView({
+	height: 198
 });
-
-	profileDetail.details = Ti.UI.createView({
-		height: 190,
-		width: 312,
-		borderRadius: 5,
-		backgroundColor: '#999'});
-
-profileDetail.add(profileDetail.details);	
-
-//TAB MENU EVENT:D////////////////////////////////////////////
-profileMenu.profileTab.addEventListener('click', function(e)
-{
-	l.text = 'You clicked index = ' + e.index;
-});
-//////////////////////////////////////////////////////////////
-profileMenu.add(profileMenu.profileTab);
+detailView.add(profileDetail);
 
 //no-edit! code:D//
-var section = Ti.UI.createTableViewSection();
-section.headerView = headerView;
-section.add(profileMenu);
-section.add(profileDetail);
+var data=[];
 
-data[0] = section;
+var header = Ti.UI.createTableViewSection();
+header.headerView = headerView;
+data[0] = header;
+
+var menu = Ti.UI.createTableViewSection();
+menu.headerView = profileMenu;
+data[1] = menu;
+
+
+var detail = Ti.UI.createTableViewSection();
+detail.headerView = profileDetail;
+data[2] = detail;
 
 var table = Ti.UI.createTableView({
 		top: 0,
@@ -167,6 +56,7 @@ var table = Ti.UI.createTableView({
 		scrollable: false,
 		data: data
 	});
+
 	self.add(table);
 	
 /////////////////////////////////////	

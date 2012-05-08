@@ -1,7 +1,8 @@
+/*
 exports.tvprogramACS_fetchAllTVProgram = function(_programTitle) {
 	var topicsOfProgram = [];
 	
-	Cloud.Posts.query({
+	Cloud.Events.query({
 	    page: 1,
 	    per_page: 20,
 	}, function (e) {
@@ -12,7 +13,7 @@ exports.tvprogramACS_fetchAllTVProgram = function(_programTitle) {
 	    }
 	});
 }
-	
+	*/
 exports.topicACS_create = function(_title,_programId) {
 	//connecting with Cloud
 	Cloud.Posts.create({

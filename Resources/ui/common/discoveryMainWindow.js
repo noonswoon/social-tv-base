@@ -86,18 +86,15 @@ function DiscoveryMainWindow(){
 		data: info
 	});
 	
-	// var linkToCheckin = require('ui/common/checkinMainWindow');
-	// var checkinWindow = new linkToCheckin();
-	// programListTable.addEventListener('check',function(e) {
-// 
-// 		
-		// programListTable.open(checkinWindow);
-	// });
-	
 	programListTable.addEventListener('click',function(e){
 		
-		var checkinWindow = require('ui/common/checkinMainWindow');
-		self.containingTab.open(checkinWindow());
+		var CheckinWindow = require('ui/common/checkinMainWindow');
+		self.containingTab.open(new CheckinWindow({
+			programTitle:'Hawaii Five-O',
+			programImage:"http://www.weloveshopping.com/shop/mildmovies/o-207.jpg",
+			programDescription:"Season1",
+			programChannel:"http://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/200px-HBO_logo.svg.png"
+			}));
 	});
 	
 	

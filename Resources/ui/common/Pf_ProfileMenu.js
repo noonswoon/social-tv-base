@@ -1,6 +1,5 @@
 var ProfileMenuView = function(){
 	var profileMenu = Ti.UI.createView({
-		height: 50,
 		 backgroundGradient: {
         	type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
@@ -9,7 +8,7 @@ var ProfileMenuView = function(){
    			},
 
 });
-/*
+
 	var profileTab = Titanium.UI.iOS.createTabbedBar({
 		labels:['Stats', 'Activity', 'Badges', 'Rewards'],
 		//backgroundColor:'#61A598',
@@ -17,9 +16,9 @@ var ProfileMenuView = function(){
 		height:30,
 		width:300,
 		index:0
-	});	*/
+	});	
 	
-//	profileMenu.add(profileTab);
+	profileMenu.add(profileTab);
 
 	return profileMenu;
 	}

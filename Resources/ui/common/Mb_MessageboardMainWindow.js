@@ -1,4 +1,3 @@
-//testing branch
 function MessageboardMainWindow(_programId) {
 	//HEADERS
 	var Topic = require('model/topic');

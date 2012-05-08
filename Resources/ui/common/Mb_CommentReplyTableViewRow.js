@@ -1,4 +1,4 @@
-ReplyTableViewRow = function(table) {
+CommentReplyTableViewRow = function(table) {
 	var row = Ti.UI.createTableViewRow({
 		height: 30,
 		allowsSelection: false,
@@ -142,4 +142,4 @@ ReplyTableViewRow = function(table) {
 	
 	return row;
 }
-module.exports = ReplyTableViewRow;
+module.exports = CommentReplyTableViewRow;

@@ -1,4 +1,4 @@
-TopicTableViewRow = function() {
+MessageboardTableViewRow = function() {
 	var row = Ti.UI.createTableViewRow({
 		height: 40,
 		allowsSelection: true,
@@ -23,4 +23,5 @@ TopicTableViewRow = function() {
 	return row;
 }
 
-module.exports = TopicTableViewRow;
+module.exports = MessageboardTableViewRow;
+

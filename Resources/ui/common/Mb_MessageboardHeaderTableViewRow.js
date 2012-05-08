@@ -1,4 +1,4 @@
-WebboardHeaderTableViewRow = function(_showName,_showSubName) {
+MessageboardHeaderTableViewRow = function(_showName,_showSubName) {
 	var header = Ti.UI.createTableViewRow({
 		height: 140,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
@@ -93,4 +93,4 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 	return header;
 }
 
-module.exports = WebboardHeaderTableViewRow;
+module.exports = MessageboardHeaderTableViewRow;

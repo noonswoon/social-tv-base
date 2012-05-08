@@ -1,4 +1,7 @@
-function WebboardAddWindow(__args) {
+function MessageboardAddWindow(__args) {
+	var Topic = require('model/topic');
+	var TopicACS = require('acs/topicACS');
+	
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/grain.png',
@@ -16,9 +19,16 @@ function WebboardAddWindow(__args) {
 	self.add(topicTextarea);
 	
 	self.addEventListener('return', function(e) {
-		Topic.create(topicTextarea.value);
+		//Topic.create(topicTextarea.value,1);
+		//connecting with Cloud
+		TopicACS.topicACS_create(topicTextarea.value,1);
+	});
+	
+	Ti.App.addEventListener('topicCreatedACS', function(e) {
 		self.close();
 		topicTextarea.value = "";
+		var newTopic = e.newTopic;	
+		Topic.topicModel_add(newTopic);
 	});
 	
 	self.addEventListener('open', function(e) {
@@ -32,4 +42,4 @@ function WebboardAddWindow(__args) {
 	return self;
 }
 
-module.exports = WebboardAddWindow;
+module.exports = MessageboardAddWindow;

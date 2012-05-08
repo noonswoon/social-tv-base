@@ -3,7 +3,8 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_postId) {
 	Cloud.Reviews.query({
 	    post_id: _postId,
 	    page: 1,
-	    per_page: 20
+	    per_page: 20, 
+	    order: '-created_at'
 	}, function (e) {
 	    if (e.success) {
 	        Ti.API.info('Reviews Count: ' + e.reviews.length);

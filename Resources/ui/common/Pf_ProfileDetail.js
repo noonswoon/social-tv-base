@@ -1,6 +1,5 @@
 var ProfileDetailView = function(){
 	var profileDetail = Ti.UI.createView({
-		height: 198,
 		backgroundColor: '#fff',
 		});
 
@@ -10,7 +9,9 @@ var ProfileDetailView = function(){
 		borderRadius: 5,
 		scrollable: true,
 		backgroundColor: '#999'});
-
+		//
+	
+		//
 profileDetail.add(profileDetail.details);	
 
 	return profileDetail;

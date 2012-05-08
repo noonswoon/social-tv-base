@@ -17,7 +17,6 @@ headerView.add(profileHeader);
 //MENU//	
 var ProfileMenu = require('ui/common/Pf_ProfileMenu');
 var profileMenu = new ProfileMenu();
-
 var menuView = Ti.UI.createView({
 	height:50
 });
@@ -44,9 +43,8 @@ var menu = Ti.UI.createTableViewSection();
 menu.headerView = menuView;
 data[1] = menu;
 
-
 var detail = Ti.UI.createTableViewSection();
-detail.headerView = profileDetail;
+detail.headerView = detailView;
 data[2] = detail;
 
 var table = Ti.UI.createTableView({

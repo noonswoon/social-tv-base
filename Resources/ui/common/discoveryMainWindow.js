@@ -23,7 +23,8 @@ function DiscoveryMainWindow(){
 	tabHeader.add(tabbar);
 	self.add(tabHeader);
 	
-/////////////////////////////
+
+/////////////////////////////Table View
 
 	var info = [];
 	// var rowsArray = [];		
@@ -84,6 +85,22 @@ function DiscoveryMainWindow(){
 		top: 50,
 		data: info
 	});
+	
+	// var linkToCheckin = require('ui/common/checkinMainWindow');
+	// var checkinWindow = new linkToCheckin();
+	// programListTable.addEventListener('check',function(e) {
+// 
+// 		
+		// programListTable.open(checkinWindow);
+	// });
+	
+	programListTable.addEventListener('click',function(e){
+		
+		var checkinWindow = require('ui/common/checkinMainWindow');
+		self.containingTab.open(checkinWindow());
+	});
+	
+	
 	// programListTable.setData(rowsArray);
 	self.add(programListTable);
 	

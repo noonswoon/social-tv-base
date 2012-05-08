@@ -3,6 +3,7 @@ function MessageboardMainWindow(_programId) {
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
 	
+	//UI STUFF
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/grain.png',
@@ -11,7 +12,7 @@ function MessageboardMainWindow(_programId) {
 	});
 	
 	
-	var table = Ti.UI.createTableView({
+	var allTopicTable = Ti.UI.createTableView({
 		top: 0,
 		left: 0,
 		right: 0,
@@ -19,7 +20,7 @@ function MessageboardMainWindow(_programId) {
 		scrollable: true
 	});
 	
-	self.add(table);
+	self.add(allTopicTable);
 	
 	(function() {
 		var MessageboardHeaderTableViewRow = require('ui/common/Mb_MessageboardHeaderTableViewRow');
@@ -40,7 +41,7 @@ function MessageboardMainWindow(_programId) {
 		
 		Ti.App.addEventListener("topicsDbUpdated", function(e) {
 			//clear current data in the table
-			table.data = [];
+			allTopicTable.data = [];
 			var viewRowsData = [header];
 			
 			//retrieve from db
@@ -50,7 +51,7 @@ function MessageboardMainWindow(_programId) {
 				row._setTopic(allTopics[i]);
 				viewRowsData.push(row);
 			}
-			table.setData(viewRowsData);
+			allTopicTable.setData(viewRowsData);
 		});
 
 		
@@ -60,7 +61,7 @@ function MessageboardMainWindow(_programId) {
 		
 		var CommentWindow = require('ui/common/Mb_CommentWindow');
 
-		table.addEventListener('click', function(e){
+		allTopicTable.addEventListener('click', function(e){
 			if (e.index == 0) return;
 			
 			var commentwin = new CommentWindow(e.row.topic.id);			

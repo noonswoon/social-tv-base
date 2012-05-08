@@ -1,4 +1,6 @@
-function DiscoveryMainWindow(){
+function DiscoveryMainWindow(_programTitle){
+	
+	var tvprogramACS = require('acs/tvprogramACS');
 	
 	var self = Ti.UI.createWindow({
 		title: 'Discovery',
@@ -97,6 +99,7 @@ function DiscoveryMainWindow(){
 			}));
 	});
 	
+	tvprogramACS.tvprogramACS_fetchAllTVProgram(_programTitle);
 	
 	// programListTable.setData(rowsArray);
 	self.add(programListTable);

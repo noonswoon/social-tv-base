@@ -130,7 +130,7 @@ CommentReplyTableViewRow = function(table) {
 		row.height += row.replyToolbar.height;
 	};
 	
-	
+/*	
 	row.contentLabel.addEventListener('click', function() {
 		if (table.shownRow != undefined) table.shownRow._hideToolbar();
 		
@@ -139,7 +139,7 @@ CommentReplyTableViewRow = function(table) {
 		
 		table.setData(table.data);
 	});
-	
+*/
 	return row;
 }
 module.exports = CommentReplyTableViewRow;

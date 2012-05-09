@@ -1,4 +1,4 @@
-function CommentWindow(_postId) {
+function CommentWindow(_topicId) {
 	//HEADERS
 	var Comment = require('model/comment');
 	var CommentACS = require('acs/commentACS');
@@ -6,9 +6,9 @@ function CommentWindow(_postId) {
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
 	
 	//OBJECTS INSTANTIATION
-	var header = new CommentHeaderTableViewRow();
-	header.topicLabel.text = "What happened to Peter?";
-	header.dateLabel.text = "Submitted 3 hours ago by Test";
+	var commentHeader = new CommentHeaderTableViewRow();
+	commentHeader.topicLabel.text = "What happened to Peter?";
+	commentHeader.dateLabel.text = "Submitted 3 hours ago by Test";
 	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
@@ -18,7 +18,7 @@ function CommentWindow(_postId) {
 		barColor: '#6d0a0c'
 	});
 
-	var table = Titanium.UI.createTableView({
+	var commentsTable = Titanium.UI.createTableView({
 		top: 0,
 		left: 0,
 		right: 0,
@@ -36,37 +36,54 @@ function CommentWindow(_postId) {
 	
 	//ADDING UI COMPONENTS
 	self.setToolbar([toolActInd],{animated:true});
-	self.add(table);
+	self.add(commentsTable);
 	
 	//CALLBACK FUNCTIONS
 	function commentsLoadedCompleteCallback(e) {
 		//add to db
-		alert("Cloud CommentACS fetchAllComments - DONE");
 		Ti.API.info(e.fetchedComments);
+		Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_topicId); 
+	}
+	
+	function commentsDbUpdatedCallback(e) {
+		//clear current data in the table
+		commentsTable.data = [];
+		var commentRowsData = [commentHeader];
+		
+		//retrieve from db
+		var allComments = Comment.commentModel_fetchFromTopicId(_topicId);
+		for (var i=0;i<allComments.length;i++) {
+			var curComment = allComments[i];
+			var row = Ti.UI.createTableViewRow({
+								title: curComment.content,
+								height: 30,
+								allowsSelection: false,
+								selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
+							});
+			commentRowsData.push(row);
+		}
+		commentsTable.setData(commentRowsData);
+	
+		//take out the Loading... spinning wheel
 		toolActInd.hide();
 		self.setToolbar(null,{animated:true});
-		table.height += self.to
-		//Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_postId); 
 	}
 	
 	function commentCreatedACSCallback(e) {
-		header.replyTextField.value = "";
+		commentHeader.replyTextField.value = "";
 		var newComment = e.newComment;	
 		alert("receving fired event from CommentACS create");
-		//Comment.commentModel_add(newComment);
+		Comment.commentModel_add(newComment);
 	}
 	
 	//ADD EVENT LISTENERS
-	table.addEventListener('click', function(e){
-		Ti.API.warn(e.index);
-	});
-
-	header.replyTextField.addEventListener('return', function(e) {
-		CommentACS.commentToPostACS_create(header.replyTextField.value,_postId);
-		header.replyTextField.value = "";
+	commentHeader.replyTextField.addEventListener('return', function(e) {
+		CommentACS.commentToPostACS_create(commentHeader.replyTextField.value,_topicId);
+		commentHeader.replyTextField.value = "";
 	});
 
 	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);
+	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);
 
 	self.addEventListener("close", function(e) {
@@ -76,28 +93,9 @@ function CommentWindow(_postId) {
 	
 	//PAGE LOGIC/CONTROLLER
 	toolActInd.show();
-	var viewRowsArray = [];
-	viewRowsArray.push(header);
-	table.setData(viewRowsArray);	
-	
-	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
-	CommentACS.commentACS_fetchAllCommentsOfPostId(_postId);
 
-	/*self._setTopic = function(topic) {
-		self.topic = Topic.get(topic.id);
-		header.topicLabel.text = self.topic.title;
-		header.dateLabel.text = "Submitted " + since(self.topic.created_at);
-		data = [
-			header
-		];
-		
-		for (var i=0;i<self.topic.replies.length;i++) {
-			var row = new CommentTableViewRow(table);
-			row._setReply(self.topic.replies[i]);
-			data.push(row);
-		}
-		table.setData(data);
-	};*/
+	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
+	CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
 
 	return self;
 }

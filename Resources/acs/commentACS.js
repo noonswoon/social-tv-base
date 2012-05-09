@@ -1,7 +1,7 @@
-exports.commentACS_fetchAllCommentsOfPostId = function(_postId) {
+exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 	var commentsOfPost = [];
 	Cloud.Reviews.query({
-	    post_id: _postId,
+	    post_id: _topicId,
 	    page: 1,
 	    per_page: 20, 
 	    order: '-created_at'
@@ -12,7 +12,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_postId) {
 	            var review = e.reviews[i];
 	            var curComment = {
 	            	id: review.id,
-	            	post_id: _postId,
+	            	topic_id: _topicId,
 	            	content: review.content,
 	            	user:review.user,
 	            	updated_at: review.updated_at
@@ -27,12 +27,13 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_postId) {
 	});
 }
 	
-exports.commentToPostACS_create = function(_comment,_postId) {
+exports.commentToPostACS_create = function(_comment,_topicId) {
 	//connecting with Cloud
 	Cloud.Reviews.create({
-	    post_id: _postId,
+	    post_id: _topicId, //need to remain as 'post_id' since it is connection to ACS Posts API
 	    rating: 1,
 	    content: _comment, 
+	    custom_fields: {"object_to_response_id": _topicId},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {

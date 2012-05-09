@@ -1,52 +1,57 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS topics(id TEXT PRIMARY KEY, program_id TEXT, title TEXT, username TEXT, updated_at TEXT);');
+//response_to_object_id --> object_id can be topic_id (comment of post) or comment_id (comment of comment)
+db.execute('CREATE TABLE IF NOT EXISTS comments(id TEXT PRIMARY KEY, topic_id TEXT, content TEXT, rating INTEGER, username TEXT, response_to_object_id TEXT, updated_at TEXT);');
 db.close();
 
-exports.topicModel_fetchFromProgramId = function(_programId) {
-	var fetchedTopics = [];
+exports.commentModel_fetchFromTopicId = function(_topicId) {
+	var fetchedComments = [];
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM topics WHERE program_id = ? ORDER BY updated_at DESC',_programId);
+	var result = db.execute('SELECT * FROM comments WHERE topic_id = ? ORDER BY updated_at DESC',_topicId);
 	while(result.isValidRow()) {
-		fetchedTopics.push({
-			title: result.fieldByName('title'),
-			id: result.fieldByName('id'),
+		fetchedComments.push({
 			hasChild:true,
 			color: '#fff',
+			title: result.fieldByName('content'),
+			id: result.fieldByName('id'),
+			topic_id: result.fieldByName('topic_id'),
+			content: result.fieldByName('content'),
+			rating: Number(result.fieldByName('rating')),
 			username: result.fieldByName('username'),
+			response_to_object_id: result.fieldByName('response_to_object_id'),
 			updated_at: result.fieldByName('updated_at')
 		});
 		result.next();
 	}	
 	result.close();
 	db.close();
-	return fetchedTopics;
+	return fetchedComments;
 };
 
-var add = function(_topic) {
+var add = function(_comment) {
 	var db = Ti.Database.open('Chatterbox');
-	db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", _topic.id,_topic.custom_fields.program_id,_topic.title,_topic.user.username,_topic.updated_at);
+	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,updated_at) VALUES(?,?,?,?,?,?,?)", _comment.id,_comment.topic_id,_comment.content,_comment.rating,_comment.user.username,_comment.response_to_object_id,_comment.updated_at);
 	db.close();
 	//fire message to let others know that database has changed
-	Ti.App.fireEvent("topicsDbUpdated");
+	Ti.App.fireEvent("commentsDbUpdated");
 };
-exports.topicModel_add = add;
+exports.commentModel_add = add;
 
 
-exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId) {
-	var fetchedTopics = [];
+exports.commentModel_updateCommentsFromACS = function(_commentsCollection, _topicId) {
+	var fetchedComments = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	
-	//need to clear records with the given programId
-	var result = db.execute('DELETE FROM topics WHERE program_id = ?',_programId);
+	//need to clear records with the given topicId
+	var result = db.execute('DELETE FROM comments WHERE topic_id = ?',_topicId);
 	
-	for(var i=0;i < _topicsCollection.length; i++) {
-		var curTopic = _topicsCollection[i];
-		db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", curTopic.id,curTopic.program_id,curTopic.title,curTopic.user.username,curTopic.updated_at);
+	for(var i=0;i < _commentsCollection.length; i++) {
+		var curComment = _commentsCollection[i];
+		db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,updated_at) VALUES(?,?,?,?,?,?,?)", curComment.id,curComment.topic_id,curComment.content,curComment.rating,curComment.user.username,curComment.response_to_object_id,curComment.updated_at);
 	}
 	db.close();
-	Ti.App.fireEvent("topicsDbUpdated");
+	Ti.App.fireEvent("commentsDbUpdated");
 };
 /*
 exports.del = function(_id) {

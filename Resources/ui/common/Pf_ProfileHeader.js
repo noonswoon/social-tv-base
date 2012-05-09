@@ -26,14 +26,13 @@ var ProfileHeaderView = function(){
 			font: { fontWeight: 'bold', fontSize: 14}
 		})
 		//switch: login via ?
-		var viaLogin = Ti.UI.createView({
+		var fbLogin = Ti.UI.createView({
 			top: 40,
 			left: 120,
 			width: 60,
-			height: 70,
-			border:1,
-			borderColor: '#999'
+			height: 70
 		});
+
 		//number of like
 		var columnLike = Ti.UI.createView({
 			top: 40,
@@ -83,7 +82,7 @@ var ProfileHeaderView = function(){
 
 	headerView.add(profilePicture);
 	headerView.add(profileName);
-	headerView.add(viaLogin);
+	headerView.add(fbLogin);
 		columnLike.add(columnLikeImage);
 		columnLike.add(columnLikeCount);
 	headerView.add(columnLike);

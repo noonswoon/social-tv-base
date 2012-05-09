@@ -19,12 +19,55 @@ var ProfileDetailView = function(){
 		profileMenu.add(profileTab);
 ///DETAIL//////////////////////////////////////////////////////////
 	var detail = Ti.UI.createTableViewSection();
-		var profileDetail = Ti.UI.createTableViewRow({
+	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
-		height:198,
+		//height:198,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 		});
+	var profileDetailScroll = Ti.UI.createScrollView({
+	contentWidth:'auto',
+	contentHeight:'auto',
+	top:0,
+	showVerticalScrollIndicator:true,
+	showHorizontalScrollIndicator:true,
+	width: 312,
+	height: 198,
+	disableBounce: true
+	});	
+	
+///////////////////////////////////////////////////////////////////
+	var ProfileStats = require('ui/common/Pf_ProfileDetails_Stats');
+	var profileStats = new ProfileStats();
+	var ProfileActivity = require('ui/common/Pf_ProfileDetails_Activity');
+	var profileActivity = new ProfileActivity();
+	var ProfileBadge = require('ui/common/Pf_ProfileDetails_Badge');
+	var profileBadge = new ProfileBadge();	
+	var ProfileReward = require('ui/common/Pf_ProfileDetails_Reward');
+	var profileReward = new ProfileReward();
 		
+	profileDetailScroll.add(profileStats);
+	profileDetail.add(profileDetailScroll);
+		
+	profileTab.addEventListener('click',function(e){
+
+		//delete unuse view
+		while (profileDetailScroll.children !== undefined && profileDetailScroll.children.length !== 0){
+				profileDetailScroll.remove(profileDetailScroll.children[0]);
+		}
+		if(e.index==0){
+			profileDetailScroll.add(profileStats);
+		}
+		else if (e.index==1) {	
+				profileDetailScroll.add(profileActivity);
+		}
+		else if (e.index==2) {
+			profileDetailScroll.add(profileBadge);
+		}	
+		else{
+			profileDetailScroll.add(profileReward);
+			}
+	});
+
 //////////////////////////////////////////////////////////////////
 
 	detail.headerView = profileMenu;

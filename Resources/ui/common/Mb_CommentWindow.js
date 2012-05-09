@@ -1,5 +1,6 @@
 function CommentWindow(_topicId) {
 	//HEADERS
+	var Topic = require('model/topic');
 	var Comment = require('model/comment');
 	var CommentACS = require('acs/commentACS');
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
@@ -7,8 +8,6 @@ function CommentWindow(_topicId) {
 	
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
-	commentHeader.topicLabel.text = "What happened to Peter?";
-	commentHeader.dateLabel.text = "Submitted 3 hours ago by Test";
 	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
@@ -41,29 +40,48 @@ function CommentWindow(_topicId) {
 	//CALLBACK FUNCTIONS
 	function commentsLoadedCompleteCallback(e) {
 		//add to db
-		Ti.API.info(e.fetchedComments);
+		//Ti.API.info(e.fetchedComments);
 		Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_topicId); 
 	}
 	
 	function commentsDbUpdatedCallback(e) {
 		//clear current data in the table
 		commentsTable.data = [];
+		
+		//getting topicInfo from the db
+		
+		var curTopic = Topic.topicModel_getTopicById(_topicId);
+		commentHeader.topicLabel.text = curTopic.title;
+
+		//use momentjs for helping on converting dateObject from string
+		//problematic because ACS stores the date as a string with timezone format (+0000)
+		//and we can't directly convert datestring with timezone format to Javascript Date object
+		//so --> create moment object with datestring from ACS (having timezone)
+		//then use moment to output a format that javascript Date object can understand
+		//namely, the 'MMM D, YYYY hh:mm:ss' format
+		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss z");
+		var dateObjFormat = dm.format('MMM D, YYYY hh:mm:ss');
+		var submitDateObj = new Date(dateObjFormat);
+		commentHeader.dateLabel.text = "Submitted "+since(submitDateObj)+" by "+curTopic.username;
+
 		var commentRowsData = [commentHeader];
 		
 		//retrieve from db
 		var allComments = Comment.commentModel_fetchFromTopicId(_topicId);
 		for (var i=0;i<allComments.length;i++) {
 			var curComment = allComments[i];
-			var row = Ti.UI.createTableViewRow({
+			var row = new CommentReplyTableViewRow(); /*Ti.UI.createTableViewRow({
 								title: curComment.content,
 								height: 30,
 								allowsSelection: false,
 								selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
-							});
+							});*/
+			row._setContent(curComment);
 			commentRowsData.push(row);
 		}
 		commentsTable.setData(commentRowsData);
 	
+		//LOGIC/Controllers 		
 		//take out the Loading... spinning wheel n
 		toolActInd.hide();
 		self.setToolbar(null,{animated:true});

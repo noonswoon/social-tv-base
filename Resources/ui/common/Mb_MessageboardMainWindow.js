@@ -75,6 +75,7 @@ function MessageboardMainWindow(_programId) {
 	
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 	TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
+	
 	return self;
 }
 module.exports = MessageboardMainWindow;

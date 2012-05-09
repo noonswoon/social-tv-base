@@ -24,6 +24,24 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 	return fetchedTopics;
 };
 
+exports.topicModel_getTopicById = function(_topicId) {
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM topics WHERE id = ?',_topicId);
+	if(result.rowCount > 1) 
+		alert("something wrong with getTopic, should return just 1 [returning too many topics]");
+	var topic = {};
+	while(result.isValidRow()) {
+		topic.id = result.fieldByName('id'); 
+		topic.title = result.fieldByName('title');
+		topic.username = result.fieldByName('username');
+		topic.updated_at = result.fieldByName('updated_at')
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return topic;
+};
+
 var add = function(_topic) {
 	var db = Ti.Database.open('Chatterbox');
 	db.execute("INSERT INTO topics(id,program_id,title,username,updated_at) VALUES(?,?,?,?,?)", _topic.id,_topic.custom_fields.program_id,_topic.title,_topic.user.username,_topic.updated_at);

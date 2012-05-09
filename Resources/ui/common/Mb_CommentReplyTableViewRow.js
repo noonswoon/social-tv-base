@@ -1,4 +1,4 @@
-CommentReplyTableViewRow = function(comment) {
+CommentReplyTableViewRow = function(_comment) {
 
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
@@ -9,7 +9,7 @@ CommentReplyTableViewRow = function(comment) {
 	});
 	
 	var contentLabel = Ti.UI.createLabel({
-		text: '-',
+		text: _comment.content,
 		top: 5,
 		left: 5,
 		width: 310,
@@ -71,11 +71,6 @@ CommentReplyTableViewRow = function(comment) {
 	replyToolbar.add(replyButton);
 	
 	// CLASS METHODS GET&SET
-	
-	row._setContent = function(comment) {
-		contentLabel.text = comment.content;
-	}; 
-		
 	row._hideToolbar = function() {
 		if (replyToolbar.visible == false) return;
 		replyToolbar.visible = false;
@@ -89,16 +84,19 @@ CommentReplyTableViewRow = function(comment) {
 		row.height += replyToolbar.height;
 	};
 	
-	contentLabel.addEventListener('click', function() {
-		/*if (table.shownRow != undefined) table.shownRow._hideToolbar();
-		
-		table.shownRow = row;
-		table.shownRow._showToolbar();
-		
-		table.setData(table.data);
-		*/
-		alert("I got clicked");
+	//ADD EVENTLISTNERS FOR REPLY VOTE UP/DOWN FOR THIS COMMENTS
+	replyButton.addEventListener('click',function() {
+		alert("submitting reply to this comment: "+_comment.id+", content: "+replyTextField.value);
 	});
+	
+	upButton.addEventListener('click', function() {
+		alert("upvote: "+_comment.id);
+	});
+	
+	downButton.addEventListener('click', function() {
+		alert("downvote: "+_comment.id);
+	});
+	
 	return row;
 }
 module.exports = CommentReplyTableViewRow;

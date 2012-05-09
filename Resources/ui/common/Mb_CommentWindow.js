@@ -23,7 +23,8 @@ function CommentWindow(_topicId) {
 		right: 0,
 		bottom: 0,
 		scrollable: true,
-		height:'480'
+		height:'480',
+		selectedToCommentRow: null
 	});
 	
 	var toolActInd = Titanium.UI.createActivityIndicator({
@@ -70,13 +71,7 @@ function CommentWindow(_topicId) {
 		var allComments = Comment.commentModel_fetchFromTopicId(_topicId);
 		for (var i=0;i<allComments.length;i++) {
 			var curComment = allComments[i];
-			var row = new CommentReplyTableViewRow(); /*Ti.UI.createTableViewRow({
-								title: curComment.content,
-								height: 30,
-								allowsSelection: false,
-								selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
-							});*/
-			row._setContent(curComment);
+			var row = new CommentReplyTableViewRow(curComment);
 			commentRowsData.push(row);
 		}
 		commentsTable.setData(commentRowsData);
@@ -99,6 +94,17 @@ function CommentWindow(_topicId) {
 		commentHeader.replyTextField.value = "";
 	});
 
+	commentsTable.addEventListener('click', function(e) {
+		if(commentsTable.selectedToCommentRow != null)
+			commentsTable.selectedToCommentRow._hideToolbar();	
+	
+		commentsTable.selectedToCommentRow = e.row;
+		commentsTable.selectedToCommentRow._showToolbar();
+
+		//reset the data to make the UI transition looks smoother
+		commentsTable.setData(commentsTable.data);
+	});
+	
 	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);
 	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);

@@ -1,10 +1,6 @@
-//testing Events ACS --var network = require('lib/network');
-
 exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	var topicsOfProgram = [];
-	
-	//..just testing ACS network.getEvents();
-	
+
 	Cloud.Posts.query({
 	    page: 1,
 	    per_page: 20,

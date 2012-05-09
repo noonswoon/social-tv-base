@@ -1,11 +1,13 @@
 exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	var topicsOfProgram = [];
+
 	Cloud.Posts.query({
 	    page: 1,
 	    per_page: 20,
 	    where: {
 	        program_id: _programId
-	    }
+	    }, 
+	    order: '-created_at'
 	}, function (e) {
 	    if (e.success) {
 	        for (var i = 0; i < e.posts.length; i++) {

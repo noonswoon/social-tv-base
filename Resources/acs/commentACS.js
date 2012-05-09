@@ -14,7 +14,9 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 	            	id: review.id,
 	            	topic_id: _topicId,
 	            	content: review.content,
+	            	rating: review.rating,
 	            	user:review.user,
+	            	response_to_object_id: review.custom_fields.response_to_object_id,
 	            	updated_at: review.updated_at
 	            }
 				commentsOfPost.push(curComment);
@@ -33,7 +35,7 @@ exports.commentToPostACS_create = function(_comment,_topicId) {
 	    post_id: _topicId, //need to remain as 'post_id' since it is connection to ACS Posts API
 	    rating: 1,
 	    content: _comment, 
-	    custom_fields: {"object_to_response_id": _topicId},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {

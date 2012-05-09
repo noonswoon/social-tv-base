@@ -31,7 +31,7 @@ exports.commentModel_fetchFromTopicId = function(_topicId) {
 
 var add = function(_comment) {
 	var db = Ti.Database.open('Chatterbox');
-	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,updated_at) VALUES(?,?,?,?,?,?,?)", _comment.id,_comment.topic_id,_comment.content,_comment.rating,_comment.user.username,_comment.response_to_object_id,_comment.updated_at);
+	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,updated_at) VALUES(?,?,?,?,?,?,?)", _comment.id,_comment.custom_fields.topic_id,_comment.content,_comment.rating,_comment.user.username,_comment.custom_fields.response_to_object_id,_comment.updated_at);
 	db.close();
 	//fire message to let others know that database has changed
 	Ti.App.fireEvent("commentsDbUpdated");

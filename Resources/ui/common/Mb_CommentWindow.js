@@ -64,7 +64,7 @@ function CommentWindow(_topicId) {
 		}
 		commentsTable.setData(commentRowsData);
 	
-		//take out the Loading... spinning wheel
+		//take out the Loading... spinning wheel n
 		toolActInd.hide();
 		self.setToolbar(null,{animated:true});
 	}
@@ -72,7 +72,6 @@ function CommentWindow(_topicId) {
 	function commentCreatedACSCallback(e) {
 		commentHeader.replyTextField.value = "";
 		var newComment = e.newComment;	
-		alert("receving fired event from CommentACS create");
 		Comment.commentModel_add(newComment);
 	}
 	

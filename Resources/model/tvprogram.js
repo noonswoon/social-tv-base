@@ -1,7 +1,7 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, photo TEXT);');
 db.close();
 
 exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
@@ -11,7 +11,7 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 	db.execute('DELETE FROM tvprograms');
 	
 	for(var i =0;i<_allPrograms.length;i++) {
-		db.execute('INSERT INTO tvprograms(id,name) VALUES(?,?)',_allPrograms[i].id,_allPrograms[i].name);
+		db.execute('INSERT INTO tvprograms(id,name,photo) VALUES(?,?,?)',_allPrograms[i].id,_allPrograms[i].name,_allPrograms[i].photo);
 	}
 	db.close();
 	Ti.App.fireEvent("tvprogramsDbUpdated");	
@@ -28,6 +28,7 @@ exports.TVProgramModel_fetchPrograms = function() {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
 			name: result.fieldByName('name'),
+			photo: result.fieldByName('photo'),
 			hasChild:true
 		});
 		result.next();

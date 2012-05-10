@@ -11,7 +11,7 @@ DiscoveryTableViewRow = function(){
 		});
 		
 		var programLabelName = Ti.UI.createLabel({
-			text: 'eee',
+			text: 'rowWithAllProgram.id',
 			textAlign: 'right',
 			right: 50,
 			font:{fontWeight:'bold',fontSize:18},
@@ -20,7 +20,7 @@ DiscoveryTableViewRow = function(){
 		row.add(programLabelName);
 		
 		var programLabelSubname = Ti.UI.createLabel({
-			text: "Season"+(c+1),
+			text: '-',
 			color: '#420404',
 			textAlign:'right',
 			font:{fontWeight:'bold',fontSize:13},
@@ -46,7 +46,7 @@ DiscoveryTableViewRow = function(){
 			width: 35,
 			height: 15
 		});
-		row.add(programChannel);		
+		row.add(programChannel);	
 	
 		return row;
 }

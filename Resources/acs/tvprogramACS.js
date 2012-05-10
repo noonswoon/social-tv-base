@@ -8,7 +8,8 @@ exports.tvprogramACS_fetchAllProgram = function(id) {
 	            var program = responseJSON.response.events[i];
 	            var curProgram = {
 	            	id: program.id,
-	            	name: program.name
+	            	name: program.name,
+	            	photo: program.photo.urls.original
 	            }
 				programs.push(curProgram);
 			}

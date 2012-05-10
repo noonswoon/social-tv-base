@@ -1,10 +1,22 @@
 
 var ProfileStatsView = function(){
-
+///////////////////////////////////////////////////////
+		var CheckinModel = require('model/checkin');
+		Ti.App.addEventListener('checkinsDbUpdated', function(){
+			totalScore = CheckinModel.checkin_sumScore();
+			//columnCheckInCount.text = totalScore;
+			var ProfileDataExp = totalScore;
+			expLabel.text=ProfileDataExp + '/' + ProfileDataLevelUp;
+			expBar.value =ProfileDataExp/ProfileDataLevelUp;
+		//	totalCheckins = CheckinModel.checkins_count();
+		//	columnCheckInCount.text = totalCheckins;
+		
+		});
+//////////////////////////////////////////////////////
 //test data			
 			var	ProfileDataName= 'Titanium Mick';
 			var	ProfileDataImg = 'images/kuma100x100.png';
-			var	ProfileDataExp = 30;
+			//var	ProfileDataExp;
 			var	ProfileDataLevelUp = 100;
 			var	ProfileDataBadgeLevel = 'Super Fan';
 
@@ -14,7 +26,7 @@ var ProfileStatsView = function(){
 	});
 			//experience point
 		var expLabel = Ti.UI.createLabel({
-			text: ProfileDataExp + '/' + ProfileDataLevelUp,
+			//text: ProfileDataExp + '/' + ProfileDataLevelUp,
 			font: {fontSize: 14, fontWeight: 'bold'},
 			color: '#fff',
 			textAlign: 'right',
@@ -39,7 +51,7 @@ var ProfileStatsView = function(){
 		    height:20,
 		    min:0,
 		    max: ProfileDataLevelUp,
-		    value: ProfileDataExp/ProfileDataLevelUp,
+		    //value: ProfileDataExp/ProfileDataLevelUp,
 		    style:Titanium.UI.iPhone.ProgressBarStyle.DEFAULT});
 
 		var leaderLabel = Ti.UI.createLabel({
@@ -83,7 +95,7 @@ var ProfileStatsView = function(){
 			font: { fontWeight: 'bold', fontSize: 14}
 			});
 		var userRankScore = Ti.UI.createLabel({
-			text: ProfileDataExp-i, 
+			text: 50-i, 
 			top: 10,
 			right: 5,
 			width: 'auto',

@@ -1,10 +1,45 @@
 
 var ProfileHeaderView = function(){
-//test Data
-			var	ProfileDataName= 'Titanium Mick';
-			var	ProfileDataImg = 'images/kuma100x100.png';
-			var	ProfileDataExp = 30;	
-	
+				
+///////////////////////////////////////////////
+//CALL DATA FROM ACS
+		var userID = '4fa17dd70020440df700950c';
+		var CheckinACS = require('lib/checkinACS');		
+		var CheckinModel = require('model/checkin');	
+		
+		//UI Stuff
+		var columnCheckInCount = Ti.UI.createLabel({
+				text: '',
+				font: {fontSize: 26, fontStyle: 'bold'},
+				color: '#fff',
+				top: 30
+			});
+			
+		//var totalScore =0;
+		var totalCheckins=0;
+		var	profileDataName= 'Titanium Mick';
+		var	profileDataImg = 'images/kuma100x100.png';
+			
+		function checkinDbLoadedCallBack(e){
+			alert('checkinDbLoadedCallBack');
+			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+			alert('DONE:checkinDbLoadedCallBack');
+		};
+		
+		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+		Ti.App.addEventListener('checkinsDbUpdated', function(){
+		//	totalScore = CheckinModel.checkin_sumScore();
+		//	columnCheckInCount.text = totalScore;
+			totalCheckins = CheckinModel.checkins_count();
+			columnCheckInCount.text = totalCheckins;
+		
+		});
+		
+		CheckinACS.checkinACS_fetchedCheckIn(userID);
+
+		//test Data
+				
+//////////////////////////////////////////////	
 	var headerView = Ti.UI.createView({
 				backgroundGradient: {
         	type: 'linear',
@@ -14,7 +49,7 @@ var ProfileHeaderView = function(){
 	});
 
 		var profilePicture = Ti.UI.createImageView({
-			image: ProfileDataImg,
+			image: profileDataImg,
 			//top: 10, left: 10,
 			width: 90,
 			height: 90,
@@ -31,7 +66,7 @@ var ProfileHeaderView = function(){
 		});
 		
 		var profileName = Ti.UI.createLabel({
-			text: ProfileDataName, //name
+			text: profileDataName, //name
 			top: 5,
 			left: 120,
 			width: 'auto',
@@ -91,18 +126,14 @@ var ProfileHeaderView = function(){
 		});
 			//img
 			var columnCheckInImage = Ti.UI.createImageView({
-				image: 'images/KS_nav_ui.png',
+				image: 'images/Location-Large.png',
+				opacity: 0.6,
 				width: 30,
 				height: 30,
 				top: 3
 			});
 			//count
-			var columnCheckInCount = Ti.UI.createLabel({
-				text: '59',
-				font: {fontSize: 26, fontStyle: 'bold'},
-				color: '#fff',
-				top: 30
-			});
+
 			
 		//number of friends
 		var columnFriend = Ti.UI.createView({
@@ -115,7 +146,8 @@ var ProfileHeaderView = function(){
 		});
 			//	img
 			var columnFriendImage = Ti.UI.createImageView({
-				image: 'images/KS_nav_views.png',
+				image: 'images/User.png',
+				opacity: 0.6,
 				width: 30,
 				height: 30,
 				top: 3

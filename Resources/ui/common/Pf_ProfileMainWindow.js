@@ -7,6 +7,7 @@ function ProfileMainWindow() {
 //REQUIRE//
 		var ProfileHeader = require('ui/common/Pf_ProfileHeader');
 		var Detail = require('ui/common/Pf_ProfileDetails');
+
 //UI//
 		var headerView = Ti.UI.createView({
 				height: 120

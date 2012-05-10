@@ -1,5 +1,7 @@
 CommentReplyTableViewRow = function(_comment) {
-
+	//HEADER
+	var CommentACS = require('acs/commentACS');
+	
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
 		height: 30,
@@ -91,6 +93,7 @@ CommentReplyTableViewRow = function(_comment) {
 	
 	upButton.addEventListener('click', function() {
 		alert("upvote: "+_comment.id);
+		CommentACS.voteToCommentACS_create(1,_comment.id,_comment.topic_id); //continue here..
 	});
 	
 	downButton.addEventListener('click', function() {

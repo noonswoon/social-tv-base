@@ -15,7 +15,7 @@ exports.commentModel_fetchFromTopicId = function(_topicId) {
 			color: '#fff',
 			title: result.fieldByName('content'),
 			id: result.fieldByName('id'),
-			topic_id: result.fieldByName('topic_id'),
+			topic_id: _topicId,
 			content: result.fieldByName('content'),
 			rating: Number(result.fieldByName('rating')),
 			username: result.fieldByName('username'),

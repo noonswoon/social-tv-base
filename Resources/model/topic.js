@@ -53,11 +53,10 @@ exports.topicModel_add = add;
 
 
 exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId) {
-	var fetchedTopics = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	
 	//need to clear records with the given programId
-	var result = db.execute('DELETE FROM topics WHERE program_id = ?',_programId);
+	db.execute('DELETE FROM topics WHERE program_id = ?',_programId);
 	
 	for(var i=0;i < _topicsCollection.length; i++) {
 		var curTopic = _topicsCollection[i];

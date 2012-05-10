@@ -90,7 +90,7 @@ function CommentWindow(_topicId) {
 	
 	//ADD EVENT LISTENERS
 	commentHeader.replyTextField.addEventListener('return', function(e) {
-		CommentACS.commentToPostACS_create(commentHeader.replyTextField.value,_topicId);
+		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,_topicId);
 		commentHeader.replyTextField.value = "";
 	});
 
@@ -119,7 +119,7 @@ function CommentWindow(_topicId) {
 
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
 	CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
-
+	CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
 	return self;
 }
 

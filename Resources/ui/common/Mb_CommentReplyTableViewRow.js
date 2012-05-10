@@ -93,7 +93,7 @@ CommentReplyTableViewRow = function(_comment) {
 	
 	upButton.addEventListener('click', function() {
 		alert("upvote: "+_comment.id);
-		CommentACS.voteToCommentACS_create(1,_comment.id,_comment.topic_id); //continue here..
+		CommentACS.commentACS_createVoteOfComment(1,_comment.id,_comment.topic_id); //continue here..
 	});
 	
 	downButton.addEventListener('click', function() {

@@ -2,10 +2,10 @@
 var ProfileStatsView = function(){
 
 //test data			
-			var	ProfileDataName= 'Jaew Panisa';
+			var	ProfileDataName= 'Titanium Mick';
 			var	ProfileDataImg = 'images/kuma100x100.png';
 			var	ProfileDataExp = 30;
-			var	ProfileDataLevelUp = 50;
+			var	ProfileDataLevelUp = 100;
 			var	ProfileDataBadgeLevel = 'Super Fan';
 
 	var profileStats = Ti.UI.createView({
@@ -34,14 +34,13 @@ var ProfileStatsView = function(){
 		});
 		
 		var expBar = Ti.UI.createProgressBar({
-			top:20,
+			top:23,
 		    width:300,
 		    height:20,
 		    min:0,
 		    max: ProfileDataLevelUp,
-		    value: ProfileDataExp,
-		    color: '#fff',
-		    style:Titanium.UI.iPhone.ProgressBarStyle.plain});
+		    value: ProfileDataExp/ProfileDataLevelUp,
+		    style:Titanium.UI.iPhone.ProgressBarStyle.DEFAULT});
 
 		var leaderLabel = Ti.UI.createLabel({
 			text: 'LEADERBOARD',
@@ -118,11 +117,12 @@ var ProfileStatsView = function(){
 			expSec.add(expLabel);
 			expSec.add(expBadge);
 			expSec.add(expBar);
+				expBar.show();
 		profileStats.add(expSec);
 			leaderSec.add(leaderLabel);
 			leaderSec.add(leaderTable);
 		profileStats.add(leaderSec);
-			expBar.show();
+
 
 	return profileStats;
 	}

@@ -1,5 +1,10 @@
 
 var ProfileHeaderView = function(){
+//test Data
+			var	ProfileDataName= 'Titanium Mick';
+			var	ProfileDataImg = 'images/kuma100x100.png';
+			var	ProfileDataExp = 30;	
+	
 	var headerView = Ti.UI.createView({
 				backgroundGradient: {
         	type: 'linear',
@@ -9,16 +14,24 @@ var ProfileHeaderView = function(){
 	});
 
 		var profilePicture = Ti.UI.createImageView({
-			image: 'images/kuma100x100.png',
-			top: 10, left: 10,
-			width: 100,
-			height: 100,
-			border: 1,
-			borderColor: '#999',
-			backgroundColor: '#E2E5EE'	
+			image: ProfileDataImg,
+			//top: 10, left: 10,
+			width: 90,
+			height: 90,
+			//borderWidth: 5,
+			//borderColor: '#fff',
+			backgroundColor: '#E2E5EE'
 		});
+		var profilePictureContain = Ti.UI.createView({
+			backgroundColor: '#fff',
+			top: 10, left: 10,
+			borderWidth: 1,
+			width:100, height:100,
+			borderColor: '#E2E5EE',
+		});
+		
 		var profileName = Ti.UI.createLabel({
-			text: 'Jaew Panisa', //name
+			text: ProfileDataName, //name
 			top: 5,
 			left: 120,
 			width: 'auto',
@@ -30,11 +43,45 @@ var ProfileHeaderView = function(){
 			top: 40,
 			left: 120,
 			width: 60,
-			height: 70
-		});
+			height: 70,
 
-		//number of like
-		var columnLike = Ti.UI.createView({
+		});
+		
+		var fbLoginButton = Ti.UI.createButton({
+			width: 60,
+			height: 70,
+			opacity: 0.8,
+			borderRadius: 5,
+			backgroundImage: 'images/FBlogin_off.png',
+		});
+		var fbValue = false;
+		
+		fbLoginButton.addEventListener('click',function(){
+			if(fbValue===false){
+			fbLoginButton.backgroundImage = 'images/FBlogin.png';
+			fbValue = true;
+			alert('You have login to Facebook ' + fbValue);
+			}
+			else if (fbValue===true)
+			{
+				fbLoginButton.backgroundImage = 'images/FBlogin_off.png';
+				fbValue = false;
+			alert('You have logout from Facebook '+ fbValue);
+			}
+		});
+/*	fbLoginButton.addEventListener('click',function(){
+
+			if (fbLoginButton.backgroundImage = 'images/FBlogin.png'){
+				fbLoginButton.backgroundImage = 'images/FBlogin_off.png',
+			alert('You have logout from Facebook')
+			}
+		});
+*/		
+		
+		fbLogin.add(fbLoginButton);
+
+		//number of checkin
+		var columnCheckIn = Ti.UI.createView({
 			top: 40,
 			left: 185,
 			width: 60,
@@ -43,21 +90,22 @@ var ProfileHeaderView = function(){
 			opacity: 0.9
 		});
 			//img
-			var columnLikeImage = Ti.UI.createImageView({
+			var columnCheckInImage = Ti.UI.createImageView({
 				image: 'images/KS_nav_ui.png',
 				width: 30,
 				height: 30,
 				top: 3
 			});
 			//count
-			var columnLikeCount = Ti.UI.createLabel({
+			var columnCheckInCount = Ti.UI.createLabel({
 				text: '59',
 				font: {fontSize: 26, fontStyle: 'bold'},
 				color: '#fff',
 				top: 30
 			});
-		//number of post
-		var columnPost = Ti.UI.createView({
+			
+		//number of friends
+		var columnFriend = Ti.UI.createView({
 			top: 40,
 			left: 250,
 			width: 60,
@@ -66,29 +114,29 @@ var ProfileHeaderView = function(){
 			opacity: 0.9
 		});
 			//	img
-			var columnPostImage = Ti.UI.createImageView({
+			var columnFriendImage = Ti.UI.createImageView({
 				image: 'images/KS_nav_views.png',
 				width: 30,
 				height: 30,
 				top: 3
 			});
 			// count
-			var columnPostCount = Ti.UI.createLabel({
+			var columnFriendCount = Ti.UI.createLabel({
 				text: '27',
 				font: {fontSize: 26, fontStyle: 'bold'},
 				color: '#fff',
 				top: 30
 			});
-
-	headerView.add(profilePicture);
+	profilePictureContain.add(profilePicture);
+	headerView.add(profilePictureContain);
 	headerView.add(profileName);
 	headerView.add(fbLogin);
-		columnLike.add(columnLikeImage);
-		columnLike.add(columnLikeCount);
-	headerView.add(columnLike);
-		columnPost.add(columnPostImage);
-		columnPost.add(columnPostCount);
-	headerView.add(columnPost);		
+		columnCheckIn.add(columnCheckInImage);
+		columnCheckIn.add(columnCheckInCount);
+	headerView.add(columnCheckIn);
+		columnFriend.add(columnFriendImage);
+		columnFriend.add(columnFriendCount);
+	headerView.add(columnFriend);		
 
 return headerView;
 

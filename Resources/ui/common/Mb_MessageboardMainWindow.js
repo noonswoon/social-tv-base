@@ -2,7 +2,7 @@ function MessageboardMainWindow(_programId) {
 	//HEADERS
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
-//	var TVProgramACS = require('acs/tvprogramACS');
+
 	
 	var MessageboardHeaderTableViewRow = require('ui/common/Mb_MessageboardHeaderTableViewRow');
 	var MessageboardTableViewRow = require('ui/common/Mb_MessageboardTableViewRow');
@@ -35,7 +35,7 @@ function MessageboardMainWindow(_programId) {
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db
-		Topic.topicModel_updateTopicsFromACS(e.fetchedTopics,_programId); 
+		Topic.topicModel_updateTopicsFromACS(e.aa,_programId); 
 	}
 
 	function topicsDbUpdatedCallback(e) {
@@ -76,7 +76,6 @@ function MessageboardMainWindow(_programId) {
 	
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 	TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
-//	TVProgramACS.tvprogramACS_fetchAllProgram();
 	return self;
 }
 module.exports = MessageboardMainWindow;

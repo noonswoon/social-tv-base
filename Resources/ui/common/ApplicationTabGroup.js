@@ -69,7 +69,7 @@ function ApplicationTabGroup() {
     self.addTab(profileTab);
    
     //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[1]);
+   	self.setActiveTab(self.tabs[2]);
 
     // open tab group
     return self;

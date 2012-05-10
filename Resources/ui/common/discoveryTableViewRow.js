@@ -1,4 +1,4 @@
-DiscoveryTableViewRow = function(){
+DiscoveryTableViewRow = function(_curTVProgram){
 	
 		var row = Ti.UI.createTableViewRow({
 			height: 100,
@@ -11,7 +11,7 @@ DiscoveryTableViewRow = function(){
 		});
 		
 		var programLabelName = Ti.UI.createLabel({
-			text: 'rowWithAllProgram.id',
+			text: _curTVProgram.name,
 			textAlign: 'right',
 			right: 50,
 			font:{fontWeight:'bold',fontSize:18},
@@ -20,7 +20,7 @@ DiscoveryTableViewRow = function(){
 		row.add(programLabelName);
 		
 		var programLabelSubname = Ti.UI.createLabel({
-			text: '-',
+			text: 'Sublabel',
 			color: '#420404',
 			textAlign:'right',
 			font:{fontWeight:'bold',fontSize:13},
@@ -30,7 +30,7 @@ DiscoveryTableViewRow = function(){
 		row.add(programLabelSubname);
 		
 		var programImage = Ti.UI.createImageView({
-			image: "http://www.weloveshopping.com/shop/mildmovies/o-207.jpg",
+			image: _curTVProgram.photo,
 			top: 5,
 			left: 10,
 			bottom: 5,

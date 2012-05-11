@@ -19,7 +19,7 @@ function since(date) {
 	for (var i=0;i<blocks.length;i++) {
 		unit = parseInt(unit / blocks[i].divisor);
 		if (unit < blocks[i].max) {
-			return unit + ' ' + pluralize(blocks[i].name) + ' ago';
+			return unit + ' ' + pluralize(blocks[i].name,unit) + ' ago';
 		}
 	}
 };

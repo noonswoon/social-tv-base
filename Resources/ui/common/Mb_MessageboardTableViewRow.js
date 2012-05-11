@@ -1,4 +1,5 @@
-TopicTableViewRow = function() {
+MessageboardTableViewRow = function() {
+	//UI STUFF
 	var row = Ti.UI.createTableViewRow({
 		height: 40,
 		allowsSelection: true,
@@ -13,8 +14,11 @@ TopicTableViewRow = function() {
 		height: 30,
 		font: { fontSize: 20, fontFamily: 'Helvetica Neue' }
 	})
+	
+	//ADDING UI COMPONENTS
 	row.add(row.topicLabel);
 	
+	//MISCELLENEOUS
 	row._setTopic = function(topic) {
 		row.topicLabel.text = topic.title;
 		row.topic = topic;
@@ -23,4 +27,5 @@ TopicTableViewRow = function() {
 	return row;
 }
 
-module.exports = TopicTableViewRow;
+module.exports = MessageboardTableViewRow;
+

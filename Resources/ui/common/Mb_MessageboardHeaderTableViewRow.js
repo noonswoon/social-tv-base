@@ -1,4 +1,5 @@
-WebboardHeaderTableViewRow = function(_showName,_showSubName) {
+MessageboardHeaderTableViewRow = function(_showName,_showSubName) {
+	//UI stuff
 	var header = Ti.UI.createTableViewRow({
 		height: 140,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
@@ -12,16 +13,14 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		height: 90,
 		backgroundColor: '#CCC'
 	});
-	header.add(header.thumbnail);
-	
+
 	header.nameLabel = Ti.UI.createLabel({
 		text: _showName,
 		top: 5,
 		left: 135,
 		width: 'auto',
 		height: 20
-	})
-	header.add(header.nameLabel);
+	});
 	
 	header.subNameLabel = Ti.UI.createLabel({
 		text: _showSubName,
@@ -29,9 +28,8 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		left: 135,
 		width: 'auto',
 		height: 20
-	})
-	header.add(header.subNameLabel);
-	
+	});
+		
 	header.peopleIcon = Ti.UI.createImageView({
 		top: 70,
 		left: 135,
@@ -39,7 +37,6 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		height: 20,
 		backgroundColor: '#CCC'
 	});
-	header.add(header.peopleIcon);
 	
 	header.numCheckinsLabel = Ti.UI.createLabel({
 		text: '13122',
@@ -47,8 +44,7 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		left: 160,
 		width: 60,
 		height: 14
-	})
-	header.add(header.numCheckinsLabel);
+	}); 
 	
 	header.friendIcon = Ti.UI.createImageView({
 		top: 70,
@@ -57,7 +53,6 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		height: 20,
 		backgroundColor: '#CCC'
 	});
-	header.add(header.friendIcon);
 	
 	header.numFriendsLabel = Ti.UI.createLabel({
 		text: '5',
@@ -65,9 +60,7 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		left: 235,
 		width: 40,
 		height: 14
-	})
-	header.add(header.numFriendsLabel);
-	
+	});
 	
 	header.searchTextField = Ti.UI.createTextField({
 		left: 10,
@@ -78,9 +71,7 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	});
-	header.add(header.searchTextField);
 	
-		
 	header.addButton = Ti.UI.createButton({
 		right: 10,
 		top: 100,
@@ -88,9 +79,19 @@ WebboardHeaderTableViewRow = function(_showName,_showSubName) {
 		height: 30,
 		title: '+'
 	});
+
+	//ADDING UI COMPONENTS
+	header.add(header.thumbnail);
+	header.add(header.nameLabel);
+	header.add(header.subNameLabel);
+	header.add(header.peopleIcon);
+	header.add(header.numCheckinsLabel);
+	header.add(header.friendIcon);
+	header.add(header.numFriendsLabel);
+	header.add(header.searchTextField);
 	header.add(header.addButton);
 	
 	return header;
 }
 
-module.exports = WebboardHeaderTableViewRow;
+module.exports = MessageboardHeaderTableViewRow;

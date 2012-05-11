@@ -3,13 +3,25 @@ var ProfileHeaderView = function(){
 				
 //CALL DATA FROM ACS
 		var userID = '4fa17dd70020440df700950c';
-		var CheckinACS = require('lib/checkinACS');		
+		var CheckinACS = require('acs/checkinACS');		
 		var CheckinModel = require('model/checkin');	
 		
-/*	function checkinDbLoadedCallBack(e){
+	function checkinDbLoadedCallBack(e){
 			alert('checkinDbLoadedCallBack');
+		//UI Stuff
+		var columnCheckInCount = Ti.UI.createLabel({
+				text: '',
+				font: {fontSize: 26, fontStyle: 'bold'},
+				color: '#fff',
+				top: 30
+			});
+			
+		//var totalScore =0;
+		var totalCheckins=0;
+		var	profileDataName= 'Titanium Mick';
+		var	profileDataImg = 'images/kuma100x100.png';
+			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
-			alert('DONE:checkinDbLoadedCallBack');
 		};
 		
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
@@ -19,8 +31,7 @@ var ProfileHeaderView = function(){
 		
 		});
 		
-		CheckinACS.checkinACS_fetchedCheckIn(userID);
-*/		
+		CheckinACS.checkinACS_fetchedCheckIn(userID);		
 		
 /////POINT ACS/////////////////////////////////////////////
 	var PointACS = require('lib/pointACS');

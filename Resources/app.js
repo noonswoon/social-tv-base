@@ -3,7 +3,10 @@
 Titanium.UI.setBackgroundColor('#000');
 
 Ti.include('/lib/date.js');
-Ti.include('/model/topic.js');
+var moment = require('/lib/moment');
+
+//include xxxACS.js here
+//include xxx models here
 
 //GLOBAL VARIABLES DECARATION
 var acs = require('lib/acs');

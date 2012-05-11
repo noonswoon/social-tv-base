@@ -88,16 +88,16 @@ CommentReplyTableViewRow = function(_comment) {
 	
 	//ADD EVENTLISTNERS FOR REPLY VOTE UP/DOWN FOR THIS COMMENTS
 	replyButton.addEventListener('click',function() {
-		alert("submitting reply to this comment: "+_comment.id+", content: "+replyTextField.value);
+		Ti.API.info("submitting reply to this comment: "+_comment.id+", content: "+replyTextField.value);
 	});
 	
 	upButton.addEventListener('click', function() {
-		alert("upvote: "+_comment.id);
+		Ti.API.info("upvote: "+_comment.id);
 		CommentACS.commentACS_createVoteOfComment(1,_comment.id,_comment.topic_id); //continue here..
 	});
 	
 	downButton.addEventListener('click', function() {
-		alert("downvote: "+_comment.id);
+		Ti.API.info("downvote: "+_comment.id);
 	});
 	
 	return row;

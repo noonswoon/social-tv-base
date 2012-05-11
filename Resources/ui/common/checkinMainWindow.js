@@ -75,11 +75,7 @@ Checkin = function (_datafromrow){
 	checkinButton.addEventListener('click',function(){
 		alert('Yeah! Check-in');
 	});
-	// var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss z");
-	// var dateObjFormat = dm.format('MMM D, YYYY hh:mm:ss');
-	var now = moment().format('MMM D, YYYY hh:mm:ss');
-	alert('Time:'+now);
-	
+
 	self.showNavBar();
 	return self;
 	

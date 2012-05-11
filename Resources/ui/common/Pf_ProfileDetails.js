@@ -1,4 +1,5 @@
 var ProfileDetailView = function(){
+	
 ///MENU//////////////////////////////////////////////////////////
 		var profileMenu = Ti.UI.createView({
 			height: 50,
@@ -21,18 +22,17 @@ var ProfileDetailView = function(){
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
-		//height:198,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
-		});
+	});
 	var profileDetailScroll = Ti.UI.createScrollView({
-	contentWidth:'auto',
-	contentHeight:'auto',
-	top:0,
-	showVerticalScrollIndicator:true,
-	showHorizontalScrollIndicator:true,
-	width: 312,
-	height: 198,
-	disableBounce: true
+		contentWidth:'auto',
+		contentHeight:'auto',
+		top:0,
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		width: 312,
+		height: 198,
+		disableBounce: true
 	});	
 	
 ///////////////////////////////////////////////////////////////////
@@ -45,29 +45,22 @@ var ProfileDetailView = function(){
 	var ProfileReward = require('ui/common/Pf_ProfileDetails_Reward');
 	var profileReward = new ProfileReward();
 		
-	profileDetailScroll.add(profileStats);
-	profileDetail.add(profileDetailScroll);
-		
 	profileTab.addEventListener('click',function(e){
-
-		//delete unuse view
 		while (profileDetailScroll.children !== undefined && profileDetailScroll.children.length !== 0){
 				profileDetailScroll.remove(profileDetailScroll.children[0]);
-		}
+				}
 		if(e.index==0){
-			profileDetailScroll.add(profileStats);
-		}
-		else if (e.index==1) {	
-				profileDetailScroll.add(profileActivity);
-		}
+			profileDetailScroll.add(profileStats);}
+		else if (e.index==1) {
+			profileDetailScroll.add(profileActivity);}
 		else if (e.index==2) {
-			profileDetailScroll.add(profileBadge);
-		}	
+			profileDetailScroll.add(profileBadge);}	
 		else{
-			profileDetailScroll.add(profileReward);
-			}
-	});
-
+			profileDetailScroll.add(profileReward);}
+	});		
+		
+	profileDetailScroll.add(profileStats);
+	profileDetail.add(profileDetailScroll);
 //////////////////////////////////////////////////////////////////
 
 	detail.headerView = profileMenu;

@@ -1,8 +1,3 @@
-//exports.userACS_fetchUserCheckIn = function(){
-//var UserCheckInInfo = [];
-//var callCheckIn = 
-//return UserCheckInInfo;
-
 var checkin =[];
 var userScore =0;
 

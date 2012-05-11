@@ -2,7 +2,7 @@
 
 var db = Ti.Database.open('Chatterbox');
 //response_to_object_id --> object_id can be topic_id (comment of post) or comment_id (comment of comment)
-db.execute('CREATE TABLE IF NOT EXISTS comments(id TEXT PRIMARY KEY, topic_id TEXT, content TEXT, rating INTEGER, username TEXT, response_to_object_id TEXT, updated_at TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS comments(id TEXT PRIMARY KEY, topic_id TEXT, content TEXT, rating INTEGER, username TEXT, response_to_object_id TEXT, is_a_vote INTEGER, updated_at TEXT);');
 db.close();
 
 exports.commentModel_fetchFromTopicId = function(_topicId) {
@@ -40,6 +40,21 @@ exports.commentModel_add = add;
 
 
 exports.commentModel_updateCommentsFromACS = function(_commentsCollection, _topicId) {
+	var fetchedComments = [];
+	var db = Ti.Database.open('Chatterbox'); 
+	
+	//need to clear records with the given topicId
+	var result = db.execute('DELETE FROM comments WHERE topic_id = ?',_topicId);
+	
+	for(var i=0;i < _commentsCollection.length; i++) {
+		var curComment = _commentsCollection[i];
+		db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,updated_at) VALUES(?,?,?,?,?,?,?)", curComment.id,curComment.topic_id,curComment.content,curComment.rating,curComment.user.username,curComment.response_to_object_id,curComment.updated_at);
+	}
+	db.close();
+	Ti.App.fireEvent("commentsDbUpdated");
+};
+
+exports.commentModel_updateCommentsOfCommentsFromACS = function(_commentsCollection, _commentId) {
 	var fetchedComments = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	

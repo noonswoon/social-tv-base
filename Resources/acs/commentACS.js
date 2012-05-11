@@ -75,7 +75,7 @@ exports.commentACS_createCommentOfTopic = function(_comment,_topicId) {
 	    post_id: _topicId, //need to remain as 'post_id' since it is connection to ACS Posts API
 	    rating: 0,
 	    content: _comment, 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId, "is_a_vote":0},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -89,8 +89,42 @@ exports.commentACS_createCommentOfTopic = function(_comment,_topicId) {
 	});
 }
 
-exports.commentACS_createVoteOfComment = function(_voteScore,_commentId) {
-	Ti.API.info("will create Review object to represent the voteup/down");
+exports.commentACS_createCommentOfComment = function(_comment,_commentId,_topicId) {
+	Cloud.Reviews.create({
+	    review_object_id: _commentId,
+	    rating: 0,
+	    content: _comment, 
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "is_a_vote":0},
+	    allow_duplicate: 1
+	}, function (e) {
+	    if (e.success) {
+	        var review = e.reviews[0];
+	        Ti.API.info('Comment of comment success: id ' + review.id);
+	        Ti.App.fireEvent("commentOfCommentCreatedACS",{newCommentOfComment:review});
+	    } else {
+	        Ti.API.info('Comment of comment Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
+}
+
+exports.commentACS_createVoteOfComment = function(_voteScore,_commentId,_topicId) {
+	Cloud.Reviews.create({
+	    review_object_id: _commentId,
+	    rating: _voteScore,
+	    content: "m", 
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "is_a_vote":1},
+	    allow_duplicate: 1
+	}, function (e) {
+	    if (e.success) {
+	        var review = e.reviews[0];
+	        Ti.API.info('Vote of comment success: id ' + review.id);
+	        Ti.App.fireEvent("voteOfCommentCreatedACS",{newVote:review});
+	    } else {
+	        Ti.API.info('Comment of comment Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
 }
 
 exports.commentACS_getAllVotesOfUser = function(_userId) {

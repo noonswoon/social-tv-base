@@ -85,19 +85,25 @@ CommentReplyTableViewRow = function(_comment) {
 		
 		row.height += replyToolbar.height;
 	};
-	
-	//ADD EVENTLISTNERS FOR REPLY VOTE UP/DOWN FOR THIS COMMENTS
+		
 	replyButton.addEventListener('click',function() {
-		Ti.API.info("submitting reply to this comment: "+_comment.id+", content: "+replyTextField.value);
+		//The fn fires a commentOfCommentCreatedACS event when done,
+		// the listener for the event is in Mb_CommentWindow.js file
+		CommentACS.commentACS_createCommentOfComment(replyTextField.value,_comment.id,_comment.topic_id);
 	});
 	
 	upButton.addEventListener('click', function() {
 		Ti.API.info("upvote: "+_comment.id);
-		CommentACS.commentACS_createVoteOfComment(1,_comment.id,_comment.topic_id); //continue here..
+		//The fn fires a voteOfCommentCreatedACS event when done,
+		// the listener for the event is in Mb_CommentWindow.js file
+		CommentACS.commentACS_createVoteOfComment(1,_comment.id,_comment.topic_id);
 	});
 	
 	downButton.addEventListener('click', function() {
+		//The fn fires a voteOfCommentCreatedACS event when done,
+		// the listener for the event is in Mb_CommentWindow.js file
 		Ti.API.info("downvote: "+_comment.id);
+		CommentACS.commentACS_createVoteOfComment(-1,_comment.id,_comment.topic_id);
 	});
 	
 	return row;

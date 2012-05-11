@@ -43,6 +43,8 @@ function CommentWindow(_topicId) {
 		//add to db
 		//Ti.API.info(e.fetchedComments);
 		Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_topicId); 
+		
+		e.fetchedCommentsOfComments
 	}
 	
 	function commentsDbUpdatedCallback(e) {
@@ -88,6 +90,18 @@ function CommentWindow(_topicId) {
 		Comment.commentModel_add(newComment);
 	}
 	
+	function commentOfCommentCreatedACSCallback(e) {
+		var newCommentOfComment = e.newCommentOfComment;	
+		Ti.API.info("new comment's comment id: "+newCommentOfComment.id);
+//		Comment.commentModel_add(newComment);
+	}
+	
+	function voteOfCommentCreatedACSCallback(e) {
+		var newVote = e.newVote;
+		Ti.API.info("new vote id: "+newVote.id+", voteScore: "+newVote.rating);	
+//		Comment.commentModel_add(newComment);
+	}
+
 	//ADD EVENT LISTENERS
 	commentHeader.replyTextField.addEventListener('return', function(e) {
 		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,_topicId);
@@ -104,11 +118,15 @@ function CommentWindow(_topicId) {
 		//reset the data to make the UI transition looks smoother
 		commentsTable.setData(commentsTable.data);
 	});
-	
-	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);
-	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
+
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);
 
+	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);	
+	Ti.App.addEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
+	Ti.App.addEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
+	
+	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
+	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);
 		Ti.App.removeEventListener("commentCreatedACS",commentCreatedACSCallback);

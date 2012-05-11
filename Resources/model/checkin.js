@@ -42,6 +42,7 @@ exports.checkin_sumScore = function(){
 		var db = Ti.Database.open('Chatterbox'); 
 		var result = db.execute('SELECT SUM(score) as totalScore from checkins');
 		var totalScore = Number(result.fieldByName('totalScore'));
+		db.close();
 		return totalScore;
 };
 
@@ -51,5 +52,6 @@ exports.checkins_count = function(){
 		var db = Ti.Database.open('Chatterbox'); 
 		var result = db.execute('SELECT COUNT(*) as checkins_count from checkins');
 		var checkins = Number(result.fieldByName('checkins_count'));
+		db.close();
 		return checkins;	
 };

@@ -45,8 +45,7 @@ function MessageboardMainWindow(_programId) {
 		//retrieve from db
 		var allTopics = Topic.topicModel_fetchFromProgramId(_programId);
 		for (var i=0;i<allTopics.length;i++) {
-			var row = new MessageboardTableViewRow();
-			row._setTopic(allTopics[i]);
+			var row = new MessageboardTableViewRow(allTopics[i]);
 			viewRowsData.push(row);
 		}
 		allTopicTable.setData(viewRowsData);

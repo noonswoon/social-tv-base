@@ -61,7 +61,20 @@ function CommentWindow(_topicId) {
 		//then use moment to output a format that javascript Date object can understand
 		//namely, the 'MMM D, YYYY hh:mm:ss' format
 		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss z");
-		var dateObjFormat = dm.format('MMM D, YYYY hh:mm:ss');
+		
+		var dateObjFormat = dm.format('YYYY-MM-DD, HH:mm:ss');
+		 alert('Update at:'+dateObjFormat);
+		
+		// var myTimeStr = dm.format('YYYY-MM-DD hh:mm:ss');
+		// alert('targetedTime:'+myTimeStr);
+		var now = moment().format('YYYY-MM-DD, HH:mm:ss');
+		alert('NOW:'+now);
+		
+		var hoursDiff = moment().diff(dm,'hours');
+		alert('diff in hours: '+hoursDiff);
+	//	var subtract = moment().subtract(dm).hours();	
+	//	alert('result is '+subtract);
+			
 		var submitDateObj = new Date(dateObjFormat);
 		commentHeader.dateLabel.text = "Submitted "+since(submitDateObj)+" by "+curTopic.username;
 

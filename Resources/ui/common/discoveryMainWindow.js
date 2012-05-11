@@ -61,8 +61,7 @@ function DiscoveryMainWindow(){
 	programListTable.addEventListener('click',function(e){
 
 		Ti.API.info(e.index+',name: '+e.row.tvprogram.name);
-		alert("table got clicked");
-		
+
 		//var dataFromRow = new CheckinMainWindow()
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');;	
 		self.containingTab.open(new CheckinMainWindow({

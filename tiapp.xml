@@ -53,5 +53,6 @@
     </mobileweb>
     <modules>
         <module platform="commonjs" version="2.0.1">ti.cloud</module>
+        <module platform="android" version="2.0.1">ti.cloudpush</module>
     </modules>
 </ti:app>

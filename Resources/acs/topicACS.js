@@ -1,4 +1,5 @@
 exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
+
 	var topicsOfProgram = [];
 
 	Cloud.Posts.query({
@@ -21,7 +22,7 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	            }
 				topicsOfProgram.push(curTopic);
 			}
-	        Ti.App.fireEvent("topicsLoadedComplete",{fetchedTopics:topicsOfProgram});
+	        Ti.App.fireEvent("topicsLoadedComplete",{aa:topicsOfProgram});
 	    } else {
 	        Ti.API.info('Fetching Topic Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 	    }
@@ -29,7 +30,7 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 }
 	
 exports.topicACS_create = function(_title,_programId) {
-	//connecting with Cloud
+	//connecting with Clou
 	Cloud.Posts.create({
     		content: 'dummy text',
 			title: _title, 

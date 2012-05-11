@@ -5,11 +5,11 @@ db.execute('CREATE TABLE IF NOT EXISTS topics(id TEXT PRIMARY KEY, program_id TE
 db.close();
 
 exports.topicModel_fetchFromProgramId = function(_programId) {
-	var fetchedTopics = [];
+	var bb = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM topics WHERE program_id = ? ORDER BY updated_at DESC',_programId);
 	while(result.isValidRow()) {
-		fetchedTopics.push({
+		bb.push({
 			title: result.fieldByName('title'),
 			id: result.fieldByName('id'),
 			hasChild:true,
@@ -21,7 +21,7 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 	}	
 	result.close();
 	db.close();
-	return fetchedTopics;
+	return bb;
 };
 
 exports.topicModel_getTopicById = function(_topicId) {

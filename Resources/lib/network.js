@@ -36,3 +36,4 @@ exports.bustFugitive = function(_macAddress,_callbackFn) {
 	xhr.open("POST", url);
 	xhr.send({udid:_macAddress});  // request is actually sent with this statement
 };
+

@@ -19,7 +19,7 @@ Checkin = function (_datafromrow){
 
 ////////////////////////////////Header detail
 	var programTitle = Ti.UI.createLabel({
-		text: _datafromrow.name,
+		text: _datafromrow.programTitle,
 		textAlign: 'left',
 		left: 150,
 		font:{fontWeight:'bold',fontSize:18},
@@ -27,18 +27,18 @@ Checkin = function (_datafromrow){
 	});
 	headerView.add(programTitle);
 	
-	var programDescription = Ti.UI.createLabel({
-		text: '_datafromrow.programDescription',
+	var programSubname = Ti.UI.createLabel({
+		text: _datafromrow.programSubname,
 		color: '#420404',
 		textAlign:'left',
 		left: 150,
 		font:{fontWeight:'bold',fontSize:13},
 		top: 30
 	});
-	headerView.add(programDescription);
+	headerView.add(programSubname);
 	
 	var programImage = Ti.UI.createImageView({
-		image: '_datafromrow.programImage',
+		image: _datafromrow.programImage,
 		top: 5,
 		left: 10,
 		bottom: 5,
@@ -48,7 +48,7 @@ Checkin = function (_datafromrow){
 	headerView.add(programImage);
 	
 	var programChannel = Ti.UI.createImageView({
-		image: '_datafromrow.programChannel',
+		image: _datafromrow.programChannel,
 		bottom: 5,
 		left: 270,
 		width: 35,

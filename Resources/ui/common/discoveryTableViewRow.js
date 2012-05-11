@@ -48,6 +48,7 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		});
 		row.add(programChannel);	
 	
+		row.tvprogram = _curTVProgram;
 		return row;
 }
 module.exports = DiscoveryTableViewRow;

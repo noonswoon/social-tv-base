@@ -3,7 +3,6 @@ function DiscoveryMainWindow(){
 	var TVProgram = require('model/tvprogram');
 	var TVProgramACS = require('acs/tvprogramACS');
 	var DiscoveryTableViewRow = require('ui/common/discoveryTableViewRow');
-	var CheckinMainWindow = require('ui/common/checkinMainWindow');
 	
 	var self = Ti.UI.createWindow({
 		title: 'Discovery',
@@ -60,8 +59,18 @@ function DiscoveryMainWindow(){
 	});
 	
 	programListTable.addEventListener('click',function(e){
-		var dataFromRow = new CheckinMainWindow(e.name);
-		self.containingTab.open(dataFromRow);
+
+		Ti.API.info(e.index+',name: '+e.row.tvprogram.name);
+		alert("table got clicked");
+		
+		//var dataFromRow = new CheckinMainWindow()
+		var CheckinMainWindow = require('ui/common/checkinMainWindow');;	
+		self.containingTab.open(new CheckinMainWindow({
+			programTitle: e.row.tvprogram.name,
+			programSubname: 'subname',
+			programImage: e.row.tvprogram.photo,
+			programChannel: "http://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/200px-HBO_logo.svg.png"
+		}));
 	});
 
 	self.add(programListTable);

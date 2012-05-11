@@ -6,6 +6,42 @@ var ProfileHeaderView = function(){
 		var CheckinACS = require('lib/checkinACS');		
 		var CheckinModel = require('model/checkin');	
 		
+/*	function checkinDbLoadedCallBack(e){
+			alert('checkinDbLoadedCallBack');
+			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+			alert('DONE:checkinDbLoadedCallBack');
+		};
+		
+		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+		Ti.App.addEventListener('checkinsDbUpdated', function(){
+			totalCheckins = CheckinModel.checkins_count();
+			columnCheckInCount.text = totalCheckins;
+		
+		});
+		
+		CheckinACS.checkinACS_fetchedCheckIn(userID);
+*/		
+		
+/////POINT ACS/////////////////////////////////////////////
+	var PointACS = require('lib/pointACS');
+		
+	function checkinDbLoadedCallBack(e){
+			alert('checkinDbLoadedCallBack');
+			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+			alert('DONE:checkinDbLoadedCallBack');
+		};
+		
+		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+		Ti.App.addEventListener('checkinsDbUpdated', function(){
+			totalCheckins = CheckinModel.checkins_count();
+			columnCheckInCount.text = totalCheckins;
+		
+		});
+		
+		PointACS.pointACS_fetchedPoint(userID);
+	
+//////////////////////////////////////////////////////////		
+		
 		var totalCheckins=0;
 		var	profileDataName= 'Titanium Mick';
 		var	profileDataImg = 'images/kuma100x100.png';
@@ -137,22 +173,6 @@ var ProfileHeaderView = function(){
 	headerView.add(columnCheckIn);
 	headerView.add(columnFriend);		
 			
-		function checkinDbLoadedCallBack(e){
-			alert('checkinDbLoadedCallBack');
-			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
-			alert('DONE:checkinDbLoadedCallBack');
-		};
-		
-		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
-		Ti.App.addEventListener('checkinsDbUpdated', function(){
-			totalCheckins = CheckinModel.checkins_count();
-			columnCheckInCount.text = totalCheckins;
-		
-		});
-		
-		CheckinACS.checkinACS_fetchedCheckIn(userID);
-
-
 
 
 return headerView;

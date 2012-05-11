@@ -59,9 +59,10 @@ function DiscoveryMainWindow(){
 		programListTable.setData(viewRowsData);
 	});
 	
-	// programListTable.addEventListener('click',function(curTVProgram){
-		// var dataFromRow = new CheckinMainWindow(curTVProgram);
-	// })
+	programListTable.addEventListener('click',function(e){
+		var dataFromRow = new CheckinMainWindow(e.name);
+		self.containingTab.open(dataFromRow);
+	});
 
 	self.add(programListTable);
 	self.hideNavBar();

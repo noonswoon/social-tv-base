@@ -1,14 +1,13 @@
-function CommentWindow(_postId) {
+function CommentWindow(_topicId) {
 	//HEADERS
+	var Topic = require('model/topic');
 	var Comment = require('model/comment');
 	var CommentACS = require('acs/commentACS');
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
 	
 	//OBJECTS INSTANTIATION
-	var header = new CommentHeaderTableViewRow();
-	header.topicLabel.text = "What happened to Peter?";
-	header.dateLabel.text = "Submitted 3 hours ago by Test";
+	var commentHeader = new CommentHeaderTableViewRow();
 	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
@@ -18,13 +17,14 @@ function CommentWindow(_postId) {
 		barColor: '#6d0a0c'
 	});
 
-	var table = Titanium.UI.createTableView({
+	var commentsTable = Titanium.UI.createTableView({
 		top: 0,
 		left: 0,
 		right: 0,
 		bottom: 0,
 		scrollable: true,
-		height:'480'
+		height:'480',
+		selectedToCommentRow: null
 	});
 	
 	var toolActInd = Titanium.UI.createActivityIndicator({
@@ -36,37 +36,77 @@ function CommentWindow(_postId) {
 	
 	//ADDING UI COMPONENTS
 	self.setToolbar([toolActInd],{animated:true});
-	self.add(table);
+	self.add(commentsTable);
 	
 	//CALLBACK FUNCTIONS
 	function commentsLoadedCompleteCallback(e) {
 		//add to db
-		alert("Cloud CommentACS fetchAllComments - DONE");
-		Ti.API.info(e.fetchedComments);
+		//Ti.API.info(e.fetchedComments);
+		Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_topicId); 
+	}
+	
+	function commentsDbUpdatedCallback(e) {
+		//clear current data in the table
+		commentsTable.data = [];
+		
+		//getting topicInfo from the db
+		
+		var curTopic = Topic.topicModel_getTopicById(_topicId);
+		commentHeader.topicLabel.text = curTopic.title;
+
+		//use momentjs for helping on converting dateObject from string
+		//problematic because ACS stores the date as a string with timezone format (+0000)
+		//and we can't directly convert datestring with timezone format to Javascript Date object
+		//so --> create moment object with datestring from ACS (having timezone)
+		//then use moment to output a format that javascript Date object can understand
+		//namely, the 'MMM D, YYYY hh:mm:ss' format
+		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss z");
+		var dateObjFormat = dm.format('MMM D, YYYY hh:mm:ss');
+		var submitDateObj = new Date(dateObjFormat);
+		commentHeader.dateLabel.text = "Submitted "+since(submitDateObj)+" by "+curTopic.username;
+
+		var commentRowsData = [commentHeader];
+		
+		//retrieve from db
+		var allComments = Comment.commentModel_fetchFromTopicId(_topicId);
+		for (var i=0;i<allComments.length;i++) {
+			var curComment = allComments[i];
+			var row = new CommentReplyTableViewRow(curComment);
+			commentRowsData.push(row);
+		}
+		commentsTable.setData(commentRowsData);
+	
+		//LOGIC/Controllers 		
+		//take out the Loading... spinning wheel n
 		toolActInd.hide();
 		self.setToolbar(null,{animated:true});
-		table.height += self.to
-		//Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_postId); 
 	}
 	
 	function commentCreatedACSCallback(e) {
-		header.replyTextField.value = "";
+		commentHeader.replyTextField.value = "";
 		var newComment = e.newComment;	
-		alert("receving fired event from CommentACS create");
-		//Comment.commentModel_add(newComment);
+		Comment.commentModel_add(newComment);
 	}
 	
 	//ADD EVENT LISTENERS
-	table.addEventListener('click', function(e){
-		Ti.API.warn(e.index);
+	commentHeader.replyTextField.addEventListener('return', function(e) {
+		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,_topicId);
+		commentHeader.replyTextField.value = "";
 	});
 
-	header.replyTextField.addEventListener('return', function(e) {
-		CommentACS.commentToPostACS_create(header.replyTextField.value,_postId);
-		header.replyTextField.value = "";
-	});
+	commentsTable.addEventListener('click', function(e) {
+		if(commentsTable.selectedToCommentRow != null)
+			commentsTable.selectedToCommentRow._hideToolbar();	
+	
+		commentsTable.selectedToCommentRow = e.row;
+		commentsTable.selectedToCommentRow._showToolbar();
 
+		//reset the data to make the UI transition looks smoother
+		commentsTable.setData(commentsTable.data);
+	});
+	
 	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);
+	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);
 
 	self.addEventListener("close", function(e) {
@@ -76,29 +116,10 @@ function CommentWindow(_postId) {
 	
 	//PAGE LOGIC/CONTROLLER
 	toolActInd.show();
-	var viewRowsArray = [];
-	viewRowsArray.push(header);
-	table.setData(viewRowsArray);	
-	
+
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
-	CommentACS.commentACS_fetchAllCommentsOfPostId(_postId);
-
-	/*self._setTopic = function(topic) {
-		self.topic = Topic.get(topic.id);
-		header.topicLabel.text = self.topic.title;
-		header.dateLabel.text = "Submitted " + since(self.topic.created_at);
-		data = [
-			header
-		];
-		
-		for (var i=0;i<self.topic.replies.length;i++) {
-			var row = new CommentTableViewRow(table);
-			row._setReply(self.topic.replies[i]);
-			data.push(row);
-		}
-		table.setData(data);
-	};*/
-
+	CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
+	CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
 	return self;
 }
 

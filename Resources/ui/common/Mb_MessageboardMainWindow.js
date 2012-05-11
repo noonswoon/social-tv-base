@@ -2,7 +2,6 @@ function MessageboardMainWindow(_programId) {
 	//HEADERS
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
-
 	
 	var MessageboardHeaderTableViewRow = require('ui/common/Mb_MessageboardHeaderTableViewRow');
 	var MessageboardTableViewRow = require('ui/common/Mb_MessageboardTableViewRow');

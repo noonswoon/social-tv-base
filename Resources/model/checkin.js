@@ -8,7 +8,6 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
 	//need to clear records with the given programId
 	var result = db.execute('DELETE FROM checkins');
-		
 	for(var i=0;i < _checkinsCollection.length; i++) {
 		var curCheckin = _checkinsCollection[i];
 		db.execute("INSERT INTO checkins(id,event_id,score,username,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event_id,curCheckin.custom_fields.score,curCheckin.username,curCheckin.updated_at);
@@ -37,19 +36,12 @@ exports.checkin_fetchCheckin = function() {
 	return fetchedCheckin;
 };
 
-//function: sum score
-exports.checkin_sumScore = function(){
-		var db = Ti.Database.open('Chatterbox'); 
-		var result = db.execute('SELECT SUM(score) as totalScore from checkins');
-		var totalScore = Number(result.fieldByName('totalScore'));
-		return totalScore;
-};
-
 //function: count checkins
 
 exports.checkins_count = function(){
 		var db = Ti.Database.open('Chatterbox'); 
 		var result = db.execute('SELECT COUNT(*) as checkins_count from checkins');
 		var checkins = Number(result.fieldByName('checkins_count'));
-		return checkins;	
+		db.close();
+		return checkins;
 };

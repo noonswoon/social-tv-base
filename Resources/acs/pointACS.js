@@ -2,7 +2,7 @@ var point =[];
 var userScore = 0;
 
 exports.pointACS_fetchedPoint = function(_id) {
-	alert('call pointACS_fetchedPoint');
+	Ti.API.info('call pointACS_fetchedPoint');
 	Cloud.Objects.query({
 	classname: 'Points',	
     page: 1,
@@ -11,21 +11,20 @@ exports.pointACS_fetchedPoint = function(_id) {
     order: '-updated_at'
 }, function (e) {
     if (e.success) {
-    	alert('CALL POINTS SUCCESS');
+    	 Ti.API.info('CALL POINTS SUCCESS');
         for (var i = 0; i < e.Points.length; i++) {
         	 var curPoint = e.Points[i];
-        	    alert('curPoint = e.Points[i]');
+        	    Ti.API.info('curPoint = e.Points[i]');
             userScore +=curPoint.point;
-            alert('Success:\\' +
+            Ti.API.info('Success:\\' +
             	curPoint.user.username +' got ' + curPoint.point+
             	' points from ' +
             	curPoint.earned_by + ' at ' + curPoint.updated_at 
             	+'. Your current score is ' + userScore
             	);
-				//alert('userScore = ' + userScore);
                point.push(curPoint);
          }
-	//	Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
+		Ti.App.fireEvent('pointsDbLoaded',{fetchedPoint:point});
     } 
     else {
         alert('Error:\\n' +

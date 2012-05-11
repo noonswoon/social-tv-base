@@ -4,59 +4,47 @@ var ProfileHeaderView = function(){
 //CALL DATA FROM ACS
 		var userID = '4fa17dd70020440df700950c';
 		var CheckinACS = require('acs/checkinACS');		
-		var CheckinModel = require('model/checkin');	
-		
-	function checkinDbLoadedCallBack(e){
-			alert('checkinDbLoadedCallBack');
-		//UI Stuff
-		var columnCheckInCount = Ti.UI.createLabel({
-				text: '',
-				font: {fontSize: 26, fontStyle: 'bold'},
-				color: '#fff',
-				top: 30
-			});
+		var CheckinModel = require('model/checkin');
 			
-		//var totalScore =0;
-		var totalCheckins=0;
-		var	profileDataName= 'Titanium Mick';
-		var	profileDataImg = 'images/kuma100x100.png';
-			
+//CHECK IN//////////////////////////////////////////////////////////////////////
+
+		function checkinDbLoadedCallBack(e){
+			 Ti.API.info('checkinDbLoadedCallBack');					
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		};
-		
+
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
 			totalCheckins = CheckinModel.checkins_count();
 			columnCheckInCount.text = totalCheckins;
-		
 		});
 		
 		CheckinACS.checkinACS_fetchedCheckIn(userID);		
 		
 /////POINT ACS/////////////////////////////////////////////
-	var PointACS = require('lib/pointACS');
+	var PointACS = require('acs/pointACS');
+	var PointModel = require('model/point');	
+	function pointDbLoadedCallBack(e){
+			Ti.API.info('pointDbLoadedCallBack');
+			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
+			Ti.API.info('DONE:pointDbLoadedCallBack');
+	};
 		
-	function checkinDbLoadedCallBack(e){
-			alert('checkinDbLoadedCallBack');
-			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
-			alert('DONE:checkinDbLoadedCallBack');
-		};
-		
-		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
-		Ti.App.addEventListener('checkinsDbUpdated', function(){
-			totalCheckins = CheckinModel.checkins_count();
-			columnCheckInCount.text = totalCheckins;
-		
-		});
-		
+		Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);	
 		PointACS.pointACS_fetchedPoint(userID);
 	
-//////////////////////////////////////////////////////////		
-		
-		var totalCheckins=0;
-		var	profileDataName= 'Titanium Mick';
-		var	profileDataImg = 'images/kuma100x100.png';
+///LEVEL ACS///////////////////////////////////////////////////////
+	var LevelModel = require('model/level');	
+	var LevelACS = require('acs/levelACS');	
+		LevelACS.levelACS_fetchedLevel();
+	
+		function levelDbLoadedCallBack(e){
+		Ti.API.info('levelDbLoadedCallBack');					
+		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
 
+		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
+
+///////////////////////////////////////////////////////////////////
 	var headerView = Ti.UI.createView({
 			backgroundGradient: {
         	type: 'linear',
@@ -64,15 +52,23 @@ var ProfileHeaderView = function(){
         	endPoint: { x: '0%', y: '100%' },
         	colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ]}
 	});
+	
+		var totalCheckins=0;
+		var	profileDataName= 'Titanium Mick';
+		var	profileDataImg = 'images/kuma100x100.png';
+	
+		var columnCheckInCount = Ti.UI.createLabel({
+			text: '',
+			font: {fontSize: 26, fontStyle: 'bold'},
+			color: '#fff',
+			top: 30
+		});
 
 		var profilePicture = Ti.UI.createImageView({
 			image: profileDataImg,
-			//top: 10, left: 10,
 			width: 90,
 			height: 90,
-			//borderWidth: 5,
-			//borderColor: '#fff',
-			backgroundColor: '#E2E5EE'
+			backgroundColor: 'transparent'
 		});
 		var profilePictureContain = Ti.UI.createView({
 			backgroundColor: '#fff',
@@ -144,6 +140,7 @@ var ProfileHeaderView = function(){
 			text: '',
 			font: {fontSize: 26, fontStyle: 'bold'},
 			color: '#fff',
+			height: 30,
 			top: 30
 		});
 				
@@ -169,6 +166,7 @@ var ProfileHeaderView = function(){
 				text: '27',
 				font: {fontSize: 26, fontStyle: 'bold'},
 				color: '#fff',
+				height: 30,
 				top: 30
 			});
 			
@@ -182,9 +180,7 @@ var ProfileHeaderView = function(){
 	headerView.add(profileName);
 	headerView.add(fbLogin);
 	headerView.add(columnCheckIn);
-	headerView.add(columnFriend);		
-			
-
+	headerView.add(columnFriend);	
 
 return headerView;
 

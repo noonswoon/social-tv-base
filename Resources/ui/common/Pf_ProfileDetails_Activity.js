@@ -50,7 +50,14 @@ var ProfileActivityView = function(){
 		data: activity
 	});
 	
-	return userActivity;
+	var userActivityView = Ti.UI.createView({
+		width: 312,
+		height: 190,
+	});
+	
+	userActivityView.add(userActivity);
+	
+	return userActivityView;
 }
 
 module.exports = ProfileActivityView;

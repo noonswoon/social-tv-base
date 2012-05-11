@@ -1,5 +1,5 @@
 var checkin =[];
-//var userScore =0;
+var userScore =0;
 
 exports.checkinACS_fetchedCheckIn = function(_id) {
 	Cloud.Checkins.query({
@@ -9,16 +9,14 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
     order: '-updated_at'
 }, function (e) {
     if (e.success) {
-    	alert('SUCCESS');
+    	 Ti.API.info('checkin SUCCESS');
         for (var i = 0; i < e.checkins.length; i++) {
         	 var curCheckin = e.checkins[i];
             userScore +=curCheckin.custom_fields.score;
             Ti.API.info('checkin Success:\\' +
             	curCheckin.user.username +' has been check in on ' +
-            	curCheckin.event.name + ' at ' + curCheckin.updated_at 
-            	//+'. Your current score is ' + userScore
-            	);
-				//alert('userScore = ' + userScore);
+            	curCheckin.event.name + ' at ' + curCheckin.updated_at );
+				Ti.API.info('userScore = ' + userScore);
                checkin.push(curCheckin);
          }
 		Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});

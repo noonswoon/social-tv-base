@@ -1,5 +1,7 @@
 var ProfileStatsView = function(){
-	var CheckinModel = require('model/checkin');
+	var PointModel = require('model/point');
+	var LevelModel = require('model/level');
+	var ProfileDataExp;
 
 	//test data			
 	var	ProfileDataName= 'Titanium Mick';
@@ -39,6 +41,20 @@ var ProfileStatsView = function(){
 	    max: ProfileDataLevelUp,
 	    style:Titanium.UI.iPhone.ProgressBarStyle.DEFAULT
 	});
+
+/////////////////////////////////////////////////////////////////////////////
+		//ACS
+			Ti.App.addEventListener('pointsDbUpdated', function(){
+			Ti.API.info('pointsDBUpdated');
+			totalPoints = PointModel.points_sumPoints();
+			ProfileDataExp = totalPoints;
+			expLabel.text=ProfileDataExp + '/' + ProfileDataLevelUp;
+			expBar.value =ProfileDataExp;
+
+			LevelModel.level_checkLevel(ProfileDataExp);
+		});
+			
+///////////////////////////////////////////////////////////////////////////
 
 	var leaderLabel = Ti.UI.createLabel({
 		text: 'LEADERBOARD',
@@ -111,6 +127,7 @@ var ProfileStatsView = function(){
 			top:50
 	});
 		
+		
 		expSec.add(expLabel);
 		expSec.add(expBadge);
 		expSec.add(expBar);
@@ -119,15 +136,6 @@ var ProfileStatsView = function(){
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);
 		profileStats.add(leaderSec);
-
-		//ACS
-		Ti.App.addEventListener('checkinsDbUpdated', function(){
-			totalScore = CheckinModel.checkin_sumScore();
-			var ProfileDataExp = totalScore;
-			expLabel.text=ProfileDataExp + '/' + ProfileDataLevelUp;
-			expBar.value =ProfileDataExp/ProfileDataLevelUp;
-		
-		});
 
 	return profileStats;
 }

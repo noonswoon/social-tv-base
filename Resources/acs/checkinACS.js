@@ -7,7 +7,6 @@ var checkin =[];
 var userScore =0;
 
 exports.checkinACS_fetchedCheckIn = function(_id) {
-	alert('call userACS_fetchUserCheckIn');
 	Cloud.Checkins.query({
     page: 1,
     per_page: 20,
@@ -18,7 +17,7 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
         for (var i = 0; i < e.checkins.length; i++) {
         	 var curCheckin = e.checkins[i];
             userScore +=curCheckin.custom_fields.score;
-            alert('Success:\\' +
+            Ti.API.info('checkin Success:\\' +
             	curCheckin.user.username +' has been check in on ' +
             	curCheckin.event.name + ' at ' + curCheckin.updated_at +
             	'. Your current score is ' + userScore);
@@ -28,7 +27,7 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
 		Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
     } 
     else {
-        alert('Error:\\n' +
+        Ti.API.info('checkin Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});

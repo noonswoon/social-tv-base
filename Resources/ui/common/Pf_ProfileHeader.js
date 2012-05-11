@@ -4,7 +4,7 @@ var ProfileHeaderView = function(){
 ///////////////////////////////////////////////
 //CALL DATA FROM ACS
 		var userID = '4fa17dd70020440df700950c';
-		var CheckinACS = require('lib/checkinACS');		
+		var CheckinACS = require('acs/checkinACS');		
 		var CheckinModel = require('model/checkin');	
 		
 		//UI Stuff
@@ -21,9 +21,7 @@ var ProfileHeaderView = function(){
 		var	profileDataImg = 'images/kuma100x100.png';
 			
 		function checkinDbLoadedCallBack(e){
-			alert('checkinDbLoadedCallBack');
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
-			alert('DONE:checkinDbLoadedCallBack');
 		};
 		
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);

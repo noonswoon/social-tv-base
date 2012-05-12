@@ -1,64 +1,85 @@
 exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
-	var commentsOfPost = [];
+	var commentsInThisTopic = [];
 	var commentIdsWithRatingsOrComments = [];
-	var commentsOfComments = [];
+	var numWaits = 0;
+	
+	function queryReviewsOfCommentsDoneCallback() {
+		numWaits--;
+		if(numWaits==0) {
+			Ti.App.fireEvent("commentsLoadedComplete",{fetchedComments:commentsInThisTopic});
+			//remove the callback when successfully joined
+			Ti.App.removeEventListener('queryReviewsOfCommentsDone',queryReviewsOfCommentsDoneCallback);
+		}
+	}
+	
+	Ti.App.addEventListener('queryReviewsOfCommentsDone',queryReviewsOfCommentsDoneCallback);
+	
 	//getting comments on the topic
 	Cloud.Reviews.query({
 	    post_id: _topicId,
 	    page: 1,
 	    per_page: 20, 
 	    order: '-created_at'
-	}, function (e) {
-	    if (e.success) {
-	        Ti.API.info('Reviews Count: ' + e.reviews.length);
-	        for (var i = 0; i < e.reviews.length; i++) {
-	            var review = e.reviews[i];
+	}, function (e1) {
+	    if (e1.success) {
+	        Ti.API.info('Reviews Count: ' + e1.reviews.length);
+	        for (var i = 0; i < e1.reviews.length; i++) {
+				var review = e1.reviews[i];
 	            var curComment = {
 	            	id: review.id,
 	            	topic_id: _topicId,
 	            	content: review.content,
+	            	rating: review.rating,
 	            	user:review.user,
 	            	response_to_object_id: review.custom_fields.response_to_object_id,
+	            	is_a_vote: review.custom_fields.is_a_vote,
 	            	updated_at: review.updated_at
 	            };
-				commentsOfPost.push(curComment);
+	            
+				commentsInThisTopic.push(curComment);
 				if(review.reviews_count !== undefined) {
 	            	commentIdsWithRatingsOrComments.push(review.id);
 	            } 
 			}
 			
-			if(commentIdsWithRatingsOrComments.length == 0)
-				Ti.App.fireEvent("commentsLoadedComplete",{fetchedComments:commentsOfPost, fetchedCommentsOfComments:commentsOfComments});
-			
+			if(commentIdsWithRatingsOrComments.length == 0) {
+				Ti.App.fireEvent("commentsLoadedComplete",{fetchedComments:commentsInThisTopic});
+			} 
 			//getting comments/rating of comment
+			// commentIdsWithRatingsOrComments.length, cwroc --> number of Cloud.Reviews.query calls
+			//need to fork cwroc times and wait til all the events are done before calling commentsLoadedComplete
+			numWaits = commentIdsWithRatingsOrComments.length;
 			for(var i=0; i <commentIdsWithRatingsOrComments.length;i++) {
 				var curCommentId = commentIdsWithRatingsOrComments[i];
 				Cloud.Reviews.query({
 				    review_object_id:curCommentId,
 				    page: 1,
 				    per_page: 20
-				}, function (e) {
-				    if (e.success) {
-				        Ti.API.info('commentID '+curCommentId+' has ' + e.reviews.length);
-				        for (var i = 0; i < e.reviews.length; i++) {
-	            			var review = e.reviews[i];
+				}, function (e2) {
+				    if (e2.success) {
+				        Ti.API.info('commentID '+e2.reviews[0].custom_fields.response_to_object_id+' has ' + e2.reviews.length +' ratings/comments');
+				        for (var j = 0; j < e2.reviews.length; j++) {
+	            			var review = e2.reviews[j];
 					        var curComment = {
 				            	id: review.id,
 				            	topic_id: _topicId,
 				            	content: review.content,
 				            	rating: review.rating,
 				            	user:review.user,
-				            	response_to_object_id: curCommentId,
-				            	is_a_vate: review.custom_fields.is_a_vote,
+				            	response_to_object_id: review.custom_fields.response_to_object_id,
+				            	is_a_vote: review.custom_fields.is_a_vote,
 				            	updated_at: review.updated_at
 				           	};
-				        	commentsOfComments.push(curComment);   
+				        	commentsInThisTopic.push(curComment);   
 				        }
-				        
-				       	Ti.App.fireEvent("commentsLoadedComplete",{fetchedComments:commentsOfPost, fetchedCommentsOfComments:commentsOfComments});
+				        //FIXED!! Mickey == smartass --> true: 
+				        //problematic here..it isn't really complete since we fire
+				        //many Cloud.Reviews.Query events..each will fire commentsLoadedComplete
+				        //Ti.App.fireEvent("commentsLoadedComplete",{fetchedComments:commentsInThisTopic});
+						Ti.App.fireEvent("queryReviewsOfCommentsDone");
 					} else {
 				        Ti.API.info('Getting CommentOfComment Error:\\n' +
-				            ((e.error && e.message) || JSON.stringify(e)));
+				            ((e2.error && e.message) || JSON.stringify(e2)));
 				    }
 				});
 			}

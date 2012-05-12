@@ -42,9 +42,7 @@ function CommentWindow(_topicId) {
 	function commentsLoadedCompleteCallback(e) {
 		//add to db
 		//Ti.API.info(e.fetchedComments);
-		Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_topicId); 
-		
-		e.fetchedCommentsOfComments
+		Comment.commentModel_updateCommentsOnTopicFromACS(e.fetchedComments,_topicId); 
 	}
 	
 	function commentsDbUpdatedCallback(e) {
@@ -67,12 +65,29 @@ function CommentWindow(_topicId) {
 		var submitDateObj = new Date(dateObjFormat);
 		commentHeader.dateLabel.text = "Submitted "+since(submitDateObj)+" by "+curTopic.username;
 
-		var commentRowsData = [commentHeader];
-		
 		//retrieve from db
-		var allComments = Comment.commentModel_fetchFromTopicId(_topicId);
+		var allComments = Comment.commentModel_fetchCommentsFromTopicId(_topicId);
+		var commentsOfTopic = [];
+		var commentsOfComments = [];
+		var votesOfComments = [];
+		
 		for (var i=0;i<allComments.length;i++) {
 			var curComment = allComments[i];
+			if(curComment.response_to_object_id === _topicId) {
+				commentsOfTopic.push(curComment);
+			} else if(curComment.is_a_vote === 0) {
+				commentsOfComments.push(curComment);
+			} else {
+				votesOfComments.push(curComment);
+			}
+		}
+		Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
+		Ti.API.info('num commentsOfComments: '+commentsOfComments.length);
+		Ti.API.info('num votesOfComments: '+votesOfComments.length);
+		
+		var commentRowsData = [commentHeader];
+		for(var i=0;i<commentsOfTopic.length;i++) {
+			var curComment = commentsOfTopic[i];
 			var row = new CommentReplyTableViewRow(curComment);
 			commentRowsData.push(row);
 		}
@@ -87,19 +102,19 @@ function CommentWindow(_topicId) {
 	function commentCreatedACSCallback(e) {
 		commentHeader.replyTextField.value = "";
 		var newComment = e.newComment;	
-		Comment.commentModel_add(newComment);
+		Comment.commentModel_addCommentOrRating(newComment);
 	}
 	
 	function commentOfCommentCreatedACSCallback(e) {
 		var newCommentOfComment = e.newCommentOfComment;	
 		Ti.API.info("new comment's comment id: "+newCommentOfComment.id);
-//		Comment.commentModel_add(newComment);
+		Comment.commentModel_addCommentOrRating(newCommentOfComment);
 	}
 	
 	function voteOfCommentCreatedACSCallback(e) {
 		var newVote = e.newVote;
 		Ti.API.info("new vote id: "+newVote.id+", voteScore: "+newVote.rating);	
-//		Comment.commentModel_add(newComment);
+		Comment.commentModel_addCommentOrRating(newVote);
 	}
 
 	//ADD EVENT LISTENERS
@@ -137,7 +152,7 @@ function CommentWindow(_topicId) {
 
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
 	CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
-	CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
+	//CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
 	return self;
 }
 

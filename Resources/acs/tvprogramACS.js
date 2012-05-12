@@ -9,7 +9,7 @@ exports.tvprogramACS_fetchAllProgram = function(id) {
 	            var curProgram = {
 	            	id: program.id,
 	            	name: program.name,
-	            	photo: program.photo.urls.original
+	            	photo: 'dummy.png'//program.photo.urls.original
 	            }
 				programs.push(curProgram);
 			}

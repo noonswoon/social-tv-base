@@ -90,6 +90,13 @@ function CommentWindow(_topicId) {
 			var curComment = commentsOfTopic[i];
 			var row = new CommentReplyTableViewRow(curComment);
 			commentRowsData.push(row);
+			//for each comment, check if there are comments of that comment or not
+			for(var j=0;j<commentsOfComments.length;j++) {
+				if(curComment.id == commentsOfComments[j].response_to_object_id) {
+					Ti.API.info(commentsOfComments[j].content+ " on "+curComment.content);
+					//continue here...building a new TableViewRow style for comments of comment
+				}
+			}
 		}
 		commentsTable.setData(commentRowsData);
 	

@@ -9,7 +9,10 @@ exports.tvprogramACS_fetchAllProgram = function(id) {
 	            var curProgram = {
 	            	id: program.id,
 	            	name: program.name,
-	            	photo: program.photo.urls.original
+	            	photo: 'program.photo.urls.original',
+	            	 start_time: program.start_time,
+	            	recurring_until: program.recurring_until,
+	            	checkin: program.custom_fields.checkin
 	            }
 				programs.push(curProgram);
 			}
@@ -19,7 +22,7 @@ exports.tvprogramACS_fetchAllProgram = function(id) {
 	        Ti.API.debug(e.error);
 	        alert('event error');
 	    },
-	    timeout:5000  /* in milliseconds */
+	    timeout:10000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();  // request is actually sent with this statement

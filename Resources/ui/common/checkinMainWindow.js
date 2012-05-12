@@ -56,6 +56,7 @@ Checkin = function (_datafromrow){
 	});
 	headerView.add(programChannel);
 	
+	
 ///////////////////////////////////////////////////Checkin Section
 
 	var checkinView = Ti.UI.createView({
@@ -73,7 +74,31 @@ Checkin = function (_datafromrow){
 	self.add(checkinButton);
 	
 	checkinButton.addEventListener('click',function(){
-		alert('Yeah! Check-in');
+		// var now_full = moment().format('YYYY-MM-DD, HH:mm:ss');
+		// var now_date = moment().format('YYYY-MM-DD');
+		// var now_time = moment().format('HH:mm:ss');
+		// alert('NOW: '+now_date);
+// 		
+		// var starttime_full = moment(_datafromrow.programStarttime, "YYYY-MM-DDTHH:mm:ss z");
+		// var starttime_date = starttime_full.format('YYYY-MM-DD');
+		// var starttime_time = starttime_full.format('HH:mm:ss');
+// 		
+		// alert('Start: '+starttime_date);
+// 		
+		// var endtime_full = moment(_datafromrow.programEndtime, "YYYY-MM-DDTHH:mm:ss z");
+		// var endtime_date = endtime_full.format('YYYY-MM-DD');
+		// var endtime_time = endtime_full.format('HH:mm:ss');
+// 		
+		// alert('End time'+endtime_time);
+		
+		// if(now_date === starttime_date){
+			// if(now_time >= starttime_time && now_time <= endtime_time){
+				// alert('Check-in');
+			// }
+			// else alert('Program is not on-air');
+		// }
+		// else alert('Program is not on-air');
+
 	});
 
 	self.showNavBar();

@@ -20,12 +20,12 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		row.add(programLabelName);
 		
 		var programLabelSubname = Ti.UI.createLabel({
-			text: 'Sublabel',
+			text: 'subname',
 			color: '#420404',
-			textAlign:'right',
+			textAlign:'left',
 			font:{fontWeight:'bold',fontSize:13},
 			top: 30,
-			right:115
+			left:140
 		});
 		row.add(programLabelSubname);
 		
@@ -46,7 +46,14 @@ DiscoveryTableViewRow = function(_curTVProgram){
 			width: 35,
 			height: 15
 		});
-		row.add(programChannel);	
+		row.add(programChannel);
+		
+		var programCheckin = Ti.UI.createLabel({
+			text: _curTVProgram.checkin,
+			textAlign: 'right',
+			right: 100
+		});
+		row.add(programCheckin);
 	
 		row.tvprogram = _curTVProgram;
 		return row;

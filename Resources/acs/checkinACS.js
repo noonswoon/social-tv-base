@@ -6,12 +6,26 @@
 var checkin =[];
 var userScore =0;
 
+/*
+exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
+	Cloud.Checkins.query({
+    page: 1,
+    per_page: 20,
+    where: {event_id: _eventId,},
+    order: '-updated_at',
+....
+...
+
+}
+*/
+
 exports.checkinACS_fetchedCheckIn = function(_id) {
 	Cloud.Checkins.query({
     page: 1,
     per_page: 20,
-    where: {user_id: _id},
-    order: '-updated_at'
+    where: {user_id: _id,},
+    order: '-updated_at',
+
 }, function (e) {
     if (e.success) {
         for (var i = 0; i < e.checkins.length; i++) {
@@ -22,6 +36,7 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
             	curCheckin.event.name + ' at ' + curCheckin.updated_at +
             	'. Your current score is ' + userScore);
                //alert('userScore = ' + userScore);
+            
                checkin.push(curCheckin);
          }
 		Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});

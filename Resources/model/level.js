@@ -1,22 +1,22 @@
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS levels(level TEXT PRIMARY KEY, point INTEGER, exp INTEGER, tag TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS levels(level TEXT PRIMARY KEY, exp INTEGER, tag TEXT);');
 db.close();
 
 // create data for local database
 exports.levelModel_updateLevelFromACS = function(_levelsCollection) {
 	Ti.API.info('LEVEL LOAD');
 	var db = Ti.Database.open('Chatterbox'); 
-	var version = 'v001';
+	//	var version = 'v001';
+	db.execute('DELETE FROM levels');
 	for(var i=0;i < _levelsCollection.length; i++) {
 		Ti.API.info('Tag for level is '+_levelsCollection[i].tag);
-		if(_levelsCollection[i].tag!==version){
+	//	if(_levelsCollection[i].tag!==version){
 		Ti.API.info('Write new level');
-		db.execute('DELETE FROM levels');
-			var curLevel = _levelsCollection[i];
-			db.execute("INSERT INTO levels(level,point,exp,tag) VALUES(?,?,?,?)", curLevel.level,curLevel.point,curLevel.exp,curLevel.tag);
-		}
-		else {Ti.API.info('SAME TAG');};
+		var curLevel = _levelsCollection[i];
+		db.execute("INSERT INTO levels(level,exp,tag) VALUES(?,?,?)", curLevel.level,curLevel.exp,curLevel.tag);
+	//	}
+	//	else {Ti.API.info('SAME TAG');};
 	}
 	db.close();
 	Ti.App.fireEvent("levelDbUpdated");
@@ -30,7 +30,6 @@ exports.level_fetchLevel = function() {
 	while(result.isValidRow()) {
 		fetchedLevel.push({
 			level: result.fieldByName('level'),
-			point: Number(result.fieldByName('point')),
 			exp: Number(result.fieldByName('exp')),
 			tag: result.fieldByName('tag')
 		});
@@ -42,10 +41,21 @@ exports.level_fetchLevel = function() {
 };
 
 exports.level_checkLevel = function(_exp) {
+	Ti.API.info('level_checkLevel');
 	var db = Ti.Database.open('Chatterbox'); 
-//	var result = db.execute('SELECT TOP 1 level FROM levels');
-	var result = 0;
-	alert(result);
+	var result = db.execute('SELECT * from levels where ? < exp ORDER BY exp ASC limit 0,1',_exp);
+	var myLevel = result.fieldByName('level');
+	result.close();
 	db.close();
-	return result;
+	return myLevel;
+};
+
+exports.level_nextLevel = function(_exp) {
+	Ti.API.info('level_nextLevel');
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * from levels where ? < exp ORDER BY exp ASC limit 0,1',_exp);
+	var NextLevel = Number(result.fieldByName('exp'));
+	result.close();
+	db.close();
+	return NextLevel;
 };

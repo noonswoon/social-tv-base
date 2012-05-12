@@ -1,4 +1,4 @@
-//compared tag ---> get data
+
 var level =[];
 
 exports.levelACS_fetchedLevel = function() {
@@ -6,14 +6,12 @@ exports.levelACS_fetchedLevel = function() {
 	Cloud.Objects.query({
 	classname: 'Level',	
     page: 1,
-    per_page: 20,
-    order: '-updated_at'
+    per_page: 20
 }, function (e) {
     if (e.success) {
     	 Ti.API.info('CALL LEVEL SUCCESS');
         for (var i = 0; i < e.Level.length; i++) {
         	 var curLevel = e.Level[i];
-        	    //alert('curLevel = e.Level[i]');
             Ti.API.info('Success:\\' +
             	curLevel.level +' must have ' + curLevel.exp+
             	'exp');

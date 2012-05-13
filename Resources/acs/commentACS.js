@@ -14,7 +14,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 	
 	Ti.App.addEventListener('queryReviewsOfCommentsDone',queryReviewsOfCommentsDoneCallback);
 	
-	//getting comments on the topic
+	//getting comments on the topic --> need to recursively call the Cloud service
 	Cloud.Reviews.query({
 	    post_id: _topicId,
 	    page: 1,

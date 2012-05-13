@@ -15,8 +15,8 @@ function ApplicationTabGroup() {
 	var chatwin = new ChatMainWindow();
 	var messageboardwin = new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
-	var productwin = new ProductMainWindow();
-	var profilewin = new ProfileMainWindow();
+	//var productwin = new ProductMainWindow();
+	//var profilewin = new ProfileMainWindow();
 	var discoveryMainWin = new DiscoveryMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
@@ -40,19 +40,22 @@ function ApplicationTabGroup() {
 	});
 	loginwin.containingTab = loginTab;
 	
-	var productTab = Ti.UI.createTab({
+	/*var productTab = Ti.UI.createTab({
 		icon: '/images/captured.png',
 		title: 'Product',
 		window: productwin
 	});
 	productwin.containingTab = productTab;
+	*/
 	
+	/*
 	var profileTab = Ti.UI.createTab({
 		icon: '/images/fugitives.png',
 		title: 'Profile',
 		window: profilewin
 	});
 	profilewin.containingTab = profileTab;
+	*/
 	
 	var discoveryTab = Ti.UI.createTab({
 		title: 'Discovery',
@@ -64,9 +67,9 @@ function ApplicationTabGroup() {
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  
     self.addTab(discoveryTab);
-    self.addTab(profileTab);
+    //self.addTab(profileTab);
    	self.addTab(loginTab);
-    self.addTab(productTab);
+    //self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[1]);

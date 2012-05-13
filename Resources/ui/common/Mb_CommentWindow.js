@@ -5,6 +5,7 @@ function CommentWindow(_topicId) {
 	var CommentACS = require('acs/commentACS');
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
+	var CommentOfCommentTableViewRow = require('ui/common/Mb_Comment2ndLevelTableViewRow');
 	
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
@@ -94,6 +95,9 @@ function CommentWindow(_topicId) {
 			for(var j=0;j<commentsOfComments.length;j++) {
 				if(curComment.id == commentsOfComments[j].response_to_object_id) {
 					Ti.API.info(commentsOfComments[j].content+ " on "+curComment.content);
+					var curCommentComment = commentsOfComments[j]; 
+					var commentOfCommentRow = new CommentOfCommentTableViewRow(curCommentComment);
+					commentRowsData.push(commentOfCommentRow);
 					//continue here...building a new TableViewRow style for comments of comment
 				}
 			}
@@ -131,6 +135,7 @@ function CommentWindow(_topicId) {
 	});
 
 	commentsTable.addEventListener('click', function(e) {
+		if(e.index == 0) return;
 		if(commentsTable.selectedToCommentRow != null)
 			commentsTable.selectedToCommentRow._hideToolbar();	
 	

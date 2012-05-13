@@ -1,4 +1,4 @@
-CommentReplyTableViewRow = function(_comment) {
+CommentReplyTableViewRow = function(_comment, _level) {
 	//HEADER
 	var CommentACS = require('acs/commentACS');
 	
@@ -10,10 +10,12 @@ CommentReplyTableViewRow = function(_comment) {
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	
+	var lineHelper = "";
+	if(_level != 0) lineHelper = "|  "; 
 	var contentLabel = Ti.UI.createLabel({
-		text: _comment.content,
+		text: lineHelper + _comment.content,
 		top: 5,
-		left: 5,
+		left: (_level * 10) + 5,
 		width: 310,
 		height: 30,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }

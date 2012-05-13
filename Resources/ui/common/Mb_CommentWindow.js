@@ -5,7 +5,6 @@ function CommentWindow(_topicId) {
 	var CommentACS = require('acs/commentACS');
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
-	var CommentOfCommentTableViewRow = require('ui/common/Mb_Comment2ndLevelTableViewRow');
 	
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
@@ -39,6 +38,19 @@ function CommentWindow(_topicId) {
 	self.setToolbar([toolActInd],{animated:true});
 	self.add(commentsTable);
 	
+	//HELPER FUNCTIONS
+	
+	//recursive function
+	function showCommentTableViewRow(_commentLevel,_commentRowsData,_commentsArray,_targetedCommentId) {
+		for(var i=0;i<_commentsArray.length;i++) {
+			var curComment = _commentsArray[i];
+			if(_targetedCommentId === curComment.response_to_object_id) {
+				var commentRow = new CommentReplyTableViewRow(curComment,_commentLevel);
+				_commentRowsData.push(commentRow);
+				showCommentTableViewRow(_commentLevel+1,_commentRowsData,_commentsArray,curComment.id);
+			}
+		}
+	}
 	//CALLBACK FUNCTIONS
 	function commentsLoadedCompleteCallback(e) {
 		//add to db
@@ -69,39 +81,25 @@ function CommentWindow(_topicId) {
 		//retrieve from db
 		var allComments = Comment.commentModel_fetchCommentsFromTopicId(_topicId);
 		var commentsOfTopic = [];
-		var commentsOfComments = [];
 		var votesOfComments = [];
 		
+		
+		//use recursion instead
 		for (var i=0;i<allComments.length;i++) {
 			var curComment = allComments[i];
-			if(curComment.response_to_object_id === _topicId) {
+			if(curComment.is_a_vote === 0) {
 				commentsOfTopic.push(curComment);
-			} else if(curComment.is_a_vote === 0) {
-				commentsOfComments.push(curComment);
 			} else {
 				votesOfComments.push(curComment);
 			}
 		}
 		Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
-		Ti.API.info('num commentsOfComments: '+commentsOfComments.length);
 		Ti.API.info('num votesOfComments: '+votesOfComments.length);
 		
 		var commentRowsData = [commentHeader];
-		for(var i=0;i<commentsOfTopic.length;i++) {
-			var curComment = commentsOfTopic[i];
-			var row = new CommentReplyTableViewRow(curComment);
-			commentRowsData.push(row);
-			//for each comment, check if there are comments of that comment or not
-			for(var j=0;j<commentsOfComments.length;j++) {
-				if(curComment.id == commentsOfComments[j].response_to_object_id) {
-					Ti.API.info(commentsOfComments[j].content+ " on "+curComment.content);
-					var curCommentComment = commentsOfComments[j]; 
-					var commentOfCommentRow = new CommentOfCommentTableViewRow(curCommentComment);
-					commentRowsData.push(commentOfCommentRow);
-					//continue here...building a new TableViewRow style for comments of comment
-				}
-			}
-		}
+		
+		//populate commentRowsData recursively from the below function
+		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
 	
 		//LOGIC/Controllers 		
@@ -167,6 +165,4 @@ function CommentWindow(_topicId) {
 	//CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
 	return self;
 }
-
-
 module.exports = CommentWindow;

@@ -1,23 +1,32 @@
-//exports.userACS_fetchUserCheckIn = function(){
-//var UserCheckInInfo = [];
-//var callCheckIn = 
-//return UserCheckInInfo;
 
 var checkin =[];
 var userScore =0;
 
-/*
+
 exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 	Cloud.Checkins.query({
     page: 1,
     per_page: 20,
-    where: {event_id: _eventId,},
-    order: '-updated_at',
-....
-...
+    where: {event_id: _eventId},
+    order: '-updated_at'
+    
+}, function (e) {
+    if (e.success) {
+        for (var i = 0; i < e.checkins.length; i++) {
+        	 var curCheckin = e.checkins[i];
+        	 var eventCheckedin = {
+        	 id: curCheckin.event.id
+        	 };
+         }
+		Ti.App.fireEvent('CheckInOfProgram',{fetchedEventCheckin:checkin});
+    } 
+    else {
+        Ti.API.info('checkin Error:\\n' +
+            ((e.error && e.message) || JSON.stringify(e)));
+    	 }
+			});
+};
 
-}
-*/
 
 exports.checkinACS_fetchedCheckIn = function(_id) {
 	Cloud.Checkins.query({

@@ -3,6 +3,7 @@ function DiscoveryMainWindow(){
 	var TVProgram = require('model/tvprogram');
 	var TVProgramACS = require('acs/tvprogramACS');
 	var DiscoveryTableViewRow = require('ui/common/discoveryTableViewRow');
+	var TVProgramCheckinACS = require('acs/checkinACS');
 	
 	var self = Ti.UI.createWindow({
 		title: 'Discovery',
@@ -23,11 +24,9 @@ function DiscoveryMainWindow(){
 		height: 50,
 		backgroundImage: '/images/bgheader.png'
 	});
-	
 	tabHeader.add(tabbar);
 	self.add(tabHeader);
 	
-
 	var programListTable = Ti.UI.createTableView({
 		top: 50,
 	});
@@ -41,6 +40,14 @@ function DiscoveryMainWindow(){
 		TVProgram.tvprogramsModel_insertAllPrograms(allPrograms);
 	}
 	
+	function tvprogramTotalCheckin(e){
+		
+		var eventCheckedin = e.fetchedEventCheckin;
+		
+		Ti.API.info('total checkin is '+eventCheckedin);
+	}
+	
+	Ti.App.addEventListener('CheckInOfProgram',tvprogramTotalCheckin);
 	
 	Ti.App.addEventListener('tvprogramsLoaded',tvprogramLoadedCompleteCallback);
 	
@@ -50,10 +57,10 @@ function DiscoveryMainWindow(){
 		
 		for (var i=0;i<currentTVPrograms.length;i++) {
 			 var curTVProgram = currentTVPrograms[i];
-
-			var row = new DiscoveryTableViewRow(curTVProgram);
-			
-			viewRowsData.push(row);
+			 
+				var row = new DiscoveryTableViewRow(curTVProgram);
+				viewRowsData.push(row);
+				
 		}
 		programListTable.setData(viewRowsData);
 	});
@@ -78,6 +85,7 @@ function DiscoveryMainWindow(){
 	self.add(programListTable);
 	self.hideNavBar();
 	
+	TVProgramCheckinACS.checkinACS_fetchedCheckInOfProgram("4fa8dbe60020442a2b0099f8");
 	TVProgramACS.tvprogramACS_fetchAllProgram();
 	return self;
 }

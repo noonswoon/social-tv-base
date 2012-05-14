@@ -98,6 +98,8 @@ Checkin = function (_datafromrow){
 			// else alert('Program is not on-air');
 		// }
 		// else alert('Program is not on-air');
+		
+		
 
 	});
 

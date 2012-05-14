@@ -16,7 +16,7 @@ function ApplicationTabGroup() {
 	var messageboardwin = new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
 	var productwin = new ProductMainWindow();
-	var profilewin = new ProfileMainWindow();
+	//var profilewin = new ProfileMainWindow();
 	var discoveryMainWin = new DiscoveryMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
@@ -47,12 +47,12 @@ function ApplicationTabGroup() {
 	});
 	productwin.containingTab = productTab;
 	
-	var profileTab = Ti.UI.createTab({
-		icon: '/images/fugitives.png',
-		title: 'Profile',
-		window: profilewin
-	});
-	profilewin.containingTab = profileTab;
+	// var profileTab = Ti.UI.createTab({
+		// icon: '/images/fugitives.png',
+		// title: 'Profile',
+		// window: profilewin
+	// });
+	// profilewin.containingTab = profileTab;
 	
 	var discoveryTab = Ti.UI.createTab({
 		title: 'Discovery',
@@ -64,7 +64,7 @@ function ApplicationTabGroup() {
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  
     self.addTab(discoveryTab);
-    self.addTab(profileTab);
+    //self.addTab(profileTab);
    	self.addTab(loginTab);
     self.addTab(productTab);
     

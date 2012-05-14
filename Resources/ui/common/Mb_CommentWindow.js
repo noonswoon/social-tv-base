@@ -23,7 +23,7 @@ function CommentWindow(_topicId) {
 		right: 0,
 		bottom: 0,
 		scrollable: true,
-		height:'480',
+		height:'auto',
 		selectedToCommentRow: null
 	});
 	

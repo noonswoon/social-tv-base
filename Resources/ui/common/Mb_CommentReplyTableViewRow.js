@@ -11,11 +11,13 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	var lineHelper = "";
-	if(_level != 0) lineHelper = "|  "; 
+	for(var i=0;i<_level;i++) {
+		lineHelper += "  |  ";	
+	}
 	var contentLabel = Ti.UI.createLabel({
 		text: lineHelper + _comment.content,
 		top: 5,
-		left: (_level * 10) + 5,
+		left: 5,
 		width: 310,
 		height: 30,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }

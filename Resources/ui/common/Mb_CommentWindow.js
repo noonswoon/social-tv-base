@@ -149,12 +149,14 @@ function CommentWindow(_topicId) {
 	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);	
 	Ti.App.addEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
 	Ti.App.addEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
-	
 	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);
 		Ti.App.removeEventListener("commentCreatedACS",commentCreatedACSCallback);
+		Ti.App.removeEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
+		Ti.App.removeEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
+		Ti.App.removeEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	});
 	
 	//PAGE LOGIC/CONTROLLER

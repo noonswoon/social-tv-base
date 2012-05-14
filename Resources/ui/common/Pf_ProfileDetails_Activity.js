@@ -16,10 +16,19 @@ var ProfileActivityView = function(){
 			image: ProfileDataImg,
 			height: 30,
 			width: 30,
+			//border: 1,
+			//borderColor: '#999',
+			//left: 50
+		});			
+		var userPictureView = Ti.UI.createView({
+			height: 34,
+			width: 34,
 			border: 1,
-			borderColor: '#999',
+			borderColor: '#E2E5EE',
+			backgroundColor: '#fff',
 			left: 50
 		});
+		
 		var activityInfo = Ti.UI.createLabel({
 				font: {fontSize: 12},
 				color: '#666',
@@ -36,7 +45,8 @@ var ProfileActivityView = function(){
 				height:20,
 				text: '3 hours ago'
 			});	
-		userActivityRow.add(userPicture);
+		userPictureView.add(userPicture);	
+		userActivityRow.add(userPictureView);
 		userActivityRow.add(activityInfo);
 		userActivityRow.add(activityTime);
 		activity[i] = userActivityRow;

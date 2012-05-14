@@ -25,7 +25,7 @@ var ProfileDetailView = function(){
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	var profileDetailScroll = Ti.UI.createScrollView({
-		contentWidth:'auto',
+		contentWidth:312,
 		contentHeight:'auto',
 		top:0,
 		showVerticalScrollIndicator:true,

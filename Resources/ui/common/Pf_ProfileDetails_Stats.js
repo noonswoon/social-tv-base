@@ -13,6 +13,7 @@ var ProfileStatsView = function(){
 		backgroundColor: 'transparent',
 		bottom: 10,
 	});
+	
 	//experience point
 	var expLabel = Ti.UI.createLabel({
 		font: {fontSize: 14, fontWeight: 'bold'},
@@ -43,7 +44,7 @@ var ProfileStatsView = function(){
 
 /////////////////////////////////////////////////////////////////////////////
 		//ACS
-			Ti.App.addEventListener('pointsDbUpdated', function(){
+		Ti.App.addEventListener('pointsDbUpdated', function(){
 			Ti.API.info('pointsDBUpdated');
 			totalPoints = PointModel.points_sumPoints();
 			ProfileDataExp = totalPoints;
@@ -84,12 +85,18 @@ var ProfileStatsView = function(){
 				});
 			var userRankPicture = Ti.UI.createImageView({
 				image: ProfileDataImg,
-				height: 50,
-				width: 50,
-				border: 1,
-				borderColor: '#999',
-				left: 50
+				height: 44,
+				width: 44
 				});
+			
+			var userRankPictureView = Ti.UI.createView({
+				backgroundColor: '#fff',
+				borderWidth: 1,
+				width:50, height:50,
+				left: 50,
+				borderColor: '#E2E5EE',
+			});	
+				
 			var userRankName = Ti.UI.createLabel({
 				text: ProfileDataName, 
 				//top: ,
@@ -106,8 +113,9 @@ var ProfileStatsView = function(){
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 26}
 			});
+			userRankPictureView.add(userRankPicture);
 			userRank.add(userRankNo);
-			userRank.add(userRankPicture);
+			userRank.add(userRankPictureView);
 			userRank.add(userRankName);
 			userRank.add(userRankScore);
 			userRankInfo[i]= userRank;
@@ -136,15 +144,20 @@ var ProfileStatsView = function(){
 				});
 			var myRankPicture = Ti.UI.createImageView({
 				image: ProfileDataImg,
-				height: 50,
-				width: 50,
-				border: 1,
-				borderColor: '#999',
-				left: 50
+				height: 44,
+				width: 44
 				});
+				
+			var myRankPictureView = Ti.UI.createView({
+				backgroundColor: '#fff',
+				borderWidth: 1,
+				width:50, height:50,
+				left: 50,
+				borderColor: '#E2E5EE',
+			});	
+				
 			var myRankName = Ti.UI.createLabel({
 				text: ProfileDataName, 
-			//	top: 0,
 				left: 110,
 				width: 'auto',
 				height: 30,
@@ -158,8 +171,9 @@ var ProfileStatsView = function(){
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 26}
 			});
+			myRankPictureView.add(myRankPicture);			
 			myRank.add(myRankNo);
-			myRank.add(myRankPicture);
+			myRank.add(myRankPictureView);
 			myRank.add(myRankName);
 			myRank.add(myRankScore);
 			myRankInfo[0] = myRank;

@@ -4,26 +4,27 @@ var ProfileHeaderView = function(){
 //CALL DATA FROM ACS
 		var userID = '4fa17dd70020440df700950c';
 		var CheckinACS = require('acs/checkinACS');		
+		var PointACS = require('acs/pointACS');
+		var LevelACS = require('acs/levelACS');	
+		var myBadgeACS = require('acs/myBadgeACS');
 		var CheckinModel = require('model/checkin');
-			
+		var PointModel = require('model/point');	
+		var LevelModel = require('model/level');			
+		
 //CHECK IN//////////////////////////////////////////////////////////////////////
-
 		function checkinDbLoadedCallBack(e){
 			 Ti.API.info('checkinDbLoadedCallBack');					
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		};
-
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
-			totalCheckins = CheckinModel.checkins_count();
-			columnCheckInCount.text = totalCheckins;
+			columnCheckInCount.text = CheckinModel.checkins_count()
 		});
-		
 		CheckinACS.checkinACS_fetchedCheckIn(userID);		
 		
-/////POINT ACS/////////////////////////////////////////////
-	var PointACS = require('acs/pointACS');
-	var PointModel = require('model/point');	
+/////POINT ACS/////////////////////////////////////////////	
+	PointACS.pointACS_fetchedPoint(userID);
 	function pointDbLoadedCallBack(e){
 			Ti.API.info('pointDbLoadedCallBack');
 			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
@@ -31,18 +32,16 @@ var ProfileHeaderView = function(){
 	};
 		
 		Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);	
-		PointACS.pointACS_fetchedPoint(userID);
 	
 ///LEVEL ACS///////////////////////////////////////////////////////
-	var LevelModel = require('model/level');	
-	var LevelACS = require('acs/levelACS');	
 		LevelACS.levelACS_fetchedLevel();
-	
 		function levelDbLoadedCallBack(e){
 		Ti.API.info('levelDbLoadedCallBack');					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
-
 		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
+
+///BADGE ACS////////////////////////////////////////////////////////
+	myBadgeACS.myBadgeACS_fetchedBadge(userID);
 
 ///////////////////////////////////////////////////////////////////
 	var headerView = Ti.UI.createView({
@@ -59,6 +58,7 @@ var ProfileHeaderView = function(){
 	
 		var columnCheckInCount = Ti.UI.createLabel({
 			text: '',
+			height:30,
 			font: {fontSize: 26, fontStyle: 'bold'},
 			color: '#fff',
 			top: 30

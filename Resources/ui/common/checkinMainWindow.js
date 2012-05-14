@@ -1,5 +1,7 @@
 Checkin = function (_datafromrow){
 	
+	// var TVProgramCheckinACS = require('acs/checkinACS');
+	
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
 		backgroundColor: 'orange'
@@ -73,6 +75,8 @@ Checkin = function (_datafromrow){
 	});
 	self.add(checkinButton);
 	
+	
+	
 	checkinButton.addEventListener('click',function(){
 		// var now_full = moment().format('YYYY-MM-DD, HH:mm:ss');
 		// var now_date = moment().format('YYYY-MM-DD');
@@ -104,6 +108,8 @@ Checkin = function (_datafromrow){
 	});
 
 	self.showNavBar();
+	
+	// TVProgramCheckinACS.checkinACS_fetchedCheckInOfProgram(_datafromrow.programId);
 	return self;
 	
 }

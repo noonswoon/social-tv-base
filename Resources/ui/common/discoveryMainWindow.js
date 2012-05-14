@@ -3,7 +3,21 @@ function DiscoveryMainWindow(){
 	var TVProgram = require('model/tvprogram');
 	var TVProgramACS = require('acs/tvprogramACS');
 	var DiscoveryTableViewRow = require('ui/common/discoveryTableViewRow');
-	var TVProgramCheckinACS = require('acs/checkinACS');
+
+	var areAllProgramsTitlesLoaded = false; 
+	var numProgramsToLoadCheckins = 0;
+	
+	function isEverythingReady() {
+		Ti.API.info("numProgramsToLoadCheckins value: "+numProgramsToLoadCheckins);
+		if(areAllProgramsTitlesLoaded && numProgramsToLoadCheckins === 0) {
+			Ti.App.fireEvent("showDiscoveryPage");
+		}
+	}
+	Ti.App.addEventListener('tvprogramsTitlesLoaded',function() {
+		areAllProgramsTitlesLoaded = true;
+		isEverythingReady();
+	});
+	
 	
 	var self = Ti.UI.createWindow({
 		title: 'Discovery',
@@ -28,7 +42,31 @@ function DiscoveryMainWindow(){
 	self.add(tabHeader);
 	
 	var programListTable = Ti.UI.createTableView({
-		top: 50,
+		top: 50
+	});
+	
+	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
+		var targetedProgramId = e.targetedProgramId; 
+		var numCheckins = e.numCheckins; 
+		TVProgram.TVProgramModel_updateCheckins(targetedProgramId, numCheckins);
+		numProgramsToLoadCheckins--;
+		isEverythingReady();
+	});
+	
+	function fetchProgramsAllCheckins() {
+		//select all programs in local db
+		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
+		//for each program, call ACS to get how many checkins in the Cloud
+		numProgramsToLoadCheckins = chrrentTVPrograms.length;
+		for(var i=0;i<currentTVPrograms.length;i++){
+			var curTVProgramId = currentTVPrograms[i].id; 
+			checkinACS_fetchedCheckInOfProgram(curTVProgramId);
+		}
+		//update numCheckins value of each tvprograms in the table
+		//fire event to populate table and show
+	};
+	Ti.App.addEventListener('tvprogramsTitlesLoaded', function() {
+		fetchProgramsAllCheckins();
 	});
 	
 	function tvprogramLoadedCompleteCallback(e) {
@@ -38,20 +76,13 @@ function DiscoveryMainWindow(){
 
 		//retrieve from db
 		TVProgram.tvprogramsModel_insertAllPrograms(allPrograms);
-	}
-	
-	function tvprogramTotalCheckin(e){
 		
-		var eventCheckedin = e.fetchedEventCheckin;
-		
-		Ti.API.info('total checkin is '+eventCheckedin);
+		fetchProgramsAllCheckins(); 
 	}
-	
-	Ti.App.addEventListener('CheckInOfProgram',tvprogramTotalCheckin);
 	
 	Ti.App.addEventListener('tvprogramsLoaded',tvprogramLoadedCompleteCallback);
 	
-	Ti.App.addEventListener('tvprogramsDbUpdated', function (){
+	Ti.App.addEventListener('showDiscoveryPage', function (){
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
 		var viewRowsData = [];
 		
@@ -72,6 +103,7 @@ function DiscoveryMainWindow(){
 		//var dataFromRow = new CheckinMainWindow()
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');;	
 		self.containingTab.open(new CheckinMainWindow({
+			programId: e.row.tvprogram.id,
 			programTitle: e.row.tvprogram.name,
 			programSubname: 'subname',
 			programImage: e.row.tvprogram.photo,
@@ -85,8 +117,8 @@ function DiscoveryMainWindow(){
 	self.add(programListTable);
 	self.hideNavBar();
 	
-	TVProgramCheckinACS.checkinACS_fetchedCheckInOfProgram("4fa8dbe60020442a2b0099f8");
 	TVProgramACS.tvprogramACS_fetchAllProgram();
+	
 	return self;
 }
 module.exports = DiscoveryMainWindow;

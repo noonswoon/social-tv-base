@@ -1,4 +1,3 @@
-
 var checkin =[];
 var userScore =0;
 
@@ -12,19 +11,17 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
     
 }, function (e) {
     if (e.success) {
-        for (var i = 0; i < e.checkins.length; i++) {
-        	 var curCheckin = e.checkins[i];
-        	 var eventCheckedin = {
-        	 id: curCheckin.event.id
-        	 };
-         }
-		Ti.App.fireEvent('CheckInOfProgram',{fetchedEventCheckin:checkin});
+        //for (var i = 0; i < e.checkins.length; i++) {
+        	 // var curCheckin = e.checkins[i];
+			var totalCheckinOfEvent = e.checkins.length;
+       //  }
+		Ti.App.fireEvent('doneGettingNumCheckinsOfProgramId',{targetedProgramId: _eventId, numCheckins:totalCheckinOfEvent});
     } 
     else {
         Ti.API.info('checkin Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
-			});
+	});
 };
 
 

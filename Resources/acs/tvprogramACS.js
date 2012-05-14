@@ -15,8 +15,7 @@ exports.tvprogramACS_fetchAllProgram = function(id) {
 	            	name: program.name,
 	            	photo: 'program.photo.urls.original',
 	            	start_time: program.start_time,
-	            	recurring_until: program.recurring_until,
-	            	checkin: program.custom_fields.checkin
+	            	recurring_until: program.recurring_until
 	            }
 				programs.push(curProgram);
 			}

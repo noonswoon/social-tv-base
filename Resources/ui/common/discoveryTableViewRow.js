@@ -1,5 +1,7 @@
 DiscoveryTableViewRow = function(_curTVProgram){
 	
+		var TVProgramCheckinACS = require('acs/checkinACS');
+	
 		var row = Ti.UI.createTableViewRow({
 			height: 100,
 			backgroundGradient: {
@@ -56,6 +58,17 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		row.add(programCheckin);
 	
 		row.tvprogram = _curTVProgram;
+		
+	function tvprogramTotalCheckin(e){
+		
+		var eventCheckedin = e.fetchedEventCheckin;
+		
+		Ti.API.info('total checkin is '+eventCheckedin);
+	}
+	
+	Ti.App.addEventListener('CheckInOfProgram',tvprogramTotalCheckin);
+		
+		TVProgramCheckinACS.checkinACS_fetchedCheckInOfProgram(_curTVProgram.id);
 		return row;
 }
 module.exports = DiscoveryTableViewRow;

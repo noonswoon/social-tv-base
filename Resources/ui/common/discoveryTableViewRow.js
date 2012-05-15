@@ -51,24 +51,14 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		row.add(programChannel);
 		
 		var programCheckin = Ti.UI.createLabel({
-			text: _curTVProgram.checkin,
+			text: _curTVProgram.number_checkins,
 			textAlign: 'right',
 			right: 100
 		});
 		row.add(programCheckin);
-	
+
 		row.tvprogram = _curTVProgram;
 		
-	function tvprogramTotalCheckin(e){
-		
-		var eventCheckedin = e.fetchedEventCheckin;
-		
-		Ti.API.info('total checkin is '+eventCheckedin);
-	}
-	
-	Ti.App.addEventListener('CheckInOfProgram',tvprogramTotalCheckin);
-		
-		TVProgramCheckinACS.checkinACS_fetchedCheckInOfProgram(_curTVProgram.id);
 		return row;
 }
 module.exports = DiscoveryTableViewRow;

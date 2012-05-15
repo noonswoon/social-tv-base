@@ -27,11 +27,6 @@ exports.tvprogramACS_fetchAllProgram = function(id) {
 	    },
 	    timeout:10000  /* in milliseconds */
 	});
-	// data = {per_page: 1};
-	// dataSerialize = JSON.stringify(data);
-	// //url = url + '&per_page=1';// +dataSerialize;
-	// //alert(url);
-	// Ti.API.info(url);
 	xhr.open("GET", url);
 	xhr.send();
  // request is actually sent with this statement

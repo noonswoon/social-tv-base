@@ -11,10 +11,7 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
     
 }, function (e) {
     if (e.success) {
-        //for (var i = 0; i < e.checkins.length; i++) {
-        	 // var curCheckin = e.checkins[i];
 			var totalCheckinOfEvent = e.checkins.length;
-       //  }
 		Ti.App.fireEvent('doneGettingNumCheckinsOfProgramId',{targetedProgramId: _eventId, numCheckins:totalCheckinOfEvent});
     } 
     else {

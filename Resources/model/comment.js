@@ -10,6 +10,7 @@ exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
 	var fetchedComments = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM comments WHERE topic_id = ? ORDER BY updated_at DESC',_topicId);
+	
 	while(result.isValidRow()) {
 		fetchedComments.push({
 			hasChild:true,
@@ -51,12 +52,26 @@ exports.commentModel_updateCommentsOnTopicFromACS = function(_commentsCollection
 	//need to clear records with the given topicId
 	var result = db.execute('DELETE FROM comments WHERE topic_id = ?',_topicId);
 	
+	//insert contents
 	for(var i=0;i < _commentsCollection.length; i++) {
 		var curComment = _commentsCollection[i];
-		db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at)" + 
+		if(curComment.is_a_vote == 0) 
+			db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at)" + 
 					"VALUES(?,?,?,?,?,?,?,?)", 	curComment.id,curComment.topic_id,curComment.content,curComment.rating,
 												curComment.user.username,curComment.response_to_object_id,curComment.is_a_vote,curComment.updated_at);
 	}
+	
+	//update voting score
+	for(var i=0;i < _commentsCollection.length; i++) {
+		var curComment = _commentsCollection[i];
+		if(curComment.is_a_vote == 1)  {
+			var result = db.execute('SELECT * FROM comments WHERE id = ?',curComment.response_to_object_id);
+			var curRating = Number(result.fieldByName('rating'));
+			var newRating = curRating + curComment.rating;
+			db.execute("UPDATE comments SET rating = ? WHERE id = ?", newRating, curComment.response_to_object_id);
+		}
+	}
+	
 	db.close();
 	Ti.App.fireEvent("commentsDbUpdated");
 };

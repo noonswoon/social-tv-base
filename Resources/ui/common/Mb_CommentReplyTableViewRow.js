@@ -4,27 +4,54 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
-		height: 30,
+		height: 55,
 		allowsSelection: false,
 		className: "ReplyTableViewRow",
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	
+	var nestedOffset = _level * 10 + 5;
+	var userImage = Ti.UI.createImageView({
+		image: "userImage.png",
+		top: 5,
+		left: nestedOffset + 10,
+		width:55,
+		height:40
+	});
+	
+	var rating = _comment.rating;
+	var ratingStr = '';
+	if(rating > 0) {
+		if(rating ===1 ) ratingStr = '+1 pt';
+		else ratingStr = '+'+rating+' pts';
+	} else if(rating < 0) {
+		if(rating === -1 ) ratingStr = '-1 pt';
+		else ratingStr = rating+' pts';
+	}
+	var commentDetail = Ti.UI.createLabel({
+		text: ratingStr + ' by titaniummick 3 hours ago',
+		color: '#420404',
+		textAlign:'right',
+		font:{fontWeight:'bold',fontSize:12},
+		top: 0,
+		left:nestedOffset+75
+	});
+		
 	var lineHelper = "";
 	for(var i=0;i<_level;i++) {
 		lineHelper += "  |  ";	
 	}
 	var contentLabel = Ti.UI.createLabel({
-		text: lineHelper + _comment.content,
-		top: 5,
-		left: 5,
+		text:  _comment.content,
+		top: 15,
+		left: nestedOffset+ 75,
 		width: 310,
 		height: 30,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
-	})
-	
+		font: { fontSize: 15, fontFamily: 'Helvetica Neue' }
+	});
+
 	var replyToolbar = Ti.UI.createView({
-		left: 5,
+		left: nestedOffset+ 5,
 		top: 35,
 		width: 310,
 		height: 60,
@@ -32,7 +59,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var replyTextField = Ti.UI.createTextField({
-		left: 0,
+		left: nestedOffset+0,
 		top: 0,
 		width: 310,
 		height: 20,
@@ -42,7 +69,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var upButton = Ti.UI.createButton({
-		left: 0,
+		left:nestedOffset+ 0,
 		top: 25,
 		width: 70,
 		height: 20,
@@ -51,7 +78,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var downButton = Ti.UI.createButton({
-		left: 80,
+		left:nestedOffset+ 80,
 		top: 25,
 		width: 70,
 		height: 20,
@@ -60,7 +87,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var replyButton = Ti.UI.createButton({
-		right: 0,
+		right: nestedOffset+0,
 		top: 25,
 		width: 70,
 		height: 20,
@@ -68,7 +95,9 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	});
 		
-	//ADDING UI COMPONENTS			
+	//ADDING UI COMPONENTS	
+	row.add(userImage);
+	row.add(commentDetail);		
 	row.add(contentLabel);
 	row.add(replyToolbar);
 	replyToolbar.add(replyTextField);

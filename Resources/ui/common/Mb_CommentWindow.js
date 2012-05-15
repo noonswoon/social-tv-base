@@ -60,7 +60,6 @@ function CommentWindow(_topicId) {
 	}
 	
 	function commentsDbUpdatedCallback(e) {
-		alert("db updated..refresh data");
 		//clear current data in the table
 		commentsTable.data = [];
 		

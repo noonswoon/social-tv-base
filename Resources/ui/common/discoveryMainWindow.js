@@ -39,6 +39,13 @@ function DiscoveryMainWindow(){
 		if(e.index === 0){
 			alert('Popular');
 		}
+		if(e.index === 1){
+			var guide = new GuideMainWindow();
+			self.add(guide);
+		}
+		if(e.index === 2){
+			alert('Friends');
+		}
 	});
 	
 	var tabHeader = Ti.UI.createView({
@@ -101,7 +108,6 @@ function DiscoveryMainWindow(){
 
 		Ti.API.info(e.index+',name: '+e.row.tvprogram.name);
 
-		//var dataFromRow = new CheckinMainWindow()
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');;	
 		self.containingTab.open(new CheckinMainWindow({
 			programId: e.row.tvprogram.id,

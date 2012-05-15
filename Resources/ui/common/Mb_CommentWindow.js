@@ -61,15 +61,10 @@ function CommentWindow(_topicId) {
 		//then use moment to output a format that javascript Date object can understand
 		//namely, the 'MMM D, YYYY hh:mm:ss' format
 		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss z");
+	
 		
-		var dateObjFormat = dm.format('YYYY-MM-DD, hh:mm:ss:A');
-		 alert('Update at:'+dateObjFormat);
-
-		var now = moment().format('YYYY-MM-DD, hh:mm:ss:A');
-		alert('NOW:'+now);
-		
-		var hoursDiff = moment().diff(dm,'hours');
-		alert('diff in hours: '+hoursDiff);
+		// var hoursDiff = moment().diff(dm,'hours');
+		// alert('diff in hours: '+hoursDiff);
 
 			
 		var submitDateObj = new Date(dateObjFormat);

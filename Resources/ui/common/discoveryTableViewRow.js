@@ -1,7 +1,5 @@
 DiscoveryTableViewRow = function(_curTVProgram){
 	
-		var TVProgramCheckinACS = require('acs/checkinACS');
-	
 		var row = Ti.UI.createTableViewRow({
 			height: 100,
 			backgroundGradient: {
@@ -22,7 +20,7 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		row.add(programLabelName);
 		
 		var programLabelSubname = Ti.UI.createLabel({
-			text: 'subname',
+			text: _curTVProgram.channel_id,
 			color: '#420404',
 			textAlign:'left',
 			font:{fontWeight:'bold',fontSize:13},

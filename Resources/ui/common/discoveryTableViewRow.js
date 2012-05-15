@@ -14,8 +14,8 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		
 		var programLabelName = Ti.UI.createLabel({
 			text: _curTVProgram.name,
-			textAlign: 'right',
-			right: 50,
+			textAlign: 'left',
+			left: 140,
 			font:{fontWeight:'bold',fontSize:18},
 			top: 10
 		});
@@ -43,19 +43,20 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		
 		var programChannel = Ti.UI.createImageView({
 			image: "http://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/200px-HBO_logo.svg.png",
-			bottom: 5,
+			bottom: 7,
 			left: 270,
 			width: 35,
 			height: 15
 		});
 		row.add(programChannel);
 		
-		var programCheckin = Ti.UI.createLabel({
+		var programNumCheckin = Ti.UI.createLabel({
 			text: _curTVProgram.number_checkins,
 			textAlign: 'right',
-			right: 100
+			right: 170,
+			bottom: 5
 		});
-		row.add(programCheckin);
+		row.add(programNumCheckin);
 
 		row.tvprogram = _curTVProgram;
 		

@@ -103,7 +103,8 @@ function DiscoveryMainWindow(){
 			programImage: e.row.tvprogram.photo,
 			programChannel: "http://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/200px-HBO_logo.svg.png",
 			programStarttime: e.row.tvprogram.start_time,
-			programEndtime: e.row.tvprogram.recurring_until
+			programEndtime: e.row.tvprogram.recurring_until,
+			programNumCheckin: e.row.tvprogram.number_checkins
 		}));
 	});
 

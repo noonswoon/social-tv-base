@@ -58,6 +58,14 @@ Checkin = function (_datafromrow){
 	});
 	headerView.add(programChannel);
 	
+	var programNumCheckin = Ti.UI.createLabel({
+		text: _datafromrow.programNumCheckin,
+		textAlign: 'right',
+		right: 170,
+		bottom: 5
+	});
+	headerView.add(programNumCheckin);
+	
 	
 ///////////////////////////////////////////////////Checkin Section
 

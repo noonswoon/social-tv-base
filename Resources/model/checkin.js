@@ -37,6 +37,15 @@ exports.checkin_fetchCheckin = function() {
 	return fetchedCheckin;
 };
 
+//function: sum score
+exports.checkin_sumScore = function(){
+		var db = Ti.Database.open('Chatterbox'); 
+		var result = db.execute('SELECT SUM(score) as totalScore from checkins');
+		var totalScore = Number(result.fieldByName('totalScore'));
+		db.close();
+		return totalScore;
+};
+
 //function: count checkins
 
 exports.checkins_count = function(_user){
@@ -54,5 +63,5 @@ exports.checkin_create = function(_checkinsCollection){
 		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event_id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
 		db.close();
 		Ti.App.fireEvent("oneCheckinUpdated");
-
+		return checkins;	
 };

@@ -47,12 +47,12 @@ function ApplicationTabGroup() {
 	});
 	productwin.containingTab = productTab;
 	
-	var profileTab = Ti.UI.createTab({
-		icon: '/images/fugitives.png',
-		title: 'Profile',
-		window: profilewin
-	});
-	profilewin.containingTab = profileTab;
+	 var profileTab = Ti.UI.createTab({
+		 icon: '/images/fugitives.png',
+		 title: 'Profile',
+		 window: profilewin
+	 });
+	 profilewin.containingTab = profileTab;
 	
 	var discoveryTab = Ti.UI.createTab({
 		title: 'Discovery',
@@ -61,7 +61,7 @@ function ApplicationTabGroup() {
 	});
 	discoveryMainWin.containingTab = discoveryTab;
 	
-    self.addTab(chatTab);  
+    //self.addTab(chatTab);  
     self.addTab(messageboardTab);  
     self.addTab(discoveryTab);
     self.addTab(profileTab);

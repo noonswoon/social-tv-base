@@ -7,7 +7,8 @@ function MessageboardMainWindow(_programId) {
 	var MessageboardTableViewRow = require('ui/common/Mb_MessageboardTableViewRow');
 	var MessageboardAddWindow = require('ui/common/Mb_MessageboardAddWindow');
 	var CommentWindow = require('ui/common/Mb_CommentWindow');
-	
+	var CacheHelper = require('helpers/cacheHelper');
+		
 	//OBJECTS INSTANTIATION
 	var messageboardHeader = new MessageboardHeaderTableViewRow('Reya','Famous Lakorn');	
 	var addWindow = new MessageboardAddWindow();	
@@ -73,7 +74,8 @@ function MessageboardMainWindow(_programId) {
 	//END -- ADD EVENTLISTNERS
 	
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
-	TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
+	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+_programId, TopicACS.topicACS_fetchAllTopicsOfProgramId, _programId, 'topicsDbUpdated');
+	
 	return self;
 }
 module.exports = MessageboardMainWindow;

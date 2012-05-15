@@ -5,6 +5,7 @@ function CommentWindow(_topicId) {
 	var CommentACS = require('acs/commentACS');
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
+	var CacheHelper = require('helpers/cacheHelper');
 	
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
@@ -59,6 +60,7 @@ function CommentWindow(_topicId) {
 	}
 	
 	function commentsDbUpdatedCallback(e) {
+		alert("db updated..refresh data");
 		//clear current data in the table
 		commentsTable.data = [];
 		
@@ -164,25 +166,9 @@ function CommentWindow(_topicId) {
 
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
 	
-	//caching mechanism
-	if(!Ti.App.Properties.hasProperty('commentsOfTopic'+_topicId)) { //do some caching
-		CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);  //never fetch before
-		var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 
-		alert("haven't set cahcing..setting: "+nowStr);
-		Ti.App.Properties.setString('commentsOfTopic'+_topicId,nowStr);
-	} else {
-		var cacheDateStr = Ti.App.Properties.getString('commentsOfTopic'+_topicId);
-		var cacheDate = moment(cacheDateStr,"YYYY-MM-DDTHH:mm:ss");		
-		var elapsedTime = moment().diff(cacheDate,'minutes');
-		if (elapsedTime < CACHE_TIMEOUT_IN_MINUTES) { //if still in cache, just fire event
-			Ti.App.fireEvent("commentsDbUpdated");
-		}
-		else { //cache is out-of-date, fetching new data from server
-			CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);  //never fetch before
-		}
-	}
+	//fetching data or get data through caching mechanism
+	CacheHelper.fetchACSDataOrCache('commentsOfTopic'+_topicId, CommentACS.commentACS_fetchAllCommentsOfPostId, _topicId, 'commentsDbUpdated');
 	
-	//CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
 	return self;
 }
 module.exports = CommentWindow;

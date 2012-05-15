@@ -4,6 +4,7 @@ function DiscoveryMainWindow(){
 	var TVProgramACS = require('acs/tvprogramACS');
 	var DiscoveryTableViewRow = require('ui/common/discoveryTableViewRow');
 	var CheckinACS = require('acs/checkinACS');
+	var GuideMainWindow = require('ui/common/guideMainWindow');
 	
 	var areAllProgramsTitlesLoaded = false; 
 	var numProgramsToLoadCheckins = 0;
@@ -26,13 +27,19 @@ function DiscoveryMainWindow(){
 	});
 	
 
-	var tabbar = Ti.UI.createTabbedBar({
+	var tabbar = Ti.UI.iOS.createTabbedBar({
 		labels: ['Popular','Guide','Friends'],
 		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		height:35,
 		width:200,
 	});
 	self.add(tabbar);
+	
+	tabbar.addEventListener('click',function(e){
+		if(e.index === 0){
+			alert('Popular');
+		}
+	});
 	
 	var tabHeader = Ti.UI.createView({
 		top: 0,

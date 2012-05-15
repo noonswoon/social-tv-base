@@ -52,8 +52,8 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		
 		var programNumCheckin = Ti.UI.createLabel({
 			text: _curTVProgram.number_checkins,
-			textAlign: 'right',
-			right: 170,
+			textAlign: 'left',
+			left: 140,
 			bottom: 5
 		});
 		row.add(programNumCheckin);

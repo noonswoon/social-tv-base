@@ -1,7 +1,7 @@
 Checkin = function (_datafromrow){
 	
-	// var TVProgramCheckinACS = require('acs/checkinACS');
-	
+	var CheckinACS = require('acs/checkinACS');
+
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
 		backgroundColor: 'orange'
@@ -96,28 +96,19 @@ Checkin = function (_datafromrow){
 		// var starttime_time = starttime_full.format('HH:mm:ss');
 // 		
 		// alert('Start: '+starttime_date);
-// 		
+ 		
 		// var endtime_full = moment(_datafromrow.programEndtime, "YYYY-MM-DDTHH:mm:ss z");
 		// var endtime_date = endtime_full.format('YYYY-MM-DD');
 		// var endtime_time = endtime_full.format('HH:mm:ss');
 // 		
 		// alert('End time'+endtime_time);
-		
-		// if(now_date === starttime_date){
-			// if(now_time >= starttime_time && now_time <= endtime_time){
-				// alert('Check-in');
-			// }
-			// else alert('Program is not on-air');
-		// }
-		// else alert('Program is not on-air');
-		
-		
-
+// 		
+		// var pressedCheckin = CheckinACS.
+	
 	});
 
 	self.showNavBar();
-	
-	// TVProgramCheckinACS.checkinACS_fetchedCheckInOfProgram(_datafromrow.programId);
+
 	return self;
 	
 }

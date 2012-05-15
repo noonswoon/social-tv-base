@@ -23,6 +23,11 @@ function ProfileMainWindow() {
 		var profileHeader = new ProfileHeader();
 		var detail = new Detail();
 		var UserProfile=[];
+//add focus eventListener
+		self.addEventListener('focus',function(){
+			
+		});
+
 		
 		headerView.add(profileHeader);
 		

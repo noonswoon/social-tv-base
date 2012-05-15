@@ -19,9 +19,15 @@ var ProfileHeaderView = function(){
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
-			columnCheckInCount.text = CheckinModel.checkins_count()
+			columnCheckInCount.text = CheckinModel.checkins_count(userID);
 		});
 		CheckinACS.checkinACS_fetchedCheckIn(userID);		
+		
+		setInterval (updateData, 300000); // runs every 30 minute
+		function updateData ()
+		{
+			columnCheckInCount.text = CheckinModel.checkins_count(userID);
+		}
 		
 /////POINT ACS/////////////////////////////////////////////	
 	PointACS.pointACS_fetchedPoint(userID);
@@ -102,6 +108,7 @@ var ProfileHeaderView = function(){
 			borderRadius: 5,
 			backgroundImage: 'images/FBlogin_off.png',
 		});
+
 		var fbValue = false;
 		
 		fbLoginButton.addEventListener('click',function(){
@@ -116,7 +123,7 @@ var ProfileHeaderView = function(){
 				fbValue = false;
 			alert('You have logout from Facebook '+ fbValue);
 			}
-		});		
+		});	
 
 		//checkin count
 		var columnCheckIn = Ti.UI.createView({

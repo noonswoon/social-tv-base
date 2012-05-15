@@ -13,8 +13,8 @@ exports.BadgesACS_fetchedBadges = function() {
     	 Ti.API.info('CALL ALL BADGES SUCCESS');
         for (var i = 0; i < e.Badges.length; i++) {
         	 var curBadge = e.Badges[i];
-            Ti.API.info('Success:\\' +
-	          			curBadge.badge_id +': ' + curBadge.badge_desc + ' \ url: ' + curBadge.badge_img);
+         //   Ti.API.info('Success:\\' +
+	     //     			curBadge.badge_id +': ' + curBadge.badge_desc + ' \ url: ' + curBadge.badge_img);
               allBadges.push(curBadge);
          }
          Ti.API.info('fire event BadgesLoaded');

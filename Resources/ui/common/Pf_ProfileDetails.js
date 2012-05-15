@@ -15,7 +15,8 @@ var ProfileDetailView = function(){
 			style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 			height:30,
 			width:300,
-			index:0
+		//index:0
+			index:3
 		});	
 		profileMenu.add(profileTab);
 ///DETAIL//////////////////////////////////////////////////////////
@@ -59,7 +60,8 @@ var ProfileDetailView = function(){
 			profileDetailScroll.add(profileReward);}
 	});		
 		
-	profileDetailScroll.add(profileStats);
+	//profileDetailScroll.add(profileStats);
+	profileDetailScroll.add(profileReward);
 	profileDetail.add(profileDetailScroll);
 //////////////////////////////////////////////////////////////////
 

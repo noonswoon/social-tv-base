@@ -163,7 +163,25 @@ function CommentWindow(_topicId) {
 	toolActInd.show();
 
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
-	CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
+	
+	//caching mechanism
+	if(!Ti.App.Properties.hasProperty('commentsOfTopic'+_topicId)) { //do some caching
+		CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);  //never fetch before
+		var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 
+		alert("haven't set cahcing..setting: "+nowStr);
+		Ti.App.Properties.setString('commentsOfTopic'+_topicId,nowStr);
+	} else {
+		var cacheDateStr = Ti.App.Properties.getString('commentsOfTopic'+_topicId);
+		var cacheDate = moment(cacheDateStr,"YYYY-MM-DDTHH:mm:ss");		
+		var elapsedTime = moment().diff(cacheDate,'minutes');
+		if (elapsedTime < CACHE_TIMEOUT_IN_MINUTES) { //if still in cache, just fire event
+			Ti.App.fireEvent("commentsDbUpdated");
+		}
+		else { //cache is out-of-date, fetching new data from server
+			CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);  //never fetch before
+		}
+	}
+	
 	//CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
 	return self;
 }

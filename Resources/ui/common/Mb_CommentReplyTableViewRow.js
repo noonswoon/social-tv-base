@@ -37,12 +37,11 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	
-	var dm = moment(_comment.updated_at, "YYYY-MM-DDTHH:mm:ss z");
-	var dateObjFormat = dm.format('MMM D, YYYY hh:mm:ss');
-	var submitDateStr = since(new Date(dateObjFormat));
+	var dm = moment(_comment.updated_at, "YYYY-MM-DDTHH:mm:ss");
+	var submitDateStr = since(dm);
 		
 	var commentDetail = Ti.UI.createLabel({
-		text: ' by '+_comment.username+', '+submitDateStr,
+		text: 'by '+_comment.username+', '+submitDateStr,
 		color: '#420404',
 		textAlign:'right',
 		font:{fontWeight:'bold',fontSize:12},

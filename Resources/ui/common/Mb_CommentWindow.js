@@ -74,10 +74,9 @@ function CommentWindow(_topicId) {
 		//so --> create moment object with datestring from ACS (having timezone)
 		//then use moment to output a format that javascript Date object can understand
 		//namely, the 'MMM D, YYYY hh:mm:ss' format
-		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss z");
-		var dateObjFormat = dm.format('MMM D, YYYY hh:mm:ss');
-		var submitDateObj = new Date(dateObjFormat);
-		commentHeader.dateLabel.text = "Submitted "+since(submitDateObj)+" by "+curTopic.username;
+		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss");
+		var submitDateStr = since(dm);
+		commentHeader.dateLabel.text = "Submitted "+submitDateStr+" by "+curTopic.username;
 
 		//retrieve from db
 		var allComments = Comment.commentModel_fetchCommentsFromTopicId(_topicId);

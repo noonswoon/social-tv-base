@@ -1,5 +1,5 @@
 
-function since(date) {
+function since(dateMomentObj) {
 
 	var pluralize = function (base, number) {
 		if (number == 1) return base;
@@ -7,7 +7,7 @@ function since(date) {
 	}
 	
 	var blocks = [
-		{ divisor: 1000, max: 60, name: 'sec' },
+		{ divisor: 1, max: 60, name: 'sec' },
 		{ divisor: 60, max: 60, name: 'min' },
 		{ divisor: 60, max: 24, name: 'hr' },
 		{ divisor: 24, max: 30, name: 'day' },
@@ -15,11 +15,37 @@ function since(date) {
 		{ divisor: 12, max: 100, name: 'year' }
 	];
 
-	var unit = (new Date() - date.getTime());	
+	var unit = moment().diff(dateMomentObj,'seconds');
 	for (var i=0;i<blocks.length;i++) {
 		unit = parseInt(unit / blocks[i].divisor);
 		if (unit < blocks[i].max) {
 			return unit + ' ' + pluralize(blocks[i].name,unit) + ' ago';
 		}
 	}
+};
+
+function convertACSTimeToLocalTime(_datetimeStr) {
+	var curCountryCode = Ti.Locale.getCurrentCountry(); 
+	var result = _datetimeStr; 
+	if(curCountryCode === "TH") {
+		var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
+		dm.add('hours',7);
+		result = dm.format("YYYY-MM-DDTHH:mm:ss");
+	} else {
+		alert('have not implementd the country: '+curCountryCode);
+	}
+	return result
+};
+
+function convertLocalTimeToACSTime(_datetimeStr) {
+	var curCountryCode = Ti.Locale.getCurrentCountry(); 
+	var result = _datetimeStr; 
+	if(curCountryCode === "TH") {
+		var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
+		dm.subtract('hours',7);
+		result = dm.format("YYYY-MM-DDTHH:mm:ss");
+	} else {
+		alert('have not implementd the country: '+curCountryCode);
+	}
+	return result
 };

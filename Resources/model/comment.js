@@ -35,6 +35,7 @@ exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
 exports.commentModel_addCommentOrRating = function(_comment) {
 	var db = Ti.Database.open('Chatterbox');
 	
+	_comment.updated_at = convertACSTimeToLocalTime(_comment.updated_at);
 	var result = db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote, updated_at) VALUES(?,?,?,?,?,?,?,?)", 
 									_comment.id,_comment.custom_fields.topic_id,_comment.content,
 									_comment.rating,_comment.user.username,_comment.custom_fields.response_to_object_id,
@@ -76,6 +77,7 @@ exports.commentModel_updateCommentsOnTopicFromACS = function(_commentsCollection
 	//insert contents
 	for(var i=0;i < _commentsCollection.length; i++) {
 		var curComment = _commentsCollection[i];
+		curComment.updated_at = convertACSTimeToLocalTime(curComment.updated_at);
 		db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at)" + 
 					"VALUES(?,?,?,?,?,?,?,?)", 	curComment.id,curComment.topic_id,curComment.content,curComment.rating,
 												curComment.user.username,curComment.response_to_object_id,curComment.is_a_vote,curComment.updated_at);

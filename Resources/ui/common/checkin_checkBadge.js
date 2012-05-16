@@ -29,9 +29,6 @@ var checkinBadgeView = function(){
 		top: 100
 	});
 	
-	
-	CheckinACS.checkinACS_fetchedCheckIn(userID);
-
 	checkinButton.addEventListener('click',function(){
 		alert('Checking in..');
 		CheckinACS.checkinACS_createCheckin(eventID);
@@ -46,7 +43,9 @@ var checkinBadgeView = function(){
 		
 	Ti.App.addEventListener('oneCheckinUpdated', function(_checkinID){
 	Ti.API.info('Your checkin has been update to your database: '+ CheckinModel.checkins_count(userID));
+	
 	PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
+	
 	checkinCount.text = CheckinModel.checkins_count(userID);
 	BadgeCondition.badgeCondition_check();
 	Ti.App.fireEvent('updateHeaderCheckin');

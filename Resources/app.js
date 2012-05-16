@@ -10,7 +10,7 @@ var moment = require('/lib/moment');
 
 //GLOBAL VARIABLES DECARATION
 Titanium.Facebook.appid = "197422093706392";
-Titanium.Facebook.permissions = ['publish_stream', 'read_stream', 'email'];
+Titanium.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
 
 var CACHE_TIMEOUT_IN_MINUTES = 30; 
 var acs = require('lib/acs');

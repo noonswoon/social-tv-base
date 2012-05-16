@@ -5,6 +5,7 @@ function DiscoveryMainWindow(){
 	var DiscoveryTableViewRow = require('ui/common/discoveryTableViewRow');
 	var CheckinACS = require('acs/checkinACS');
 	var GuideMainWindow = require('ui/common/guideMainWindow');
+	var CacheHelper = require('helpers/cacheHelper');
 	
 	var areAllProgramsTitlesLoaded = false; 
 	var numProgramsToLoadCheckins = 0;
@@ -125,7 +126,8 @@ function DiscoveryMainWindow(){
 	self.add(programListTable);
 	self.hideNavBar();
 	
-	TVProgramACS.tvprogramACS_fetchAllProgram();
+	//TVProgramACS.tvprogramACS_fetchAllProgram(); -- using caching method instead
+	CacheHelper.fetchACSDataOrCache('discoverypage', TVProgramACS.tvprogramACS_fetchAllProgram, '', 'tvprogramsTitlesLoaded');
 	
 	return self;
 }

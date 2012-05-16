@@ -83,8 +83,7 @@ var ProfileBadgeView = function(){
 		Ti.App.fireEvent('updatedmyUnlockedBadges');
 						
 	});
-	
-return badgeView;
+	return badgeView;
 }
 
 module.exports = ProfileBadgeView;

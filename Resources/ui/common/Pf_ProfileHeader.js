@@ -9,7 +9,9 @@ var ProfileHeaderView = function(){
 		var myBadgeACS = require('acs/myBadgeACS');
 		var CheckinModel = require('model/checkin');
 		var PointModel = require('model/point');	
-		var LevelModel = require('model/level');			
+		var LevelModel = require('model/level');	
+		var CacheHelper = require('helpers/cacheHelper');
+			
 		
 //CHECK IN//////////////////////////////////////////////////////////////////////
 		function checkinDbLoadedCallBack(e){
@@ -20,10 +22,13 @@ var ProfileHeaderView = function(){
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
 			columnCheckInCount.text = CheckinModel.checkins_count(userID);
 		});
-		CheckinACS.checkinACS_fetchedCheckIn(userID);		
 		Ti.App.addEventListener('updateHeaderCheckin',function(){
 			columnCheckInCount.text=CheckinModel.checkins_count(userID);
 		});
+		
+		// Using cache		
+		CacheHelper.fetchACSDataOrCache('userCheckin'+userID, CheckinACS.checkinACS_fetchedCheckIn, userID, 'checkinsDbUpdated');
+	
 		
 /////POINT ACS/////////////////////////////////////////////	
 	PointACS.pointACS_fetchedPoint(userID);

@@ -2,6 +2,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	//HEADER
 	var Comment = require('model/comment');
 	var CommentACS = require('acs/commentACS');
+	var UserReportACS = require('acs/userReportACS');
 	
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
@@ -63,15 +64,15 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var replyToolbar = Ti.UI.createView({
-		left: nestedOffset+ 5,
-		top: 35,
-		width: 310,
+		left: 0,
+		top: 55,
+		width: '100%',
 		height: 60,
 		visible: false
 	});
 
 	var replyTextField = Ti.UI.createTextField({
-		left: nestedOffset+0,
+		left: 5,
 		top: 0,
 		width: 310,
 		height: 20,
@@ -81,30 +82,39 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var upButton = Ti.UI.createButton({
-		left:nestedOffset+ 0,
+		left:5,
 		top: 25,
-		width: 70,
+		width: 35,
 		height: 20,
-		title: 'Vote Up',
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
+		title: 'Up',
+		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
 	});
 
 	var downButton = Ti.UI.createButton({
-		left:nestedOffset+ 80,
+		left:45,
 		top: 25,
-		width: 70,
+		width: 35,
 		height: 20,
-		title: 'Vote Down',
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
+		title: 'Down',
+		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
+	});
+	
+	var reportButton = Ti.UI.createButton({
+		left:85,
+		top: 25,
+		width: 45,
+		height: 20,
+		title: 'Report',
+		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
 	});
 
 	var replyButton = Ti.UI.createButton({
-		right: nestedOffset+0,
+		right: 5,
 		top: 25,
-		width: 70,
+		width: 50,
 		height: 20,
 		title: 'Reply',
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
+		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
 	});
 		
 	//ADDING UI COMPONENTS	
@@ -117,6 +127,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	replyToolbar.add(replyTextField);
 	replyToolbar.add(upButton);
 	replyToolbar.add(downButton);
+	replyToolbar.add(reportButton);
 	replyToolbar.add(replyButton);
 	
 	// CLASS METHODS GET&SET
@@ -161,6 +172,10 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		} else {
 			alert("Sorry you already voted on this comment");	
 		}
+	});
+	
+	reportButton.addEventListener('click', function() {
+		UserReportACS.userReportACS_reportObject(_comment.id,'comment',_comment.content);
 	});
 	
 	return row;

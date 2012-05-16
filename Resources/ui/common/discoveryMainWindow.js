@@ -26,8 +26,12 @@ function DiscoveryMainWindow(){
 		backgroundColor: 'black'
 	});
 	
-
-	var tabbar = Ti.UI.iOS.createTabbedBar({
+	
+	var programListTable = Ti.UI.createTableView({
+		top: 50
+	});
+	
+		var tabbar = Ti.UI.iOS.createTabbedBar({
 		labels: ['Popular','Guide','Friends'],
 		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		height:35,
@@ -41,6 +45,7 @@ function DiscoveryMainWindow(){
 		}
 		if(e.index === 1){
 			var guide = new GuideMainWindow();
+			// guide.containingTab = self.containingTab;
 			self.add(guide);
 		}
 		if(e.index === 2){
@@ -55,10 +60,6 @@ function DiscoveryMainWindow(){
 	});
 	tabHeader.add(tabbar);
 	self.add(tabHeader);
-	
-	var programListTable = Ti.UI.createTableView({
-		top: 50
-	});
 	
 	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
 		var targetedProgramId = e.targetedProgramId; 

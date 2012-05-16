@@ -1,6 +1,11 @@
-GuideMainWindow = function (){
+function GuideMainWindow(){
 	
-	var GuideChannelWindow = require('ui/common/guideChannelWindow');
+	var Ch3Window = require('ui/common/Channel3MainWindow');
+	var Ch5Window = require('ui/common/Channel5MainWindow');
+	var Ch7Window = require('ui/common/Channel7MainWindow');
+	var Ch9Window = require('ui/common/Channel9MainWindow');
+	var Ch11Window = require('ui/common/Channel11MainWindow');
+	var ChThaipbsWindow = require('ui/common/ChannelThaipbsMainWindow');
 	
 	var channel = [];
 	
@@ -181,9 +186,34 @@ GuideMainWindow = function (){
 		data: channel
 	});
 	
-	channelTableView.addEventListener('click',function(){
+	channelTableView.addEventListener('click',function(e){
+		Ti.API.info('Index is '+e.index);
 
-
+		if(e.index === 0){
+			var ch3 = new Ch3Window();
+			//self.containingTab.open(new Ch3Window);
+			self.add(ch3);
+		}
+		if(e.index === 1){
+			var ch5 = new Ch5Window();
+			self.add(ch5);
+		}
+		if(e.index === 2){
+			var ch7 = new Ch7Window();
+			self.add(ch7);
+		}
+		if(e.index === 3){
+			var ch9 = new Ch9Window();
+			self.add(ch9);
+		}
+		if(e.index === 4){
+			var ch11 = new Ch11Window();
+			self.add(ch11);
+		}
+		if(e.index === 5){
+			var chThaipbs = new ChThaipbsWindow();
+			self.add(chThaipbs);
+		}		
 	});
 	
 	self.add(channelTableView);

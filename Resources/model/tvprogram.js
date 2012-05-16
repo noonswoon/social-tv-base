@@ -34,7 +34,7 @@ exports.TVProgramModel_fetchPrograms = function() {
 	//select some stuff from the local db..based on the future filtering
 	var fetchedPrograms = [];
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM tvprograms');
+	var result = db.execute('SELECT * FROM tvprograms ORDER BY start_time ASC');
 	while(result.isValidRow()) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),

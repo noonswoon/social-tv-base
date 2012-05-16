@@ -16,7 +16,7 @@ function ApplicationTabGroup() {
 	var messageboardwin = new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
 	//var productwin = new ProductMainWindow();
-	//var profilewin = new ProfileMainWindow();
+	var profilewin = new ProfileMainWindow();
 	var discoveryMainWin = new DiscoveryMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
@@ -48,14 +48,12 @@ function ApplicationTabGroup() {
 	productwin.containingTab = productTab;
 	*/
 	
-	/*
-	var profileTab = Ti.UI.createTab({
-		icon: '/images/fugitives.png',
-		title: 'Profile',
-		window: profilewin
-	});
-	profilewin.containingTab = profileTab;
-	*/
+	 var profileTab = Ti.UI.createTab({
+		 icon: '/images/fugitives.png',
+		 title: 'Profile',
+		 window: profilewin
+	 });
+	 profilewin.containingTab = profileTab;
 	
 	var discoveryTab = Ti.UI.createTab({
 		title: 'Discovery',
@@ -64,15 +62,15 @@ function ApplicationTabGroup() {
 	});
 	discoveryMainWin.containingTab = discoveryTab;
 	
-    self.addTab(chatTab);  
+    //self.addTab(chatTab);  
     self.addTab(messageboardTab);  
     self.addTab(discoveryTab);
-    //self.addTab(profileTab);
+    self.addTab(profileTab);
    	self.addTab(loginTab);
     //self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[1]);
+   	self.setActiveTab(self.tabs[2]);
 		//coming to this page, should already loggin
 	
 	//checking the current login and setup the currentLoggedIn user to query anywhere
@@ -84,7 +82,7 @@ function ApplicationTabGroup() {
    			self.setActiveTab(self.tabs[3]);
    		}
     });
-     
+   
     // open tab group
     return self;
 };

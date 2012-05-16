@@ -12,20 +12,20 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		
 		var programLabelName = Ti.UI.createLabel({
 			text: _curTVProgram.name,
-			textAlign: 'right',
-			right: 50,
+			textAlign: 'left',
+			left: 140,
 			font:{fontWeight:'bold',fontSize:18},
 			top: 10
 		});
 		row.add(programLabelName);
 		
 		var programLabelSubname = Ti.UI.createLabel({
-			text: 'Sublabel',
+			text: _curTVProgram.channel_id,
 			color: '#420404',
-			textAlign:'right',
+			textAlign:'left',
 			font:{fontWeight:'bold',fontSize:13},
 			top: 30,
-			right:115
+			left:140
 		});
 		row.add(programLabelSubname);
 		
@@ -41,13 +41,23 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		
 		var programChannel = Ti.UI.createImageView({
 			image: "http://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/200px-HBO_logo.svg.png",
-			bottom: 5,
+			bottom: 7,
 			left: 270,
 			width: 35,
 			height: 15
 		});
-		row.add(programChannel);	
-	
+		row.add(programChannel);
+		
+		var programNumCheckin = Ti.UI.createLabel({
+			text: _curTVProgram.number_checkins,
+			textAlign: 'left',
+			left: 140,
+			bottom: 5
+		});
+		row.add(programNumCheckin);
+
+		row.tvprogram = _curTVProgram;
+		
 		return row;
 }
 module.exports = DiscoveryTableViewRow;

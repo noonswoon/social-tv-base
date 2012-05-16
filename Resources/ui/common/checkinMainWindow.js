@@ -1,5 +1,7 @@
-function Checkin(_datafromrow){
+Checkin = function (_datafromrow){
 	
+	var CheckinACS = require('acs/checkinACS');
+
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
 		backgroundColor: 'orange'
@@ -27,15 +29,15 @@ function Checkin(_datafromrow){
 	});
 	headerView.add(programTitle);
 	
-	var programDescription = Ti.UI.createLabel({
-		text: _datafromrow.programDescription,
+	var programSubname = Ti.UI.createLabel({
+		text: _datafromrow.programSubname,
 		color: '#420404',
 		textAlign:'left',
 		left: 150,
 		font:{fontWeight:'bold',fontSize:13},
 		top: 30
 	});
-	headerView.add(programDescription);
+	headerView.add(programSubname);
 	
 	var programImage = Ti.UI.createImageView({
 		image: _datafromrow.programImage,
@@ -56,6 +58,15 @@ function Checkin(_datafromrow){
 	});
 	headerView.add(programChannel);
 	
+	var programNumCheckin = Ti.UI.createLabel({
+		text: _datafromrow.programNumCheckin,
+		textAlign: 'right',
+		right: 170,
+		bottom: 5
+	});
+	headerView.add(programNumCheckin);
+	
+	
 ///////////////////////////////////////////////////Checkin Section
 
 	var checkinView = Ti.UI.createView({
@@ -72,11 +83,32 @@ function Checkin(_datafromrow){
 	});
 	self.add(checkinButton);
 	
-	checkinButton.addEventListener('click',function(){
-		alert('Yeah! Check-in');
-	});
 	
+	
+	checkinButton.addEventListener('click',function(){
+		// var now_full = moment().format('YYYY-MM-DD, HH:mm:ss');
+		// var now_date = moment().format('YYYY-MM-DD');
+		// var now_time = moment().format('HH:mm:ss');
+		// alert('NOW: '+now_date);
+// 		
+		// var starttime_full = moment(_datafromrow.programStarttime, "YYYY-MM-DDTHH:mm:ss z");
+		// var starttime_date = starttime_full.format('YYYY-MM-DD');
+		// var starttime_time = starttime_full.format('HH:mm:ss');
+// 		
+		// alert('Start: '+starttime_date);
+ 		
+		// var endtime_full = moment(_datafromrow.programEndtime, "YYYY-MM-DDTHH:mm:ss z");
+		// var endtime_date = endtime_full.format('YYYY-MM-DD');
+		// var endtime_time = endtime_full.format('HH:mm:ss');
+// 		
+		// alert('End time'+endtime_time);
+// 		
+		// var pressedCheckin = CheckinACS.
+	
+	});
+
 	self.showNavBar();
+
 	return self;
 	
 }

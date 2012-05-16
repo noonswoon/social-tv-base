@@ -11,9 +11,16 @@ Cloud.apiKey = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 Cloud.consumerKey = 'K25ozMNbVQ0wH2xpQ5YR8YEWomFO5M61';
 Cloud.consumerSecret = '6HjCZezCRZcQQZrOlEDApl3G4FEBGvn7';
 
-
 exports.isLoggedIn = function() {
 	return loggedIn;
+};
+
+exports.getUserLoggedIn = function() {
+	return currentUser;
+};
+
+exports.setUserLoggedIn = function(user) {
+	currentUser = user;
 };
 
 exports.setLoggedInStatus = function(isLoggedIn) {

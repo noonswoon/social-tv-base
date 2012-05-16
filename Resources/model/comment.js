@@ -6,7 +6,7 @@ db.execute('CREATE TABLE IF NOT EXISTS comments(id TEXT PRIMARY KEY, topic_id TE
 db.close();
 
 exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
-	//only fetch the string comments, not the ratings [right now ratings and comments are considered comments]
+	//get both comments and ratings on the topicId [right now ratings and comments are considered comments]
 	var fetchedComments = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM comments WHERE topic_id = ? ORDER BY updated_at DESC',_topicId);
@@ -44,6 +44,18 @@ exports.commentModel_addCommentOrRating = function(_comment) {
 	Ti.App.fireEvent("commentsDbUpdated");
 };
 
+exports.commentModel_canUserVote = function(_targetedCommentId,username) {	
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM comments WHERE response_to_object_id = ? AND username = ? AND is_a_vote=1',_targetedCommentId,username);
+	var canUserVote = true;
+	if(result.isValidRow()) {
+		//alert('already vote: '+result.fieldByName('content')+', is_a_vote: '+result.fieldByName('is_a_vote'));
+		canUserVote = false;
+	} 
+	result.close();
+	db.close();
+	return canUserVote;
+}; 
 
 exports.commentModel_updateCommentsOnTopicFromACS = function(_commentsCollection, _topicId) {
 	var fetchedComments = [];
@@ -55,8 +67,7 @@ exports.commentModel_updateCommentsOnTopicFromACS = function(_commentsCollection
 	//insert contents
 	for(var i=0;i < _commentsCollection.length; i++) {
 		var curComment = _commentsCollection[i];
-		if(curComment.is_a_vote == 0) 
-			db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at)" + 
+		db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at)" + 
 					"VALUES(?,?,?,?,?,?,?,?)", 	curComment.id,curComment.topic_id,curComment.content,curComment.rating,
 												curComment.user.username,curComment.response_to_object_id,curComment.is_a_vote,curComment.updated_at);
 	}

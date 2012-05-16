@@ -1,5 +1,6 @@
 CommentReplyTableViewRow = function(_comment, _level) {
 	//HEADER
+	var Comment = require('model/comment');
 	var CommentACS = require('acs/commentACS');
 	
 	//UI Stuff
@@ -126,17 +127,27 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	upButton.addEventListener('click', function() {
-		Ti.API.info("upvote: "+_comment.id);
-		//The fn fires a voteOfCommentCreatedACS event when done,
-		// the listener for the event is in Mb_CommentWindow.js file
-		CommentACS.commentACS_createVoteOfComment(1,_comment.id,_comment.topic_id);
+		//need to check if alreaady voted
+		if(Comment.commentModel_canUserVote(_comment.id,acs.getUserLoggedIn().username)) {		
+			Ti.API.info("upvote: "+_comment.id);
+			//The fn fires a voteOfCommentCreatedACS event when done,
+			// the listener for the event is in Mb_CommentWindow.js file		
+			CommentACS.commentACS_createVoteOfComment(1,_comment.id,_comment.topic_id);
+		} else {
+			alert("Sorry you already voted on this comment");	
+		}
 	});
 	
 	downButton.addEventListener('click', function() {
-		//The fn fires a voteOfCommentCreatedACS event when done,
-		// the listener for the event is in Mb_CommentWindow.js file
-		Ti.API.info("downvote: "+_comment.id);
-		CommentACS.commentACS_createVoteOfComment(-1,_comment.id,_comment.topic_id);
+		//need to check if alreaady voted
+		if(Comment.commentModel_canUserVote(_comment.id,acs.getUserLoggedIn().username)) {		
+			Ti.API.info("downvote: "+_comment.id);
+			//The fn fires a voteOfCommentCreatedACS event when done,
+			// the listener for the event is in Mb_CommentWindow.js file		
+			CommentACS.commentACS_createVoteOfComment(-1,_comment.id,_comment.topic_id);
+		} else {
+			alert("Sorry you already voted on this comment");	
+		}
 	});
 	
 	return row;

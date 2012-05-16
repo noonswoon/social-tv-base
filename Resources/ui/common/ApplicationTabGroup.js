@@ -10,7 +10,7 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');
+	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');	
 	
 	var chatwin = new ChatMainWindow();
 	var messageboardwin = new MessageboardMainWindow(1);		
@@ -73,7 +73,18 @@ function ApplicationTabGroup() {
     
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[1]);
-
+		//coming to this page, should already loggin
+	
+	//checking the current login and setup the currentLoggedIn user to query anywhere
+	Cloud.Users.showMe(function (e) {        
+		if (e.success) {
+			acs.setUserLoggedIn(e.users[0]);
+			acs.setLoggedInStatus(true);
+	    } else {
+   			self.setActiveTab(self.tabs[3]);
+   		}
+    });
+     
     // open tab group
     return self;
 };

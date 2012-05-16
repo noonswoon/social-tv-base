@@ -47,9 +47,14 @@ var ProfileDetailView = function(){
 	var profileReward = new ProfileReward();
 		
 	profileTab.addEventListener('click',function(e){
-		while (profileDetailScroll.children !== undefined && profileDetailScroll.children.length !== 0){
-				profileDetailScroll.remove(profileDetailScroll.children[0]);
-		}		
+		for (var i in profileDetailScroll.children){
+			if (profileDetailScroll.children.hasOwnProperty(i)) {
+				profileDetailScroll.remove(profileDetailScroll.children[i]);
+			}
+		}			
+/*		while (profileDetailScroll.children !== undefined && profileDetailScroll.children.length !== 0){
+				profileDetailScroll.remove(profileDetailScroll.children[0]);}	
+*/			
 		if(e.index==0){
 			profileDetailScroll.add(profileStats);}
 		else if (e.index==1) {

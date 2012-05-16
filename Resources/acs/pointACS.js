@@ -6,7 +6,7 @@ exports.pointACS_fetchedPoint = function(_id) {
 	Cloud.Objects.query({
 	classname: 'Points',	
     page: 1,
-    per_page: 20,
+    per_page: 500,
     where: {user_id: _id},
     order: '-updated_at'
 }, function (e) {
@@ -32,3 +32,29 @@ exports.pointACS_fetchedPoint = function(_id) {
     	 }
 			});
 };
+
+exports.pointACS_createPoint = function(_userID,_point,_earnedby,_objID){
+	Cloud.Objects.create({
+	    classname: 'Points',
+	    fields: {
+	    	user: _userID,
+	        point: _point,
+	        earned_by: _earnedby,
+	        object: _objID
+	    }
+	}, function (e) {
+	    if (e.success) {
+	        var curPoint = e.Points[0];
+	        alert('Success:\\n' +
+	            'id: ' + curPoint.user.id + '\\n' +
+	            'point: ' + curPoint.point + '\\n' +
+	            'earned_by: ' + curPoint.earned_by +
+	             'checkinID: ' + curPoint.object);
+	        Ti.App.fireEvent('createPointDB',{fetchedPoint:curPoint});
+	    } else {
+	        alert('Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
+};
+

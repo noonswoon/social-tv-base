@@ -2,6 +2,12 @@ var checkinBadgeView = function(){
 	//hard data
 	var userID = '4fa17dd70020440df700950c';
 	var eventID = '4fa8dbe60020442a2b0099f8';
+	var CheckinACS = require('acs/checkinACS');
+	var CheckinModel = require('model/checkin');
+	var PointACS = require('acs/pointACS');	
+	var PointModel = require('model/point');
+	var BadgeCondition = require('helpers/badgeCondition');
+	var checkinPoint = 10;
 
 	var checkinView = Ti.UI.createView({
 		backgroundColor: '#858D65'
@@ -24,8 +30,6 @@ var checkinBadgeView = function(){
 	});
 	
 	
-	var CheckinACS = require('acs/checkinACS');
-	var CheckinModel = require('model/checkin');
 	CheckinACS.checkinACS_fetchedCheckIn(userID);
 
 	checkinButton.addEventListener('click',function(){
@@ -40,10 +44,12 @@ var checkinBadgeView = function(){
 	CheckinModel.checkin_create(e.fetchedACheckin);
 	};	
 		
-	Ti.App.addEventListener('oneCheckinUpdated', function(){
-	Ti.API.info('Your checkin has been update to your database');
-	Ti.API.info(CheckinModel.checkins_count(userID));
+	Ti.App.addEventListener('oneCheckinUpdated', function(_checkinID){
+	Ti.API.info('Your checkin has been update to your database: '+ CheckinModel.checkins_count(userID));
+	PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
 	checkinCount.text = CheckinModel.checkins_count(userID);
+	BadgeCondition.badgeCondition_check();
+	Ti.App.fireEvent('updateHeaderCheckin');
 	});	
 	
 	checkinView.add(checkinCount);

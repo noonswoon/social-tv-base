@@ -4,7 +4,7 @@ var userScore =0;
 exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 	Cloud.Checkins.query({
     page: 1,
-    per_page: 20,
+    per_page: 500,
     where: {event_id: _eventId},
     order: '-updated_at'
     
@@ -24,7 +24,7 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 exports.checkinACS_fetchedCheckIn = function(_id) {
 	Cloud.Checkins.query({
     page: 1,
-    per_page: 20,
+    per_page: 500,
     where: {user_id: _id,},
     order: '-updated_at',
 

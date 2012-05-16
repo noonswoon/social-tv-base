@@ -62,6 +62,7 @@ exports.checkin_create = function(_checkinsCollection){
 		var curCheckin = _checkinsCollection;
 		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event_id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
 		db.close();
-		Ti.App.fireEvent("oneCheckinUpdated");
-		return checkins;	
+		Ti.App.fireEvent("oneCheckinUpdated",{
+			id: curCheckin.id
+		});
 };

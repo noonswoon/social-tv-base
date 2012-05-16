@@ -13,21 +13,17 @@ var ProfileHeaderView = function(){
 		
 //CHECK IN//////////////////////////////////////////////////////////////////////
 		function checkinDbLoadedCallBack(e){
-			 Ti.API.info('checkinDbLoadedCallBack');					
+			Ti.API.info('checkinDbLoadedCallBack');					
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		};
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
-
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
 			columnCheckInCount.text = CheckinModel.checkins_count(userID);
 		});
 		CheckinACS.checkinACS_fetchedCheckIn(userID);		
-		
-		setInterval (updateData, 300000); // runs every 30 minute
-		function updateData ()
-		{
-			columnCheckInCount.text = CheckinModel.checkins_count(userID);
-		}
+		Ti.App.addEventListener('updateHeaderCheckin',function(){
+			columnCheckInCount.text=CheckinModel.checkins_count(userID);
+		});
 		
 /////POINT ACS/////////////////////////////////////////////	
 	PointACS.pointACS_fetchedPoint(userID);

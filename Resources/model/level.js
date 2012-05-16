@@ -10,9 +10,9 @@ exports.levelModel_updateLevelFromACS = function(_levelsCollection) {
 	//	var version = 'v001';
 	db.execute('DELETE FROM levels');
 	for(var i=0;i < _levelsCollection.length; i++) {
-		Ti.API.info('Tag for level is '+_levelsCollection[i].tag);
+	//Ti.API.info('Tag for level is '+_levelsCollection[i].tag);
 	//	if(_levelsCollection[i].tag!==version){
-		Ti.API.info('Write new level');
+	//	Ti.API.info('Write new level');
 		var curLevel = _levelsCollection[i];
 		db.execute("INSERT INTO levels(level,exp,tag) VALUES(?,?,?)", curLevel.level,curLevel.exp,curLevel.tag);
 	//	}

@@ -44,6 +44,18 @@ var ProfileStatsView = function(){
 
 /////////////////////////////////////////////////////////////////////////////
 		//ACS
+		Ti.App.addEventListener('createPointDB', createPointDBCallBack);
+	
+		function createPointDBCallBack(e){
+		Ti.API.info('createPointDBCallBack');
+		PointModel.points_updateNewPoint(e.fetchedPoint);
+		};	
+		
+		Ti.App.addEventListener('updateNewPoint',function(){
+			alert('updateNewPoint');
+			Ti.App.fireEvent('pointsDbUpdated');
+		});
+		
 		Ti.App.addEventListener('pointsDbUpdated', function(){
 			Ti.API.info('pointsDBUpdated');
 			totalPoints = PointModel.points_sumPoints();
@@ -56,7 +68,7 @@ var ProfileStatsView = function(){
 			myLevelLabel.text = LevelModel.level_checkLevel(ProfileDataExp);
 
 		});
-			
+					
 ///////////////////////////////////////////////////////////////////////////
 
 	var leaderLabel = Ti.UI.createLabel({
@@ -110,6 +122,7 @@ var ProfileStatsView = function(){
 				top: 10,
 				right: 5,
 				width: 'auto',
+				textAlign: 'right',
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 26}
 			});
@@ -168,6 +181,7 @@ var ProfileStatsView = function(){
 				top: 10,
 				right: 5,
 				width: 'auto',
+				textAlign: 'right',
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 26}
 			});

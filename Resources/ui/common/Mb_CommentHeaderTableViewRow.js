@@ -11,7 +11,9 @@ CommentHeaderTableViewRow = function() {
 		left: 5,
 		width: 'auto',
 		height: 30,
-		font: { fontSize: 20, fontFamily: 'Helvetica Neue' }
+		font: { fontSize: 20, fontFamily: 'Helvetica Neue' },
+		height: 20,
+		width: 310
 	})
 	header.add(header.topicLabel);
 	
@@ -21,7 +23,9 @@ CommentHeaderTableViewRow = function() {
 		left: 10,
 		width: 'auto',
 		height: 20,
-		font: { fontSize: 10, fontFamily: 'Helvetica Neue' }
+		font: { fontSize: 10, fontFamily: 'Helvetica Neue' },
+		height: 10,
+		width: 310
 	})
 	header.add(header.dateLabel);
 	

@@ -139,9 +139,6 @@ function CommentWindow(_topicId) {
 	
 		commentsTable.selectedToCommentRow = e.row;
 		commentsTable.selectedToCommentRow._showToolbar();
-
-		//reset the data to make the UI transition looks smoother
-		commentsTable.setData(commentsTable.data);
 	});
 
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);

@@ -26,7 +26,9 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:12},
 		top: 15,
-		left:nestedOffset
+		left:nestedOffset,
+		height: 15,
+		width: 50
 	});
 	
 	var userImage = Ti.UI.createImageView({
@@ -47,7 +49,9 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		textAlign:'right',
 		font:{fontWeight:'bold',fontSize:12},
 		top: 0,
-		left:nestedOffset+75
+		left:nestedOffset+75,
+		height: 15,
+		width: 150
 	});
 		
 	var lineHelper = "";
@@ -60,7 +64,9 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		left: nestedOffset+ 75,
 		width: 310,
 		height: 30,
-		font: { fontSize: 15, fontFamily: 'Helvetica Neue' }
+		font: { fontSize: 15, fontFamily: 'Helvetica Neue' },
+		height: 15,
+		width: 250
 	});
 
 	var replyToolbar = Ti.UI.createView({

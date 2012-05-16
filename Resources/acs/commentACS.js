@@ -158,7 +158,3 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_commentId,_topicId
 	    }
 	});
 }
-
-exports.commentACS_getAllVotesOfUser = function(_userId) {
-	Ti.API.info("may be no need to implement");
-}

@@ -34,13 +34,22 @@ exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
 
 exports.commentModel_addCommentOrRating = function(_comment) {
 	var db = Ti.Database.open('Chatterbox');
-	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote, updated_at) VALUES(?,?,?,?,?,?,?,?)", 
+	
+	var result = db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote, updated_at) VALUES(?,?,?,?,?,?,?,?)", 
 									_comment.id,_comment.custom_fields.topic_id,_comment.content,
 									_comment.rating,_comment.user.username,_comment.custom_fields.response_to_object_id,
 									_comment.custom_fields.is_a_vote,_comment.updated_at);
+	
+	//if the _comment is a rating, need to do the data update
+	if(_comment.custom_fields.is_a_vote == 1)  {
+		result = db.execute('SELECT * FROM comments WHERE id = ?',_comment.custom_fields.response_to_object_id);
+		var curRating = Number(result.fieldByName('rating'));
+		var newRating = curRating + _comment.rating;
+		db.execute("UPDATE comments SET rating = ? WHERE id = ?", newRating, _comment.custom_fields.response_to_object_id);
+	}
+		
 	db.close();
 	//fire message to let others know that database has changed
-	Ti.API.info("just insert some comment, is_a_vote? "+_comment.custom_fields.is_a_vote);
 	Ti.App.fireEvent("commentsDbUpdated");
 };
 

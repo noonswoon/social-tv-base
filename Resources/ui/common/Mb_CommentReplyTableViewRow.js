@@ -12,25 +12,37 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	var nestedOffset = _level * 10 + 5;
+	var rating = _comment.rating;
+	var ratingStr = '';
+	if(rating > 0) {
+		ratingStr = '+'+rating;
+	} else if(rating < 0) {
+		ratingStr = rating;
+	}
+	var ratingLabel = Ti.UI.createLabel({
+		text: ratingStr,
+		color: '#420404',
+		textAlign:'left',
+		font:{fontWeight:'bold',fontSize:12},
+		top: 15,
+		left:nestedOffset
+	});
+	
 	var userImage = Ti.UI.createImageView({
 		image: "userImage.png",
 		top: 5,
-		left: nestedOffset + 10,
+		left: nestedOffset + 15,
 		width:55,
 		height:40
 	});
 	
-	var rating = _comment.rating;
-	var ratingStr = '';
-	if(rating > 0) {
-		if(rating ===1 ) ratingStr = '+1 pt';
-		else ratingStr = '+'+rating+' pts';
-	} else if(rating < 0) {
-		if(rating === -1 ) ratingStr = '-1 pt';
-		else ratingStr = rating+' pts';
-	}
+	
+	var dm = moment(_comment.updated_at, "YYYY-MM-DDTHH:mm:ss z");
+	var dateObjFormat = dm.format('MMM D, YYYY hh:mm:ss');
+	var submitDateStr = since(new Date(dateObjFormat));
+		
 	var commentDetail = Ti.UI.createLabel({
-		text: ratingStr + ' by titaniummick 3 hours ago',
+		text: ' by '+_comment.username+', '+submitDateStr,
 		color: '#420404',
 		textAlign:'right',
 		font:{fontWeight:'bold',fontSize:12},
@@ -97,6 +109,8 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 		
 	//ADDING UI COMPONENTS	
+
+	row.add(ratingLabel);
 	row.add(userImage);
 	row.add(commentDetail);		
 	row.add(contentLabel);

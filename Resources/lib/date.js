@@ -7,11 +7,11 @@ function since(date) {
 	}
 	
 	var blocks = [
-		{ divisor: 1000, max: 60, name: 'second' },
-		{ divisor: 60, max: 60, name: 'minute' },
-		{ divisor: 60, max: 24, name: 'hour' },
+		{ divisor: 1000, max: 60, name: 'sec' },
+		{ divisor: 60, max: 60, name: 'min' },
+		{ divisor: 60, max: 24, name: 'hr' },
 		{ divisor: 24, max: 30, name: 'day' },
-		{ divisor: 30, max: 12, name: 'month' },
+		{ divisor: 30, max: 12, name: 'mon' },
 		{ divisor: 12, max: 100, name: 'year' }
 	];
 

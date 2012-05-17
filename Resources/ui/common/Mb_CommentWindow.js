@@ -114,7 +114,26 @@ function CommentWindow(_topicId) {
 	
 	function commentOfCommentCreatedACSCallback(e) {
 		var newCommentOfComment = e.newCommentOfComment;	
+		var rowIndexToUpdateACSObjectId = e.rowIndexToUpdateACSObjectId;
+		var commentLevel = e.commentLevel;
+	/* NOT DONE HERE...
+		var commentForTableViewRow = {
+			title: newCommentOfComment.content,
+			commentLevel: commentLevel,
+			acsObjectId: newCommentOfComment.id, //just to update this field!
+			topicId: newCommentOfComment.topicId,
+			content: newCommentOfComment.content,
+			rating: 0,
+			username: acs.getUserLoggedIn().username,
+			responseToObjectId: _comment.acsObjectId,
+			isAVote: 0,
+			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
+		}
+		//will eventually call: commentsTable.updateRow(newRow);
+	*/	
+		
 		Ti.API.info("new comment's comment id: "+newCommentOfComment.id);
+		//commentsTable-->how to get tableviewrow at rowIndexToUpdateACSObjectId and update the acsObjectId value?
 		Comment.commentModel_updateACSObjectIdField(newCommentOfComment);
 	}
 	
@@ -137,6 +156,7 @@ function CommentWindow(_topicId) {
 	});
 
 	commentsTable.addEventListener('click', function(e) {
+		if(e.source.toString().indexOf("TiUIButton") > 0) return; //prevent event propagation of clicking reply,vote up/down
 		if(e.index == 0) return;
 		if(commentsTable.selectedToCommentRow != null)
 			commentsTable.selectedToCommentRow._hideToolbar(e.index);	
@@ -146,7 +166,6 @@ function CommentWindow(_topicId) {
 	});
 
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);
-
 	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);	
 	Ti.App.addEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
 	Ti.App.addEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
@@ -159,6 +178,7 @@ function CommentWindow(_topicId) {
 		Ti.App.removeEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
 		Ti.App.removeEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
 		Ti.App.removeEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
+		Ti.App.removeEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
 	});
 	
 	//PAGE LOGIC/CONTROLLER

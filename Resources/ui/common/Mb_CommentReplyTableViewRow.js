@@ -154,19 +154,20 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		row.height += replyToolbar.height;
 	};
 		
-	replyButton.addEventListener('click',function() {
+	replyButton.addEventListener('click',function(e) {
 		//insert to db-->update UI-->then call acs to save data -->get callback then update the acs_object_id field
-		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,replyTextField.value,0,acs.getUserLoggedIn().username,_comment.acsObjectId,0); 
+		var responseText = replyTextField.value;
+		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,responseText,0,acs.getUserLoggedIn().username,_comment.acsObjectId,0); 
 		
 		//add tableviewrow to the table manually, rather than calling reset
 		var commentDetailForNewTableViewRow = {
-			title: replyTextField.value,
+			title: responseText,
 			commentLevel: _level+1,
 			rowIndex: row.index,  //will insert the new comment after the rowIndex row
 			id: newId,
 			acsObjectId: 0, //need to be later updated
 			topicId: _comment.topicId,
-			content: replyTextField.value,
+			content: responseText,
 			rating: 0,
 			username: acs.getUserLoggedIn().username,
 			responseToObjectId: _comment.acsObjectId,
@@ -180,16 +181,24 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		
 		//The fn fires a commentOfCommentCreatedACS event when done,
 		// the listener for the event is in Mb_CommentWindow.js file...add newId param
-		CommentACS.commentACS_createCommentOfComment(replyTextField.value,newId,_comment.acsObjectId,_comment.topicId);
+		var rowIndexToUpdateACSObjectId = row.index+1; //currently the new inserted row will have acsObjectId = 0
+		var commentLevel = _level+1;
+		CommentACS.commentACS_createCommentOfComment(responseText,newId,_comment.acsObjectId,_comment.topicId,rowIndexToUpdateACSObjectId,commentLevel);
+		
+		//clear the UI, clear replyTextField value, hide the toolbar
+		replyTextField.value = "";
+		row._hideToolbar(row.index);
 	});
 	
-	upButton.addEventListener('click', function() {
+	function handleVote(_isUpVote) {
+		var ratingOffset = -1;
+		if(_isUpVote) ratingOffset = 1;
+		
 		//need to check if alreaady voted
 		if(Comment.commentModel_canUserVote(_comment.acsObjectId,acs.getUserLoggedIn().username)) {		
-			Ti.API.info("upvote: "+_comment.id);
-			
 			//updating the rating manually rather than calling setData for the entire table
-			rating = rating + 1;
+			var ratingStr = '';
+			rating = rating + ratingOffset;
 			if(rating > 0) {
 				ratingStr = '+'+rating;
 			} else if(rating < 0) {
@@ -199,24 +208,23 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			
 			//The fn fires a voteOfCommentCreatedACS event when done,
 			// the listener for the event is in Mb_CommentWindow.js file		
-			var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,'m',1,acs.getUserLoggedIn().username,_comment.acsObjectId,1); 
-			CommentACS.commentACS_createVoteOfComment(1,newId,_comment.acsObjectId,_comment.topicId);
+			var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,'m',ratingOffset,acs.getUserLoggedIn().username,_comment.acsObjectId,1); 
+			CommentACS.commentACS_createVoteOfComment(ratingOffset,newId,_comment.acsObjectId,_comment.topicId);
+			
+			//clear the UI, clear replyTextField value, hide the toolbar
+			replyTextField.value = "";
+			row._hideToolbar(row.index);
 		} else {
 			alert("Sorry you already voted on this comment");	
 		}
-	});
+	}
 	
-	downButton.addEventListener('click', function() {
-		//need to check if alreaady voted
-		if(Comment.commentModel_canUserVote(_comment.acsObjectId,acs.getUserLoggedIn().username)) {		
-			Ti.API.info("downvote: "+_comment.id);
-			//The fn fires a voteOfCommentCreatedACS event when done,
-			// the listener for the event is in Mb_CommentWindow.js file		
-			CommentACS.commentACS_createVoteOfComment(-1,_comment.id,_comment.topic_id);
-		} else {
-			alert("Sorry you already voted on this comment");	
-		}
-	});
+	function handleUpVote() { handleVote(true); }
+	
+	function handleDownVote() { handleVote(false); }
+	
+	upButton.addEventListener('click', handleUpVote);
+	downButton.addEventListener('click', handleDownVote);
 	
 	reportButton.addEventListener('click', function() {
 		UserReportACS.userReportACS_reportObject(_comment.id,'comment',_comment.content);

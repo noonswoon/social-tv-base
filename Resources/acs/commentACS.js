@@ -120,7 +120,7 @@ exports.commentACS_createCommentOfTopic = function(_comment,_topicId) {
 	});
 }
 
-exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentId,_topicId) {
+exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentId,_topicId,_rowIndexToUpdateACSObjectId,_commentLevel) {
 	Cloud.Reviews.create({
 	    review_object_id: _commentId,
 	    rating: 0,
@@ -131,7 +131,7 @@ exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentI
 	    if (e.success) {
 	        var review = e.reviews[0];
 	        Ti.API.info('Comment of comment success: id ' + review.id);
-	        Ti.App.fireEvent("commentOfCommentCreatedACS",{newCommentOfComment:review});
+	        Ti.App.fireEvent("commentOfCommentCreatedACS",{newCommentOfComment:review, rowIndexToUpdateACSObjectId:_rowIndexToUpdateACSObjectId,commentLevel:_commentLevel});
 	    } else {
 	        Ti.API.info('Comment of comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));

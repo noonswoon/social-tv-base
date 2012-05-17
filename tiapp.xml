@@ -29,7 +29,7 @@
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
     <analytics>true</analytics>
-    <guid>ac993d25-1ec2-4174-8b4d-211c835458f3</guid>
+    <guid></guid>
     <property name="ti.ui.defaultunit">system</property>
     <iphone>
         <orientations device="iphone">

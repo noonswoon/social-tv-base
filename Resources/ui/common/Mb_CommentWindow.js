@@ -83,11 +83,9 @@ function CommentWindow(_topicId) {
 		var commentsOfTopic = [];
 		var votesOfComments = [];
 		
-		
-		//use recursion instead
 		for (var i=0;i<allComments.length;i++) {
 			var curComment = allComments[i];
-			if(curComment.rating === 0) { //if rating is = 0, this is a vote record
+			if(curComment.isAVote === 0) {
 				commentsOfTopic.push(curComment);
 			} else {
 				votesOfComments.push(curComment);
@@ -123,7 +121,7 @@ function CommentWindow(_topicId) {
 	function voteOfCommentCreatedACSCallback(e) {
 		var newVote = e.newVote;
 		Ti.API.info("new vote id: "+newVote.id+", voteScore: "+newVote.rating);	
-		Comment.commentModel_addCommentOrRating(newVote);
+		Comment.commentModel_updateACSObjectIdField(newVote);
 	}
 
 	//ADD EVENT LISTENERS

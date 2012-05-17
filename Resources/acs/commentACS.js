@@ -124,7 +124,7 @@ exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentI
 	    review_object_id: _commentId,
 	    rating: 0,
 	    content: _comment, 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId, "is_a_vote":0},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -138,12 +138,12 @@ exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentI
 	});
 }
 
-exports.commentACS_createVoteOfComment = function(_voteScore,_commentId,_topicId) {
+exports.commentACS_createVoteOfComment = function(_voteScore,_localId,_commentId,_topicId) {
 	Cloud.Reviews.create({
 	    review_object_id: _commentId,
 	    rating: _voteScore,
 	    content: "m", 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId, "is_a_vote":1},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -151,7 +151,7 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_commentId,_topicId
 	        Ti.API.info('Vote of comment success: id ' + review.id);
 	        Ti.App.fireEvent("voteOfCommentCreatedACS",{newVote:review});
 	    } else {
-	        Ti.API.info('Comment of comment Error:\\n' +
+	        Ti.API.info('Vote of comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

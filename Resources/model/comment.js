@@ -2,7 +2,7 @@
 
 var db = Ti.Database.open('Chatterbox');
 //response_to_object_id --> object_id can be topic_id (comment of post) or comment_id (comment of comment)
-db.execute('CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY, acs_object_id TEXT, topic_id TEXT, content TEXT, rating INTEGER, username TEXT, response_to_object_id TEXT, updated_at TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY, acs_object_id TEXT, topic_id TEXT, content TEXT, rating INTEGER, username TEXT, response_to_object_id TEXT, is_a_vote INTEGER, updated_at TEXT);');
 db.close();
 
 exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
@@ -24,6 +24,7 @@ exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
 			rating: Number(result.fieldByName('rating')),
 			username: result.fieldByName('username'),
 			responseToObjectId: result.fieldByName('response_to_object_id'),
+			isAVote: Number(result.fieldByName('is_a_vote')),
 			updatedAt: result.fieldByName('updated_at')
 		});
 		result.next();
@@ -33,24 +34,24 @@ exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
 	return fetchedComments;
 };
 
-exports.commentModel_updateACSObjectIdField = function(_comment) {
+exports.commentModel_updateACSObjectIdField = function(_review) {
 	var db = Ti.Database.open('Chatterbox');
-	var acsObjectId = _comment.id;
-	var localId = _comment.custom_fields.local_id;
+	var acsObjectId = _review.id;
+	var localId = _review.custom_fields.local_id;
 	db.execute("UPDATE comments SET acs_object_id = ? WHERE id = ?", acsObjectId, localId);
 	db.close();
 };
 
 //need to fix..adding acs_object_id
-exports.commentModel_addCommentOrRating = function(_topicId, _content,_rating,_username,_responseToObjectId) {
+exports.commentModel_addCommentOrRating = function(_topicId, _content,_rating,_username,_responseToObjectId,_isAVote) {
 	var db = Ti.Database.open('Chatterbox');
 	
 	//_comment.updated_at = convertACSTimeToLocalTime(_comment.updated_at);
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
 	
 	//need to update acs_object_id later
-	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,updated_at) "+
-							"VALUES(NULL,?,?,?,?,?,?)", _topicId,_content,_rating,_username,_responseToObjectId,updatedAt);
+	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at) "+
+							"VALUES(NULL,?,?,?,?,?,?,?)", _topicId,_content,_rating,_username,_responseToObjectId,_isAVote,updatedAt);
 	
 	var result = db.execute("SELECT last_insert_rowid() as new_id");
 	var newId = result.fieldByName('new_id');
@@ -71,7 +72,7 @@ exports.commentModel_addCommentOrRating = function(_topicId, _content,_rating,_u
 
 exports.commentModel_canUserVote = function(_targetedCommentId,username) {	
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM comments WHERE response_to_object_id = ? AND username = ? AND rating <> 0',_targetedCommentId,username);
+	var result = db.execute('SELECT * FROM comments WHERE response_to_object_id = ? AND username = ? AND is_a_vote = 1',_targetedCommentId,username);
 	var canUserVote = true;
 	if(result.isValidRow()) {
 		//alert('already vote: '+result.fieldByName('content')+', rating: '+result.fieldByName('rating'));
@@ -93,10 +94,10 @@ exports.commentModel_updateCommentsOnTopicFromACS = function(_commentsCollection
 	for(var i=0;i < _commentsCollection.length; i++) {
 		var curComment = _commentsCollection[i];
 		curComment.updated_at = convertACSTimeToLocalTime(curComment.updated_at);
-		db.execute("INSERT INTO comments(id,acs_object_id,topic_id,content,rating,username, response_to_object_id,updated_at) " +
-					"VALUES(NULL,?,?,?,?,?,?,?)", 	
+		db.execute("INSERT INTO comments(id,acs_object_id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at) " +
+					"VALUES(NULL,?,?,?,?,?,?,?,?)", 	
 					curComment.id,curComment.topic_id,curComment.content,curComment.rating,
-					curComment.user.username,curComment.response_to_object_id,curComment.updated_at);
+					curComment.user.username,curComment.response_to_object_id,curComment.is_a_vote,curComment.updated_at);
 	}
 	
 	//update voting score

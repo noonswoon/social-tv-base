@@ -152,7 +152,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		
 	replyButton.addEventListener('click',function() {
 		//insert to db-->update UI-->then call acs to save data -->get callback then update the acs_object_id field
-		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,replyTextField.value,0,'titaniummick',_comment.acsObjectId); 
+		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,replyTextField.value,0,acs.getUserLoggedIn().username,_comment.acsObjectId,0); 
 		
 		//The fn fires a commentOfCommentCreatedACS event when done,
 		// the listener for the event is in Mb_CommentWindow.js file...add newId param
@@ -165,7 +165,8 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			Ti.API.info("upvote: "+_comment.id);
 			//The fn fires a voteOfCommentCreatedACS event when done,
 			// the listener for the event is in Mb_CommentWindow.js file		
-			CommentACS.commentACS_createVoteOfComment(1,_comment.id,_comment.topic_id);
+			var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,'m',1,acs.getUserLoggedIn().username,_comment.acsObjectId,1); 
+			CommentACS.commentACS_createVoteOfComment(1,newId,_comment.acsObjectId,_comment.topicId);
 		} else {
 			alert("Sorry you already voted on this comment");	
 		}

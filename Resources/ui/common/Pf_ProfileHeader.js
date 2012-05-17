@@ -1,7 +1,7 @@
 
-var ProfileHeaderView = function(){
+var ProfileHeaderView = function(_profileMain){
 				
-//CALL DATA FROM ACS
+//CALL DATA
 		var userID = '4fa17dd70020440df700950c';
 		var CheckinACS = require('acs/checkinACS');		
 		var PointACS = require('acs/pointACS');
@@ -9,7 +9,8 @@ var ProfileHeaderView = function(){
 		var myBadgeACS = require('acs/myBadgeACS');
 		var CheckinModel = require('model/checkin');
 		var PointModel = require('model/point');	
-		var LevelModel = require('model/level');			
+		var LevelModel = require('model/level');
+		var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
 		
 //CHECK IN//////////////////////////////////////////////////////////////////////
 		function checkinDbLoadedCallBack(e){
@@ -156,23 +157,27 @@ var ProfileHeaderView = function(){
 			backgroundColor: '#999',
 			opacity: 0.9
 		});
-			//img
-			var columnFriendImage = Ti.UI.createImageView({
-				image: 'images/User.png',
-				opacity: 0.6,
-				width: 30,
-				height: 30,
-				top: 3
-			});
-			// count
-			var columnFriendCount = Ti.UI.createLabel({
-				text: '27',
-				font: {fontSize: 26, fontStyle: 'bold'},
-				color: '#fff',
-				height: 30,
-				top: 30
-			});
-			
+		//img
+		var columnFriendImage = Ti.UI.createImageView({
+			image: 'images/User.png',
+			opacity: 0.6,
+			width: 30,
+			height: 30,
+			top: 3
+		});
+		// count
+		var columnFriendCount = Ti.UI.createLabel({
+			text: '27',
+			font: {fontSize: 26, fontStyle: 'bold'},
+			color: '#fff',
+			height: 30,
+			top: 30
+		});
+
+		columnFriendCount.addEventListener('click',function(){
+			_profileMain.containingTab.open(new FriendsMainWindow());
+		});	
+		
 	profilePictureContain.add(profilePicture);
 	fbLogin.add(fbLoginButton);
 	columnCheckIn.add(columnCheckInImage);

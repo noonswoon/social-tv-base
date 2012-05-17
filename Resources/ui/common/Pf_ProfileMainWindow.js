@@ -20,15 +20,10 @@ function ProfileMainWindow() {
 				scrollable: false,
 			});
 		var header = Ti.UI.createTableViewSection();
-		var profileHeader = new ProfileHeader();
+		var profileHeader = new ProfileHeader(self);
 		var detail = new Detail();
 		var UserProfile=[];
-//add focus eventListener
-		self.addEventListener('focus',function(){
-			
-		});
 
-		
 		headerView.add(profileHeader);
 		
 		header.headerView = headerView;

@@ -123,6 +123,12 @@ function CommentWindow(_topicId) {
 		Ti.API.info("new vote id: "+newVote.id+", voteScore: "+newVote.rating);	
 		Comment.commentModel_updateACSObjectIdField(newVote);
 	}
+	
+	function addNewCommentTableViewRowCallback(e) {
+		var tableViewRowDetail = e.commentDetailForNewTableViewRow;
+		var commentRow = new CommentReplyTableViewRow(tableViewRowDetail,tableViewRowDetail.commentLevel);
+		commentsTable.insertRowAfter(tableViewRowDetail.rowIndex,commentRow);
+	}
 
 	//ADD EVENT LISTENERS
 	commentHeader.replyTextField.addEventListener('return', function(e) {
@@ -133,10 +139,10 @@ function CommentWindow(_topicId) {
 	commentsTable.addEventListener('click', function(e) {
 		if(e.index == 0) return;
 		if(commentsTable.selectedToCommentRow != null)
-			commentsTable.selectedToCommentRow._hideToolbar();	
+			commentsTable.selectedToCommentRow._hideToolbar(e.index);	
 	
 		commentsTable.selectedToCommentRow = e.row;
-		commentsTable.selectedToCommentRow._showToolbar();
+		commentsTable.selectedToCommentRow._showToolbar(e.index);
 	});
 
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);
@@ -145,6 +151,7 @@ function CommentWindow(_topicId) {
 	Ti.App.addEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
 	Ti.App.addEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
 	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
+	Ti.App.addEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
 	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);

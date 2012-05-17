@@ -12,6 +12,8 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	
+	row.index = -1;
+	
 	var nestedOffset = _level * 10 + 5;
 	var rating = _comment.rating;
 	var ratingStr = '';
@@ -137,22 +139,44 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	replyToolbar.add(replyButton);
 	
 	// CLASS METHODS GET&SET
-	row._hideToolbar = function() {
+	row._hideToolbar = function(rowIndex) {
+		row.index = rowIndex;
 		if (replyToolbar.visible == false) return;
 		replyToolbar.visible = false;
 		row.height -= replyToolbar.height;
+		
 	};
 	
-	row._showToolbar = function() {
+	row._showToolbar = function(rowIndex) {
+		row.index = rowIndex;
 		if (replyToolbar.visible == true) return;
 		replyToolbar.visible = true;
-		
 		row.height += replyToolbar.height;
 	};
 		
 	replyButton.addEventListener('click',function() {
 		//insert to db-->update UI-->then call acs to save data -->get callback then update the acs_object_id field
 		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,replyTextField.value,0,acs.getUserLoggedIn().username,_comment.acsObjectId,0); 
+		
+		//add tableviewrow to the table manually, rather than calling reset
+		var commentDetailForNewTableViewRow = {
+			title: replyTextField.value,
+			commentLevel: _level+1,
+			rowIndex: row.index,  //will insert the new comment after the rowIndex row
+			id: newId,
+			acsObjectId: 0, //need to be later updated
+			topicId: _comment.topicId,
+			content: replyTextField.value,
+			rating: 0,
+			username: acs.getUserLoggedIn().username,
+			responseToObjectId: _comment.acsObjectId,
+			isAVote: 0,
+			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
+		}
+		
+		//eventlistener of insertingCommentTableViewRow is in Mb_CommentWindow file, it will insert the tableviewrow
+		Ti.App.fireEvent('insertingCommentTableViewRow',{commentDetailForNewTableViewRow: commentDetailForNewTableViewRow});
+		
 		
 		//The fn fires a commentOfCommentCreatedACS event when done,
 		// the listener for the event is in Mb_CommentWindow.js file...add newId param
@@ -161,8 +185,18 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	
 	upButton.addEventListener('click', function() {
 		//need to check if alreaady voted
-		if(Comment.commentModel_canUserVote(_comment.id,acs.getUserLoggedIn().username)) {		
+		if(Comment.commentModel_canUserVote(_comment.acsObjectId,acs.getUserLoggedIn().username)) {		
 			Ti.API.info("upvote: "+_comment.id);
+			
+			//updating the rating manually rather than calling setData for the entire table
+			rating = rating + 1;
+			if(rating > 0) {
+				ratingStr = '+'+rating;
+			} else if(rating < 0) {
+				ratingStr = rating;
+			}
+			ratingLabel.text = ratingStr;
+			
 			//The fn fires a voteOfCommentCreatedACS event when done,
 			// the listener for the event is in Mb_CommentWindow.js file		
 			var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,'m',1,acs.getUserLoggedIn().username,_comment.acsObjectId,1); 
@@ -174,7 +208,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	
 	downButton.addEventListener('click', function() {
 		//need to check if alreaady voted
-		if(Comment.commentModel_canUserVote(_comment.id,acs.getUserLoggedIn().username)) {		
+		if(Comment.commentModel_canUserVote(_comment.acsObjectId,acs.getUserLoggedIn().username)) {		
 			Ti.API.info("downvote: "+_comment.id);
 			//The fn fires a voteOfCommentCreatedACS event when done,
 			// the listener for the event is in Mb_CommentWindow.js file		

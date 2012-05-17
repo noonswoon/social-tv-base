@@ -37,6 +37,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 			            	rating: review.rating,
 			            	user:review.user,
 			            	response_to_object_id: review.custom_fields.response_to_object_id,
+			            	is_a_vote: review.custom_fields.is_a_vote,
 			            	updated_at: review.updated_at
 			           	};
 			           	commentsInThisTopic.push(curComment);

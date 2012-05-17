@@ -66,7 +66,9 @@ exports.commentModel_addCommentOrRating = function(_topicId, _content,_rating,_u
 	result.close();
 	db.close();
 	//fire message to let others know that database has changed
-	Ti.App.fireEvent("commentsDbUpdated");
+	
+	//try to not fire an auto update the UI
+	//Ti.App.fireEvent("commentsDbUpdated");
 	return newId;
 };
 

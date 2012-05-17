@@ -57,6 +57,8 @@ exports.checkins_count = function(_user){
 		return checkins;
 };
 
+// 'select count(id) as user_checkin_count where username="titaniummick"'
+
 exports.checkin_create = function(_checkinsCollection){
 		Ti.API.info('checkin_create');
 		var db = Ti.Database.open('Chatterbox'); 

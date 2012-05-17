@@ -19,6 +19,7 @@ Ch3Window = function (){
 				
 	var allprograms = TVProgram.TVProgramModel_fetchPrograms(); 
 	var ch3 = [];
+	var ch5 = [];
 	for(var i=0;i<allprograms.length;i++){
 		
 		var program = allprograms[i];
@@ -26,8 +27,13 @@ Ch3Window = function (){
 			var channel3Row = new ChannelTableViewRow(program);
 			ch3.push(channel3Row);
 		}
+		if(program.channel_id === '5'){
+			var channel5Row = new ChannelTableViewRow(program);
+			ch5.push(channel5Row);
+		}
 	}
 	ch3TableView.setData(ch3);
+	ch3TableView.setData(ch5);
 	self.add(ch3TableView);
 	
 	return self;

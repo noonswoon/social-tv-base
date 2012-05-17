@@ -1,5 +1,7 @@
 DiscoveryTableViewRow = function(_curTVProgram){
 	
+	var TVProgram = require('model/tvprogram');
+	
 		var row = Ti.UI.createTableViewRow({
 			height: 100,
 			backgroundGradient: {
@@ -57,6 +59,13 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		row.add(programNumCheckin);
 
 		row.tvprogram = _curTVProgram;
+			
+		Ti.App.addEventListener('updateNumCheckinAtDiscovery'+_curTVProgram.id,function(e){
+			_curTVProgram.number_checkins = _curTVProgram.number_checkins + e.numCheckin;
+			row.tvprogram = _curTVProgram;  //need to reset to make it update the row.tvprogram
+			programNumCheckin.text = _curTVProgram.number_checkins;
+		});	
+
 		
 		return row;
 }

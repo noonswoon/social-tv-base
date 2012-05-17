@@ -45,11 +45,7 @@ exports.pointACS_createPoint = function(_userID,_point,_earnedby,_objID){
 	}, function (e) {
 	    if (e.success) {
 	        var curPoint = e.Points[0];
-	        alert('Success:\\n' +
-	            'id: ' + curPoint.user.id + '\\n' +
-	            'point: ' + curPoint.point + '\\n' +
-	            'earned_by: ' + curPoint.earned_by +
-	             'checkinID: ' + curPoint.object);
+	        Ti.API.info('pointsCreated Success:');
 	        Ti.App.fireEvent('createPointDB',{fetchedPoint:curPoint});
 	    } else {
 	        alert('Error:\\n' +

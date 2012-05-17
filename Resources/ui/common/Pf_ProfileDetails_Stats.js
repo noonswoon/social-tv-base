@@ -52,7 +52,8 @@ var ProfileStatsView = function(){
 		};	
 		
 		Ti.App.addEventListener('updateNewPoint',function(){
-			alert('updateNewPoint');
+			//TODO: สงสัยว่าน่าจะเกิดการ  call event ซ้ำ recheck again
+			//alert('updateNewPoint');
 			Ti.App.fireEvent('pointsDbUpdated');
 		});
 		

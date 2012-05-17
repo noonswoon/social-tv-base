@@ -11,7 +11,8 @@ function DiscoveryMainWindow(){
 	var numProgramsToLoadCheckins = 0;
 	
 	function isEverythingReady() {
-		Ti.API.info("numProgramsToLoadCheckins value: "+numProgramsToLoadCheckins);
+		//Ti.API.info("numProgramsToLoadCheckins value: "+numProgramsToLoadCheckins);
+	//	if(areAllProgramsTitlesLoaded) {
 		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
 			Ti.App.fireEvent("showDiscoveryPage");
 		}
@@ -105,7 +106,7 @@ function DiscoveryMainWindow(){
 		}
 		programListTable.setData(viewRowsData);
 	});
-	
+
 	programListTable.addEventListener('click',function(e){
 
 		Ti.API.info(e.index+',name: '+e.row.tvprogram.name);
@@ -122,6 +123,7 @@ function DiscoveryMainWindow(){
 			programNumCheckin: e.row.tvprogram.number_checkins
 		}));
 	});
+	
 
 	self.add(programListTable);
 	self.hideNavBar();

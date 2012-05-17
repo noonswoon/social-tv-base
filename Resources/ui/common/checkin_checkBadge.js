@@ -30,15 +30,15 @@ var checkinBadgeView = function(){
 	});
 	
 	checkinButton.addEventListener('click',function(){
-		alert('Checking in..');
+		//alert('Checking in..');
 		CheckinACS.checkinACS_createCheckin(eventID);
 	});
 	
 	Ti.App.addEventListener('createCheckinDB', createCheckinDBCallBack);
 	
 	function createCheckinDBCallBack(e){
-	Ti.API.info('createCheckinDBCallBack');
-	CheckinModel.checkin_create(e.fetchedACheckin);
+		Ti.API.info('createCheckinDBCallBack');
+		CheckinModel.checkin_create(e.fetchedACheckin);
 	};	
 		
 	Ti.App.addEventListener('oneCheckinUpdated', function(_checkinID){

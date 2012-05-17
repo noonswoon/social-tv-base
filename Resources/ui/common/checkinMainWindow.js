@@ -1,6 +1,14 @@
 Checkin = function (_datafromrow){
 	
 	var CheckinACS = require('acs/checkinACS');
+	var CheckinModel = require('model/checkin');
+	var PointACS = require('acs/pointACS');
+	var PointModel = require('model/point');
+	var BadgeCondition = require('helpers/badgeCondition');
+	var TVProgram = require('model/tvprogram');
+	var checkinPoint = 10;
+	
+	var userID = '4fa17dd70020440df700950c';
 
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
@@ -83,28 +91,29 @@ Checkin = function (_datafromrow){
 	});
 	self.add(checkinButton);
 	
-	
-	
 	checkinButton.addEventListener('click',function(){
-		// var now_full = moment().format('YYYY-MM-DD, HH:mm:ss');
-		// var now_date = moment().format('YYYY-MM-DD');
-		// var now_time = moment().format('HH:mm:ss');
-		// alert('NOW: '+now_date);
-// 		
-		// var starttime_full = moment(_datafromrow.programStarttime, "YYYY-MM-DDTHH:mm:ss z");
-		// var starttime_date = starttime_full.format('YYYY-MM-DD');
-		// var starttime_time = starttime_full.format('HH:mm:ss');
-// 		
-		// alert('Start: '+starttime_date);
- 		
-		// var endtime_full = moment(_datafromrow.programEndtime, "YYYY-MM-DDTHH:mm:ss z");
-		// var endtime_date = endtime_full.format('YYYY-MM-DD');
-		// var endtime_time = endtime_full.format('HH:mm:ss');
-// 		
-		// alert('End time'+endtime_time);
-// 		
-		// var pressedCheckin = CheckinACS.
+		//alert('Checking in..');
+		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
+	});
 	
+	function oneCheckinUpdatedCallback(_checkinID) {
+		//Ti.API.info('Your checkin has been update to your database: '+ CheckinModel.checkins_count(userID));
+		
+		PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
+		// checkinCount.text = CheckinModel.checkins_count(userID);
+		BadgeCondition.badgeCondition_check();
+		
+		var num = TVProgram.TVProgramModel_countCheckins(_datafromrow.programId);
+		//alert("firing event: updateNumCheckinAtDiscovery"+_datafromrow.programId);
+		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_datafromrow.programId,{numCheckin:num});
+		Ti.App.fireEvent('updateHeaderCheckin');
+	}
+	
+	Ti.App.addEventListener('oneCheckinUpdated',oneCheckinUpdatedCallback);
+
+	
+	self.addEventListener("close", function(e) {
+		Ti.App.removeEventListener('oneCheckinUpdated',oneCheckinUpdatedCallback);
 	});
 
 	self.showNavBar();

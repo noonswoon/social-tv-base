@@ -45,10 +45,10 @@ function CommentWindow(_topicId) {
 	function showCommentTableViewRow(_commentLevel,_commentRowsData,_commentsArray,_targetedCommentId) {
 		for(var i=0;i<_commentsArray.length;i++) {
 			var curComment = _commentsArray[i];
-			if(_targetedCommentId === curComment.response_to_object_id) {
+			if(_targetedCommentId === curComment.responseToObjectId) {
 				var commentRow = new CommentReplyTableViewRow(curComment,_commentLevel);
 				_commentRowsData.push(commentRow);
-				showCommentTableViewRow(_commentLevel+1,_commentRowsData,_commentsArray,curComment.id);
+				showCommentTableViewRow(_commentLevel+1,_commentRowsData,_commentsArray,curComment.acsObjectId);
 			}
 		}
 	}
@@ -87,7 +87,7 @@ function CommentWindow(_topicId) {
 		//use recursion instead
 		for (var i=0;i<allComments.length;i++) {
 			var curComment = allComments[i];
-			if(curComment.is_a_vote === 0) {
+			if(curComment.rating === 0) { //if rating is = 0, this is a vote record
 				commentsOfTopic.push(curComment);
 			} else {
 				votesOfComments.push(curComment);
@@ -117,7 +117,7 @@ function CommentWindow(_topicId) {
 	function commentOfCommentCreatedACSCallback(e) {
 		var newCommentOfComment = e.newCommentOfComment;	
 		Ti.API.info("new comment's comment id: "+newCommentOfComment.id);
-		Comment.commentModel_addCommentOrRating(newCommentOfComment);
+		Comment.commentModel_updateACSObjectIdField(newCommentOfComment);
 	}
 	
 	function voteOfCommentCreatedACSCallback(e) {

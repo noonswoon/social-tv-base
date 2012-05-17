@@ -37,7 +37,6 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 			            	rating: review.rating,
 			            	user:review.user,
 			            	response_to_object_id: review.custom_fields.response_to_object_id,
-			            	is_a_vote: review.custom_fields.is_a_vote,
 			            	updated_at: review.updated_at
 			           	};
 			           	commentsInThisTopic.push(curComment);
@@ -79,7 +78,6 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 	            	rating: review.rating,
 	            	user:review.user,
 	            	response_to_object_id: review.custom_fields.response_to_object_id,
-	            	is_a_vote: review.custom_fields.is_a_vote,
 	            	updated_at: review.updated_at
 	            };
 	            
@@ -107,7 +105,7 @@ exports.commentACS_createCommentOfTopic = function(_comment,_topicId) {
 	    post_id: _topicId, //need to remain as 'post_id' since it is connection to ACS Posts API
 	    rating: 0,
 	    content: _comment, 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId, "is_a_vote":0},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -121,12 +119,12 @@ exports.commentACS_createCommentOfTopic = function(_comment,_topicId) {
 	});
 }
 
-exports.commentACS_createCommentOfComment = function(_comment,_commentId,_topicId) {
+exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentId,_topicId) {
 	Cloud.Reviews.create({
 	    review_object_id: _commentId,
 	    rating: 0,
 	    content: _comment, 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "is_a_vote":0},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -145,7 +143,7 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_commentId,_topicId
 	    review_object_id: _commentId,
 	    rating: _voteScore,
 	    content: "m", 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "is_a_vote":1},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {

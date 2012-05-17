@@ -40,7 +40,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	
-	var dm = moment(_comment.updated_at, "YYYY-MM-DDTHH:mm:ss");
+	var dm = moment(_comment.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 	var submitDateStr = since(dm);
 		
 	var commentDetail = Ti.UI.createLabel({
@@ -151,9 +151,12 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	};
 		
 	replyButton.addEventListener('click',function() {
+		//insert to db-->update UI-->then call acs to save data -->get callback then update the acs_object_id field
+		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,replyTextField.value,0,'titaniummick',_comment.acsObjectId); 
+		
 		//The fn fires a commentOfCommentCreatedACS event when done,
-		// the listener for the event is in Mb_CommentWindow.js file
-		CommentACS.commentACS_createCommentOfComment(replyTextField.value,_comment.id,_comment.topic_id);
+		// the listener for the event is in Mb_CommentWindow.js file...add newId param
+		CommentACS.commentACS_createCommentOfComment(replyTextField.value,newId,_comment.acsObjectId,_comment.topicId);
 	});
 	
 	upButton.addEventListener('click', function() {

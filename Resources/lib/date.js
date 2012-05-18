@@ -19,7 +19,7 @@ function since(dateMomentObj) {
 	for (var i=0;i<blocks.length;i++) {
 		unit = parseInt(unit / blocks[i].divisor);
 		if (unit < blocks[i].max) {
-			if(unit == 0) return 'just now';
+			if(unit <= 0) return 'just now';
 			else return unit + ' ' + pluralize(blocks[i].name,unit) + ' ago';
 		}
 	}

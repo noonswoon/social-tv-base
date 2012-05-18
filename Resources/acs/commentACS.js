@@ -100,19 +100,19 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 	});
 }
 	
-exports.commentACS_createCommentOfTopic = function(_comment,_topicId) {
+exports.commentACS_createCommentOfTopic = function(_comment,_localId,_topicId) {
 	//connecting with Cloud
 	Cloud.Reviews.create({
 	    post_id: _topicId, //need to remain as 'post_id' since it is connection to ACS Posts API
 	    rating: 0,
 	    content: _comment, 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId, "local_id":_localId, "is_a_vote":0},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
 	        Ti.API.info('Commenting Success: id ' + review.id);
-	        Ti.App.fireEvent("commentCreatedACS",{newComment:review});
+	        Ti.App.fireEvent("commentCreatedACS",{newComment:review});	        
 	    } else {
 	        Ti.API.info('Comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));

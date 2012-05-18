@@ -1,4 +1,4 @@
-Channel3TableViewRow = function(_program){
+ChannelTableViewRow = function(_program){
 	
 	var row = Ti.UI.createTableViewRow({
 		height: 100
@@ -42,4 +42,4 @@ Channel3TableViewRow = function(_program){
 	return row;
 	
 }
-module.exports = Channel3TableViewRow;
+module.exports = ChannelTableViewRow;

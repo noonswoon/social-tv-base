@@ -1,11 +1,6 @@
 function GuideMainWindow(){
 	
-	var Ch3Window = require('ui/common/Channel3MainWindow');
-	var Ch5Window = require('ui/common/Channel5MainWindow');
-	var Ch7Window = require('ui/common/Channel7MainWindow');
-	var Ch9Window = require('ui/common/Channel9MainWindow');
-	var Ch11Window = require('ui/common/Channel11MainWindow');
-	var ChThaipbsWindow = require('ui/common/ChannelThaipbsMainWindow');
+	var ChannelMainWindow = require('ui/common/ChannelMainWindow');
 	
 	var channel = [];
 	
@@ -187,31 +182,36 @@ function GuideMainWindow(){
 	});
 	
 	channelTableView.addEventListener('click',function(e){
-		Ti.API.info('Index is '+e.index);
-
-		if(e.index === 0){
-			var ch3 = new Ch3Window();
-			//self.containingTab.open(new Ch3Window);
+		// var channelProgram = new ChannelMainWindow();
+		// self.add(channelProgram);
+		// self.containingTab.open(new ChannelMainWindow);
+		
+		var index = e.index;
+		
+		if(index === 0){
+			alert('Index is '+index);
+			var ch3 = new ChannelMainWindow(index);
 			self.add(ch3);
 		}
-		if(e.index === 1){
-			var ch5 = new Ch5Window();
+		if(index === 1){
+			alert('Index is '+index);
+			var ch5 = new ChannelMainWindow(index);
 			self.add(ch5);
 		}
-		if(e.index === 2){
-			var ch7 = new Ch7Window();
+		if(index === 2){
+			var ch7 = new ChannelMainWindow(index);
 			self.add(ch7);
 		}
-		if(e.index === 3){
-			var ch9 = new Ch9Window();
+		if(index === 3){
+			var ch9 = new ChannelMainWindow(index);
 			self.add(ch9);
 		}
-		if(e.index === 4){
-			var ch11 = new Ch11Window();
+		if(index === 4){
+			var ch11 = new ChannelMainWindow(index);
 			self.add(ch11);
 		}
-		if(e.index === 5){
-			var chThaipbs = new ChThaipbsWindow();
+		if(index === 5){
+			var chThaipbs = new ChannelMainWindow(index);
 			self.add(chThaipbs);
 		}		
 	});

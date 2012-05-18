@@ -47,7 +47,7 @@ function DiscoveryMainWindow(){
 		}
 		if(e.index === 1){
 			var guide = new GuideMainWindow();
-			// guide.containingTab = self.containingTab;
+			guide.containingTab = self.containingTab;
 			self.add(guide);
 		}
 		if(e.index === 2){

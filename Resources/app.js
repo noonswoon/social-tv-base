@@ -9,11 +9,12 @@ var moment = require('/lib/moment');
 //include xxx models here
 
 //GLOBAL VARIABLES DECARATION
+Titanium.Facebook.appid = "197422093706392";
+Titanium.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
+
+var CACHE_TIMEOUT_IN_MINUTES = 30; 
 var acs = require('lib/acs');
 var Cloud = require('ti.cloud');
-Titanium.Facebook.appid = "197422093706392";
-Titanium.Facebook.permissions = ['publish_stream', 'read_stream', 'email'];
-
 
 //bootstrap and check dependencies
 if (Ti.version < 1.8 ) {

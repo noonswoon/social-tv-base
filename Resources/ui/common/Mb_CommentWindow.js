@@ -5,6 +5,7 @@ function CommentWindow(_topicId) {
 	var CommentACS = require('acs/commentACS');
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
+	var CacheHelper = require('helpers/cacheHelper');
 	
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
@@ -23,7 +24,7 @@ function CommentWindow(_topicId) {
 		right: 0,
 		bottom: 0,
 		scrollable: true,
-		height:'480',
+		height:'auto',
 		selectedToCommentRow: null
 	});
 	
@@ -38,11 +39,24 @@ function CommentWindow(_topicId) {
 	self.setToolbar([toolActInd],{animated:true});
 	self.add(commentsTable);
 	
+	//HELPER FUNCTIONS
+	
+	//recursive function
+	function showCommentTableViewRow(_commentLevel,_commentRowsData,_commentsArray,_targetedCommentId) {
+		for(var i=0;i<_commentsArray.length;i++) {
+			var curComment = _commentsArray[i];
+			if(_targetedCommentId === curComment.response_to_object_id) {
+				var commentRow = new CommentReplyTableViewRow(curComment,_commentLevel);
+				_commentRowsData.push(commentRow);
+				showCommentTableViewRow(_commentLevel+1,_commentRowsData,_commentsArray,curComment.id);
+			}
+		}
+	}
 	//CALLBACK FUNCTIONS
 	function commentsLoadedCompleteCallback(e) {
 		//add to db
 		//Ti.API.info(e.fetchedComments);
-		Comment.commentModel_updateCommentsFromACS(e.fetchedComments,_topicId); 
+		Comment.commentModel_updateCommentsOnTopicFromACS(e.fetchedComments,_topicId); 
 	}
 	
 	function commentsDbUpdatedCallback(e) {
@@ -60,30 +74,32 @@ function CommentWindow(_topicId) {
 		//so --> create moment object with datestring from ACS (having timezone)
 		//then use moment to output a format that javascript Date object can understand
 		//namely, the 'MMM D, YYYY hh:mm:ss' format
-		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss z");
-		
-		var dateObjFormat = dm.format('YYYY-MM-DD, hh:mm:ss:A');
-		 alert('Update at:'+dateObjFormat);
+		var dm = moment(curTopic.updated_at, "YYYY-MM-DDTHH:mm:ss");
+		var submitDateStr = since(dm);
+		commentHeader.dateLabel.text = "Submitted "+submitDateStr+" by "+curTopic.username;
 
-		var now = moment().format('YYYY-MM-DD, hh:mm:ss:A');
-		alert('NOW:'+now);
-		
-		var hoursDiff = moment().diff(dm,'hours');
-		alert('diff in hours: '+hoursDiff);
-
-			
-		var submitDateObj = new Date(dateObjFormat);
-		commentHeader.dateLabel.text = "Submitted "+since(submitDateObj)+" by "+curTopic.username;
-
-		var commentRowsData = [commentHeader];
-		
 		//retrieve from db
-		var allComments = Comment.commentModel_fetchFromTopicId(_topicId);
+		var allComments = Comment.commentModel_fetchCommentsFromTopicId(_topicId);
+		var commentsOfTopic = [];
+		var votesOfComments = [];
+		
+		
+		//use recursion instead
 		for (var i=0;i<allComments.length;i++) {
 			var curComment = allComments[i];
-			var row = new CommentReplyTableViewRow(curComment);
-			commentRowsData.push(row);
+			if(curComment.is_a_vote === 0) {
+				commentsOfTopic.push(curComment);
+			} else {
+				votesOfComments.push(curComment);
+			}
 		}
+		Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
+		Ti.API.info('num votesOfComments: '+votesOfComments.length);
+		
+		var commentRowsData = [commentHeader];
+		
+		//populate commentRowsData recursively from the below function
+		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
 	
 		//LOGIC/Controllers 		
@@ -95,9 +111,21 @@ function CommentWindow(_topicId) {
 	function commentCreatedACSCallback(e) {
 		commentHeader.replyTextField.value = "";
 		var newComment = e.newComment;	
-		Comment.commentModel_add(newComment);
+		Comment.commentModel_addCommentOrRating(newComment);
 	}
 	
+	function commentOfCommentCreatedACSCallback(e) {
+		var newCommentOfComment = e.newCommentOfComment;	
+		Ti.API.info("new comment's comment id: "+newCommentOfComment.id);
+		Comment.commentModel_addCommentOrRating(newCommentOfComment);
+	}
+	
+	function voteOfCommentCreatedACSCallback(e) {
+		var newVote = e.newVote;
+		Ti.API.info("new vote id: "+newVote.id+", voteScore: "+newVote.rating);	
+		Comment.commentModel_addCommentOrRating(newVote);
+	}
+
 	//ADD EVENT LISTENERS
 	commentHeader.replyTextField.addEventListener('return', function(e) {
 		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,_topicId);
@@ -105,6 +133,7 @@ function CommentWindow(_topicId) {
 	});
 
 	commentsTable.addEventListener('click', function(e) {
+		if(e.index == 0) return;
 		if(commentsTable.selectedToCommentRow != null)
 			commentsTable.selectedToCommentRow._hideToolbar();	
 	
@@ -114,24 +143,30 @@ function CommentWindow(_topicId) {
 		//reset the data to make the UI transition looks smoother
 		commentsTable.setData(commentsTable.data);
 	});
-	
-	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);
-	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
+
 	Ti.App.addEventListener("commentsLoadedComplete", commentsLoadedCompleteCallback);
 
+	Ti.App.addEventListener('commentCreatedACS', commentCreatedACSCallback);	
+	Ti.App.addEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
+	Ti.App.addEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
+	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
+	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);
 		Ti.App.removeEventListener("commentCreatedACS",commentCreatedACSCallback);
+		Ti.App.removeEventListener('commentOfCommentCreatedACS', commentOfCommentCreatedACSCallback);
+		Ti.App.removeEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
+		Ti.App.removeEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	});
 	
 	//PAGE LOGIC/CONTROLLER
 	toolActInd.show();
 
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
-	CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
-	CommentACS.commentACS_getAllVotesOfUser('4fa17dd70020440df700950c',_topicId);
+	
+	//fetching data or get data through caching mechanism
+	CacheHelper.fetchACSDataOrCache('commentsOfTopic'+_topicId, CommentACS.commentACS_fetchAllCommentsOfPostId, _topicId, 'commentsDbUpdated');
+	
 	return self;
 }
-
-
 module.exports = CommentWindow;

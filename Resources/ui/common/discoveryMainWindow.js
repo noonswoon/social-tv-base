@@ -5,6 +5,7 @@ function DiscoveryMainWindow(){
 	var DiscoveryTableViewRow = require('ui/common/discoveryTableViewRow');
 	var CheckinACS = require('acs/checkinACS');
 	var GuideMainWindow = require('ui/common/guideMainWindow');
+	var CacheHelper = require('helpers/cacheHelper');
 	
 	var areAllProgramsTitlesLoaded = false; 
 	var numProgramsToLoadCheckins = 0;
@@ -26,8 +27,12 @@ function DiscoveryMainWindow(){
 		backgroundColor: 'black'
 	});
 	
-
-	var tabbar = Ti.UI.iOS.createTabbedBar({
+	
+	var programListTable = Ti.UI.createTableView({
+		top: 50
+	});
+	
+		var tabbar = Ti.UI.iOS.createTabbedBar({
 		labels: ['Popular','Guide','Friends'],
 		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		height:35,
@@ -39,6 +44,14 @@ function DiscoveryMainWindow(){
 		if(e.index === 0){
 			alert('Popular');
 		}
+		if(e.index === 1){
+			var guide = new GuideMainWindow();
+			// guide.containingTab = self.containingTab;
+			self.add(guide);
+		}
+		if(e.index === 2){
+			alert('Friends');
+		}
 	});
 	
 	var tabHeader = Ti.UI.createView({
@@ -48,10 +61,6 @@ function DiscoveryMainWindow(){
 	});
 	tabHeader.add(tabbar);
 	self.add(tabHeader);
-	
-	var programListTable = Ti.UI.createTableView({
-		top: 50
-	});
 	
 	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
 		var targetedProgramId = e.targetedProgramId; 
@@ -101,7 +110,6 @@ function DiscoveryMainWindow(){
 
 		Ti.API.info(e.index+',name: '+e.row.tvprogram.name);
 
-		//var dataFromRow = new CheckinMainWindow()
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');;	
 		self.containingTab.open(new CheckinMainWindow({
 			programId: e.row.tvprogram.id,
@@ -118,7 +126,8 @@ function DiscoveryMainWindow(){
 	self.add(programListTable);
 	self.hideNavBar();
 	
-	TVProgramACS.tvprogramACS_fetchAllProgram();
+	//TVProgramACS.tvprogramACS_fetchAllProgram(); -- using caching method instead
+	CacheHelper.fetchACSDataOrCache('discoverypage', TVProgramACS.tvprogramACS_fetchAllProgram, '', 'tvprogramsTitlesLoaded');
 	
 	return self;
 }

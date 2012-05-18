@@ -1,4 +1,4 @@
-MessageboardTableViewRow = function() {
+MessageboardTableViewRow = function(_topic) {
 	//UI STUFF
 	var row = Ti.UI.createTableViewRow({
 		height: 40,
@@ -7,7 +7,7 @@ MessageboardTableViewRow = function() {
 	});
 	
 	row.topicLabel = Ti.UI.createLabel({
-		text: '-',
+		text: _topic.title,
 		top: 5,
 		left: 5,
 		width: 'auto',
@@ -19,10 +19,7 @@ MessageboardTableViewRow = function() {
 	row.add(row.topicLabel);
 	
 	//MISCELLENEOUS
-	row._setTopic = function(topic) {
-		row.topicLabel.text = topic.title;
-		row.topic = topic;
-	};
+	row.topic = _topic;
 	
 	return row;
 }

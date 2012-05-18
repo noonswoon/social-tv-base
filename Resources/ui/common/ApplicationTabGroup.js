@@ -10,12 +10,12 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');
+	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');	
 	
 	var chatwin = new ChatMainWindow();
 	var messageboardwin = new ChatMainWindow();//new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
-	var productwin = new ProductMainWindow();
+	//var productwin = new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();
 	var discoveryMainWin = new ChatMainWindow();//new DiscoveryMainWindow();
 
@@ -40,12 +40,13 @@ function ApplicationTabGroup() {
 	});
 	loginwin.containingTab = loginTab;
 	
-	var productTab = Ti.UI.createTab({
+	/*var productTab = Ti.UI.createTab({
 		icon: '/images/captured.png',
 		title: 'Product',
 		window: productwin
 	});
 	productwin.containingTab = productTab;
+	*/
 	
 	 var profileTab = Ti.UI.createTab({
 		 icon: '/images/fugitives.png',
@@ -66,12 +67,23 @@ function ApplicationTabGroup() {
     self.addTab(discoveryTab);
     self.addTab(profileTab);
    	self.addTab(loginTab);
-    self.addTab(productTab);
+    //self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[2]);
 
-    // open tab group
+		//coming to this page, should already loggin
+	
+	//checking the current login and setup the currentLoggedIn user to query anywhere
+	Cloud.Users.showMe(function (e) {        
+		if (e.success) {
+			acs.setUserLoggedIn(e.users[0]);
+			acs.setLoggedInStatus(true);
+	    } else {
+   			self.setActiveTab(self.tabs[3]);
+   		}
+    });
+   
     return self;
 };
 

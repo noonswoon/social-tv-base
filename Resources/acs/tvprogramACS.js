@@ -1,4 +1,4 @@
-exports.tvprogramACS_fetchAllProgram = function(id) {
+exports.tvprogramACS_fetchAllProgram = function() {
 	var programs = [];
 	var now_full = moment().format('YYYY-MM-DD, HH:mm:ss:Z');
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr'+
@@ -15,7 +15,8 @@ exports.tvprogramACS_fetchAllProgram = function(id) {
 	            	name: program.name,
 	            	photo: 'program.photo.urls.original',
 	            	start_time: program.start_time,
-	            	recurring_until: program.recurring_until
+	            	recurring_until: program.recurring_until,
+	            	channel_id: program.custom_fields.channel_id
 	            }
 				programs.push(curProgram);
 			}

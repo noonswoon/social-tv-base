@@ -53,6 +53,7 @@ exports.checkins_count = function(_user){
 		var result = db.execute('SELECT COUNT(?) as checkins_count from checkins',_user);
 		var checkins = Number(result.fieldByName('checkins_count'));
 		db.close();
+
 		return checkins;
 };
 

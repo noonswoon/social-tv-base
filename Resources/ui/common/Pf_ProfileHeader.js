@@ -11,7 +11,8 @@ var ProfileHeaderView = function(_parentWindow){
 		var PointModel = require('model/point');	
 		var LevelModel = require('model/level');
 		var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
-		
+		var CacheHelper = require('helpers/cacheHelper');
+					
 //CHECK IN//////////////////////////////////////////////////////////////////////
 		function checkinDbLoadedCallBack(e){
 			Ti.API.info('checkinDbLoadedCallBack');					
@@ -21,10 +22,13 @@ var ProfileHeaderView = function(_parentWindow){
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
 			columnCheckInCount.text = CheckinModel.checkins_count(userID);
 		});
-		CheckinACS.checkinACS_fetchedCheckIn(userID);		
 		Ti.App.addEventListener('updateHeaderCheckin',function(){
 			columnCheckInCount.text=CheckinModel.checkins_count(userID);
 		});
+		
+		// Using cache		
+		CacheHelper.fetchACSDataOrCache('userCheckin'+userID, CheckinACS.checkinACS_fetchedCheckIn, userID, 'checkinsDbUpdated');
+	
 		
 /////POINT ACS/////////////////////////////////////////////	
 	PointACS.pointACS_fetchedPoint(userID);

@@ -28,7 +28,7 @@ function since(dateMomentObj) {
 function convertACSTimeToLocalTime(_datetimeStr) {
 	var curCountryCode = Ti.Locale.getCurrentCountry(); 
 	var result = _datetimeStr; 
-	if(curCountryCode === "TH") {
+	if(curCountryCode === "TH" || curCountryCode === "US") {
 		var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
 		dm.add('hours',7);
 		result = dm.format("YYYY-MM-DDTHH:mm:ss");
@@ -41,7 +41,7 @@ function convertACSTimeToLocalTime(_datetimeStr) {
 function convertLocalTimeToACSTime(_datetimeStr) {
 	var curCountryCode = Ti.Locale.getCurrentCountry(); 
 	var result = _datetimeStr; 
-	if(curCountryCode === "TH") {
+	if(curCountryCode === "TH" || curCountryCode === "US") {
 		var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
 		dm.subtract('hours',7);
 		result = dm.format("YYYY-MM-DDTHH:mm:ss");

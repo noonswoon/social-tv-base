@@ -116,22 +116,23 @@ function CommentWindow(_topicId) {
 		var newCommentOfComment = e.newCommentOfComment;	
 		var rowIndexToUpdateACSObjectId = e.rowIndexToUpdateACSObjectId;
 		var commentLevel = e.commentLevel;
-	/* NOT DONE HERE...
+	/* NOT DONE HERE...*/
 		var commentForTableViewRow = {
-			title: newCommentOfComment.content,
+			title: 'mickeymouse',
 			commentLevel: commentLevel,
 			acsObjectId: newCommentOfComment.id, //just to update this field!
-			topicId: newCommentOfComment.topicId,
+			topicId: newCommentOfComment.custom_fields.topic_id,
 			content: newCommentOfComment.content,
 			rating: 0,
-			username: acs.getUserLoggedIn().username,
-			responseToObjectId: _comment.acsObjectId,
+			username: newCommentOfComment.user.username,
+			responseToObjectId: newCommentOfComment.custom_fields.response_to_object_id,
 			isAVote: 0,
-			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
+			updatedAt: convertACSTimeToLocalTime(newCommentOfComment.updated_at)
 		}
-		//will eventually call: commentsTable.updateRow(newRow);
-	*/	
+		var updatedRow = new CommentReplyTableViewRow(commentForTableViewRow,commentLevel);
 		
+		//will eventually call: commentsTable.updateRow(newRow);
+		commentsTable.updateRow(rowIndexToUpdateACSObjectId,updatedRow);
 		Ti.API.info("new comment's comment id: "+newCommentOfComment.id);
 		//commentsTable-->how to get tableviewrow at rowIndexToUpdateACSObjectId and update the acsObjectId value?
 		Comment.commentModel_updateACSObjectIdField(newCommentOfComment);
@@ -151,6 +152,8 @@ function CommentWindow(_topicId) {
 
 	//ADD EVENT LISTENERS
 	commentHeader.replyTextField.addEventListener('return', function(e) {
+		//TODO change this to insert to the table then call acs
+		
 		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,_topicId);
 		commentHeader.replyTextField.value = "";
 	});

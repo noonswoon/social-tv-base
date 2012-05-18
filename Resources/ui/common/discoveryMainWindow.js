@@ -42,17 +42,15 @@ function DiscoveryMainWindow(){
 	self.add(tabbar);
 	
 	tabbar.addEventListener('click',function(e){
-		if(e.index === 0){
-			alert('Popular');
-		}
+		// if(e.index === 0){
+		// }
 		if(e.index === 1){
 			var guide = new GuideMainWindow();
 			guide.containingTab = self.containingTab;
 			self.add(guide);
 		}
-		if(e.index === 2){
-			alert('Friends');
-		}
+		// if(e.index === 2){
+		// }
 	});
 	
 	var tabHeader = Ti.UI.createView({
@@ -96,6 +94,7 @@ function DiscoveryMainWindow(){
 	
 	Ti.App.addEventListener('tvprogramsLoaded',tvprogramLoadedCompleteCallback);
 	
+	
 	Ti.App.addEventListener('showDiscoveryPage', function (){
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
 		var viewRowsData = [];
@@ -128,8 +127,7 @@ function DiscoveryMainWindow(){
 	self.add(programListTable);
 	self.hideNavBar();
 	
-	//TVProgramACS.tvprogramACS_fetchAllProgram(); -- using caching method instead
-	CacheHelper.fetchACSDataOrCache('discoverypage', TVProgramACS.tvprogramACS_fetchAllProgram, '', 'tvprogramsTitlesLoaded');
+	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow(); //using caching method instead
 	
 	return self;
 }

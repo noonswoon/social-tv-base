@@ -13,10 +13,10 @@ function ApplicationTabGroup() {
 	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');	
 	
 	var chatwin = new ChatMainWindow();
-	var messageboardwin = new MessageboardMainWindow(1);		
+	var messageboardwin =  new ChatMainWindow();// new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
 	//var productwin = new ProductMainWindow();
-	var profilewin = new ProfileMainWindow();
+	var profilewin =  new ChatMainWindow();// new ProfileMainWindow();
 	var discoveryMainWin = new DiscoveryMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
@@ -70,7 +70,7 @@ function ApplicationTabGroup() {
     //self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[2]);
+   	self.setActiveTab(self.tabs[1]);
 		//coming to this page, should already loggin
 	
 	//checking the current login and setup the currentLoggedIn user to query anywhere

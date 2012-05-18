@@ -9,25 +9,35 @@ function GuideMainWindow(){
 		top: 50
 	});
 	
-	for(var c=0;c<6;c++){
-		
-		var row = Ti.UI.createTableViewRow({
+	var channel3Label = Ti.UI.createLabel({
+		text: 'Channel 3',
+		color: '#420404',
+		shadowColor:'#FFFFE6',
+		shadowOffset:{x:0,y:1},
+		textAlign:'left',
+		top:20,
+		left:150,
+		width: 'auto',
+		height:'auto',
+		font:{fontWeight:'bold',fontSize:18}
+	});
+	
+	var channel3Logo = Ti.UI.createImageView({
+		image: 'images/channel/ch3.jpg',
+		top: 5,
+		left: 10,
+		bottom: 5,
+		width:125,
+		height:89
+	});
+	var ch3Row = Ti.UI.createTableViewRow({
 			height: 100,
 		});
+	ch3Row.add(channel3Logo);
+	ch3Row.add(channel3Label);
+	channel.push(ch3Row);
 		
-		var channel3Label = Ti.UI.createLabel({
-			text: 'Channel 3',
-			color: '#420404',
-			shadowColor:'#FFFFE6',
-			shadowOffset:{x:0,y:1},
-			textAlign:'left',
-			top:20,
-			left:150,
-			width: 'auto',
-			height:'auto',
-			font:{fontWeight:'bold',fontSize:18}
-		});
-		
+		//TODO: fix the alignment
 		var channel5Label = Ti.UI.createLabel({
 			text: 'Channel 5',
 			color: '#420404',
@@ -40,7 +50,21 @@ function GuideMainWindow(){
 			height:'auto',
 			font:{fontWeight:'bold',fontSize:18}
 		});
-		
+		var channel5Logo = Ti.UI.createImageView({
+			image: 'images/channel/ch5.jpg',
+			top: 5,
+			left: 10,
+			bottom: 5,
+			width:125,
+			height:89
+		});
+	var ch5Row = Ti.UI.createTableViewRow({
+			height: 100,
+		});
+	ch5Row.add(channel5Logo);
+	ch5Row.add(channel5Label);
+	channel.push(ch5Row);
+	
 		var channel7Label = Ti.UI.createLabel({
 			text: 'Channel 7',
 			color: '#420404',
@@ -53,7 +77,21 @@ function GuideMainWindow(){
 			height:'auto',
 			font:{fontWeight:'bold',fontSize:18}
 		});
-		
+		var channel7Logo = Ti.UI.createImageView({
+			image: 'images/channel/ch7.jpg',
+			top: 5,
+			left: 10,
+			bottom: 5,
+			width:125,
+			height:89
+		});
+	var ch7Row = Ti.UI.createTableViewRow({
+			height: 100,
+		});
+	ch7Row.add(channel7Logo);
+	ch7Row.add(channel7Label);
+	channel.push(ch7Row);
+			
 		var channel9Label = Ti.UI.createLabel({
 			text: 'Channel 9',
 			color: '#420404',
@@ -66,7 +104,21 @@ function GuideMainWindow(){
 			height:'auto',
 			font:{fontWeight:'bold',fontSize:18}
 		});
-		
+		var channel9Logo = Ti.UI.createImageView({
+			image: 'images/channel/ch9.jpg',
+			top: 5,
+			left: 10,
+			bottom: 5,
+			width:125,
+			height:89
+		});
+			var ch9Row = Ti.UI.createTableViewRow({
+			height: 100,
+		});
+	ch9Row.add(channel9Logo);
+	ch9Row.add(channel9Label);
+	channel.push(ch9Row);
+	
 		var channel11Label = Ti.UI.createLabel({
 			text: 'Channel 11',
 			color: '#420404',
@@ -79,8 +131,22 @@ function GuideMainWindow(){
 			height:'auto',
 			font:{fontWeight:'bold',fontSize:18}
 		});
-		
-		var channelThaipbsLabel = Ti.UI.createLabel({
+		var channel11Logo = Ti.UI.createImageView({
+			image: 'images/channel/ch11.jpg',
+			top: 5,
+			left: 10,
+			bottom: 5,
+			width:125,
+			height:89
+		});
+			var ch11Row = Ti.UI.createTableViewRow({
+			height: 100,
+		});
+	ch11Row.add(channel11Logo);
+	ch11Row.add(channel11Label);
+	channel.push(ch11Row);
+	
+		var channelThaiPBSLabel = Ti.UI.createLabel({
 			text: 'ThaiPBS',
 			color: '#420404',
 			shadowColor:'#FFFFE6',
@@ -92,132 +158,53 @@ function GuideMainWindow(){
 			height:'auto',
 			font:{fontWeight:'bold',fontSize:18}
 		});
-		
-//////////// Image View
-
-		var channel3Logo = Ti.UI.createImageView({
-			image: 'images/channel/ch3.jpg',
-			top: 5,
-			left: 10,
-			bottom: 5,
-			width:125,
-			height:89
-		});
-
-		var channel5Logo = Ti.UI.createImageView({
-			image: 'images/channel/ch5.jpg',
-			top: 5,
-			left: 10,
-			bottom: 5,
-			width:125,
-			height:89
-		});
-
-		var channel7Logo = Ti.UI.createImageView({
-			image: 'images/channel/ch7.jpg',
-			top: 5,
-			left: 10,
-			bottom: 5,
-			width:125,
-			height:89
-		});
-
-		var channel9Logo = Ti.UI.createImageView({
-			image: 'images/channel/ch9.jpg',
-			top: 5,
-			left: 10,
-			bottom: 5,
-			width:125,
-			height:89
-		});
-
-		var channel11Logo = Ti.UI.createImageView({
-			image: 'images/channel/ch11.jpg',
-			top: 5,
-			left: 10,
-			bottom: 5,
-			width:125,
-			height:89
-		});
-
-		var channelThaipbsLogo = Ti.UI.createImageView({
+		var channelThaiPBSLogo = Ti.UI.createImageView({
 			image: 'images/channel/thaipbs.jpg',
 			top: 5,
 			left: 10,
 			bottom: 5,
 			width:125,
 			height:89
-		});					
-		
-		if(c===0){
-			row.add(channel3Logo);
-			row.add(channel3Label);
-		}
-		else if(c===1){
-			row.add(channel5Logo);
-			row.add(channel5Label);
-		}
-		else if(c===2){
-			row.add(channel7Logo);
-			row.add(channel7Label);
-		}
-		else if(c===3){
-			row.add(channel9Logo);
-			row.add(channel9Label);
-		}
-		else if(c===4){
-			row.add(channel11Logo);
-			row.add(channel11Label);
-		}
-		else if(c===5){
-			row.add(channelThaipbsLogo);
-			row.add(channelThaipbsLabel);
-		}
-				
-		channel[c]=row;
-	}
-		
-	var channelTableView = Ti.UI.createTableView({
-		data: channel
-	});
+		});	
+			var chThaiPBSRow = Ti.UI.createTableViewRow({
+			height: 100,
+		});
+	chThaiPBSRow.add(channelThaiPBSLogo);
+	chThaiPBSRow.add(channelThaiPBSLabel);
+	channel.push(chThaiPBSRow);
+	
+	var channelTableView = Ti.UI.createTableView();
+	channelTableView.setData(channel);
 	
 	channelTableView.addEventListener('click',function(e){
-		// var channelProgram = new ChannelMainWindow();
-		// self.add(channelProgram);
-		// self.containingTab.open(new ChannelMainWindow);
-		
 		var index = e.index;
-		
 		if(index === 0){
-			alert('Index is '+index);
 			var ch3 = new ChannelMainWindow(index);
 			self.add(ch3);
 		}
-		if(index === 1){
-			alert('Index is '+index);
+		else if(index === 1){
 			var ch5 = new ChannelMainWindow(index);
 			self.add(ch5);
 		}
-		if(index === 2){
+		else if(index === 2){
 			var ch7 = new ChannelMainWindow(index);
 			self.add(ch7);
 		}
-		if(index === 3){
+		else if(index === 3){
 			var ch9 = new ChannelMainWindow(index);
 			self.add(ch9);
 		}
-		if(index === 4){
+		else if(index === 4){
 			var ch11 = new ChannelMainWindow(index);
 			self.add(ch11);
 		}
-		if(index === 5){
+		else if(index === 5){
 			var chThaipbs = new ChannelMainWindow(index);
 			self.add(chThaipbs);
 		}		
 	});
 	
 	self.add(channelTableView);
-	
 	return self;
 }
 module.exports = GuideMainWindow;

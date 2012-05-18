@@ -34,12 +34,12 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
         for (var i = 0; i < e.checkins.length; i++) {
         	 var curCheckin = e.checkins[i];
             userScore +=curCheckin.custom_fields.score;
-            Ti.API.info('checkin Success:\\' +
+/*            Ti.API.info('checkin Success:\\' +
             	curCheckin.user.username +' has been check in on ' +
             	curCheckin.event.id + ' at ' + curCheckin.updated_at +
             	'. Your current score is ' + userScore);
                //alert('userScore = ' + userScore);
-            
+  */          
                checkin.push(curCheckin);
          }
 		Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});

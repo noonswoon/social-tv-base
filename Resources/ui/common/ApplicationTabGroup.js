@@ -13,11 +13,11 @@ function ApplicationTabGroup() {
 	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');
 	
 	var chatwin = new ChatMainWindow();
-	var messageboardwin = new MessageboardMainWindow(1);		
+	var messageboardwin = new ChatMainWindow();//new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
 	var productwin = new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();
-	var discoveryMainWin = new DiscoveryMainWindow();
+	var discoveryMainWin = new ChatMainWindow();//new DiscoveryMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
         icon:'/images/fugitives.png',
@@ -69,7 +69,7 @@ function ApplicationTabGroup() {
     self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[3]);
+   	self.setActiveTab(self.tabs[2]);
 
     // open tab group
     return self;

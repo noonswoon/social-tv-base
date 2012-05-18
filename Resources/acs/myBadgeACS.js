@@ -13,8 +13,8 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
     if (e.success) {
         for (var i = 0; i < e.BadgeUnlock.length; i++) {
         	 var curBadge = e.BadgeUnlock[i];
-            Ti.API.info('Success:\\' +
-            	curBadge.user.username +' got #' + curBadge.badge_id);
+ /*           Ti.API.info('Success:\\' +
+            	curBadge.user.username +' got #' + curBadge.badge_id);*/
               myBadges.push(curBadge);
          }
 		Ti.App.fireEvent('myBadgesLoaded',{fetchedMyUnlockBadges:myBadges});

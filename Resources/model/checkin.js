@@ -11,7 +11,7 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	var result = db.execute('DELETE FROM checkins');
 	for(var i=0;i < _checkinsCollection.length; i++) {
 		var curCheckin = _checkinsCollection[i];
-		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event_id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
+		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
 	}
 	db.close();
 	Ti.App.fireEvent("checkinsDbUpdated");
@@ -60,7 +60,7 @@ exports.checkin_create = function(_checkinsCollection){
 		Ti.API.info('checkin_create');
 		var db = Ti.Database.open('Chatterbox'); 
 		var curCheckin = _checkinsCollection;
-		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event_id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
+		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
 		db.close();
 		Ti.App.fireEvent("oneCheckinUpdated",{
 			id: curCheckin.id

@@ -1,5 +1,5 @@
 
-var ProfileHeaderView = function(_profileMain){
+var ProfileHeaderView = function(_parentWindow){
 				
 //CALL DATA
 		var userID = '4fa17dd70020440df700950c';
@@ -175,7 +175,7 @@ var ProfileHeaderView = function(_profileMain){
 		});
 
 		columnFriendCount.addEventListener('click',function(){
-			_profileMain.containingTab.open(new FriendsMainWindow());
+			_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow));
 		});	
 		
 	profilePictureContain.add(profilePicture);

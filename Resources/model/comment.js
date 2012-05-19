@@ -2,14 +2,14 @@
 
 var db = Ti.Database.open('Chatterbox');
 //response_to_object_id --> object_id can be topic_id (comment of post) or comment_id (comment of comment)
-db.execute('CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY, acs_object_id TEXT, topic_id TEXT, content TEXT, rating INTEGER, username TEXT, response_to_object_id TEXT, is_a_vote INTEGER, updated_at TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY, acs_object_id TEXT, topic_id TEXT, content TEXT, rating INTEGER, username TEXT, response_to_object_id TEXT, is_a_vote INTEGER, is_deleted INTEGER, updated_at TEXT);');
 db.close();
 
 exports.commentModel_fetchCommentsFromTopicId = function(_topicId) {
 	//get both comments and ratings on the topicId [right now ratings and comments are considered comments]
 	var fetchedComments = [];
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM comments WHERE topic_id = ? ORDER BY updated_at DESC',_topicId);
+	var result = db.execute('SELECT * FROM comments WHERE topic_id = ? AND is_deleted = 0 ORDER BY updated_at DESC',_topicId);
 	
 	while(result.isValidRow()) {
 		//Ti.API.info('from comments, id: '+result.fieldByName('id')+', acs_object_id: '+result.fieldByName('acs_object_id')+', content: '+result.fieldByName('content'));
@@ -50,8 +50,8 @@ exports.commentModel_addCommentOrRating = function(_topicId, _content,_rating,_u
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
 	
 	//need to update acs_object_id later
-	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at) "+
-							"VALUES(NULL,?,?,?,?,?,?,?)", _topicId,_content,_rating,_username,_responseToObjectId,_isAVote,updatedAt);
+	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote, is_deleted, updated_at) "+
+							"VALUES(NULL,?,?,?,?,?,?,0,?)", _topicId,_content,_rating,_username,_responseToObjectId,_isAVote,updatedAt);
 	
 	var result = db.execute("SELECT last_insert_rowid() as new_id");
 	var newId = result.fieldByName('new_id');
@@ -92,55 +92,33 @@ exports.commentModel_updateCommentsOnTopicFromACS = function(_commentsCollection
 	//need to clear records with the given topicId
 	var result = db.execute('DELETE FROM comments WHERE topic_id = ?',_topicId);
 	
-	//insert contents
+	//insert everything -- comments/ratings
 	for(var i=0;i < _commentsCollection.length; i++) {
 		var curComment = _commentsCollection[i];
-		curComment.updated_at = convertACSTimeToLocalTime(curComment.updated_at);
-		db.execute("INSERT INTO comments(id,acs_object_id,topic_id,content,rating,username, response_to_object_id,is_a_vote,updated_at) " +
-					"VALUES(NULL,?,?,?,?,?,?,?,?)", 	
-					curComment.id,curComment.topic_id,curComment.content,curComment.rating,
-					curComment.user.username,curComment.response_to_object_id,curComment.is_a_vote,curComment.updated_at);
+		curComment.updatedAt = convertACSTimeToLocalTime(curComment.updatedAt);
+		db.execute("INSERT INTO comments(id,acs_object_id,topic_id,content,rating,username, response_to_object_id,is_a_vote,is_deleted,updated_at) " +
+					"VALUES(NULL,?,?,?,?,?,?,?,?,?)", 	
+					curComment.id,_topicId,curComment.content,curComment.rating,
+					curComment.user.username,curComment.responseToObjectId,curComment.isAVote,curComment.isDeleted, curComment.updatedAt);
 	}
 	
 	//update voting score
 	for(var i=0;i < _commentsCollection.length; i++) {
 		var curComment = _commentsCollection[i];
-		if(curComment.rating !== 0)  {
-			result = db.execute('SELECT * FROM comments WHERE acs_object_id = ?',curComment.response_to_object_id);
+		if(curComment.isAVote == 1)  { //if it is a vote, need to update the targeted comment with the vote score
+			result = db.execute('SELECT * FROM comments WHERE acs_object_id = ?',curComment.responseToObjectId);
 			var curRating = Number(result.fieldByName('rating'));
 			var newRating = curRating + curComment.rating;
-			db.execute("UPDATE comments SET rating = ? WHERE acs_object_id = ?", newRating, curComment.response_to_object_id);
+			db.execute("UPDATE comments SET rating = ? WHERE acs_object_id = ?", newRating, curComment.responseToObjectId);
 		}
 	}
 	if(result != null)	result.close();
 	db.close();
 	Ti.App.fireEvent("commentsDbUpdated");
 };
-/*
-exports.del = function(_id) {
-	var db = Ti.Database.open('TiBountyHunter');
-	db.execute("DELETE FROM fugitives WHERE id = ?",_id);
-	db.close();
-	
-	Ti.App.fireEvent("databaseUpdated");
-};
 
-exports.bust  = function(_id,_lat,_long) {
-	var db = Ti.Database.open('TiBountyHunter');
-	db.execute("UPDATE fugitives SET captured = 1, capturedLat = ?, capturedLong = ? WHERE id = ?",_lat,_long,_id);
+exports.commentModel_deleteComment = function(_targetedACSObjectId) {
+	var db = Ti.Database.open('Chatterbox');
+	db.execute("UPDATE comments SET is_deleted = 1 WHERE acs_object_id = ?", _targetedACSObjectId);
 	db.close();
-	
-	Ti.App.fireEvent("databaseUpdated");
 };
-
-if(!Ti.App.Properties.hasProperty('seeded')) {
-	var networkFn = require('/lib/network');
-	networkFn.getFugitives(function(list) {
-		for(var i=0;i<list.length;i++) {
-			var name = list[i]['name'];
-			add(name);
-		}
-		Ti.App.Properties.setString('seeded','already');
-	});
-}
-*/

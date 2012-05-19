@@ -41,17 +41,19 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		height:40
 	});
 	
-	
 	var dm = moment(_comment.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 	var submitDateStr = since(dm);
-		
+	var usernameStr = _comment.username;
+	if(_comment.username === acs.getUserLoggedIn().username)
+		usernameStr = 'you';
+	
 	var commentDetail = Ti.UI.createLabel({
-		text: 'by '+_comment.username+', '+submitDateStr,
+		text: 'by '+usernameStr+', '+submitDateStr,
 		color: '#420404',
 		textAlign:'right',
 		font:{fontWeight:'bold',fontSize:12},
 		top: 0,
-		left:nestedOffset+75,
+		left:nestedOffset+15,
 		height: 15,
 		width: 150
 	});
@@ -115,6 +117,15 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		title: 'Report',
 		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
 	});
+	
+	var deleteButton = Ti.UI.createButton({
+		left:85,
+		top: 25,
+		width: 45,
+		height: 20,
+		title: 'Delete',
+		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
+	});
 
 	var replyButton = Ti.UI.createButton({
 		right: 5,
@@ -135,7 +146,12 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	replyToolbar.add(replyTextField);
 	replyToolbar.add(upButton);
 	replyToolbar.add(downButton);
-	replyToolbar.add(reportButton);
+	
+	//either show reportButton or deleteButton (comment's owner)
+	if(_comment.username === acs.getUserLoggedIn().username)
+		replyToolbar.add(deleteButton);
+	else replyToolbar.add(reportButton);
+	
 	replyToolbar.add(replyButton);
 	
 	// CLASS METHODS GET&SET
@@ -228,6 +244,19 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	
 	reportButton.addEventListener('click', function() {
 		UserReportACS.userReportACS_reportObject(_comment.id,'comment',_comment.content);
+	});
+	
+	deleteButton.addEventListener('click', function() {
+		//fire the event & have commentWindow remove that row from the table
+		Ti.App.fireEvent('deletingCommentTableViewRow',{rowIndexToDelete:row.index});		
+		
+		//update comments table to set the is_deleted column of commentId to 1
+		Comment.commentModel_deleteComment(_comment.acsObjectId);
+		
+		//send update ACS query to Reviews to update the custom_fields.is_deleted to 1
+		if(_level == 0)
+			CommentACS.commentACS_deleteComment(_comment.responseToObjectId,_comment.acsObjectId);
+		else CommentACS.commentACS_deleteCommentOfComment(_comment.responseToObjectId,_comment.acsObjectId);
 	});
 	
 	return row;

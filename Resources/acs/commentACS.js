@@ -32,13 +32,14 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
             			var review = e.reviews[j];
 				        var curComment = {
 			            	id: review.id,
-			            	topic_id: _topicId,
+			            	topicId: _topicId,
 			            	content: review.content,
 			            	rating: review.rating,
 			            	user:review.user,
-			            	response_to_object_id: review.custom_fields.response_to_object_id,
-			            	is_a_vote: review.custom_fields.is_a_vote,
-			            	updated_at: review.updated_at
+			            	responseToObjectId: review.custom_fields.response_to_object_id,
+			            	isAVote: review.custom_fields.is_a_vote,
+			            	isDeleted: review.custom_fields.is_deleted,
+			            	updatedAt: review.updated_at
 			           	};
 			           	commentsInThisTopic.push(curComment);
 			           	
@@ -74,12 +75,14 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 				var review = e.reviews[i];
 	            var curComment = {
 	            	id: review.id,
-	            	topic_id: _topicId,
+	            	topicId: _topicId,
 	            	content: review.content,
 	            	rating: review.rating,
 	            	user:review.user,
-	            	response_to_object_id: review.custom_fields.response_to_object_id,
-	            	updated_at: review.updated_at
+	            	responseToObjectId: review.custom_fields.response_to_object_id,
+	            	isAVote: review.custom_fields.is_a_vote,
+			        isDeleted: review.custom_fields.is_deleted,
+	            	updatedAt: review.updated_at
 	            };
 	            
 				commentsInThisTopic.push(curComment);
@@ -106,7 +109,7 @@ exports.commentACS_createCommentOfTopic = function(_comment,_localId,_topicId) {
 	    post_id: _topicId, //need to remain as 'post_id' since it is connection to ACS Posts API
 	    rating: 0,
 	    content: _comment, 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId, "local_id":_localId, "is_a_vote":0},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _topicId, "local_id":_localId, "is_a_vote":0, "is_deleted":0},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -125,7 +128,7 @@ exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentI
 	    review_object_id: _commentId,
 	    rating: 0,
 	    content: _comment, 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId, "is_a_vote":0},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId, "is_a_vote":0, "is_deleted":0},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -148,7 +151,7 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_localId,_commentId
 	    review_object_id: _commentId,
 	    rating: _voteScore,
 	    content: "m", 
-	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId, "is_a_vote":1},
+	    custom_fields: {"topic_id": _topicId, "response_to_object_id": _commentId, "local_id":_localId, "is_a_vote":1, "is_deleted":0},
 	    allow_duplicate: 1
 	}, function (e) {
 	    if (e.success) {
@@ -158,6 +161,34 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_localId,_commentId
 	    } else {
 	        Ti.API.info('Vote of comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
+}
+
+exports.commentACS_deleteComment = function(_respondToObjectId,_commentId) {
+	Cloud.Reviews.update({
+    	post_id: _respondToObjectId,
+    	review_id: _commentId,
+     	custom_fields: {"is_deleted": 1}
+	}, function (e) {
+	    if (e.success) {
+	        Ti.API.info("deleteCommentOfPost: update is_deleted_flag success");
+	    } else {
+	        Ti.API.info("deleteCommentOfPost: update is_deleted_flag FAILED");
+	    }
+	});
+}
+
+exports.commentACS_deleteCommentOfComment = function(_respondToObjectId,_commentId) {
+	Cloud.Reviews.update({
+    	review_object_id: _respondToObjectId,
+    	review_id: _commentId,
+    	custom_fields: {"is_deleted": 1}
+	}, function (e) {
+	    if (e.success) {
+	        Ti.API.info("deleteCommentOfComment: update is_deleted_flag success");
+	    } else {
+	        Ti.API.info("deleteCommentOfComment: update is_deleted_flag FAILED");
 	    }
 	});
 }

@@ -118,6 +118,7 @@ function CommentWindow(_topicId) {
 			username: newComment.user.username,
 			responseToObjectId: newComment.custom_fields.response_to_object_id,
 			isAVote: 0,
+			isDeleted: 0,
 			updatedAt: convertACSTimeToLocalTime(newComment.updated_at)
 		}
 		var updatedRow = new CommentReplyTableViewRow(commentForTableViewRow,0);
@@ -139,6 +140,7 @@ function CommentWindow(_topicId) {
 			username: newCommentOfComment.user.username,
 			responseToObjectId: newCommentOfComment.custom_fields.response_to_object_id,
 			isAVote: 0,
+			isDeleted: 0,
 			updatedAt: convertACSTimeToLocalTime(newCommentOfComment.updated_at)
 		}
 		var updatedRow = new CommentReplyTableViewRow(commentForTableViewRow,commentLevel);
@@ -158,6 +160,10 @@ function CommentWindow(_topicId) {
 		var commentRow = new CommentReplyTableViewRow(tableViewRowDetail,tableViewRowDetail.commentLevel);
 		commentsTable.insertRowAfter(tableViewRowDetail.rowIndex,commentRow);
 	}
+	
+	function removeTableViewRowCallback(e) {
+		commentsTable.deleteRow(e.rowIndexToDelete);
+	}
 
 	function postCommentAction(e) {
 		if(commentHeader.replyTextField.value === '') {
@@ -175,6 +181,7 @@ function CommentWindow(_topicId) {
 			username: acs.getUserLoggedIn().username,
 			responseToObjectId: _topicId,
 			isAVote: 0,
+			isDeleted: 0,
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
 		}
 		var commentRow = new CommentReplyTableViewRow(newCommentDetail,0);
@@ -204,6 +211,9 @@ function CommentWindow(_topicId) {
 	Ti.App.addEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
 	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	Ti.App.addEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
+	Ti.App.addEventListener('deletingCommentTableViewRow', removeTableViewRowCallback);
+	
+	
 	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);
@@ -212,6 +222,7 @@ function CommentWindow(_topicId) {
 		Ti.App.removeEventListener('voteOfCommentCreatedACS', voteOfCommentCreatedACSCallback);
 		Ti.App.removeEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 		Ti.App.removeEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
+		Ti.App.removeEventListener('deletingCommentTableViewRow', removeTableViewRowCallback);
 	});
 	
 	//PAGE LOGIC/CONTROLLER

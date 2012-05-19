@@ -15,7 +15,6 @@ CommentHeaderTableViewRow = function() {
 		height: 20,
 		width: 310
 	})
-	header.add(header.topicLabel);
 	
 	header.dateLabel = Ti.UI.createLabel({
 		text: '--',
@@ -27,7 +26,15 @@ CommentHeaderTableViewRow = function() {
 		height: 10,
 		width: 310
 	})
-	header.add(header.dateLabel);
+	
+	header.replyButton = Titanium.UI.createButton({
+	    title : 'Reply',
+	    style : Titanium.UI.iPhone.SystemButtonStyle.DONE,
+	});
+	
+	header.cancelButton = Titanium.UI.createButton({
+    	systemButton : Titanium.UI.iPhone.SystemButton.CANCEL
+	});
 	
 	header.replyTextField = Ti.UI.createTextField({
 		left: 5,
@@ -36,9 +43,18 @@ CommentHeaderTableViewRow = function() {
 		height: 30,
 		hintText: "Write your comment here...",
     	borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
+		keyboardToolbar : [header.cancelButton, header.replyButton], //this is iOS only
 	})
-	header.add(header.replyTextField);
+	
+	header.add(header.topicLabel);
+	header.add(header.dateLabel);
+	header.add(header.replyTextField);	
+	
+	header.cancelButton.addEventListener('click', function(e) {
+		header.replyTextField.blur();
+	});
+
 	
 	return header;
 }

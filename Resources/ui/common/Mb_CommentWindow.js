@@ -159,9 +159,12 @@ function CommentWindow(_topicId) {
 		commentsTable.insertRowAfter(tableViewRowDetail.rowIndex,commentRow);
 	}
 
-	//ADD EVENT LISTENERS
-	commentHeader.replyTextField.addEventListener('return', function(e) {
-		if(commentHeader.replyTextField.value === '') return;
+	//ADD EVENT LISTENERS  header.replyButton
+	commentHeader.replyButton.addEventListener('click', function(e) {
+		if(commentHeader.replyTextField.value === '') {
+			commentHeader.replyTextField.blur();
+			return;
+		}
 		var newId = Comment.commentModel_addCommentOrRating(_topicId,commentHeader.replyTextField.value,0,acs.getUserLoggedIn().username,_topicId,0);
 		var newCommentDetail = {
 			title: commentHeader.replyTextField.value,
@@ -180,6 +183,7 @@ function CommentWindow(_topicId) {
 		
 		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,newId,_topicId);
 		commentHeader.replyTextField.value = "";
+		commentHeader.replyTextField.blur();
 	});
 
 	commentsTable.addEventListener('click', function(e) {

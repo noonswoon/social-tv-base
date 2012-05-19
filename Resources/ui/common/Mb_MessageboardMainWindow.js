@@ -11,7 +11,7 @@ function MessageboardMainWindow(_programId) {
 		
 	//OBJECTS INSTANTIATION
 	var messageboardHeader = new MessageboardHeaderTableViewRow('Reya','Famous Lakorn');	
-	var addWindow = new MessageboardAddWindow();	
+	var addWindow = new MessageboardAddWindow(_programId);	
 		
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
@@ -35,7 +35,7 @@ function MessageboardMainWindow(_programId) {
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db
-		Topic.topicModel_updateTopicsFromACS(e.aa,_programId); 
+		Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,_programId); 
 	}
 
 	function topicsDbUpdatedCallback(e) {

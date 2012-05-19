@@ -15,26 +15,27 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	            var post = e.posts[i];
 	            var curTopic = {
 	            	id: post.id,
-	            	program_id: _programId,
+	            	programId: _programId,
 	            	title: post.title,
 	            	user:post.user,
-	            	updated_at: post.updated_at
+	            	isDeleted: post.custom_fields.is_deleted,
+	            	updatedAt: post.updated_at
 	            }
 				topicsOfProgram.push(curTopic);
 			}
-	        Ti.App.fireEvent("topicsLoadedComplete",{aa:topicsOfProgram});
+	        Ti.App.fireEvent("topicsLoadedComplete",{topicsOfProgram:topicsOfProgram});
 	    } else {
 	        Ti.API.info('Fetching Topic Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
 }
 	
-exports.topicACS_create = function(_title,_programId) {
+exports.topicACS_create = function(_title,_programId,_localId) {
 	//connecting with Clou
 	Cloud.Posts.create({
     		content: 'dummy text',
 			title: _title, 
-			custom_fields: {"program_id": _programId}
+			custom_fields: {"program_id": _programId,"local_id":_localId,"is_deleted":0}
 		}, function (e) {
 			if (e.success) {
 		    	var post = e.posts[0];

@@ -109,6 +109,20 @@ function CommentWindow(_topicId) {
 	function commentCreatedACSCallback(e) {
 		commentHeader.replyTextField.value = "";
 		var newComment = e.newComment;	
+		var commentForTableViewRow = {
+			commentLevel: 0,
+			acsObjectId: newComment.id, //just to update this field!
+			topicId: newComment.custom_fields.response_to_object_id,
+			content: newComment.content,
+			rating: 0,
+			username: newComment.user.username,
+			responseToObjectId: newComment.custom_fields.response_to_object_id,
+			isAVote: 0,
+			updatedAt: convertACSTimeToLocalTime(newComment.updated_at)
+		}
+		var updatedRow = new CommentReplyTableViewRow(commentForTableViewRow,0);
+		commentsTable.updateRow(1,updatedRow);
+		
 		Comment.commentModel_updateACSObjectIdField(newComment);
 	}
 	
@@ -147,32 +161,25 @@ function CommentWindow(_topicId) {
 
 	//ADD EVENT LISTENERS
 	commentHeader.replyTextField.addEventListener('return', function(e) {
-		//TODO change this to insert to the table then call acs
-		
+		if(commentHeader.replyTextField.value === '') return;
 		var newId = Comment.commentModel_addCommentOrRating(_topicId,commentHeader.replyTextField.value,0,acs.getUserLoggedIn().username,_topicId,0);
-		/*
-		 * continue here...need to insert a row at index1+update when acs is ready
-		var commentDetailForNewTableViewRow = {
-			title: responseText,
-			commentLevel: _level+1,
-			rowIndex: row.index,  //will insert the new comment after the rowIndex row
+		var newCommentDetail = {
+			title: commentHeader.replyTextField.value,
 			id: newId,
 			acsObjectId: 0, //need to be later updated
-			topicId: _comment.topicId,
-			content: responseText,
+			topicId: _topicId,
+			content: commentHeader.replyTextField.value,
 			rating: 0,
 			username: acs.getUserLoggedIn().username,
-			responseToObjectId: _comment.acsObjectId,
+			responseToObjectId: _topicId,
 			isAVote: 0,
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
 		}
-		 * 
-		 * 
-		 */
+		var commentRow = new CommentReplyTableViewRow(newCommentDetail,0);
+		commentsTable.insertRowAfter(0,commentRow);
 		
 		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,newId,_topicId);
 		commentHeader.replyTextField.value = "";
-		
 	});
 
 	commentsTable.addEventListener('click', function(e) {

@@ -159,8 +159,7 @@ function CommentWindow(_topicId) {
 		commentsTable.insertRowAfter(tableViewRowDetail.rowIndex,commentRow);
 	}
 
-	//ADD EVENT LISTENERS  header.replyButton
-	commentHeader.replyButton.addEventListener('click', function(e) {
+	function postCommentAction(e) {
 		if(commentHeader.replyTextField.value === '') {
 			commentHeader.replyTextField.blur();
 			return;
@@ -184,7 +183,10 @@ function CommentWindow(_topicId) {
 		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,newId,_topicId);
 		commentHeader.replyTextField.value = "";
 		commentHeader.replyTextField.blur();
-	});
+	}
+	//ADD EVENT LISTENERS  header.replyButton
+	commentHeader.replyButton.addEventListener('click',postCommentAction); //can either post by click on the 'reply' keyboard button (only iOS)
+	commentHeader.replyTextField.addEventListener('return',postCommentAction); //or click on the 'return' button (iOS/Android)
 
 	commentsTable.addEventListener('click', function(e) {
 		if(e.source.toString().indexOf("TiUIButton") > 0) return; //prevent event propagation of clicking reply,vote up/down

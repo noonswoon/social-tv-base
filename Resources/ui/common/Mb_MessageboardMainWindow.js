@@ -79,6 +79,25 @@ function MessageboardMainWindow(_programId) {
 	messageboardHeader.addButton.addEventListener('click', function(e) {
 		self.containingTab.open(addWindow);
 	});
+	
+	messageboardHeader.searchTextField.addEventListener('change', function(e) {
+		if(messageboardHeader.searchTextField.value.length >= 3) { //micro optimize, only query when the length is >= 3
+			
+			Ti.API.info('search on: '+messageboardHeader.searchTextField.value);
+			//clear current data in the table
+			allTopicTable.data = [];
+			var viewRowsData = [messageboardHeader];
+			
+			//retrieve from db with keywords
+			var keywordsStr = messageboardHeader.searchTextField.value;
+			var topicsOfKeywords = Topic.topicModel_fetchWithKeywords(keywordsStr,_programId);
+			for (var i=0;i<topicsOfKeywords.length;i++) {
+				var row = new MessageboardTableViewRow(topicsOfKeywords[i]);
+				viewRowsData.push(row);
+			}
+			allTopicTable.setData(viewRowsData);
+		}
+	});
 
 	allTopicTable.addEventListener('click', function(e){
 		if (e.index == 0) return;

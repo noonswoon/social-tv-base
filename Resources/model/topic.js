@@ -25,6 +25,26 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 	return fetchedTopics;
 };
 
+exports.topicModel_fetchWithKeywords = function(_keywordsStr,_programId) {
+	var fetchedTopics = [];
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM topics WHERE program_id = ? AND title LIKE "%Str%" AND is_deleted = 0 ORDER BY updated_at DESC',_programId);
+	while(result.isValidRow()) {
+		fetchedTopics.push({
+			title: result.fieldByName('title'),
+			id: Number(result.fieldByName('id')),
+			acsObjectId: result.fieldByName('acs_object_id'),
+			hasChild:true,
+			color: '#fff',
+			username: result.fieldByName('username'),
+			updatedAt: result.fieldByName('updated_at')
+		});
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return fetchedTopics;
+};
 
 exports.topicModel_getTopicById = function(_topicACSObjectId) {
 	var db = Ti.Database.open('Chatterbox'); 
@@ -57,14 +77,8 @@ var add = function(_programId,_acsObjectId,_title,_username) {
 	var db = Ti.Database.open('Chatterbox');
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
 	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,username,is_deleted,updated_at) VALUES(NULL,?,?,?,?,0,?)",_acsObjectId, _programId,_title,_username,updatedAt);
-	
-	var result = db.execute("SELECT last_insert_rowid() as new_id");
-	var newId = result.fieldByName('new_id');
-
-	result.close();
+	var newId = db.lastInsertRowId;
 	db.close();
-	//fire message to let others know that database has changed
-	//Ti.App.fireEvent("topicsDbUpdated");
 	
 	return newId;
 };
@@ -80,7 +94,7 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 	for(var i=0;i < _topicsCollection.length; i++) {
 		var curTopic = _topicsCollection[i];
 		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,username,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?)", 
-					curTopic.id,_programId,curTopic.title,curTopic.user.username,curTopic.isDeleted, curTopic.updatedAt);
+					curTopic.id,_programId,curTopic.title,curTopic.user.username,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
 	}
 	db.close();
 	Ti.App.fireEvent("topicsDbUpdated");

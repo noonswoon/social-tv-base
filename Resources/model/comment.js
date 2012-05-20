@@ -53,22 +53,18 @@ exports.commentModel_addCommentOrRating = function(_topicId, _content,_rating,_u
 	db.execute("INSERT INTO comments(id,topic_id,content,rating,username, response_to_object_id,is_a_vote, is_deleted, updated_at) "+
 							"VALUES(NULL,?,?,?,?,?,?,0,?)", _topicId,_content,_rating,_username,_responseToObjectId,_isAVote,updatedAt);
 	
-	var result = db.execute("SELECT last_insert_rowid() as new_id");
-	var newId = result.fieldByName('new_id');
+	var newId = db.lastInsertRowId;
+	
 	//if the _comment is a rating, need to do the data update for the targetted comment
 	if(_rating != 0)  {
-		result = db.execute('SELECT * FROM comments WHERE acs_object_id = ?',_responseToObjectId);
+		var result = db.execute('SELECT * FROM comments WHERE acs_object_id = ?',_responseToObjectId);
 		var curRating = Number(result.fieldByName('rating'));
 		var newRating = curRating + _rating;
 		db.execute("UPDATE comments SET rating = ? WHERE acs_object_id = ?", newRating, _responseToObjectId);
+		result.close();
 	}
 		
-	result.close();
 	db.close();
-	//fire message to let others know that database has changed
-	
-	//try to not fire an auto update the UI
-	//Ti.App.fireEvent("commentsDbUpdated");
 	return newId;
 };
 

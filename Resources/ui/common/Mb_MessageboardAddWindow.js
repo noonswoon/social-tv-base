@@ -21,53 +21,38 @@ function MessageboardAddWindow(_programId) {
 	
 	//ADDING UI COMPONENTS TO THE WINDOW
 	self.add(topicTextarea);
-	
-	//CALLBACK FUNCTIONS
-	function topicCreatedACSCallback(e) {
-		self.close();
-		topicTextarea.value = "";
-		var newTopic = e.newTopic;	
-		Topic.topicModel_add(newTopic);
-	}
-	
+		
 	//ADDING EVENT LISTENERS
 	self.addEventListener('return', function(e) {
 		if(topicTextarea.value === '') {
 			return;
 		}
 		
-		//1. insert into topics table
+		//1. insert to the db topic table
 		var newId = Topic.topicModel_add(_programId, 0,topicTextarea.value,acs.getUserLoggedIn().username);
-		alert('new topicId: '+newId);
-		//var newId = Comment.commentModel_addCommentOrRating(_topicId,commentHeader.replyTextField.value,0,acs.getUserLoggedIn().username,_topicId,0);
 		
-		//2. update the table
-		/*
-		var newCommentDetail = {
-			title: commentHeader.replyTextField.value,
+		//2. insert into topics table view [first record]
+		var topicDetailForNewTableViewRow = {
+			title: topicTextarea.value,
 			id: newId,
-			acsObjectId: 0, //need to be later updated
-			topicId: _topicId,
-			content: commentHeader.replyTextField.value,
-			rating: 0,
+			acsObjectId:0,
+			hasChild:true,
+			color: '#fff',
 			username: acs.getUserLoggedIn().username,
-			responseToObjectId: _topicId,
-			isAVote: 0,
-			isDeleted: 0,
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
-		}
-		var commentRow = new CommentReplyTableViewRow(newCommentDetail,0);
-		commentsTable.insertRowAfter(0,commentRow);
+		};
+		
+		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
 		//3 call TopicACS.topicACS_create(topicTextarea.value,_programId,newId);
+		TopicACS.topicACS_create(topicTextarea.value,_programId,newId);
 		
-		//4 use the return object from ACS to update db and row in the table
-
-		*/
+		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
+		// in the function callback in Mb_MessageboardMainWindow.js
+		topicTextarea.value = "";		
+		self.close();
 	
 	});
-	
-	Ti.App.addEventListener('topicCreatedACS', topicCreatedACSCallback);
 	
 	self.addEventListener('open', function(e) {
 		topicTextarea.focus();

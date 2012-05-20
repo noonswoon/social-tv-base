@@ -31,7 +31,7 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 }
 	
 exports.topicACS_create = function(_title,_programId,_localId) {
-	//connecting with Clou
+	//connecting with Cloud
 	Cloud.Posts.create({
     		content: 'dummy text',
 			title: _title, 

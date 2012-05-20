@@ -5,11 +5,11 @@ db.execute('CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY, acs_object
 db.close();
 
 exports.topicModel_fetchFromProgramId = function(_programId) {
-	var bb = [];
+	var fetchedTopics = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM topics WHERE program_id = ? AND is_deleted = 0 ORDER BY updated_at DESC',_programId);
 	while(result.isValidRow()) {
-		bb.push({
+		fetchedTopics.push({
 			title: result.fieldByName('title'),
 			id: Number(result.fieldByName('id')),
 			acsObjectId: result.fieldByName('acs_object_id'),
@@ -22,28 +22,36 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 	}	
 	result.close();
 	db.close();
-	return bb;
+	return fetchedTopics;
 };
 
-/*
-exports.topicModel_getTopicById = function(_topicId) {
+
+exports.topicModel_getTopicById = function(_topicACSObjectId) {
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM topics WHERE id = ?',_topicId);
+	var result = db.execute('SELECT * FROM topics WHERE acs_object_id = ?',_topicACSObjectId);
 	if(result.rowCount > 1) 
 		alert("something wrong with getTopic, should return just 1 [returning too many topics]");
 	var topic = {};
 	while(result.isValidRow()) {
 		topic.id = result.fieldByName('id'); 
+		topic.acsObjectId = result.fieldByName('acs_object_id'); 
 		topic.title = result.fieldByName('title');
 		topic.username = result.fieldByName('username');
-		topic.updated_at = result.fieldByName('updated_at')
+		topic.updatedAt = result.fieldByName('updated_at')
 		result.next();
 	}	
 	result.close();
 	db.close();
 	return topic;
 };
-*/
+
+exports.topicModel_updateACSObjectIdField = function(_topic) {
+	var db = Ti.Database.open('Chatterbox');
+	var acsObjectId = _topic.id;
+	var localId = _topic.custom_fields.local_id;
+	db.execute("UPDATE topics SET acs_object_id = ? WHERE id = ?", acsObjectId, localId);
+	db.close();
+};
 
 var add = function(_programId,_acsObjectId,_title,_username) {
 	var db = Ti.Database.open('Chatterbox');

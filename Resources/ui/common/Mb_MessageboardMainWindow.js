@@ -52,6 +52,29 @@ function MessageboardMainWindow(_programId) {
 		allTopicTable.setData(viewRowsData);
 	}
 	
+	function addNewTopicTableViewRowCallback(e) {
+		var tableViewRowDetail = e.topicDetailForNewTableViewRow;
+		var topicRow = new MessageboardTableViewRow(tableViewRowDetail);
+		allTopicTable.insertRowAfter(0,topicRow);
+	}
+	
+	function topicCreatedACSCallback(e) {	
+		var newTopic = e.newTopic;	
+		var topicForTableViewRow = {
+			title: newTopic.title,
+			id: newTopic.custom_fields.local_id,
+			acsObjectId:newTopic.id,
+			hasChild:true,
+			color: '#fff',
+			username: acs.getUserLoggedIn().username,
+			updatedAt: convertACSTimeToLocalTime(newTopic.updated_at)
+		};
+		var topicRow = new MessageboardTableViewRow(topicForTableViewRow);
+		allTopicTable.updateRow(1,topicRow);
+		
+		Topic.topicModel_updateACSObjectIdField(e.newTopic);
+	}
+	
 	//BEGIN -- ADD EVENTLISTNERS
 	messageboardHeader.addButton.addEventListener('click', function(e) {
 		self.containingTab.open(addWindow);
@@ -59,17 +82,21 @@ function MessageboardMainWindow(_programId) {
 
 	allTopicTable.addEventListener('click', function(e){
 		if (e.index == 0) return;
-		var commentwin = new CommentWindow(e.row.topic.id);			
+		var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
 		self.containingTab.open(commentwin);
 	});		
 	
 	Ti.App.addEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);
 	Ti.App.addEventListener("topicsDbUpdated", topicsDbUpdatedCallback);
-
+	Ti.App.addEventListener("insertingTopicTableViewRow", addNewTopicTableViewRowCallback);
+	Ti.App.addEventListener('topicCreatedACS', topicCreatedACSCallback);
+	
 	self.addEventListener("close", function(e) {
 		alert("closing MbMainWindow-rarely see this");
 		Ti.App.removeEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);
 		Ti.App.removeEventListener("topicsDbUpdated", topicsDbUpdatedCallback);
+		Ti.App.removeEventListener("insertingTopicTableViewRow", addNewTopicTableViewRowCallback);
+		Ti.App.removeEventListener('topicCreatedACS', topicCreatedACSCallback);
 	});	
 	//END -- ADD EVENTLISTNERS
 	

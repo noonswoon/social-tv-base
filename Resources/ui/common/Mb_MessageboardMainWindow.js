@@ -26,8 +26,31 @@ function MessageboardMainWindow(_programId) {
 		left: 0,
 		right: 0,
 		bottom: 0,
-		scrollable: true
+		scrollable: true,
+		search: dummySearchTextField,//messageboardHeader.searchTextField,
+		searchHidden: true
 	});
+	
+	var dummySearchTextField = Titanium.UI.createSearchBar({
+		left: 0,
+		top: 0,
+		width: 280,
+		barColor:'#6d0a0c',
+		showCancel:false,
+		hintText:'Search here...'
+	});
+
+	var dummyAddButton = Ti.UI.createButton({
+		right: 10,
+		top: 0,
+		width: 30,
+		height: 30,
+		title: '+'
+	});
+	
+	var dummyTableViewRow = Ti.UI.createTableViewRow();
+	dummyTableViewRow.add(dummySearchTextField);
+	dummyTableViewRow.add(dummyAddButton);
 	
 	//ADDING UI COMPONENTS TO WINDOW
 	self.add(allTopicTable);
@@ -41,7 +64,7 @@ function MessageboardMainWindow(_programId) {
 	function topicsDbUpdatedCallback(e) {
 		//clear current data in the table
 		allTopicTable.data = [];
-		var viewRowsData = [messageboardHeader];
+		var viewRowsData = [messageboardHeader,dummyTableViewRow];
 		
 		//retrieve from db
 		var allTopics = Topic.topicModel_fetchFromProgramId(_programId);
@@ -76,16 +99,15 @@ function MessageboardMainWindow(_programId) {
 	}
 	
 	//BEGIN -- ADD EVENTLISTNERS
-	messageboardHeader.addButton.addEventListener('click', function(e) {
-		self.containingTab.open(addWindow);
-	});
+	//messageboardHeader.addButton.addEventListener('click', function(e) {
+	//	self.containingTab.open(addWindow);
+	//});
 	
-	messageboardHeader.searchTextField.addEventListener('change', function(e) {
-		if(messageboardHeader.searchTextField.value.length >= 3) { //micro optimize, only query when the length is >= 3
-			
-			Ti.API.info('search on: '+messageboardHeader.searchTextField.value);
+	/*messageboardHeader.searchTextField.addEventListener('change', function(e) {
+		Ti.API.info('search on: '+messageboardHeader.searchTextField.value);
+		if(messageboardHeader.searchTextField.value.length >= 10) {
 			//clear current data in the table
-			allTopicTable.data = [];
+			allTopicTable.data = [{title:''}]; //work around the crash
 			var viewRowsData = [messageboardHeader];
 			
 			//retrieve from db with keywords
@@ -97,7 +119,7 @@ function MessageboardMainWindow(_programId) {
 			}
 			allTopicTable.setData(viewRowsData);
 		}
-	});
+	});*/
 
 	allTopicTable.addEventListener('click', function(e){
 		if (e.index == 0) return;

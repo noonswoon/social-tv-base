@@ -62,6 +62,7 @@ MessageboardHeaderTableViewRow = function(_showName,_showSubName) {
 		height: 14
 	});
 	
+	/*
 	header.searchTextField = Ti.UI.createTextField({
 		left: 10,
 		top: 100,
@@ -70,15 +71,25 @@ MessageboardHeaderTableViewRow = function(_showName,_showSubName) {
 		hintText: "Search here...",
 		borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
-	});
+}); 
+*/
 	
+/*	header.searchTextField = Titanium.UI.createSearchBar({
+		left: 0,
+		top: 0,
+		width: 280,
+		barColor:'#6d0a0c',
+		showCancel:false,
+		hintText:'Search here...'
+	});
+
 	header.addButton = Ti.UI.createButton({
 		right: 10,
-		top: 100,
+		top: 0,
 		width: 30,
 		height: 30,
 		title: '+'
-	});
+	});*/
 
 	//ADDING UI COMPONENTS
 	header.add(header.thumbnail);
@@ -88,9 +99,9 @@ MessageboardHeaderTableViewRow = function(_showName,_showSubName) {
 	header.add(header.numCheckinsLabel);
 	header.add(header.friendIcon);
 	header.add(header.numFriendsLabel);
-	header.add(header.searchTextField);
-	header.add(header.addButton);
-	
+	//header.add(header.searchTextField);
+	//header.add(header.addButton);
+	//header.searchTextField.add(header.addButton);
 	return header;
 }
 

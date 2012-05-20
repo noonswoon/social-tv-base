@@ -28,7 +28,7 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 exports.topicModel_fetchWithKeywords = function(_keywordsStr,_programId) {
 	var fetchedTopics = [];
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM topics WHERE program_id = ? AND title LIKE "%Str%" AND is_deleted = 0 ORDER BY updated_at DESC',_programId);
+	var result = db.execute("SELECT * FROM topics WHERE program_id = ? AND title LIKE \'%"+_keywordsStr+"%\' AND is_deleted = 0 ORDER BY updated_at DESC",_programId);
 	while(result.isValidRow()) {
 		fetchedTopics.push({
 			title: result.fieldByName('title'),

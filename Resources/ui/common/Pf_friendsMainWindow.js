@@ -1,10 +1,14 @@
 FriendsMainView = function(_parentWindow){
 //CALL ACS
-//	var userACS = require('acs/userACS');	
-//	userACS.userACS_fetchAllUser();
-	var FriendsAddNew = require('ui/common/Pf_friendsAddNew');
+	var friendsAddNew = require('ui/common/Pf_friendsAddNew');
+	var friendsRequest = require('ui/common/Pf_friendsRequest');
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
-//	var tempUsers = [];
+	var friendModel = require('model/friend');
+	var userID = '4fa17dd70020440df700950c';
+	
+// if open more than 1 time, it shows tons of it T_T))
+	var friendsACS = require('acs/friendsACS');
+	friendsACS.searchFriend(userID);
 
 	var self = Ti.UI.createWindow({
 		backgroundColor:'#fff',
@@ -26,7 +30,7 @@ FriendsMainView = function(_parentWindow){
 		font: {fontSize: 13},
 		height: 20
 	});
-	
+
 	var addFriendsView = Ti.UI.createView({
 		top: 20,
 		height:30,
@@ -41,10 +45,6 @@ FriendsMainView = function(_parentWindow){
 		height: 30,
 		font: {fontSize: 14, fontWeight: 'bold'},		
 	});
-	
-	addFriendsLabel.addEventListener('click',function(){
-		_parentWindow.containingTab.open(new FriendsAddNew());
-	});	
 	
 	var nav = Ti.UI.iPhone.createNavigationGroup({
 		window: self
@@ -64,6 +64,30 @@ FriendsMainView = function(_parentWindow){
 		backgroundColor: '#eee'
 	});
 
+	function friendDbLoadedCallBack(e){
+		friendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
+	};
+	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
+
+	Ti.App.addEventListener('friendsDbUpdated',function(e){
+		var myFriendsList = [];
+		myFriends = friendModel.friendModel_fetchFriend(userID);
+		for(var i = 0; i<myFriends.length;i++){
+			var curUser = myFriends[i];
+			var userRow = new tableViewRow(curUser,'myFriend');
+			 myFriendsList.push(userRow);
+		};
+		friendsTable.setData(myFriendsList);
+	});
+	
+	addFriendsLabel.addEventListener('click',function(){
+		_parentWindow.containingTab.open(new friendsAddNew());
+	});	
+	
+	requestLabel.addEventListener('click',function(){
+		_parentWindow.containingTab.open(new friendsRequest());
+	});
+	
 	showRequestView.add(requestLabel);
 	addFriendsView.add(addFriendsLabel);
 	self.add(addFriendsView);

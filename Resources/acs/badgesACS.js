@@ -5,7 +5,6 @@ function badgeSort(a,b) {
 	return a.badge_id - b.badge_id;
 }
 exports.BadgesACS_fetchedBadges = function() {
-	Ti.API.info('call BadgesACS_fetchedBadges');
 	Cloud.Objects.query({
 		classname: 'Badges',	
     	page: 1,
@@ -13,7 +12,6 @@ exports.BadgesACS_fetchedBadges = function() {
 	}, 
 	function (e) {
     if (e.success) {
-    	 Ti.API.info('CALL ALL BADGES SUCCESS');
     	 var badgesCollection = e.Badges; 
     	badgesCollection.sort(badgeSort);
        for (var i = 0; i < badgesCollection.length; i++) {

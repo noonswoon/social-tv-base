@@ -14,8 +14,7 @@ var ProfileHeaderView = function(_parentWindow){
 		var CacheHelper = require('helpers/cacheHelper');
 					
 //CHECK IN//////////////////////////////////////////////////////////////////////
-		function checkinDbLoadedCallBack(e){
-			Ti.API.info('checkinDbLoadedCallBack');					
+		function checkinDbLoadedCallBack(e){			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		};
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
@@ -33,17 +32,14 @@ var ProfileHeaderView = function(_parentWindow){
 /////POINT ACS/////////////////////////////////////////////	
 	PointACS.pointACS_fetchedPoint(userID);
 	function pointDbLoadedCallBack(e){
-			Ti.API.info('pointDbLoadedCallBack');
 			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
-			Ti.API.info('DONE:pointDbLoadedCallBack');
 	};
 		
 		Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);	
 	
 ///LEVEL ACS///////////////////////////////////////////////////////
 		LevelACS.levelACS_fetchedLevel();
-		function levelDbLoadedCallBack(e){
-		Ti.API.info('levelDbLoadedCallBack');					
+		function levelDbLoadedCallBack(e){					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
 		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
 

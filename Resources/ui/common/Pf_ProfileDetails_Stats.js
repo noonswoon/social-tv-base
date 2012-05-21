@@ -47,17 +47,14 @@ var ProfileStatsView = function(){
 		Ti.App.addEventListener('createPointDB', createPointDBCallBack);
 	
 		function createPointDBCallBack(e){
-		Ti.API.info('createPointDBCallBack');
 		PointModel.points_updateNewPoint(e.fetchedPoint);
 		};	
 		
 		Ti.App.addEventListener('updateNewPoint',function(){
-			alert('updateNewPoint');
 			Ti.App.fireEvent('pointsDbUpdated');
 		});
 		
 		Ti.App.addEventListener('pointsDbUpdated', function(){
-			Ti.API.info('pointsDBUpdated');
 			totalPoints = PointModel.points_sumPoints();
 			ProfileDataExp = totalPoints;
 			ProfileDataLevelUp = LevelModel.level_nextLevel(ProfileDataExp);

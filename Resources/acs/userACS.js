@@ -2,7 +2,7 @@ var userCollection=[];
 exports.userACS_fetchAllUser = function(_myusername){
 	Cloud.Users.query({
     page: 1,
-    per_page: 20,
+    per_page: 10,
 	where: {username: {"$ne": _myusername}
   }
 }, function (e) {

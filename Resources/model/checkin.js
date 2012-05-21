@@ -5,7 +5,7 @@ db.close();
 
 // create data for local database
 exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
-	Ti.API.info('checkinModel_updateCheckinsFromACS');
+//	Ti.API.info('checkinModel_updateCheckinsFromACS');
 	var db = Ti.Database.open('Chatterbox'); 
 	//need to clear records with the given programId
 	var result = db.execute('DELETE FROM checkins');
@@ -58,7 +58,7 @@ exports.checkins_count = function(_user){
 };
 
 exports.checkin_create = function(_checkinsCollection){
-		Ti.API.info('checkin_create');
+		//Ti.API.info('checkin_create');
 		var db = Ti.Database.open('Chatterbox'); 
 		var curCheckin = _checkinsCollection;
 		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);

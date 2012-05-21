@@ -1,12 +1,10 @@
-function DiscoveryMainWindow(){
+function PopularWindow(_parent) {
 	
 	var TVProgram = require('model/tvprogram');
 	var TVProgramACS = require('acs/tvprogramACS');
 	var DiscoveryTableViewRow = require('ui/common/discoveryTableViewRow');
 	var CheckinACS = require('acs/checkinACS');
-	// var GuideMainWindow = require('ui/common/guideMainWindow');
 	var CacheHelper = require('helpers/cacheHelper');
-	// var guide = new GuideMainWindow();
 
 	
 	var areAllProgramsTitlesLoaded = false; 
@@ -85,9 +83,8 @@ function DiscoveryMainWindow(){
 	programListTable.addEventListener('click',function(e){
 
 	//	Ti.API.info(e.index+',name: '+e.row.tvprogram.name);
-
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');	
-		self.containingTab.open(new CheckinMainWindow({
+		checkinmainwin = new CheckinMainWindow({
 			programId: e.row.tvprogram.id,
 			programTitle: e.row.tvprogram.name,
 			programSubname: 'subname',
@@ -96,7 +93,8 @@ function DiscoveryMainWindow(){
 			programStarttime: e.row.tvprogram.start_time,
 			programEndtime: e.row.tvprogram.recurring_until,
 			programNumCheckin: e.row.tvprogram.number_checkins
-		}));
+		});
+		_parent.containingTab.open(checkinmainwin);
 	});
 	
 
@@ -106,5 +104,8 @@ function DiscoveryMainWindow(){
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow(); //using caching method instead
 	
 	return self;
+	
+	return self;
 }
-module.exports = DiscoveryMainWindow;
+
+module.exports = PopularWindow;

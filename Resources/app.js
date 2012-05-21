@@ -36,4 +36,5 @@ if (Ti.version < 1.8 ) {
 
 	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 	new ApplicationTabGroup().open();
+
 })();

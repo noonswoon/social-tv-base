@@ -10,14 +10,14 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');	
+	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');	
 	
 	var chatwin = new ChatMainWindow();
-	var messageboardwin =  new ChatMainWindow();// new MessageboardMainWindow(1);		
+	var messageboardwin =  new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
 	//var productwin = new ProductMainWindow();
-	var profilewin =  new ChatMainWindow();// new ProfileMainWindow();
-	var discoveryMainWin = new DiscoveryMainWindow();
+	var profilewin =  new ProfileMainWindow();
+	var selectionMainWin = new ChannelSelectionMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
         icon:'/images/fugitives.png',
@@ -55,16 +55,16 @@ function ApplicationTabGroup() {
 	 });
 	 profilewin.containingTab = profileTab;
 	
-	var discoveryTab = Ti.UI.createTab({
-		title: 'Discovery',
+	var selectionTab = Ti.UI.createTab({
+		title: 'Selection',
 		icon: '/images/tv.png',
-		window: discoveryMainWin
+		window: selectionMainWin
 	});
-	discoveryMainWin.containingTab = discoveryTab;
+	selectionMainWin.containingTab = selectionTab;
 	
     //self.addTab(chatTab);  
     self.addTab(messageboardTab);  
-    self.addTab(discoveryTab);
+    self.addTab(selectionTab);
     self.addTab(profileTab);
    	self.addTab(loginTab);
     //self.addTab(productTab);

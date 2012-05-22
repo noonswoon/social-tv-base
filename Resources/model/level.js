@@ -5,7 +5,6 @@ db.close();
 
 // create data for local database
 exports.levelModel_updateLevelFromACS = function(_levelsCollection) {
-	Ti.API.info('LEVEL LOAD');
 	var db = Ti.Database.open('Chatterbox'); 
 	//	var version = 'v001';
 	db.execute('DELETE FROM levels');

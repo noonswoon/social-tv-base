@@ -29,7 +29,6 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
 
 }, function (e) {
     if (e.success) {
-    	 Ti.API.info('checkin SUCCESS');
         for (var i = 0; i < e.checkins.length; i++) {
         	 var curCheckin = e.checkins[i]; 
                checkin.push(curCheckin);

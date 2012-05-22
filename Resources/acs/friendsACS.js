@@ -40,7 +40,7 @@ exports.searchFriend = function(_userID){
 //add friend /////////////////////////////////////////////////////////////////////////////////////////////////
 exports.addFriend = function(_userID,_callbackFn){
 	alert('user to be friended with: '+_userID);
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json';
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
 	    	alert("success friend added");
@@ -56,7 +56,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	xhr.open("POST", url);
 	var postParameters = {
 		key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
-		user_ids: _userID
+		user_ids: String(_userID),
 	};
 	xhr.send(postParameters);  // request is actually sent with this statement
 };
@@ -80,7 +80,8 @@ exports.approveFriend = function(_userID,_callbackFn){
 	});
 	xhr.open("PUT", url);
 	var putParameters = {
-		user_ids: '4fa207e0b6855308b0009c1d'
+		key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
+		user_ids: _userID,
 	};
 	xhr.send(putParameters);  // request is actually sent with this statement
 };

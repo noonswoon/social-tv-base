@@ -5,8 +5,6 @@ FriendsMainView = function(_parentWindow){
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
 	var friendModel = require('model/friend');
 	var userID = '4fa17dd70020440df700950c';
-	
-// if open more than 1 time, it shows tons of it T_T))
 	var friendsACS = require('acs/friendsACS');
 	friendsACS.searchFriend(userID);
 

@@ -56,7 +56,7 @@ FriendsTableViewRow = function(_user,_source){
 		alert('approve friend');
 		//create in database before adding to cloud
 		friendsModel.friend_create(_user);
-		friendsACS.approveFriend(_user.id,approveRequest);
+		friendsACS.approveFriend(_user.friend_id,approveRequest);
 	});		
 	tableRow.add(approveButton);
 	};	

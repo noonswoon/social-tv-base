@@ -7,6 +7,7 @@ FriendsAddNewView = function(){
 	});
 //USER TABLE/////////////////////////////////////////
 	var userName = 'titaniummick';
+	
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
 	var userACS = require('acs/userACS');
 	

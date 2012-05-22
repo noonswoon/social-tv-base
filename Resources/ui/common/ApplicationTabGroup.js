@@ -20,7 +20,7 @@ function ApplicationTabGroup() {
 	var discoveryMainWin = new ChatMainWindow();//new DiscoveryMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
-        icon:'/images/fugitives.png',
+        icon:'/images/icon/Chat-Bubble.png',
         title:'Chat',
         window:chatwin
     });

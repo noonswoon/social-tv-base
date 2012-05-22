@@ -19,29 +19,45 @@ var ProfileStatsView = function(){
 		font: {fontSize: 14, fontWeight: 'bold'},
 		color: '#fff',
 		textAlign: 'right',
-		top: 5,
+		top: 0,
 		height:30,
 		right: 10
 	});
 		
 	var myLevelLabel = Ti.UI.createLabel({
 		text: '',
-		font: {fontSize: 14, fontWeight: 'bold'},
-		color: '#8ee0ff',
+		font: {fontSize: 16, fontWeight: 'bold'},
+		color: '#53b4df',
 		textAlign: 'left',
 		height:30,
-		top: 5,
-		left: 10			
+		top: 0,
+		left: 10,
+		shadowColor: '#333'		
 	});
 		
-	var expBar = Ti.UI.createProgressBar({
-		top:23,
-	    width:300,
-	    height:20,
-	    min:0,
-	    style:Titanium.UI.iPhone.ProgressBarStyle.DEFAULT
-	});
-
+    var expBar = Ti.UI.createSlider({
+		top:25,
+		width:300,
+		height:30,
+		min:0,
+		thumbImage: 'images/slider/thumb_bar.png',
+		leftTrackImage:'images/slider/slider_bar.png',
+		//rightTrackImage:'images/slider/slider_lightbar.png',
+		rightTrackImage:'images/empty_thumb.png',
+		touchEnabled: false,
+		//backgroundColor: 'transparent'
+    });
+    
+        var expBar_light = Ti.UI.createSlider({
+		top:25,
+		width:300,
+		height:30,
+		min:0,
+		thumbImage: 'images/slider/thumb_nextbar.png',
+		leftTrackImage:'images/slider/slider_nextbar.png',
+		rightTrackImage:'images/slider/slider_lightbar.png',
+		touchEnabled: false,
+    });
 /////////////////////////////////////////////////////////////////////////////
 		//ACS
 		Ti.App.addEventListener('createPointDB', createPointDBCallBack);
@@ -60,10 +76,11 @@ var ProfileStatsView = function(){
 			ProfileDataLevelUp = LevelModel.level_nextLevel(ProfileDataExp);
 			expLabel.text=ProfileDataExp + '/' + ProfileDataLevelUp;
 			expBar.max= ProfileDataLevelUp;
+			expBar_light.max= ProfileDataLevelUp;
 			myRankScore.text = ProfileDataExp;
 			expBar.value = ProfileDataExp;
 			myLevelLabel.text = LevelModel.level_checkLevel(ProfileDataExp);
-
+			expBar_light.value = ProfileDataExp+1000;
 		});
 					
 ///////////////////////////////////////////////////////////////////////////
@@ -212,8 +229,8 @@ var ProfileStatsView = function(){
 		
 		expSec.add(expLabel);
 		expSec.add(myLevelLabel);
+		expSec.add(expBar_light);
 		expSec.add(expBar);
-		expBar.show();
 		profileStats.add(expSec);
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);

@@ -5,10 +5,10 @@ ChannelMainWindow = function (_index){
 	var ChannelTableViewRow = require('ui/common/ChannelTableViewRow');
 		
 	var self = Ti.UI.createWindow({
-		backgroundColor: 'orange'
+		backgroundColor: 'orange',
+		top: 40
 	});
 	
-		
 	var programsInChannelTableView = Ti.UI.createTableView();
 	
 	function tvprogramLoadedAllTimeCompleteCallback(e) {
@@ -19,7 +19,7 @@ ChannelMainWindow = function (_index){
 	function tvprogramsTitlesLoadedCallback(e) {
 		var programsInChannel = [];		
 		var allprograms = TVProgram.TVProgramModel_fetchPrograms(); 
-		//loop all programs
+
 		for(var i=0;i<allprograms.length;i++){
 			
 			var program = allprograms[i];

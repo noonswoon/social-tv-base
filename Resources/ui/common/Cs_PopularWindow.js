@@ -6,12 +6,10 @@ function PopularWindow(_parent) {
 	var CheckinACS = require('acs/checkinACS');
 	var CacheHelper = require('helpers/cacheHelper');
 
-	
 	var areAllProgramsTitlesLoaded = false; 
 	var numProgramsToLoadCheckins = 0;
 	
 	function isEverythingReady() {
-		//Ti.API.info("numProgramsToLoadCheckins value: "+numProgramsToLoadCheckins);
 		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
 			Ti.App.fireEvent("showDiscoveryPage");
 		}
@@ -21,18 +19,12 @@ function PopularWindow(_parent) {
 		isEverythingReady();
 	});
 	
-	
 	var self = Ti.UI.createWindow({
 		title: 'Discovery',
 		backgroundColor: 'black'
 	});
-	
-	
-	var programListTable = Ti.UI.createTableView({
-		// top: 50
-	});
-	
-	// guide.containingTab = self.containingTab;
+		
+	var programListTable = Ti.UI.createTableView();
 
 	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
 		var targetedProgramId = e.targetedProgramId; 
@@ -81,8 +73,6 @@ function PopularWindow(_parent) {
 	});
 
 	programListTable.addEventListener('click',function(e){
-
-	//	Ti.API.info(e.index+',name: '+e.row.tvprogram.name);
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');	
 		checkinmainwin = new CheckinMainWindow({
 			programId: e.row.tvprogram.id,
@@ -97,7 +87,6 @@ function PopularWindow(_parent) {
 		_parent.containingTab.open(checkinmainwin);
 	});
 	
-
 	self.add(programListTable);
 	self.hideNavBar();
 	

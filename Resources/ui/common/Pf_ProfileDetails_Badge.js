@@ -27,7 +27,6 @@ var ProfileBadgeView = function(){
 		//alert(_id.badgeID);
 		var checkBadge = _id.badgeID;
 		if(myUnlockedBadges[checkBadge]===1){
-			Ti.API.info('You already got badge: ' + checkBadge);
 		}
 		else {
 			Ti.API.info('creating your new badge..');
@@ -38,20 +37,17 @@ var ProfileBadgeView = function(){
 	Ti.App.addEventListener('updatedMyBadge',function(_user){
 		var badgeUpdated = _user.badgeID;
 		myUnlockedBadges[badgeUpdated]=1;
-		Ti.API.info('myUnlockedBadges has been updated: ' + myUnlockedBadges[badgeUpdated]);
 		alert('CONGRATS! You have got a new badge: ' + badgesDesc[badgeUpdated]);
 		Ti.App.fireEvent('updatedmyUnlockedBadges');
 	});
 	
 	Ti.App.addEventListener('updatedmyUnlockedBadges',function(){
-			Ti.API.info('Clean my badges view');
 			for (var i in badgeView.children){
 				if (badgeView.children.hasOwnProperty(i)) {
 					badgeView.remove(badgeView.children[i]);
 			   }
 			}	
 			var count = 0;
-			Ti.API.info('Update my badges view');
 			for(var i=0;i<3;i++){
 				for(var j=0;j<3;j++){
 					var badgeImg = Ti.UI.createImageView({
@@ -60,7 +56,6 @@ var ProfileBadgeView = function(){
 						left: (j*100)+5,
 					});
 					if(myUnlockedBadges[count]===1){
-						Ti.API.info(count +' got badge!');
 						badgeImg.image = String(badgesImg[count]);
 					}
 					else {
@@ -74,8 +69,7 @@ var ProfileBadgeView = function(){
 			};			
 	});
 		
-	Ti.App.addEventListener('BadgesLoaded',function(e){		
-		Ti.API.info('BadgesLoaded');
+	Ti.App.addEventListener('BadgesLoaded',function(e){	
 		for(var i=0;i < e.fetchedMyBadges.length; i++) {
 			badgesImg[i] = e.fetchedMyBadges[i].badge_img;
 			badgesDesc[i] = e.fetchedMyBadges[i].badge_desc;	

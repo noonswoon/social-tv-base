@@ -38,20 +38,17 @@ var ProfileStatsView = function(){
     var expBar = Ti.UI.createSlider({
 		top:25,
 		width:300,
-		height:30,
 		min:0,
 		thumbImage: 'images/slider/thumb_bar.png',
 		leftTrackImage:'images/slider/slider_bar.png',
-		//rightTrackImage:'images/slider/slider_lightbar.png',
-		rightTrackImage:'images/empty_thumb.png',
+		rightTrackImage:'images/slider/slider_emptybar.png',
 		touchEnabled: false,
-		//backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
     });
     
         var expBar_light = Ti.UI.createSlider({
 		top:25,
 		width:300,
-		height:30,
 		min:0,
 		thumbImage: 'images/slider/thumb_nextbar.png',
 		leftTrackImage:'images/slider/slider_nextbar.png',

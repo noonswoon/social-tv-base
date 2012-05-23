@@ -30,9 +30,14 @@ function ChannelSelectionMainWindow(){
  	self.setTitleControl(tabBar);
 
 	tabBar.addEventListener('click', function(e){
-		if(mainView.children[0] !== undefined){
-			mainView.remove(mainView.children[0]);	
-		} 
+		// if(mainView.children[0] !== undefined){
+			// mainView.remove(mainView.children[0]);	
+		// } 
+		for (var i in mainView.children){
+			if (mainView.children.hasOwnProperty(i)) {
+				mainView.remove(mainView.children[i]);
+			}
+		}			
 		if(e.index==0){
 			mainView.add(popularwin);
 		}

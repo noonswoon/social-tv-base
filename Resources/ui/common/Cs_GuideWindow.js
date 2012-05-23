@@ -1,4 +1,4 @@
-function GuideWindow() {
+function GuideWindow(_parent) {
 	
 	var ChannelMainWindow = require('ui/common/ChannelMainWindow');
 	
@@ -26,16 +26,17 @@ function GuideWindow() {
 		left: 20
 	});
 	selectChannelToolbar.add(selectChannelLabel);
-
+	
 	//Default Channel(Ch3)
 	var defaultChannel = new ChannelMainWindow(0);
-	self.add(defaultChannel);	
+ 	self.add(defaultChannel);	
 	
 	selectChannelButton.addEventListener('click',function(){
-		
+				
 		var selectChannelPicker = Ti.UI.createPicker({
 			bottom: 0
 		});
+
 		var channel = [];
 		channel[0]=Ti.UI.createPickerRow({title:'Channel3'});
 		channel[1]=Ti.UI.createPickerRow({title:'Channel5'});
@@ -43,11 +44,11 @@ function GuideWindow() {
 		channel[3]=Ti.UI.createPickerRow({title:'Channel9'});
 		channel[4]=Ti.UI.createPickerRow({title:'Channel11'});
 		channel[5]=Ti.UI.createPickerRow({title:'ThaiPBS'});
-	
+		
 		selectChannelPicker.selectionIndicator = true;
 		selectChannelPicker.add(channel);
 		self.add(selectChannelPicker);
-	
+
 		selectChannelPicker.addEventListener('change',function(e){
 			var index = e.rowIndex;
 			if(index === 0){

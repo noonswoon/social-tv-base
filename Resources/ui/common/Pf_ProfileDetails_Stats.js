@@ -68,7 +68,10 @@ var ProfileStatsView = function(){
 			//TODO: สงสัยว่าน่าจะเกิดการ  call event ซ้ำ recheck again
 			//alert('updateNewPoint');
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> ProfileUI-23052012(2)
 			Ti.App.fireEvent('pointsDbUpdated');
 		});
 		
@@ -102,36 +105,38 @@ var ProfileStatsView = function(){
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
 				width: 300,
-				height: 60,
-				selectedBackgroundColor: '#fff'
-				});
+				height: 50,
+				selectedBackgroundColor: '#fff',
+				color: '#666'
+			});
 			var userRankNo = Ti.UI.createLabel({
 				text: '#' + (i+1),
 				left: 15,
 				height:30,
-				font: { fontWeight: 'bold', fontSize: 14}
+				font: { fontWeight: 'bold', fontSize: 14},
+				color: '#666'
 				});
 			var userRankPicture = Ti.UI.createImageView({
 				image: ProfileDataImg,
-				height: 44,
-				width: 44
+				height: 36,
+				width: 36
 				});
 			
 			var userRankPictureView = Ti.UI.createView({
 				backgroundColor: '#fff',
 				borderWidth: 1,
-				width:50, height:50,
-				left: 50,
+				width:40, height:40,
+				left: 40,
 				borderColor: '#E2E5EE',
 			});	
 				
 			var userRankName = Ti.UI.createLabel({
 				text: ProfileDataName, 
-				//top: ,
-				left: 110,
+				left: 90,
 				width: 'auto',
 				height: 30,
-				font: { fontWeight: 'bold', fontSize: 14}
+				font: { fontWeight: 'bold', fontSize: 14},
+				color: '#666'
 				});
 			var userRankScore = Ti.UI.createLabel({
 				text: 50-i, 
@@ -140,7 +145,8 @@ var ProfileStatsView = function(){
 				width: 'auto',
 				textAlign: 'right',
 				height: 30,
-				font: { fontWeight: 'bold', fontSize: 26}
+				font: { fontWeight: 'bold', fontSize: 26},
+				color: '#666'
 			});
 			userRankPictureView.add(userRankPicture);
 			userRank.add(userRankNo);
@@ -155,39 +161,39 @@ var ProfileStatsView = function(){
 		borderRadius: 10,
 		scrollable:false,
 		width: 300,
-		height: 300,
+		height: 250,
 		data: userRankInfo
 	});
 //////////////////////////////////////////////////
 	var myRankInfo = [];
 			var myRank = Ti.UI.createTableViewRow({
 				width: 300,
-				height: 60,
+				height: 50,
 				selectedBackgroundColor: 'transparent'
 				});
 			var myRankNo = Ti.UI.createLabel({
 				text: '#' + 1,
 				left: 15,
 				height:30,
-				font: { fontWeight: 'bold', fontSize: 14}
+				font: {fontSize: 16}
 				});
 			var myRankPicture = Ti.UI.createImageView({
 				image: ProfileDataImg,
-				height: 44,
-				width: 44
+				height: 36,
+				width: 36
 				});
 				
 			var myRankPictureView = Ti.UI.createView({
 				backgroundColor: '#fff',
 				borderWidth: 1,
-				width:50, height:50,
-				left: 50,
+				width:40, height:40,
+				left: 40,
 				borderColor: '#E2E5EE',
 			});	
 				
 			var myRankName = Ti.UI.createLabel({
 				text: ProfileDataName, 
-				left: 110,
+				left: 90,
 				width: 'auto',
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 14}
@@ -211,12 +217,11 @@ var ProfileStatsView = function(){
 //////////////////////////////////////////////////	
 	
 	var myRankTable = Ti.UI.createTableView({
-		top: 340,
+		top: leaderTable.top+leaderTable.height+10,
 		borderRadius: 10,
 		scrollable:false,
 		width: 300,
-		height: 59,
-		backgroundColor: '#FFC48C',
+		height: 50,
 		data: myRankInfo
 	});
 	

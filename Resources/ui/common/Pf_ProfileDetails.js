@@ -11,8 +11,7 @@ var ProfileDetailView = function(){
 		});
 		var profileTab = Titanium.UI.iOS.createTabbedBar({
 			labels:['Stats', 'Activity', 'Badges', 'Rewards'],
-			backgroundColor:'#398bb0',
-			backgroundSelectedColor: '#fff',
+			backgroundColor:'#5baad1',
 			style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 			height:30,
 			width:300,
@@ -54,9 +53,7 @@ var ProfileDetailView = function(){
 				profileDetailScroll.remove(profileDetailScroll.children[i]);
 			}
 		}			
-/*		while (profileDetailScroll.children !== undefined && profileDetailScroll.children.length !== 0){
-				profileDetailScroll.remove(profileDetailScroll.children[0]);}	
-*/			
+		
 		if(e.index==0){
 			profileDetailScroll.add(profileStats);}
 		else if (e.index==1) {

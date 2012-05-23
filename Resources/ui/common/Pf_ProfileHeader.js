@@ -49,10 +49,10 @@ var ProfileHeaderView = function(_parentWindow){
 ///////////////////////////////////////////////////////////////////
 	var headerView = Ti.UI.createView({
 			backgroundGradient: {
-        	type: 'linear',
-        	startPoint: { x: '0%', y: '0%' },
-        	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]}
+	        	type: 'linear',
+	        	startPoint: { x: '0%', y: '0%' },
+	        	endPoint: { x: '0%', y: '100%' },
+	        	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]}
 	});
 	
 		var totalCheckins=0;
@@ -117,6 +117,13 @@ var ProfileHeaderView = function(_parentWindow){
 			opacity: 0.2			
 		});		
 */
+		var refreshButton = Ti.UI.createImageView({
+			image: 'images/icon/refresh.png',
+			right: 10,
+			top: 5,
+			height:20,
+			width:20
+		});
 		//checkin count
 		var columnCheckIn = Ti.UI.createView({
 			top: 40,
@@ -155,7 +162,6 @@ var ProfileHeaderView = function(_parentWindow){
 		//img
 		var columnFriendImage = Ti.UI.createImageView({
 			image: 'images/icon/112-group.png',
-			//opacity: 0.6,
 			top: 10
 		});
 		// count
@@ -183,6 +189,7 @@ var ProfileHeaderView = function(_parentWindow){
 	headerView.add(profilePictureContain);
 	headerView.add(profileName);
 	headerView.add(socialNet);
+	headerView.add(refreshButton);
 	headerView.add(columnCheckIn);
 	headerView.add(columnFriend);	
 

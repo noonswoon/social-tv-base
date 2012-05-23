@@ -1,6 +1,6 @@
 function ProfileMainWindow() {
 	var self = Titanium.UI.createWindow({
-		backgroundColor:'#fff',
+	//	backgroundColor:'#fff',
 		title: "My Profile",
 		barColor:'#398bb0'
 	});
@@ -31,6 +31,7 @@ function ProfileMainWindow() {
 				right: 0,
 				bottom: 0,
 				scrollable: false,
+				backgroundColor: '#212b3d',
 			});
 		var header = Ti.UI.createTableViewSection();
 		var profileHeader = new ProfileHeader(self);

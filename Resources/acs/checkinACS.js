@@ -42,7 +42,6 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
 			});
 };
 
-//create checkin
 exports.checkinACS_createCheckin = function(_eventID){
 	Cloud.Checkins.create({
     event_id: _eventID,

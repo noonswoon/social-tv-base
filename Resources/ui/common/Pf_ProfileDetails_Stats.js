@@ -64,11 +64,11 @@ var ProfileStatsView = function(){
 		};	
 		
 		Ti.App.addEventListener('updateNewPoint',function(){
-<<<<<<< HEAD
+
 			//TODO: สงสัยว่าน่าจะเกิดการ  call event ซ้ำ recheck again
 			//alert('updateNewPoint');
-=======
->>>>>>> profileFunctionality
+
+
 			Ti.App.fireEvent('pointsDbUpdated');
 		});
 		

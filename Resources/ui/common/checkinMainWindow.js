@@ -92,19 +92,16 @@ Checkin = function (_datafromrow){
 	self.add(checkinButton);
 	
 	checkinButton.addEventListener('click',function(){
-		//alert('Checking in..');
 		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
 	});
 	
 	function oneCheckinUpdatedCallback(_checkinID) {
-		//Ti.API.info('Your checkin has been update to your database: '+ CheckinModel.checkins_count(userID));
-		
 		PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
 		// checkinCount.text = CheckinModel.checkins_count(userID);
 		BadgeCondition.badgeCondition_check();
 		
 		var num = TVProgram.TVProgramModel_countCheckins(_datafromrow.programId);
-		//alert("firing event: updateNumCheckinAtDiscovery"+_datafromrow.programId);
+		programNumCheckin.text = programNumCheckin.text + 1;
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_datafromrow.programId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');
 	}

@@ -1,4 +1,4 @@
-DiscoveryTableViewRow = function(_curTVProgram){
+Cs_PopularWindowTableViewRow = function(_curTVProgram){
 	
 	var TVProgram = require('model/tvprogram');
 	
@@ -69,4 +69,4 @@ DiscoveryTableViewRow = function(_curTVProgram){
 		
 		return row;
 }
-module.exports = DiscoveryTableViewRow;
+module.exports = Cs_PopularWindowTableViewRow;

@@ -37,7 +37,7 @@ function ChannelSelectionMainWindow(){
 			if (mainView.children.hasOwnProperty(i)) {
 				mainView.remove(mainView.children[i]);
 			}
-		}			
+		}		
 		if(e.index==0){
 			mainView.add(popularwin);
 		}

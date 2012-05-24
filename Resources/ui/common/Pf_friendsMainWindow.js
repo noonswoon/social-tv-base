@@ -3,6 +3,7 @@ FriendsMainView = function(_parentWindow){
 	var friendsAddNew = require('ui/common/Pf_friendsAddNew');
 	var friendsRequest = require('ui/common/Pf_friendsRequest');
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
+	var friendsProfile = require('ui/common/Pf_friendsProfile');
 	var friendModel = require('model/friend');
 	var userID = '4fa17dd70020440df700950c';
 	var friendsACS = require('acs/friendsACS');
@@ -85,6 +86,11 @@ FriendsMainView = function(_parentWindow){
 	requestLabel.addEventListener('click',function(){
 		_parentWindow.containingTab.open(new friendsRequest());
 	});
+	
+	friendsTable.addEventListener('click',function(e){
+		_parentWindow.containingTab.open(new friendsProfile(e.rowData.user));
+	});
+	
 	
 	showRequestView.add(requestLabel);
 	addFriendsView.add(addFriendsLabel);

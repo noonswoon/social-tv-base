@@ -13,19 +13,12 @@ function ApplicationTabGroup() {
 	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');	
 	
 	var chatwin = new ChatMainWindow();
-<<<<<<< HEAD
 
-=======
->>>>>>> ProfileUI-23052012(2)
 	var messageboardwin =  new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
 	var productwin = new ProductMainWindow();
 	var profilewin =  new ProfileMainWindow();
 	var selectionMainWin = new ChannelSelectionMainWindow();
-<<<<<<< HEAD
-
-=======
->>>>>>> ProfileUI-23052012(2)
 
     var chatTab = Titanium.UI.createTab({  
         icon:'/images/icon/Chat-Bubble.png',
@@ -78,13 +71,7 @@ function ApplicationTabGroup() {
     //self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
-<<<<<<< HEAD
-
    	self.setActiveTab(self.tabs[1]);
-=======
-   	self.setActiveTab(self.tabs[2]);
->>>>>>> ProfileUI-23052012(2)
-
 		//coming to this page, should already loggin
 	
 	//checking the current login and setup the currentLoggedIn user to query anywhere

@@ -17,7 +17,7 @@ Checkin = function (_datafromrow){
 	
 	var headerView = Ti.UI.createView({
 		top: 0,
-		height: 100,
+		height: 110,
 		backgroundGradient: {
         	type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
@@ -31,55 +31,116 @@ Checkin = function (_datafromrow){
 	var programTitle = Ti.UI.createLabel({
 		text: _datafromrow.programTitle,
 		textAlign: 'left',
-		left: 150,
-		font:{fontWeight:'bold',fontSize:18},
+		color: '#333',
+		left: 145,
+		height: 30,
+		width: 142,
+		font:{fontWeight:'bold',fontSize:17},
 		top: 10
 	});
 	headerView.add(programTitle);
 	
 	var programSubname = Ti.UI.createLabel({
 		text: _datafromrow.programSubname,
-		color: '#420404',
+		color: '#333',
 		textAlign:'left',
-		left: 150,
 		font:{fontWeight:'bold',fontSize:13},
-		top: 30
+		top: 33,
+		left:145
 	});
 	headerView.add(programSubname);
 	
 	var programImage = Ti.UI.createImageView({
 		image: _datafromrow.programImage,
-		top: 5,
-		left: 10,
-		bottom: 5,
 		width:125,
-		height:89
+		height:90
 	});
-	headerView.add(programImage);
-	
-	var programChannel = Ti.UI.createImageView({
-		image: _datafromrow.programChannel,
-		bottom: 5,
-		left: 270,
-		width: 35,
-		height: 15
+		var programImageView = Ti.UI.createView({
+		width: 131,
+		height: 96,
+		borderColor: '#D1CBCD',
+		borderWidth: 1,
+		backgroundColor: '#fff',
+		top: 10,
+		left:5,
+		bottom:10
 	});
-	headerView.add(programChannel);
+	programImageView.add(programImage);
+	headerView.add(programImageView);
 	
+	
+	var channelView = Ti.UI.createView({
+		width: 52,
+		bottom:5,
+		right: 10,
+		height: 47,
+	});
+	var programChannelImage = Ti.UI.createImageView({
+		image: 'images/icon/tvchannel.png',
+		opacity: 0.5,
+		top: 3
+	});
+	var programChannel = Ti.UI.createLabel({
+		text: _datafromrow.programChannel,
+		textAlign: 'left',
+		color: '#898687',
+		height: 20,
+		font: {fontSize: 14},
+		bottom: 0
+	});
+	channelView.add(programChannel);
+	channelView.add(programChannelImage);	
+	headerView.add(channelView);
+	
+	var checkinView = Ti.UI.createView({
+		width: 52,
+		bottom:5,
+		left: 150,
+		height: 47
+	});
+	var programNumCheckinImage = Ti.UI.createImageView({
+		image: 'images/icon/watch.png',
+		opacity: 0.5,
+		top: 0
+	});
 	var programNumCheckin = Ti.UI.createLabel({
 		text: _datafromrow.programNumCheckin,
-		textAlign: 'right',
-		right: 170,
-		bottom: 5
+		textAlign: 'left',
+		color: '#898687',
+		font: {fontSize: 14},
+		bottom: 0
 	});
-	headerView.add(programNumCheckin);
+	checkinView.add(programNumCheckin);
+	checkinView.add(programNumCheckinImage);	
+	headerView.add(checkinView);
 	
+	var friendView = Ti.UI.createView({
+		width: 52,
+		bottom:5,
+		left: 202,
+		height: 47
+	});
+	var programNumFriendImage = Ti.UI.createImageView({
+		image: 'images/icon/friends.png',
+		opacity: 0.5,
+		top: 0
+	});
+	var programNumFriend = Ti.UI.createLabel({
+		text: _datafromrow.programNumCheckin,
+		textAlign: 'left',
+		color: '#898687',
+		bottom: 0,
+		font: {fontSize: 14},
+	});
+	friendView.add(programNumFriend);
+	friendView.add(programNumFriendImage);	
+	headerView.add(friendView);		
 	
 ///////////////////////////////////////////////////Checkin Section
 
 	var checkinView = Ti.UI.createView({
 		backgroundImage: 'images/bgcheckin.png',
-		top: 100
+		top: 110
 	});
 	self.add(checkinView);
 	

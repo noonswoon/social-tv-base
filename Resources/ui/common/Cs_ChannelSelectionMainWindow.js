@@ -6,6 +6,7 @@ function ChannelSelectionMainWindow(){
 
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'transparent',
+		barColor:'#398bb0',
 		title: 'Popular'
 	});
 	
@@ -16,6 +17,7 @@ function ChannelSelectionMainWindow(){
 	var tabBar = Ti.UI.iOS.createTabbedBar({
 		labels: ['Popular','Guide'],
 		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
+		backgroundColor:'#398bb0',
 		height:35,
 		width:200,
 		index:0

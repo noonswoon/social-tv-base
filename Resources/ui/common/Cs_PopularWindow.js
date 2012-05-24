@@ -20,11 +20,20 @@ function PopularWindow(_parent) {
 	});
 	
 	var self = Ti.UI.createWindow({
-		title: 'Discovery',
-		backgroundColor: 'black'
 	});
-		
-	var programListTable = Ti.UI.createTableView();
+	
+	var TimeSelection = require('ui/common/Cs_PopularWindow_TimeSelection');	
+	var timeSelection = new TimeSelection();
+	var timeSelectionView = Ti.UI.createView({
+		height: 35,
+		top:0,
+		backgroundColor: 'transparent'
+	});	
+	timeSelectionView.add(timeSelection);
+	
+	var programListTable = Ti.UI.createTableView({
+		top: 35
+	});
 
 	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
 		var targetedProgramId = e.targetedProgramId; 
@@ -77,7 +86,7 @@ function PopularWindow(_parent) {
 			programTitle: e.row.tvprogram.name,
 			programSubname: 'subname',
 			programImage: e.row.tvprogram.photo,
-			programChannel: "http://upload.wikimedia.org/wikipedia/commons/thumb/d/de/HBO_logo.svg/200px-HBO_logo.svg.png",
+			programChannel: e.row.tvprogram.channel_id,
 			programStarttime: e.row.tvprogram.start_time,
 			programEndtime: e.row.tvprogram.recurring_until,
 			programNumCheckin: e.row.tvprogram.number_checkins
@@ -85,11 +94,11 @@ function PopularWindow(_parent) {
 		_parent.containingTab.open(checkinmainwin);
 	});
 	
+	self.add(timeSelectionView);
 	self.add(programListTable);
 	self.hideNavBar();
 	
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
-
 	return self;
 }
 

@@ -2,7 +2,7 @@
 var ProfileHeaderView = function(_parentWindow){
 				
 //CALL DATA
-		var userID = '4fa17dd70020440df700950c';
+	    var user_id = '4fa17dd70020440df700950c';
 		var CheckinACS = require('acs/checkinACS');		
 		var PointACS = require('acs/pointACS');
 		var LevelACS = require('acs/levelACS');	
@@ -19,18 +19,18 @@ var ProfileHeaderView = function(_parentWindow){
 		};
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
-			columnCheckInCount.text = CheckinModel.checkins_count(userID);
+			columnCheckInCount.text = CheckinModel.checkins_count(user_id);
 		});
 		Ti.App.addEventListener('updateHeaderCheckin',function(){
-			columnCheckInCount.text=CheckinModel.checkins_count(userID);
+			columnCheckInCount.text=CheckinModel.checkins_count(user_id);
 		});
 		
 		// Using cache		
-		CacheHelper.fetchACSDataOrCache('userCheckin'+userID, CheckinACS.checkinACS_fetchedCheckIn, userID, 'checkinsDbUpdated');
+		CacheHelper.fetchACSDataOrCache('userCheckin'+user_id, CheckinACS.checkinACS_fetchedCheckIn,user_id, 'checkinsDbUpdated');
 	
 		
 /////POINT ACS/////////////////////////////////////////////	
-	PointACS.pointACS_fetchedPoint(userID);
+	PointACS.pointACS_fetchedPoint(user_id);
 	function pointDbLoadedCallBack(e){
 			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
 	};
@@ -44,7 +44,7 @@ var ProfileHeaderView = function(_parentWindow){
 		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
 
 ///BADGE ACS////////////////////////////////////////////////////////
-	myBadgeACS.myBadgeACS_fetchedBadge(userID);
+	myBadgeACS.myBadgeACS_fetchedBadge(user_id);
 
 ///////////////////////////////////////////////////////////////////
 	var headerView = Ti.UI.createView({

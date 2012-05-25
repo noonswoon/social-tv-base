@@ -42,3 +42,12 @@ exports.friend_create = function(_friendsCollection){
 		db.close();
 		Ti.App.fireEvent("friendsDbUpdated",curFriend);
 };
+
+exports.friendModel_removeFriend = function(_friendID){
+		var db = Ti.Database.open('Chatterbox');
+		db.execute('DELETE FROM friends where friend_id = ?',_friendID);
+		db.close();
+		Ti.App.fireEvent('removedFriend');
+};	
+
+

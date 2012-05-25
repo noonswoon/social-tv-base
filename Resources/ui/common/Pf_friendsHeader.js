@@ -6,6 +6,9 @@ FriendsHeaderView = function(_friend){
 		var CheckinModel = require('model/checkin');	
 		var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
 		var CacheHelper = require('helpers/cacheHelper');
+		var FriendModel = require('model/friend');
+		var FriendACS = require('acs/friendsACS')
+		var FriendsProfile = require('ui/common/Pf_friendsProfile')
 					
 //CHECK IN//////////////////////////////////////////////////////////////////////
 		function checkinDbLoadedCallBack(e){			
@@ -120,7 +123,25 @@ FriendsHeaderView = function(_friend){
 			bottom: 10
 		});
 		
+		var removeFriendButton = Ti.UI.createButton({
+			width: 25,
+			height: 25,
+			right: 20,
+			top: 5
+		});
 		
+		removeFriendButton.addEventListener('click',function(e){
+			FriendModel.friendModel_removeFriend(_friend.friend_id);
+			FriendACS.removedFriendFromACS(_friend.friend_id);
+			alert('remove');
+		});
+// 		
+		// function redirect(){			
+					// FriendsMainWindow.open({
+  			  // transition : Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT,
+   			 // duration : 1000
+			// });
+		// };
 
 	profilePictureContain.add(profilePicture);
 	columnCheckIn.add(columnCheckInImage);
@@ -130,7 +151,8 @@ FriendsHeaderView = function(_friend){
 	headerView.add(profilePictureContain);
 	headerView.add(profileName);
 	headerView.add(columnCheckIn);
-	headerView.add(columnFriend);	
+	headerView.add(columnFriend);
+	headerView.add(removeFriendButton);	
 
 return headerView;
 }

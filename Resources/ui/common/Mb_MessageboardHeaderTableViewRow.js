@@ -1,7 +1,7 @@
 MessageboardHeaderTableViewRow = function(_showName,_showSubName) {
 	//UI stuff
 	var header = Ti.UI.createTableViewRow({
-		height: 140,
+		height: 120,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	

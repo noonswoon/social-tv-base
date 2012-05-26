@@ -12,13 +12,25 @@ MessageboardTableViewRow = function(_topic) {
 		text: _topic.title,
 		top:5,
 		left: 5,
-		width: 'auto',
+		width: '260',
 		height: 'auto',
 		font: { fontSize: 16, fontFamily: 'Helvetica Neue' }
 	})
 	
+	row.numComments = Ti.UI.createLabel({
+		text: '9 replies >',
+		color: 'black',
+		textAlign:'right',
+		left:215,
+		width:100,
+		top:2,
+		font:{fontWeight:'bold',fontSize:13}
+	});
+	
+	
 	//ADDING UI COMPONENTS
 	row.add(row.topicLabel);
+	row.add(row.numComments);
 	
 	//MISCELLENEOUS
 	row.topic = _topic;

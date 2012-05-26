@@ -117,13 +117,9 @@ function CommentWindow(_topicId) {
 		assignRankingScores(commentsOfTopic); 
 		
 		//sort comments based on rankingScore
-		for(var i=0;i<commentsOfTopic.length;i++)
-			Ti.API.info('commentId: '+commentsOfTopic[i].acsObjectId+', score: '+commentsOfTopic[i].rankingScore);
+		commentsOfTopic.sort(commentSort);
 		
-		//assignRankingScores.sort(commentSort);
-		for(var i=0;i<commentsOfTopic.length;i++)
-			Ti.API.info('commentId: '+commentsOfTopic[i].acsObjectId+', score: '+commentsOfTopic[i].rankingScore);	
-						
+		//recursively build the comment lists
 		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
 	
@@ -258,7 +254,7 @@ function CommentWindow(_topicId) {
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
 	
 	//fetching data or get data through caching mechanism
-	//Comment.contentsDuringOffline();
+	Comment.contentsDuringOffline();
 	//Comment.commentModel_updateRankingScore('4fbfbcdb002044729301dd73');
 	CacheHelper.fetchACSDataOrCache('commentsOfTopic'+_topicId, CommentACS.commentACS_fetchAllCommentsOfPostId, _topicId, 'commentsDbUpdated');
 	return self;

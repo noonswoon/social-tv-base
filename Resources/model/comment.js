@@ -201,8 +201,6 @@ exports.contentsDuringOffline = function() {
 	db.execute("INSERT INTO comments(id,acs_object_id,topic_id,content,rating,username, response_to_object_id,is_a_vote, is_deleted, updated_at) "+
 							"VALUES(NULL,?,?,?,?,?,?,?,0,?)", 'bb','4fbfbcdb002044729301dd73','m',1,'dude','a',1,ct1Str);
 	db.execute("INSERT INTO comments(id,acs_object_id,topic_id,content,rating,username, response_to_object_id,is_a_vote, is_deleted, updated_at) "+
-							"VALUES(NULL,?,?,?,?,?,?,?,0,?)", 'bbb','4fbfbcdb002044729301dd73','m',1,'dude','a',1,ct1Str);
-	db.execute("INSERT INTO comments(id,acs_object_id,topic_id,content,rating,username, response_to_object_id,is_a_vote, is_deleted, updated_at) "+
 							"VALUES(NULL,?,?,?,?,?,?,?,0,?)", 'bbbb','4fbfbcdb002044729301dd73','m',-1,'dude','a',1,ct1Str);												
 	
 	var commentACSId = 'a'

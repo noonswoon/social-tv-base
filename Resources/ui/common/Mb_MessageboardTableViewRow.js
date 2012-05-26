@@ -1,7 +1,8 @@
 MessageboardTableViewRow = function(_topic) {
 	//UI STUFF
 	var row = Ti.UI.createTableViewRow({
-		height: 40,
+		height:'auto',
+		backgroundColor: 'pink',
 		allowsSelection: true,
 		className: "TopicTableViewRow"
 	});
@@ -11,8 +12,8 @@ MessageboardTableViewRow = function(_topic) {
 		top: 5,
 		left: 5,
 		width: 'auto',
-		height: 30,
-		font: { fontSize: 20, fontFamily: 'Helvetica Neue' }
+		height: 'auto',
+		font: { fontSize: 16, fontFamily: 'Helvetica Neue' }
 	})
 	
 	//ADDING UI COMPONENTS
@@ -20,6 +21,7 @@ MessageboardTableViewRow = function(_topic) {
 	
 	//MISCELLENEOUS
 	row.topic = _topic;
+	row.filter = _topic.title;
 	
 	return row;
 }

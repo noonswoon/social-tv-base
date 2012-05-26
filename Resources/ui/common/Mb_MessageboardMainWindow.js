@@ -3,14 +3,14 @@ function MessageboardMainWindow(_programId) {
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
 	
-	var MessageboardHeaderTableViewRow = require('ui/common/Mb_MessageboardHeaderTableViewRow');
+	var MessageboardHeader = require('ui/common/Mb_MessageboardHeader');
 	var MessageboardTableViewRow = require('ui/common/Mb_MessageboardTableViewRow');
 	var MessageboardAddWindow = require('ui/common/Mb_MessageboardAddWindow');
 	var CommentWindow = require('ui/common/Mb_CommentWindow');
 	var CacheHelper = require('helpers/cacheHelper');
 		
 	//OBJECTS INSTANTIATION
-	var messageboardHeader = new MessageboardHeaderTableViewRow('Reya','Famous Lakorn');	
+	var messageboardHeader = new MessageboardHeader('Reya','Famous Lakorn');	
 	var addWindow = new MessageboardAddWindow(_programId);	
 		
 	//UI STUFF
@@ -20,25 +20,26 @@ function MessageboardMainWindow(_programId) {
 		title: "Message Board",
 		barColor: '#6d0a0c'
 	});
+
+	var searchTextField = Titanium.UI.createSearchBar({
+		left: 50,
+		top: 130,
+		barColor:'#6d0a0c',
+		showCancel:false,
+		hintText:'Search here...',
+	});
 	
 	var allTopicTable = Ti.UI.createTableView({
-		top: 0,
+		top: 120,
 		left: 0,
 		right: 0,
 		bottom: 0,
 		scrollable: true,
 		search: searchTextField,//messageboardHeader.searchTextField,
-		searchHidden: true
-	});
-	
-	var searchTextField = Titanium.UI.createSearchBar({
-		left: 0,
-		top: 0,
-		width: 280,
-		barColor:'#6d0a0c',
-		showCancel:false,
-		hintText:'Search here...'
-	});
+		filterAttribute: 'filter',
+		searchHidden: false
+	});	
+
 
 	var addButton = Ti.UI.createButton({
 		right: 10,
@@ -48,11 +49,12 @@ function MessageboardMainWindow(_programId) {
 		title: '+'
 	});
 	
-	var searchbarTableViewRow = Ti.UI.createTableViewRow();
-	searchbarTableViewRow.add(searchTextField);
-	searchbarTableViewRow.add(addButton);
+	//var searchbarTableViewRow = Ti.UI.createTableViewRow();
+	//searchbarTableViewRow.add(searchTextField);
+	//searchbarTableViewRow.add(addButton);
 	
 	//ADDING UI COMPONENTS TO WINDOW
+	self.add(messageboardHeader);
 	self.add(allTopicTable);
 
 	//CALLBACK FUNCTIONS
@@ -64,7 +66,7 @@ function MessageboardMainWindow(_programId) {
 	function topicsDbUpdatedCallback(e) {
 		//clear current data in the table
 		allTopicTable.data = [];
-		var viewRowsData = [messageboardHeader,searchbarTableViewRow];
+		var viewRowsData = [];//[searchbarTableViewRow];
 		
 		//retrieve from db
 		var allTopics = Topic.topicModel_fetchFromProgramId(_programId);
@@ -103,23 +105,6 @@ function MessageboardMainWindow(_programId) {
 		self.containingTab.open(addWindow);
 	});
 	
-	searchTextField.addEventListener('change', function(e) {
-		Ti.API.info('search on: '+searchTextField.value);
-	/*	if(messageboardHeader.searchTextField.value.length >= 10) {
-			//clear current data in the table
-			allTopicTable.data = [{title:''}]; //work around the crash
-			var viewRowsData = [messageboardHeader];
-			
-			//retrieve from db with keywords
-			var keywordsStr = messageboardHeader.searchTextField.value;
-			var topicsOfKeywords = Topic.topicModel_fetchWithKeywords(keywordsStr,_programId);
-			for (var i=0;i<topicsOfKeywords.length;i++) {
-				var row = new MessageboardTableViewRow(topicsOfKeywords[i]);
-				viewRowsData.push(row);
-			}
-			allTopicTable.setData(viewRowsData);
-	} */
-	});
 
 	allTopicTable.addEventListener('click', function(e){
 		if (e.index == 0) return;
@@ -132,6 +117,13 @@ function MessageboardMainWindow(_programId) {
 	Ti.App.addEventListener("insertingTopicTableViewRow", addNewTopicTableViewRowCallback);
 	Ti.App.addEventListener('topicCreatedACS', topicCreatedACSCallback);
 	
+	searchTextField.addEventListener('return', function(e) {
+		searchTextField.blur();
+	});
+	searchTextField.addEventListener('cancel', function(e) {
+		searchTextField.blur();
+	});
+
 	self.addEventListener("close", function(e) {
 		alert("closing MbMainWindow-rarely see this");
 		Ti.App.removeEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);

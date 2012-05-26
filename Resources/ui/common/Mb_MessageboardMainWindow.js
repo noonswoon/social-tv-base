@@ -20,41 +20,47 @@ function MessageboardMainWindow(_programId) {
 		title: "Message Board",
 		barColor: '#6d0a0c'
 	});
-
+	
+	var searchView = Ti.UI.createView({
+		top: 120,
+		width:'auto',
+		height:44,
+		backgroundColor: 'pink',
+		zIndex:2
+	});
 	var searchTextField = Titanium.UI.createSearchBar({
-		left: 50,
-		top: 130,
+		top: 0, 
+		left: 0,
+		width: 285,
 		barColor:'#6d0a0c',
 		showCancel:false,
 		hintText:'Search here...',
 	});
 	
+	var addButton = Ti.UI.createButton({
+		right: 0,
+		top: 0,
+		width: 40,
+		height: 40,
+		title: '+'
+	});
+	searchView.add(searchTextField);
+	searchView.add(addButton);
+	
 	var allTopicTable = Ti.UI.createTableView({
-		top: 120,
+		top: 160,
 		left: 0,
 		right: 0,
-		bottom: 0,
 		scrollable: true,
 		search: searchTextField,//messageboardHeader.searchTextField,
 		filterAttribute: 'filter',
-		searchHidden: false
+		searchHidden: true, //the bar is outside the table
+		backgroundColor: 'pink'
 	});	
-
-
-	var addButton = Ti.UI.createButton({
-		right: 10,
-		top: 0,
-		width: 30,
-		height: 30,
-		title: '+'
-	});
-	
-	//var searchbarTableViewRow = Ti.UI.createTableViewRow();
-	//searchbarTableViewRow.add(searchTextField);
-	//searchbarTableViewRow.add(addButton);
 	
 	//ADDING UI COMPONENTS TO WINDOW
 	self.add(messageboardHeader);
+	self.add(searchView);
 	self.add(allTopicTable);
 
 	//CALLBACK FUNCTIONS
@@ -107,7 +113,6 @@ function MessageboardMainWindow(_programId) {
 	
 
 	allTopicTable.addEventListener('click', function(e){
-		if (e.index == 0) return;
 		var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
 		self.containingTab.open(commentwin);
 	});		

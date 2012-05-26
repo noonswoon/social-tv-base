@@ -1,6 +1,7 @@
 MessageboardTableViewRow = function(_topic) {
 	//UI STUFF
 	var row = Ti.UI.createTableViewRow({
+		top:0,
 		height:'auto',
 		backgroundColor: 'pink',
 		allowsSelection: true,
@@ -9,7 +10,7 @@ MessageboardTableViewRow = function(_topic) {
 	
 	row.topicLabel = Ti.UI.createLabel({
 		text: _topic.title,
-		top: 5,
+		top:5,
 		left: 5,
 		width: 'auto',
 		height: 'auto',

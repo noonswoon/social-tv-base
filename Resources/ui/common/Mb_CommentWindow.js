@@ -80,7 +80,8 @@ function CommentWindow(_topicId) {
 		//getting topicInfo from the db
 		
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
-		commentHeader.topicLabel.text = curTopic.title;
+		
+		commentHeader.headerTable.topicRow.topicLabel.text = curTopic.title;
 
 		//use momentjs for helping on converting dateObject from string
 		//problematic because ACS stores the date as a string with timezone format (+0000)
@@ -90,8 +91,8 @@ function CommentWindow(_topicId) {
 		//namely, the 'MMM D, YYYY hh:mm:ss' format
 		var dm = moment(curTopic.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 		var submitDateStr = since(dm);
-		commentHeader.dateLabel.text = "Submitted "+submitDateStr+" by "+curTopic.username;
-
+		commentHeader.headerTable.dateRow.dateLabel.text = "Submitted "+submitDateStr+" by "+curTopic.username;
+		Ti.API.info("setting submission date");
 		//retrieve from db
 		var allComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
 		var commentsOfTopic = [];
@@ -130,7 +131,7 @@ function CommentWindow(_topicId) {
 	}
 	
 	function commentCreatedACSCallback(e) {
-		commentHeader.replyTextField.value = "";
+		commentHeader.headerTable.textFieldRow.replyTextField.value = "";
 		var newComment = e.newComment;	
 		var commentForTableViewRow = {
 			commentLevel: 0,
@@ -189,17 +190,17 @@ function CommentWindow(_topicId) {
 	}
 
 	function postCommentAction(e) {
-		if(commentHeader.replyTextField.value === '') {
-			commentHeader.replyTextField.blur();
+		if(commentHeader.headerTable.textFieldRow.replyTextField.value === '') {
+			commentHeader.headerTable.textFieldRow.replyTextField.blur();
 			return;
 		}
-		var newId = Comment.commentModel_addCommentOrRating(_topicId,commentHeader.replyTextField.value,0,acs.getUserLoggedIn().username,_topicId,0);
+		var newId = Comment.commentModel_addCommentOrRating(_topicId,commentHeader.headerTable.textFieldRow.replyTextField.value,0,acs.getUserLoggedIn().username,_topicId,0);
 		var newCommentDetail = {
-			title: commentHeader.replyTextField.value,
+			title: commentHeader.headerTable.textFieldRow.replyTextField.value,
 			id: newId,
 			acsObjectId: 0, //need to be later updated
 			topicId: _topicId,
-			content: commentHeader.replyTextField.value,
+			content: commentHeader.headerTable.textFieldRow.replyTextField.value,
 			rating: 0,
 			username: acs.getUserLoggedIn().username,
 			responseToObjectId: _topicId,
@@ -210,13 +211,13 @@ function CommentWindow(_topicId) {
 		var commentRow = new CommentReplyTableViewRow(newCommentDetail,0);
 		commentsTable.insertRowAfter(0,commentRow);
 		
-		CommentACS.commentACS_createCommentOfTopic(commentHeader.replyTextField.value,newId,_topicId);
-		commentHeader.replyTextField.value = "";
-		commentHeader.replyTextField.blur();
+		CommentACS.commentACS_createCommentOfTopic(commentHeader.headerTable.textFieldRow.replyTextField.value,newId,_topicId);
+		commentHeader.headerTable.textFieldRow.replyTextField.value = "";
+		commentHeader.headerTable.textFieldRow.replyTextField.blur();
 	}
 	//ADD EVENT LISTENERS  header.replyButton
-	commentHeader.replyButton.addEventListener('click',postCommentAction); //can either post by click on the 'reply' keyboard button (only iOS)
-	commentHeader.replyTextField.addEventListener('return',postCommentAction); //or click on the 'return' button (iOS/Android)
+	commentHeader.headerTable.textFieldRow.replyButton.addEventListener('click',postCommentAction); //can either post by click on the 'reply' keyboard button (only iOS)
+	commentHeader.headerTable.textFieldRow.replyTextField.addEventListener('return',postCommentAction); //or click on the 'return' button (iOS/Android)
 
 	commentsTable.addEventListener('click', function(e) {
 		if(e.source.toString().indexOf("TiUIButton") > 0) return; //prevent event propagation of clicking reply,vote up/down

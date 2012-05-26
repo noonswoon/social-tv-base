@@ -9,7 +9,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
-		height: 55,
+		height: 'auto',
 		allowsSelection: false,
 		className: "ReplyTableViewRow",
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
@@ -71,7 +71,6 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		left: nestedOffset+ 75,
 		height: 'auto',
 		font: { fontSize: 15, fontFamily: 'Helvetica Neue' },
-		height: 15,
 		width: 250
 	});
 
@@ -80,7 +79,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		top: 55,
 		width: '100%',
 		height: 60,
-		visible: false
+		visible: true
 	});
 
 	var replyTextField = Ti.UI.createTextField({
@@ -144,7 +143,9 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	row.add(userImage);
 	row.add(commentDetail);		
 	row.add(contentLabel);
-	row.add(replyToolbar);
+	
+	//row.add(replyToolbar);
+	
 	replyToolbar.add(replyTextField);
 	replyToolbar.add(upButton);
 	replyToolbar.add(downButton);
@@ -159,17 +160,12 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	// CLASS METHODS GET&SET
 	row._hideToolbar = function(rowIndex) {
 		row.index = rowIndex;
-		if (replyToolbar.visible == false) return;
-		replyToolbar.visible = false;
-		row.height -= replyToolbar.height;
-		
+		row.remove(replyToolbar);
 	};
 	
 	row._showToolbar = function(rowIndex) {
-		row.index = rowIndex;
-		if (replyToolbar.visible == true) return;
-		replyToolbar.visible = true;
-		row.height += replyToolbar.height;
+		row.index = rowIndex;		
+		row.add(replyToolbar);
 	};
 		
 	replyButton.addEventListener('click',function(e) {

@@ -1,42 +1,69 @@
 CommentHeaderTableViewRow = function() {
-	var header = Ti.UI.createTableViewRow({
-		height: 90,
-		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		className: "DetailedTopicTableViewRow"
-	});
+	Ti.API.info('start setting up');
+	var headerWrapper = Ti.UI.createTableViewRow({
+		height: 'auto',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: 'yellow'
+	})
+
+	var headerTableData = [];
 	
-	header.topicLabel = Ti.UI.createLabel({
+	headerWrapper.headerTable = Ti.UI.createTableView({
+		height: 'auto',
+		backgroundColor: 'green'
+	})
+	headerWrapper.add(headerWrapper.headerTable);
+	
+//	COMMENT TOPIC SECTION
+	headerWrapper.headerTable.topicRow = Ti.UI.createTableViewRow({
+		height: 'auto',
+		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		className: "DetailedTopicTableViewRow",
+		backgroundColor: 'pink'
+	});
+		
+	headerWrapper.headerTable.topicRow.topicLabel = Ti.UI.createLabel({
 		text: '-',
 		top: 5,
 		left: 5,
 		width: 'auto',
-		height: 30,
+		height: 'auto',
 		font: { fontSize: 20, fontFamily: 'Helvetica Neue' },
-		height: 20,
-		width: 310
 	})
+	headerWrapper.headerTable.topicRow.add(headerWrapper.headerTable.topicRow.topicLabel);
+	headerTableData.push(headerWrapper.headerTable.topicRow);
+		
+// DATE SUBMISSION SECTION
+	headerWrapper.headerTable.dateRow = Ti.UI.createTableViewRow({
+		height: 'auto'
+	});
 	
-	header.dateLabel = Ti.UI.createLabel({
+	headerWrapper.headerTable.dateRow.dateLabel = Ti.UI.createLabel({
 		text: '--',
 		top: 30,
 		left: 10,
 		width: 'auto',
-		height: 20,
 		font: { fontSize: 10, fontFamily: 'Helvetica Neue' },
-		height: 10,
-		width: 310
-	})
+		backgroundColor: 'orange'
+	});
+	headerWrapper.headerTable.dateRow.add(headerWrapper.headerTable.dateRow.dateLabel);
+	headerTableData.push(headerWrapper.headerTable.dateRow);
 	
-	header.replyButton = Titanium.UI.createButton({
+// ADD NEW COMMENT SECTION
+	headerWrapper.headerTable.textFieldRow = Ti.UI.createTableViewRow({
+		height: 'auto'
+	});
+	
+	var replyButton = Titanium.UI.createButton({
 	    title : 'Reply',
 	    style : Titanium.UI.iPhone.SystemButtonStyle.DONE,
 	});
 	
-	header.cancelButton = Titanium.UI.createButton({
+	var cancelButton = Titanium.UI.createButton({
     	systemButton : Titanium.UI.iPhone.SystemButton.CANCEL
 	});
 	
-	header.replyTextField = Ti.UI.createTextField({
+	headerWrapper.headerTable.textFieldRow.replyTextField = Ti.UI.createTextField({
 		left: 5,
 		top: 55,
 		width: 310,
@@ -44,19 +71,23 @@ CommentHeaderTableViewRow = function() {
 		hintText: "Write your comment here...",
     	borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
-		keyboardToolbar : [header.cancelButton, header.replyButton], //this is iOS only
-	})
-	
-	header.add(header.topicLabel);
-	header.add(header.dateLabel);
-	header.add(header.replyTextField);	
-	
-	header.cancelButton.addEventListener('click', function(e) {
-		header.replyTextField.blur();
+		keyboardToolbar : [cancelButton, replyButton], //this is iOS only
+		backgroundColor: 'blue'
 	});
 
+	headerWrapper.headerTable.textFieldRow.add(headerWrapper.headerTable.textFieldRow.replyTextField);
+	headerWrapper.headerTable.textFieldRow.replyButton = replyButton;
+	headerWrapper.headerTable.textFieldRow.cancelButton = cancelButton;
+	headerTableData.push(headerWrapper.headerTable.textFieldRow);
+		
+	cancelButton.addEventListener('click', function(e) {
+		headerWrapper.headerTable.textFieldRow.replyTextField.blur();
+	});
+	headerWrapper.headerTable.setData(headerTableData);
 	
-	return header;
+	Ti.API.info('succeeed setting up');
+	
+	return headerWrapper;
 }
 
 module.exports = CommentHeaderTableViewRow;

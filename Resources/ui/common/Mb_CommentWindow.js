@@ -40,6 +40,20 @@ function CommentWindow(_topicId) {
 	self.add(commentsTable);
 	
 	//HELPER FUNCTIONS
+	function assignRankingScores(_commentsArray) {
+		for(var i=0;i<_commentsArray.length;i++) {
+			var curComment = _commentsArray[i];
+			var commentACSId = curComment.acsObjectId;
+			var totalVotes = Comment.commentModel_getNumberOfVotes(commentACSId);
+			var positiveVotes = Comment.commentModel_getPositiveVotes(commentACSId);
+			curComment.rankingScore = calculateRankingScore(totalVotes,positiveVotes);	
+			_commentsArray[i] = curComment;
+		}
+	}
+	
+	function commentSort(a,b) {
+		return a.rankingScore - b.rankingScore;
+	}
 	
 	//recursive function
 	function showCommentTableViewRow(_commentLevel,_commentRowsData,_commentsArray,_targetedCommentId) {
@@ -79,7 +93,7 @@ function CommentWindow(_topicId) {
 		commentHeader.dateLabel.text = "Submitted "+submitDateStr+" by "+curTopic.username;
 
 		//retrieve from db
-		var allComments = Comment.commentModel_fetchCommentsFromTopicId(_topicId);
+		var allComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
 		var commentsOfTopic = [];
 		var votesOfComments = [];
 		
@@ -97,6 +111,19 @@ function CommentWindow(_topicId) {
 		var commentRowsData = [commentHeader];
 		
 		//populate commentRowsData recursively from the below function
+		//need to modify this so that the first level of comment is ranked by score
+		
+		//calculate ranking score of each comment
+		assignRankingScores(commentsOfTopic); 
+		
+		//sort comments based on rankingScore
+		for(var i=0;i<commentsOfTopic.length;i++)
+			Ti.API.info('commentId: '+commentsOfTopic[i].acsObjectId+', score: '+commentsOfTopic[i].rankingScore);
+		
+		//assignRankingScores.sort(commentSort);
+		for(var i=0;i<commentsOfTopic.length;i++)
+			Ti.API.info('commentId: '+commentsOfTopic[i].acsObjectId+', score: '+commentsOfTopic[i].rankingScore);	
+						
 		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
 	
@@ -231,8 +258,9 @@ function CommentWindow(_topicId) {
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
 	
 	//fetching data or get data through caching mechanism
+	//Comment.contentsDuringOffline();
+	//Comment.commentModel_updateRankingScore('4fbfbcdb002044729301dd73');
 	CacheHelper.fetchACSDataOrCache('commentsOfTopic'+_topicId, CommentACS.commentACS_fetchAllCommentsOfPostId, _topicId, 'commentsDbUpdated');
-	
 	return self;
 }
 module.exports = CommentWindow;

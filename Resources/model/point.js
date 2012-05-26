@@ -7,7 +7,7 @@ db.close();
 exports.pointModel_updatePointsFromACS = function(_pointsCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
 	//need to clear records with the given programId
-	var result = db.execute('DELETE FROM points');
+	db.execute('DELETE FROM points');
 	for(var i=0;i < _pointsCollection.length; i++) {
 		var curPoint = _pointsCollection[i];
 		db.execute("INSERT INTO points(id,user_id,point,earned_by,object) VALUES(?,?,?,?,?)", curPoint.id,curPoint.user_id,curPoint.point,curPoint.earned_by, curPoint.object);
@@ -41,6 +41,8 @@ exports.points_sumPoints = function(){
 		var db = Ti.Database.open('Chatterbox'); 
 		var result = db.execute('SELECT SUM(point) as totalScore from points');
 		var totalScore = Number(result.fieldByName('totalScore'));
+
+		result.close();
 		db.close();
 		return totalScore;
 };

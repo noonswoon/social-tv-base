@@ -4,6 +4,9 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var CommentACS = require('acs/commentACS');
 	var UserReportACS = require('acs/userReportACS');
 	
+	//var username = acs.getUserLoggedIn().username;
+	var username = 'titaniummick'
+		
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
 		height: 55,
@@ -44,7 +47,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var dm = moment(_comment.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 	var submitDateStr = since(dm);
 	var usernameStr = _comment.username;
-	if(_comment.username === acs.getUserLoggedIn().username)
+	if(_comment.username === username)
 		usernameStr = 'you';
 	
 	var commentDetail = Ti.UI.createLabel({
@@ -66,8 +69,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		text:  _comment.content,
 		top: 15,
 		left: nestedOffset+ 75,
-		width: 310,
-		height: 30,
+		height: 'auto',
 		font: { fontSize: 15, fontFamily: 'Helvetica Neue' },
 		height: 15,
 		width: 250
@@ -148,7 +150,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	replyToolbar.add(downButton);
 	
 	//either show reportButton or deleteButton (comment's owner)
-	if(_comment.username === acs.getUserLoggedIn().username)
+	if(_comment.username === username)
 		replyToolbar.add(deleteButton);
 	else replyToolbar.add(reportButton);
 	
@@ -173,7 +175,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	replyButton.addEventListener('click',function(e) {
 		//insert to db-->update UI-->then call acs to save data -->get callback then update the acs_object_id field
 		var responseText = replyTextField.value;
-		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,responseText,0,acs.getUserLoggedIn().username,_comment.acsObjectId,0); 
+		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,responseText,0,username,_comment.acsObjectId,0); 
 		
 		//add tableviewrow to the table manually, rather than calling reset
 		var commentDetailForNewTableViewRow = {
@@ -185,7 +187,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			topicId: _comment.topicId,
 			content: responseText,
 			rating: 0,
-			username: acs.getUserLoggedIn().username,
+			username: username,
 			responseToObjectId: _comment.acsObjectId,
 			isAVote: 0,
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
@@ -211,7 +213,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		if(_isUpVote) ratingOffset = 1;
 		
 		//need to check if alreaady voted
-		if(Comment.commentModel_canUserVote(_comment.acsObjectId,acs.getUserLoggedIn().username)) {		
+		if(Comment.commentModel_canUserVote(_comment.acsObjectId,username)) {		
 			//updating the rating manually rather than calling setData for the entire table
 			var ratingStr = '';
 			rating = rating + ratingOffset;
@@ -224,7 +226,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			
 			//The fn fires a voteOfCommentCreatedACS event when done,
 			// the listener for the event is in Mb_CommentWindow.js file		
-			var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,'m',ratingOffset,acs.getUserLoggedIn().username,_comment.acsObjectId,1); 
+			var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,'m',ratingOffset,username,_comment.acsObjectId,1); 
 			CommentACS.commentACS_createVoteOfComment(ratingOffset,newId,_comment.acsObjectId,_comment.topicId);
 			
 			//clear the UI, clear replyTextField value, hide the toolbar

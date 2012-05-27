@@ -60,8 +60,8 @@ CommentHeaderTableViewRow = function() {
 	
 	headerWrapper.headerTable.textFieldRow.replyTextField = Ti.UI.createTextArea({
 		width: '100%',
-		height: 65,
-		hintText: "Write your comment here...",
+		height: 50,
+		value: "Write your comment here...",
 		borderRadius : 5,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		keyboardToolbar : [cancelButton, replyButton], //this is iOS only

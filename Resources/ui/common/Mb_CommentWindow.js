@@ -80,7 +80,7 @@ function CommentWindow(_topicId) {
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
 		
 		commentHeader.headerTable.topicRow.topicLabel.text = curTopic.title;
-
+		
 		//use momentjs for helping on converting dateObject from string
 		//problematic because ACS stores the date as a string with timezone format (+0000)
 		//and we can't directly convert datestring with timezone format to Javascript Date object
@@ -214,7 +214,10 @@ function CommentWindow(_topicId) {
 	//ADD EVENT LISTENERS  header.replyButton
 	commentHeader.headerTable.textFieldRow.replyButton.addEventListener('click',postCommentAction); //can either post by click on the 'reply' keyboard button (only iOS)
 	commentHeader.headerTable.textFieldRow.replyTextField.addEventListener('return',postCommentAction); //or click on the 'return' button (iOS/Android)
-
+	commentHeader.headerTable.textFieldRow.replyTextField.addEventListener('focus',function() {
+		commentHeader.headerTable.textFieldRow.replyTextField.value = ""; //get rid of psedu hint text
+	}); //or click on the 'return' button (iOS/Android)
+	
 	commentsTable.addEventListener('click', function(e) {
 		if(e.source.toString().indexOf("TiUIButton") > 0) return; //prevent event propagation of clicking reply,vote up/down
 		if(e.index == 0) return;
@@ -251,7 +254,7 @@ function CommentWindow(_topicId) {
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
 	
 	//fetching data or get data through caching mechanism
-	Comment.contentsDuringOffline();
+	//Comment.contentsDuringOffline();
 	//Comment.commentModel_updateRankingScore('4fbfbcdb002044729301dd73');
 	CacheHelper.fetchACSDataOrCache('commentsOfTopic'+_topicId, CommentACS.commentACS_fetchAllCommentsOfPostId, _topicId, 'commentsDbUpdated');
 	return self;

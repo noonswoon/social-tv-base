@@ -1,83 +1,121 @@
 CommentHeaderTableViewRow = function() {
-	Ti.API.info('start setting up');
-	var headerWrapper = Ti.UI.createTableViewRow({
-		height: 180,
+	var headerTableData = [];
+	
+	var headerMainRow = Ti.UI.createTableViewRow({
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: 'pink'
 	})
 
-	var headerTableData = [];
 	//tableview inside tableviewrow	
-	headerWrapper.headerTable = Ti.UI.createTableView({
+	var headerTable = Ti.UI.createTableView({
+		top: 5,
 		height: 'auto',
-		style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
 	})
-	headerWrapper.add(headerWrapper.headerTable);
 	
 //	COMMENT TOPIC SECTION
-	headerWrapper.headerTable.topicRow = Ti.UI.createTableViewRow({
+	var topicRow = Ti.UI.createTableViewRow({
 		height: 'auto',
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		className: "DetailedTopicTableViewRow",
-		backgroundColor: 'pink'
+		backgroundColor: 'orange'
 	});
 		
-	headerWrapper.headerTable.topicRow.topicLabel = Ti.UI.createLabel({
+	var topicLabel = Ti.UI.createLabel({
 		text: '-',
 		width: 'auto',
 		height: 'auto',
 		font: { fontSize: 20, fontFamily: 'Helvetica Neue' },
 	})
-	headerWrapper.headerTable.topicRow.add(headerWrapper.headerTable.topicRow.topicLabel);
-	headerTableData.push(headerWrapper.headerTable.topicRow);
 		
 // DATE SUBMISSION SECTION
-	headerWrapper.headerTable.dateRow = Ti.UI.createTableViewRow({
-		height: 20
+	var dateRow = Ti.UI.createTableViewRow({
+		height: 20,
+		backgroundColor: 'green'
 	});
 	
-	headerWrapper.headerTable.dateRow.dateLabel = Ti.UI.createLabel({
+	var dateLabel = Ti.UI.createLabel({
 		text: '--',
 		height: 20,
 		width: 'auto',
 		font: { fontSize: 10, fontFamily: 'Helvetica Neue' },
 	});
-	headerWrapper.headerTable.dateRow.add(headerWrapper.headerTable.dateRow.dateLabel);
-	headerTableData.push(headerWrapper.headerTable.dateRow);
 	
 // ADD NEW COMMENT SECTION
-	headerWrapper.headerTable.textFieldRow = Ti.UI.createTableViewRow({
-		height: 35
-	});
+	var textAreaRow = Ti.UI.createTableViewRow();
 	
 	var replyButton = Titanium.UI.createButton({
 	    title : 'Reply',
-	    style : Titanium.UI.iPhone.SystemButtonStyle.DONE,
+	    style : Titanium.UI.iPhone.SystemButtonStyle.DONE
 	});
 	
 	var cancelButton = Titanium.UI.createButton({
     	systemButton : Titanium.UI.iPhone.SystemButton.CANCEL
 	});
 	
-	headerWrapper.headerTable.textFieldRow.replyTextField = Ti.UI.createTextArea({
+	var replyTextArea = Ti.UI.createTextArea({
 		width: '100%',
 		height: 50,
 		value: "Write your comment here...",
-		borderRadius : 5,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		keyboardToolbar : [cancelButton, replyButton], //this is iOS only
+	    backgroundColor: 'gray'
 	});
-
-	headerWrapper.headerTable.textFieldRow.add(headerWrapper.headerTable.textFieldRow.replyTextField);
-	headerWrapper.headerTable.textFieldRow.replyButton = replyButton;
-	headerWrapper.headerTable.textFieldRow.cancelButton = cancelButton;
-	headerTableData.push(headerWrapper.headerTable.textFieldRow);
+	
 		
 	cancelButton.addEventListener('click', function(e) {
-		headerWrapper.headerTable.textFieldRow.replyTextField.blur();
+		replyTextArea.blur();
 	});
-	headerWrapper.headerTable.setData(headerTableData);
+
+	//add table to the main row
+	headerMainRow.add(headerTable);
 	
-	return headerWrapper;
+	//set up label in the 3 rows
+	topicRow.add(topicLabel);
+	dateRow.add(dateLabel);
+	textAreaRow.add(replyTextArea);
+	
+	//setup data for the headerTable
+	headerTableData.push(topicRow);
+	headerTableData.push(dateRow);
+	headerTableData.push(textAreaRow);
+	
+	headerTable.setData(headerTableData);
+	
+	//class methods -- for some reason, has to have underscore '_' prefix
+	headerMainRow._getReplyTextAreaContent = function() {
+		return replyTextArea.value;
+	};
+	
+	headerMainRow._getReplyTextArea = function() {
+		return replyTextArea;
+	};
+	
+	headerMainRow._getReplyButton = function() {
+		return replyButton;
+	};
+	
+	headerMainRow._setTitle = function(_title) {
+		topicLabel.text = _title;
+		var topicWidth = topicRow.toImage().width; 
+		var topicHeight = topicRow.toImage().height; 
+		
+		var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
+		headerMainRow.height = numLines * topicHeight + dateRow.toImage().height + textAreaRow.toImage().height + 5;
+	};
+	
+	headerMainRow._setSubmissionTime = function(_submissionTime) {
+		dateLabel.text = _submissionTime;
+	};
+	
+	headerMainRow._setReplyTextArea = function(_reply) {
+		replyTextArea.value = _reply;
+	};
+	
+	headerMainRow._blurReplyTextArea = function() {
+		return replyTextArea.blur();
+	};
+	
+	return headerMainRow;
 }
 
 module.exports = CommentHeaderTableViewRow;

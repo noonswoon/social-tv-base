@@ -1,16 +1,15 @@
 CommentHeaderTableViewRow = function() {
 	Ti.API.info('start setting up');
 	var headerWrapper = Ti.UI.createTableViewRow({
-		height: 'auto',
+		height: 180,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		backgroundColor: 'yellow'
 	})
 
 	var headerTableData = [];
-	
+	//tableview inside tableviewrow	
 	headerWrapper.headerTable = Ti.UI.createTableView({
 		height: 'auto',
-		backgroundColor: 'green'
+		style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
 	})
 	headerWrapper.add(headerWrapper.headerTable);
 	
@@ -24,8 +23,6 @@ CommentHeaderTableViewRow = function() {
 		
 	headerWrapper.headerTable.topicRow.topicLabel = Ti.UI.createLabel({
 		text: '-',
-		top: 5,
-		left: 5,
 		width: 'auto',
 		height: 'auto',
 		font: { fontSize: 20, fontFamily: 'Helvetica Neue' },
@@ -35,23 +32,21 @@ CommentHeaderTableViewRow = function() {
 		
 // DATE SUBMISSION SECTION
 	headerWrapper.headerTable.dateRow = Ti.UI.createTableViewRow({
-		height: 'auto'
+		height: 20
 	});
 	
 	headerWrapper.headerTable.dateRow.dateLabel = Ti.UI.createLabel({
 		text: '--',
-		top: 30,
-		left: 10,
+		height: 20,
 		width: 'auto',
 		font: { fontSize: 10, fontFamily: 'Helvetica Neue' },
-		backgroundColor: 'orange'
 	});
 	headerWrapper.headerTable.dateRow.add(headerWrapper.headerTable.dateRow.dateLabel);
 	headerTableData.push(headerWrapper.headerTable.dateRow);
 	
 // ADD NEW COMMENT SECTION
 	headerWrapper.headerTable.textFieldRow = Ti.UI.createTableViewRow({
-		height: 'auto'
+		height: 35
 	});
 	
 	var replyButton = Titanium.UI.createButton({
@@ -63,16 +58,13 @@ CommentHeaderTableViewRow = function() {
     	systemButton : Titanium.UI.iPhone.SystemButton.CANCEL
 	});
 	
-	headerWrapper.headerTable.textFieldRow.replyTextField = Ti.UI.createTextField({
-		left: 5,
-		top: 55,
-		width: 310,
-		height: 30,
+	headerWrapper.headerTable.textFieldRow.replyTextField = Ti.UI.createTextArea({
+		width: '100%',
+		height: 65,
 		hintText: "Write your comment here...",
-    	borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
+		borderRadius : 5,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		keyboardToolbar : [cancelButton, replyButton], //this is iOS only
-		backgroundColor: 'blue'
 	});
 
 	headerWrapper.headerTable.textFieldRow.add(headerWrapper.headerTable.textFieldRow.replyTextField);
@@ -84,8 +76,6 @@ CommentHeaderTableViewRow = function() {
 		headerWrapper.headerTable.textFieldRow.replyTextField.blur();
 	});
 	headerWrapper.headerTable.setData(headerTableData);
-	
-	Ti.API.info('succeeed setting up');
 	
 	return headerWrapper;
 }

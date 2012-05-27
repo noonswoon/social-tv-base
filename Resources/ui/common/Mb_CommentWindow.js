@@ -21,11 +21,9 @@ function CommentWindow(_topicId) {
 	var commentsTable = Titanium.UI.createTableView({
 		top: 0,
 		left: 0,
-		right: 0,
-		bottom: 0,
 		scrollable: true,
 		height:'auto',
-		selectedToCommentRow: null
+		selectedToCommentRow: null,
 	});
 	
 	var toolActInd = Titanium.UI.createActivityIndicator({
@@ -92,7 +90,6 @@ function CommentWindow(_topicId) {
 		var dm = moment(curTopic.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 		var submitDateStr = since(dm);
 		commentHeader.headerTable.dateRow.dateLabel.text = "Submitted "+submitDateStr+" by "+curTopic.username;
-		Ti.API.info("setting submission date");
 		//retrieve from db
 		var allComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
 		var commentsOfTopic = [];
@@ -123,7 +120,6 @@ function CommentWindow(_topicId) {
 		//recursively build the comment lists
 		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
-	
 		//LOGIC/Controllers 		
 		//take out the Loading... spinning wheel n
 		toolActInd.hide();

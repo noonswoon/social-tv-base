@@ -9,6 +9,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
+		top:0,
 		height: 'auto',
 		allowsSelection: false,
 		className: "ReplyTableViewRow",

@@ -1,7 +1,7 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY, acs_object_id TEXT, program_id TEXT, title TEXT, username TEXT, is_deleted INTEGER,updated_at TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY, acs_object_id TEXT, program_id TEXT, title TEXT, comments_count INTEGER, username TEXT, is_deleted INTEGER,updated_at TEXT);');
 db.close();
 
 exports.topicModel_fetchFromProgramId = function(_programId) {
@@ -15,6 +15,7 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 			acsObjectId: result.fieldByName('acs_object_id'),
 			hasChild:true,
 			color: '#fff',
+			commentsCount: Number(result.fieldByName('comments_count')),
 			username: result.fieldByName('username'),
 			updatedAt: result.fieldByName('updated_at')
 		});
@@ -93,8 +94,8 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 	
 	for(var i=0;i < _topicsCollection.length; i++) {
 		var curTopic = _topicsCollection[i];
-		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,username,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?)", 
-					curTopic.id,_programId,curTopic.title,curTopic.user.username,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
+		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,comments_count, username,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?)", 
+					curTopic.id,_programId,curTopic.title,curTopic.commentsCount, curTopic.user.username,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
 	}
 	db.close();
 	Ti.App.fireEvent("topicsDbUpdated");

@@ -17,8 +17,9 @@ MessageboardTableViewRow = function(_topic) {
 		font: { fontSize: 16, fontFamily: 'Helvetica Neue' }
 	})
 	
+	var replyStr = _topic.commentsCount <= 1? ' reply >':' replies >';
 	row.numComments = Ti.UI.createLabel({
-		text: '9 replies >',
+		text: _topic.commentsCount+ replyStr,
 		color: 'black',
 		textAlign:'right',
 		left:215,

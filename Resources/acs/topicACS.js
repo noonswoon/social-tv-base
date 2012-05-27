@@ -13,11 +13,15 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	    if (e.success) {
 	        for (var i = 0; i < e.posts.length; i++) {
 	            var post = e.posts[i];
+	            var numComments = 0; 
+	            if(post.reviews_count !== undefined)
+	            	numComments = post.reviews_count;
 	            var curTopic = {
 	            	id: post.id,
 	            	programId: _programId,
 	            	title: post.title,
 	            	user:post.user,
+	            	commentsCount: numComments,
 	            	isDeleted: post.custom_fields.is_deleted,
 	            	updatedAt: post.updated_at
 	            }

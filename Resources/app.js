@@ -13,7 +13,7 @@ var moment = require('/lib/moment');
 Titanium.Facebook.appid = "197422093706392";
 Titanium.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
 
-var CACHE_TIMEOUT_IN_MINUTES = 5; 
+var CACHE_TIMEOUT_IN_MINUTES = 1; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 
 var acs = require('lib/acs');

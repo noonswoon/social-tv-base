@@ -50,7 +50,7 @@ function CommentWindow(_topicId) {
 	}
 	
 	function commentSort(a,b) {
-		return a.rankingScore - b.rankingScore;
+		return b.rankingScore - a.rankingScore; //high ranking score should be at the front (smaller)
 	}
 	
 	//recursive function
@@ -114,8 +114,13 @@ function CommentWindow(_topicId) {
 		assignRankingScores(commentsOfTopic); 
 		
 		//sort comments based on rankingScore
+		for(var i=0;i<commentsOfTopic.length;i++) {
+			Ti.API.info('pre sort: '+commentsOfTopic[i].id+ ' score '+commentsOfTopic[i].rankingScore);
+		}
 		commentsOfTopic.sort(commentSort);
-		
+		for(var i=0;i<commentsOfTopic.length;i++) {
+			Ti.API.info('post sort: '+commentsOfTopic[i].id+ ' score '+commentsOfTopic[i].rankingScore);
+		}
 		//recursively build the comment lists
 		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
@@ -234,8 +239,6 @@ function CommentWindow(_topicId) {
 	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	Ti.App.addEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
 	Ti.App.addEventListener('deletingCommentTableViewRow', removeTableViewRowCallback);
-	
-	
 	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);

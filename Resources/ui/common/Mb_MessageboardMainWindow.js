@@ -86,7 +86,7 @@ function MessageboardMainWindow(_programId) {
 	function addNewTopicTableViewRowCallback(e) {
 		var tableViewRowDetail = e.topicDetailForNewTableViewRow;
 		var topicRow = new MessageboardTableViewRow(tableViewRowDetail);
-		allTopicTable.insertRowAfter(0,topicRow);
+		allTopicTable.insertRowBefore(0,topicRow);
 	}
 	
 	function topicCreatedACSCallback(e) {	
@@ -101,7 +101,7 @@ function MessageboardMainWindow(_programId) {
 			updatedAt: convertACSTimeToLocalTime(newTopic.updated_at)
 		};
 		var topicRow = new MessageboardTableViewRow(topicForTableViewRow);
-		allTopicTable.updateRow(1,topicRow);
+		allTopicTable.updateRow(0,topicRow);
 		
 		Topic.topicModel_updateACSObjectIdField(e.newTopic);
 	}

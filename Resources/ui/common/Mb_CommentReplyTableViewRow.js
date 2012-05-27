@@ -4,8 +4,8 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var CommentACS = require('acs/commentACS');
 	var UserReportACS = require('acs/userReportACS');
 	
-	//var username = acs.getUserLoggedIn().username;
-	var username = 'titaniummick'
+	var username = acs.getUserLoggedIn().username;
+	//var username = 'titaniummick'
 		
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({

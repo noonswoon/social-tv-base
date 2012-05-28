@@ -1,8 +1,8 @@
-ChannelMainWindow = function (_index){
+ChannelInGuideWindow = function (_index){
 	
 	var TVProgram = require('model/tvprogram');
 	var TVProgramACS = require('acs/tvprogramACS');
-	var ChannelTableViewRow = require('ui/common/ChannelTableViewRow');
+	var ChannelInGuideTableViewRow = require('ui/common/Cs_ChannelInGuideTableViewRow');
 		
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'orange',
@@ -24,27 +24,27 @@ ChannelMainWindow = function (_index){
 			
 			var program = allprograms[i];
 			if(_index === 0 && program.channel_id === 'ch3'){
-				var channel3 = new ChannelTableViewRow(program);
+				var channel3 = new ChannelInGuideTableViewRow(program);
 				programsInChannel.push(channel3);
 			}
 			else if(_index === 1 && program.channel_id === 'ch5'){
-				var channel5 = new ChannelTableViewRow(program);
+				var channel5 = new ChannelInGuideTableViewRow(program);
 				programsInChannel.push(channel5);
 			}
 			else if(_index === 2 && program.channel_id === 'ch7'){
-				var channel7 = new ChannelTableViewRow(program);
+				var channel7 = new ChannelInGuideTableViewRow(program);
 				programsInChannel.push(channel7);
 			}
 			else if(_index === 3 && program.channel_id === 'ch9'){
-				var channel9 = new ChannelTableViewRow(program);
+				var channel9 = new ChannelInGuideTableViewRow(program);
 				programsInChannel.push(channel9);
 			}
 			else if(_index === 4 && program.channel_id === 'ch11'){
-				var channel11 = new ChannelTableViewRow(program);
+				var channel11 = new ChannelInGuideTableViewRow(program);
 				programsInChannel.push(channel11);
 			}
 			else if(_index === 5 && program.channel_id === 'chThaipbs'){
-				var channelThaipbs = new ChannelTableViewRow(program);
+				var channelThaipbs = new ChannelInGuideTableViewRow(program);
 				programsInChannel.push(channelThaipbs);
 			}
 		}
@@ -64,4 +64,4 @@ ChannelMainWindow = function (_index){
 	TVProgramACS.tvprogramACS_fetchAllProgram();
 	return self;
 }
-module.exports = ChannelMainWindow;
+module.exports = ChannelInGuideWindow;

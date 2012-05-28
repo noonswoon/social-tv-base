@@ -1,6 +1,5 @@
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
-	//import
-	//save to database
+
 exports.searchFriend = function(_userID){
 	var friends = [];
 	//alert('search friend');
@@ -123,7 +122,7 @@ exports.showFriendsRequest = function(){
 
 
 //remove friend ////////////////////////////////////////////
-exports.removedFriendFromACS = function(_friendID){
+exports.removedFriendFromACS = function(user_id){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/remove.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
@@ -138,9 +137,10 @@ exports.removedFriendFromACS = function(_friendID){
 	    timeout:5000  /* in milliseconds */
 	});
 	xhr.open("DELETE", url);
-	var putParameters = {
-		user_ids: _friendID,
-	};
-	xhr.send(putParameters);  // request is actually sent with this statement
+	 var parameters = {
+	 	//key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
+		user_ids: user_id
+	 };
+	xhr.send(parameters);  // request is actually sent with this statement
 };
 

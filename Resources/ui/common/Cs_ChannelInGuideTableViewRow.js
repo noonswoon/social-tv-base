@@ -1,4 +1,4 @@
-ChannelTableViewRow = function(_program){
+ChannelInGuideTableViewRow = function(_program){
 	
 	var row = Ti.UI.createTableViewRow({
 		backgroundGradient: {
@@ -68,4 +68,4 @@ ChannelTableViewRow = function(_program){
 
 	return row;	
 }
-module.exports = ChannelTableViewRow;
+module.exports = ChannelInGuideTableViewRow;

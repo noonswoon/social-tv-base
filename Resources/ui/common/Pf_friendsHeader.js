@@ -132,16 +132,11 @@ FriendsHeaderView = function(_friend){
 		
 		removeFriendButton.addEventListener('click',function(e){
 			FriendModel.friendModel_removeFriend(_friend.friend_id);
+			// Ti.UI.Window.close();
 			FriendACS.removedFriendFromACS(_friend.friend_id);
-			alert('remove');
+
 		});
-// 		
-		// function redirect(){			
-					// FriendsMainWindow.open({
-  			  // transition : Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT,
-   			 // duration : 1000
-			// });
-		// };
+
 
 	profilePictureContain.add(profilePicture);
 	columnCheckIn.add(columnCheckInImage);

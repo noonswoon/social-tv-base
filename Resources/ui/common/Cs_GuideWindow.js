@@ -1,11 +1,13 @@
 function GuideWindow(_parent) {
 	
-	var ChannelMainWindow = require('ui/common/ChannelMainWindow');
-	
-	var channelTable = [];
+	var ChannelInGuideWindow = require('ui/common/Cs_ChannelInGuideWindow');
+	var GuideTabTableViewRow = require('ui/common/Cs_GuideTabTableViewRow');
+
+	var channelsList = ['3','5','7','9','11','ThaiPBS'];
+	var dataForTab = []; 
 	
 	var self = Ti.UI.createWindow({
-		//backgroundColor: 'black'
+		backgroundColor: 'pink'
 	});
 
 	var selectChannelToolbar = Ti.UI.createView({
@@ -52,62 +54,98 @@ function GuideWindow(_parent) {
 	});
 	selectChannelToolbar.add(selectChannelLabel);
 	
-	//Default Channel(Ch3)
-	var defaultChannel = new ChannelMainWindow(0);
- 	self.add(defaultChannel);	
-	
-	selectChannelButton.addEventListener('click',function(){
-		var selectChannelPicker = Ti.UI.createPicker({
-			bottom: 0
-		});
-
-	var channel = [];
-	channel[0]=Ti.UI.createPickerRow({title:'Channel3'});
-	channel[1]=Ti.UI.createPickerRow({title:'Channel5'});
-	channel[2]=Ti.UI.createPickerRow({title:'Channel7'});
-	channel[3]=Ti.UI.createPickerRow({title:'Channel9'});
-	channel[4]=Ti.UI.createPickerRow({title:'Channel11'});
-	channel[5]=Ti.UI.createPickerRow({title:'ThaiPBS'});
-		
-	selectChannelPicker.selectionIndicator = true;
-	selectChannelPicker.add(channel);
-	self.add(selectChannelPicker);
-
-	selectChannelPicker.addEventListener('change',function(e){
-		var index = e.rowIndex;
-		if(index === 0){
-			var ch3 = new ChannelMainWindow(index);
-			self.add(ch3);				
-			selectChannelLabel.text = 'CH3';
-		}
-		else if(index === 1){
-			var ch5 = new ChannelMainWindow(index);
-			self.add(ch5);
-			selectChannelLabel.text = 'CH5';	
-		}
-		else if(index === 2){
-			var ch7 = new ChannelMainWindow(index);
-			self.add(ch7);
-			selectChannelLabel.text = 'CH7';	
-		}
-		else if(index === 3){
-			var ch9 = new ChannelMainWindow(index);
-			self.add(ch9);	
-			selectChannelLabel.text = 'CH9';
-		}
-		else if(index === 4){
-			var ch11 = new ChannelMainWindow(index);
-			self.add(ch11);	
-			selectChannelLabel.text = 'CH11';
-		}
-		else if(index === 5){
-			var thaiPBS = new ChannelMainWindow(index);
-			self.add(thaiPBS);
-			selectChannelLabel.text = 'ThaiPBS';
-		}
-		selectChannelPicker.hide();
+	//Popup
+	var channelSelectorPopupWin = Ti.UI.createWindow({
+	backgroundColor: 'black',
+	left: 10, 
+	top: 90, 
+	width: 300,
+	height: 300,
+	borderWidth: 5,
+	borderColor: 'black',
+	borderRadius: 15,
+	zIndex: 3
 	});
-});
+
+	var triangleImage = Ti.UI.createImageView({
+	image: 'images/triangle.png',
+	height: 20,
+	top: 30,
+	left: 260
+	});
+
+	//Tab's table
+	var tableViewForTab	= Ti.UI.createTableView({backgroundColor:'white' });
+	
+	//Add UI
+	channelSelectorPopupWin.add(tableViewForTab);
+	
+	//LOGIC STUFF
+	for(var i=0;i<channelsList.length;i++) {
+		var curChannel = new GuideTabTableViewRow(channelsList[i]);
+		dataForTab.push(curChannel);
+	}
+	tableViewForTab.setData(dataForTab);
+	
+	//EVENT LISTENERS
+	var channelSelectorToggle = true;
+	selectChannelButton.addEventListener('click',function(e){
+		if(channelSelectorToggle) {
+			channelSelectorToggle = false;
+			channelSelectorPopupWin.open();
+			self.add(triangleImage);
+		} else {
+			channelSelectorToggle = true;
+			channelSelectorPopupWin.close();
+			self.remove(triangleImage);
+		}
+	});
+	
+	//add event listener for each tableviewrow
+	for(var i=0;i<dataForTab.length;i++) {
+		var curChannel = dataForTab[i];
+		curChannel.addEventListener('click', function(e) {
+			var index = e.index;
+			if(index === 0){
+				var ch3 = new ChannelInGuideWindow(index);
+				self.add(ch3);				
+				selectChannelLabel.text = 'CH3';
+			}
+			else if(index === 1){
+				var ch5 = new ChannelInGuideWindow(index);
+				self.add(ch5);
+				selectChannelLabel.text = 'CH5';	
+			}
+			else if(index === 2){
+				var ch7 = new ChannelInGuideWindow(index);
+				self.add(ch7);
+				selectChannelLabel.text = 'CH7';	
+			}
+			else if(index === 3){
+				var ch9 = new ChannelInGuideWindow(index);
+				self.add(ch9);	
+				selectChannelLabel.text = 'CH9';
+			}
+			else if(index === 4){
+				var ch11 = new ChannelInGuideWindow(index);
+				self.add(ch11);	
+				selectChannelLabel.text = 'CH11';
+			}
+			else if(index === 5){
+				var thaiPBS = new ChannelInGuideWindow(index);
+				self.add(thaiPBS);
+				selectChannelLabel.text = 'ThaiPBS';
+			}
+			channelSelectorToggle = true;
+			channelSelectorPopupWin.close();
+			self.remove(triangleImage);
+		});
+	}
+	
+	// Default Channel(Ch3)
+	var defaultChannel = new ChannelInGuideWindow(0);
+ 	self.add(defaultChannel);	
+
 	return self;
 }
 module.exports = GuideWindow;

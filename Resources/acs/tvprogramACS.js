@@ -1,9 +1,13 @@
 exports.tvprogramACS_fetchAllProgramShowingNow = function() {
 	var programs = [];
-	var now_full = moment().format('YYYY-MM-DD, HH:mm:ss:Z');
+	var now_full = moment().format('YYYY-MM-DD, HH:mm:ss');
+	var currentDate = moment().format('YYYY-MM-DD');
+	var start_of_the_day = moment().sod().format('YYYY-MM-DD, HH:mm:ss');
+	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr'+
-			  	'&per_page=20&where={"start_time":{"$lte":"'+now_full+'"}}';
-
+			  	'&per_page=20&where={"start_time":{"$gte":"'+start_of_the_day+'", "$lte":"'+now_full+'"}}';
+	// var url = 'https://api.cloud.appcelerator.com/v1/events/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr'+
+			  	// '&per_page=20&where={"start_time":{"$lte":"'+now_full+'"},"recurring_until":{"$gte":"'+now_full+'"}}';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);

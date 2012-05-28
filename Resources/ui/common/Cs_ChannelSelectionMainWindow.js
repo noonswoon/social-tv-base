@@ -11,7 +11,7 @@ function ChannelSelectionMainWindow(){
 	});
 	
 	var popularwin = new PopularWindow(self); 
-	var guidewin = new GuideWindow(self);
+	var guidewin = null; //new GuideWindow(self);
 //	var friendwin = new FriendWindow();
 
 	var tabBar = Ti.UI.iOS.createTabbedBar({
@@ -39,9 +39,12 @@ function ChannelSelectionMainWindow(){
 		}		
 		if(e.index==0){
 			mainView.add(popularwin);
-			guidewin._closePopupWindow();
+			if(guidewin != null)
+				guidewin._closePopupWindow();
 		}
 		else if (e.index==1){
+			if(guidewin == null)
+				guidewin = new GuideWindow(self);
 			mainView.add(guidewin);
 		}
 		// else if (e.index==2){

@@ -35,13 +35,14 @@ function PopularWindow(_parent) {
 		top: 35
 	});
 
-	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
-		var targetedProgramId = e.targetedProgramId; 
-		var numCheckins = e.numCheckins; 
-		TVProgram.TVProgramModel_updateCheckins(targetedProgramId, numCheckins);
-		numProgramsToLoadCheckins--;
-		isEverythingReady();
-	});
+	
+	function tvprogramLoadedCompleteCallback(e) {
+		programListTable.data = [];	
+		var allPrograms = e.fetchedPrograms;
+		TVProgram.tvprogramsModel_insertAllPrograms(allPrograms);
+		fetchProgramsAllCheckins(); 
+	}
+	Ti.App.addEventListener('tvprogramsLoaded',tvprogramLoadedCompleteCallback);
 	
 	function fetchProgramsAllCheckins() {
 		//select all programs in local db
@@ -58,17 +59,16 @@ function PopularWindow(_parent) {
 		fetchProgramsAllCheckins();
 	});
 	
-	Ti.App.addEventListener('tvprogramsLoaded',tvprogramLoadedCompleteCallback);
-	
-	function tvprogramLoadedCompleteCallback(e) {
-		programListTable.data = [];	
-		var allPrograms = e.fetchedPrograms;
-		TVProgram.tvprogramsModel_insertAllPrograms(allPrograms);
-		fetchProgramsAllCheckins(); 
-	}
+	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
+		var targetedProgramId = e.targetedProgramId; 
+		var numCheckins = e.numCheckins; 
+		TVProgram.TVProgramModel_updateCheckins(targetedProgramId, numCheckins);
+		numProgramsToLoadCheckins--;
+		isEverythingReady();
+	});
 	
 	Ti.App.addEventListener('showDiscoveryPage', function(){
-		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
+		var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
 		var viewRowsData = [];
 		for (var i=0;i<currentTVPrograms.length;i++) {
 			 var curTVProgram = currentTVPrograms[i];

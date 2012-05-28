@@ -19,6 +19,7 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 	Ti.App.fireEvent("tvprogramsTitlesLoaded");
 };
 
+
 exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins) {	
 	var db = Ti.Database.open('Chatterbox'); 
 	db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckins,targetedProgramId);
@@ -56,5 +57,32 @@ exports.TVProgramModel_fetchPrograms = function() {
 	result.close();
 	db.close();
 	return fetchedPrograms;
-	
+};
+
+exports.TVProgramModel_fetchPopularPrograms = function() {
+	//select some stuff from the local db..based on the future filtering
+	var fetchedPrograms = [];
+	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', now,now);
+	while(result.isValidRow()) {
+		fetchedPrograms.push({
+			id: result.fieldByName('id'),
+			name: result.fieldByName('name'),
+			photo: result.fieldByName('photo'),
+			start_time: result.fieldByName('start_time'),
+			recurring_until: result.fieldByName('recurring_until'),
+			number_checkins: result.fieldByName('number_checkins'),
+			channel_id: result.fieldByName('channel_id'),
+			hasChild:true
+		});
+		Ti.API.info('Name: '+result.fieldByName('name'));
+		Ti.API.info('Start: '+result.fieldByName('start_time'));
+		Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
+		Ti.API.info('Now: '+now);
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return fetchedPrograms;
 };

@@ -5,7 +5,6 @@ db.close();
 
 // create data for local database
 exports.levelModel_updateLevelFromACS = function(_levelsCollection) {
-	Ti.API.info('LEVEL LOAD');
 	var db = Ti.Database.open('Chatterbox'); 
 	//	var version = 'v001';
 	db.execute('DELETE FROM levels');
@@ -41,7 +40,7 @@ exports.level_fetchLevel = function() {
 };
 
 exports.level_checkLevel = function(_exp) {
-	Ti.API.info('level_checkLevel');
+	//Ti.API.info('level_checkLevel');
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * from levels where ? < exp ORDER BY exp ASC limit 0,1',_exp);
 	var myLevel = result.fieldByName('level');
@@ -51,7 +50,7 @@ exports.level_checkLevel = function(_exp) {
 };
 
 exports.level_nextLevel = function(_exp) {
-	Ti.API.info('level_nextLevel');
+	//Ti.API.info('level_nextLevel');
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * from levels where ? < exp ORDER BY exp ASC limit 0,1',_exp);
 	var NextLevel = Number(result.fieldByName('exp'));

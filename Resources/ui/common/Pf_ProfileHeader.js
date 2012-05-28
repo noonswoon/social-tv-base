@@ -1,62 +1,58 @@
 
-var ProfileHeaderView = function(){
+var ProfileHeaderView = function(_parentWindow){
 				
-//CALL DATA FROM ACS
-		var userID = '4fa17dd70020440df700950c';
+//CALL DATA
+	    var user_id = '4fa17dd70020440df700950c';
 		var CheckinACS = require('acs/checkinACS');		
 		var PointACS = require('acs/pointACS');
 		var LevelACS = require('acs/levelACS');	
 		var myBadgeACS = require('acs/myBadgeACS');
 		var CheckinModel = require('model/checkin');
 		var PointModel = require('model/point');	
-		var LevelModel = require('model/level');	
+		var LevelModel = require('model/level');
+		var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
 		var CacheHelper = require('helpers/cacheHelper');
-			
-		
+					
 //CHECK IN//////////////////////////////////////////////////////////////////////
-		function checkinDbLoadedCallBack(e){
-			Ti.API.info('checkinDbLoadedCallBack');					
+		function checkinDbLoadedCallBack(e){			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		};
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
-			columnCheckInCount.text = CheckinModel.checkins_count(userID);
+			columnCheckInCount.text = CheckinModel.checkins_count(user_id);
 		});
 		Ti.App.addEventListener('updateHeaderCheckin',function(){
-			columnCheckInCount.text=CheckinModel.checkins_count(userID);
+			columnCheckInCount.text=CheckinModel.checkins_count(user_id);
 		});
 		
 		// Using cache		
-		CacheHelper.fetchACSDataOrCache('userCheckin'+userID, CheckinACS.checkinACS_fetchedCheckIn, userID, 'checkinsDbUpdated');
+		CacheHelper.fetchACSDataOrCache('userCheckin'+user_id, CheckinACS.checkinACS_fetchedCheckIn,user_id, 'checkinsDbUpdated');
 	
 		
 /////POINT ACS/////////////////////////////////////////////	
-	PointACS.pointACS_fetchedPoint(userID);
+	PointACS.pointACS_fetchedPoint(user_id);
 	function pointDbLoadedCallBack(e){
-			Ti.API.info('pointDbLoadedCallBack');
 			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
-			Ti.API.info('DONE:pointDbLoadedCallBack');
 	};
 		
 		Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);	
 	
 ///LEVEL ACS///////////////////////////////////////////////////////
 		LevelACS.levelACS_fetchedLevel();
-		function levelDbLoadedCallBack(e){
-		Ti.API.info('levelDbLoadedCallBack');					
+		function levelDbLoadedCallBack(e){					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
 		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
 
 ///BADGE ACS////////////////////////////////////////////////////////
-	myBadgeACS.myBadgeACS_fetchedBadge(userID);
+	myBadgeACS.myBadgeACS_fetchedBadge(user_id);
 
 ///////////////////////////////////////////////////////////////////
 	var headerView = Ti.UI.createView({
 			backgroundGradient: {
-        	type: 'linear',
-        	startPoint: { x: '0%', y: '0%' },
-        	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ]}
+	        	type: 'linear',
+	        	startPoint: { x: '0%', y: '0%' },
+	        	endPoint: { x: '0%', y: '100%' },
+	        	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]}
 	});
 	
 		var totalCheckins=0;
@@ -82,19 +78,20 @@ var ProfileHeaderView = function(){
 			top: 10, left: 10,
 			borderWidth: 1,
 			width:100, height:100,
-			borderColor: '#E2E5EE',
+			borderColor: '#b1b1b1'
 		});
 		
 		var profileName = Ti.UI.createLabel({
 			text: profileDataName,
 			top: 5,
 			left: 120,
+			color: '#3e3e3e',
 			width: 'auto',
 			height: 30,
-			font: { fontWeight: 'bold', fontSize: 14}
+			font: { fontWeight: 'bold', fontSize: 15}
 		})
 		//Facebook login
-		var fbLogin = Ti.UI.createView({
+		var socialNet = Ti.UI.createView({
 			top: 40,
 			left: 120,
 			width: 60,
@@ -102,91 +99,97 @@ var ProfileHeaderView = function(){
 
 		});
 		
-		var fbLoginButton = Ti.UI.createButton({
-			width: 60,
-			height: 70,
-			opacity: 0.8,
-			borderRadius: 5,
-			backgroundImage: 'images/FBlogin_off.png',
+		fbButton = Ti.UI.createImageView({
+			image: 'images/icon/facebook-icon_24x24.png',
+			borderRadius: 7,
+			bottom:0,
+			left: 4
 		});
-
-		var fbValue = false;
-		
-		fbLoginButton.addEventListener('click',function(){
-			if(fbValue===false){
-			fbLoginButton.backgroundImage = 'images/FBlogin.png';
-			fbValue = true;
-			alert('You have login to Facebook ' + fbValue);
-			}
-			else if (fbValue===true)
-			{
-				fbLoginButton.backgroundImage = 'images/FBlogin_off.png';
-				fbValue = false;
-			alert('You have logout from Facebook '+ fbValue);
-			}
-		});	
-
+		twButton = Ti.UI.createImageView({
+			image: 'images/icon/twitter-icon_24x24.png',
+			borderRadius: 7,
+			bottom: 0,
+			right: 4			
+		});
+/*		tvBorder = Ti.UI.createImageView({
+			image: 'images/icon/tvBorder.png',
+			bottom: 2,
+			opacity: 0.2			
+		});		
+*/
+		var refreshButton = Ti.UI.createImageView({
+			image: 'images/icon/refresh.png',
+			right: 10,
+			top: 5,
+			height:20,
+			width:20
+		});
 		//checkin count
 		var columnCheckIn = Ti.UI.createView({
 			top: 40,
-			left: 185,
+			left: 250,
 			width: 60,
 			height: 70,
-			backgroundColor: '#999',
-			opacity: 0.9
+			backgroundColor: '#d74e55',
+			borderRadius: 10,
 		});
 			//img
 			var columnCheckInImage = Ti.UI.createImageView({
-				image: 'images/Location-Large.png',
-				opacity: 0.6,
-				width: 30,
-				height: 30,
-				top: 3
+				image: 'images/icon/checkin.png',
+				top: 10
 			});
 			//count
 		var columnCheckInCount = Ti.UI.createLabel({
 			text: '',
-			font: {fontSize: 26, fontStyle: 'bold'},
+			font: {fontSize: 20, fontStyle: 'bold'},
+			shadowColor: '#999',
 			color: '#fff',
 			height: 30,
-			top: 30
+			bottom:10
 		});
 				
 		//number of friends
 		var columnFriend = Ti.UI.createView({
 			top: 40,
-			left: 250,
+			left: 185,
 			width: 60,
 			height: 70,
-			backgroundColor: '#999',
-			opacity: 0.9
+			backgroundColor: '#a7c63d',
+			borderRadius: 10,
 		});
-			//img
-			var columnFriendImage = Ti.UI.createImageView({
-				image: 'images/User.png',
-				opacity: 0.6,
-				width: 30,
-				height: 30,
-				top: 3
-			});
-			// count
-			var columnFriendCount = Ti.UI.createLabel({
-				text: '27',
-				font: {fontSize: 26, fontStyle: 'bold'},
-				color: '#fff',
-				height: 30,
-				top: 30
-			});
-			
+		
+		
+		//img
+		var columnFriendImage = Ti.UI.createImageView({
+			image: 'images/icon/112-group.png',
+			top: 10
+		});
+		// count
+		var columnFriendCount = Ti.UI.createLabel({
+			text: '27',
+			font: {fontSize: 20, fontStyle: 'bold'},
+			color: '#fff',
+			shadowColor: '#999',
+			height: 30,
+			bottom: 10
+		});
+
+		columnFriendCount.addEventListener('click',function(){
+			_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow));
+		});	
+		
 	profilePictureContain.add(profilePicture);
-	fbLogin.add(fbLoginButton);
+//	socialNet.add(tvBorder);
+	socialNet.add(fbButton);
+	socialNet.add(twButton);
 	columnCheckIn.add(columnCheckInImage);
 	columnCheckIn.add(columnCheckInCount);
 	columnFriend.add(columnFriendImage);
 	columnFriend.add(columnFriendCount);
 	headerView.add(profilePictureContain);
 	headerView.add(profileName);
-	headerView.add(fbLogin);
+	headerView.add(socialNet);
+	headerView.add(refreshButton);
 	headerView.add(columnCheckIn);
 	headerView.add(columnFriend);	
 

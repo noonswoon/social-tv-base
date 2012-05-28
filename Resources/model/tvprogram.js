@@ -14,21 +14,26 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 		db.execute('INSERT INTO tvprograms(id,name,photo,start_time,recurring_until,channel_id) VALUES(?,?,?,?,?,?)',
 		_allPrograms[i].id,_allPrograms[i].name,_allPrograms[i].photo,_allPrograms[i].start_time,_allPrograms[i].recurring_until,_allPrograms[i].channel_id);
 	}
-	// var numCheckin = checkinACS.checkinACS_fetchedCheckInOfProgram();
-	// db.execute('INSERT INTO tvprograms(number_checkins) VALUES(?)',numCheckin);
-	
 	db.close();
-	//Ti.App.fireEvent("tvprogramsDbUpdated");	
+	// Ti.App.fireEvent("tvprogramsDbUpdated");	
 	Ti.App.fireEvent("tvprogramsTitlesLoaded");
-	
-	// return
 };
 
 exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins) {	
-		var db = Ti.Database.open('Chatterbox'); 
-		db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckins,targetedProgramId);
-		db.close();
+	var db = Ti.Database.open('Chatterbox'); 
+	db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckins,targetedProgramId);
+	db.close();
 }; 
+
+
+exports.TVProgramModel_countCheckins = function(_eventId){
+	var db = Ti.Database.open('Chatterbox');
+	var result = db.execute('SELECT COUNT(number_checkins) as numCheckinsOfProgram  FROM tvprograms WHERE id = ?',_eventId);
+	number_checkins = Number(result.fieldByName('numCheckinsOfProgram'));
+	db.close();
+	return number_checkins;
+};
+
 
 exports.TVProgramModel_fetchPrograms = function() {
 	//select some stuff from the local db..based on the future filtering
@@ -51,6 +56,5 @@ exports.TVProgramModel_fetchPrograms = function() {
 	result.close();
 	db.close();
 	return fetchedPrograms;
-	//return that stuff to discoveryMainWindow
 	
 };

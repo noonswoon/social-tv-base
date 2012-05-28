@@ -1,5 +1,4 @@
 var checkin =[];
-var userScore =0;
 
 exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 	Cloud.Checkins.query({
@@ -30,16 +29,8 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
 
 }, function (e) {
     if (e.success) {
-    	 Ti.API.info('checkin SUCCESS');
         for (var i = 0; i < e.checkins.length; i++) {
-        	 var curCheckin = e.checkins[i];
-            userScore +=curCheckin.custom_fields.score;
-            Ti.API.info('checkin Success:\\' +
-            	curCheckin.user.username +' has been check in on ' +
-            	curCheckin.event.id + ' at ' + curCheckin.updated_at +
-            	'. Your current score is ' + userScore);
-               //alert('userScore = ' + userScore);
-            
+        	 var curCheckin = e.checkins[i]; 
                checkin.push(curCheckin);
          }
 		Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
@@ -51,7 +42,6 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
 			});
 };
 
-//create checkin
 exports.checkinACS_createCheckin = function(_eventID){
 	Cloud.Checkins.create({
     event_id: _eventID,
@@ -59,10 +49,6 @@ exports.checkinACS_createCheckin = function(_eventID){
 	}, function (e) {
 	    if (e.success) {
 	        var checkin = e.checkins[0];
-	        Ti.API.info('Success:\\n' +
-	            'id: ' + checkin.id + '\\n' +
-	            'user: ' + checkin.user.id +' has been checkin in ' + checkin.event.id + ', got score = ' + checkin.custom_fields.score);
-	       Ti.API.info('fire createCheckinDB');
 	        Ti.App.fireEvent('createCheckinDB',{fetchedACheckin:checkin});
 	    } else {
 	        alert('Error:\\n' +

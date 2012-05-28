@@ -15,7 +15,6 @@ function ProfileMainWindow() {
 		});
 		
 		var settingButton = Titanium.UI.createButton({
-			//systemButton:Titanium.UI.iPhone.SystemButton.CONTACT_ADD
 			image: 'images/icon/19-gear.png'
 		});
 		settingButton.addEventListener('click',function(){

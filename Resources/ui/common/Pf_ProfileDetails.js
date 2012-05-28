@@ -7,27 +7,28 @@ var ProfileDetailView = function(){
         	type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
         	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ]},
+        	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]},
 		});
 		var profileTab = Titanium.UI.iOS.createTabbedBar({
 			labels:['Stats', 'Activity', 'Badges', 'Rewards'],
-			//backgroundColor:'#61A598',
+			backgroundColor:'#5baad1',
 			style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 			height:30,
 			width:300,
-		//index:0
-			index:3
+			index:0
 		});	
 		profileMenu.add(profileTab);
 ///DETAIL//////////////////////////////////////////////////////////
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
+		//backgroundImage: 'images/icon/bg.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	var profileDetailScroll = Ti.UI.createScrollView({
 		contentWidth:312,
 		contentHeight:'auto',
+		backgroundColor: 'transparent',
 		top:0,
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
@@ -52,9 +53,7 @@ var ProfileDetailView = function(){
 				profileDetailScroll.remove(profileDetailScroll.children[i]);
 			}
 		}			
-/*		while (profileDetailScroll.children !== undefined && profileDetailScroll.children.length !== 0){
-				profileDetailScroll.remove(profileDetailScroll.children[0]);}	
-*/			
+		
 		if(e.index==0){
 			profileDetailScroll.add(profileStats);}
 		else if (e.index==1) {
@@ -65,8 +64,7 @@ var ProfileDetailView = function(){
 			profileDetailScroll.add(profileReward);}
 	});		
 		
-	//profileDetailScroll.add(profileStats);
-	profileDetailScroll.add(profileReward);
+	profileDetailScroll.add(profileStats);
 	profileDetail.add(profileDetailScroll);
 //////////////////////////////////////////////////////////////////
 

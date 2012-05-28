@@ -10,17 +10,19 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	var DiscoveryMainWindow = require('ui/common/discoveryMainWindow');	
+	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');	
 	
 	var chatwin = new ChatMainWindow();
-	var messageboardwin = new MessageboardMainWindow(1);		
+
+	var messageboardwin =  new MessageboardMainWindow(1);		
     var loginwin = new LoginWindow();
-	//var productwin = new ProductMainWindow();
-	var profilewin = new ChatMainWindow();//new ProfileMainWindow();
-	var discoveryMainWin = new ChatMainWindow();//new DiscoveryMainWindow();
+
+	var productwin = new ProductMainWindow();
+	var profilewin =  new ProfileMainWindow();
+	var selectionMainWin = new ChannelSelectionMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
-        icon:'/images/fugitives.png',
+        icon:'/images/icon/Chat-Bubble.png',
         title:'Chat',
         window:chatwin
     });
@@ -40,13 +42,13 @@ function ApplicationTabGroup() {
 	});
 	loginwin.containingTab = loginTab;
 	
-	/*var productTab = Ti.UI.createTab({
+	var productTab = Ti.UI.createTab({
 		icon: '/images/captured.png',
 		title: 'Product',
 		window: productwin
 	});
 	productwin.containingTab = productTab;
-	*/
+	
 	
 	 var profileTab = Ti.UI.createTab({
 		 icon: '/images/fugitives.png',
@@ -55,24 +57,24 @@ function ApplicationTabGroup() {
 	 });
 	 profilewin.containingTab = profileTab;
 	
-	var discoveryTab = Ti.UI.createTab({
-		title: 'Discovery',
+	var selectionTab = Ti.UI.createTab({
+		title: 'Selection',
 		icon: '/images/tv.png',
-		window: discoveryMainWin
+		window: selectionMainWin
 	});
-	discoveryMainWin.containingTab = discoveryTab;
+	selectionMainWin.containingTab = selectionTab;
 	
     //self.addTab(chatTab);  
     self.addTab(messageboardTab);  
-    self.addTab(discoveryTab);
+    self.addTab(selectionTab);
     self.addTab(profileTab);
    	self.addTab(loginTab);
     //self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
-		//coming to this page, should already loggin
 	
+	//coming to this page, should already loggin
 	//checking the current login and setup the currentLoggedIn user to query anywhere
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
@@ -83,7 +85,6 @@ function ApplicationTabGroup() {
    		}
     });
    
-    // open tab group
     return self;
 };
 

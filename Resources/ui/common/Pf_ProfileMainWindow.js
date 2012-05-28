@@ -1,7 +1,8 @@
 function ProfileMainWindow() {
 	var self = Titanium.UI.createWindow({
-		backgroundColor:'#fff',
+	//	backgroundColor:'#fff',
 		title: "My Profile",
+		barColor:'#398bb0'
 	});
 	
 //REQUIRE//
@@ -9,6 +10,18 @@ function ProfileMainWindow() {
 		var Detail = require('ui/common/Pf_ProfileDetails');
 
 //UI//
+		var nav = Ti.UI.iPhone.createNavigationGroup({
+			window: self
+		});
+		
+		var settingButton = Titanium.UI.createButton({
+			//systemButton:Titanium.UI.iPhone.SystemButton.CONTACT_ADD
+			image: 'images/icon/19-gear.png'
+		});
+		settingButton.addEventListener('click',function(){
+			alert('setting');
+		});
+
 		var headerView = Ti.UI.createView({
 				height: 120
 		});	
@@ -18,21 +31,16 @@ function ProfileMainWindow() {
 				right: 0,
 				bottom: 0,
 				scrollable: false,
+				backgroundColor: '#212b3d',
 			});
 		var header = Ti.UI.createTableViewSection();
-		var profileHeader = new ProfileHeader();
+		var profileHeader = new ProfileHeader(self);
 		var detail = new Detail();
 		var UserProfile=[];
-//add focus eventListener
-		self.addEventListener('focus',function(){
-			
-		});
-
 		
+		self.setRightNavButton(settingButton);
 		headerView.add(profileHeader);
-		
 		header.headerView = headerView;
-		
 		UserProfile.push(header);
 		UserProfile.push(detail);
 		UserProfileTable.setData(UserProfile);

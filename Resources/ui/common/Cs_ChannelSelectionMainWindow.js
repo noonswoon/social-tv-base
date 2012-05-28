@@ -32,9 +32,6 @@ function ChannelSelectionMainWindow(){
  	self.setTitleControl(tabBar);
 
 	tabBar.addEventListener('click', function(e){
-		// if(mainView.children[0] !== undefined){
-			// mainView.remove(mainView.children[0]);	
-		// } 
 		for (var i in mainView.children){
 			if (mainView.children.hasOwnProperty(i)) {
 				mainView.remove(mainView.children[i]);
@@ -42,6 +39,7 @@ function ChannelSelectionMainWindow(){
 		}		
 		if(e.index==0){
 			mainView.add(popularwin);
+			guidewin._closePopupWindow();
 		}
 		else if (e.index==1){
 			mainView.add(guidewin);
@@ -50,6 +48,7 @@ function ChannelSelectionMainWindow(){
 			// mainView.add(self);
 		// }	
 	});
+	
 	self.add(mainView);
 	return self;
 }

@@ -88,7 +88,7 @@ function GuideWindow(_parent) {
 	tableViewForTab.setData(dataForTab);
 	
 	//EVENT LISTENERS
-	var channelSelectorToggle = true;
+	var channelSelectorToggle = true; //true means it closes
 	selectChannelButton.addEventListener('click',function(e){
 		if(channelSelectorToggle) {
 			channelSelectorToggle = false;
@@ -146,6 +146,14 @@ function GuideWindow(_parent) {
 	var defaultChannel = new ChannelInGuideWindow(0);
  	self.add(defaultChannel);	
 
+	self._closePopupWindow = function() {
+		if(!channelSelectorToggle) { //only close if it is still open
+			channelSelectorToggle = true;
+			channelSelectorPopupWin.close();
+			self.remove(triangleImage);
+		}
+	};
+	
 	return self;
 }
 module.exports = GuideWindow;

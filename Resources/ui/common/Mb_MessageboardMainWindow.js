@@ -2,17 +2,17 @@ function MessageboardMainWindow(_programId) {
 	//HEADERS
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
-	
+
 	var MessageboardHeader = require('ui/common/Mb_MessageboardHeader');
 	var MessageboardTableViewRow = require('ui/common/Mb_MessageboardTableViewRow');
 	var MessageboardAddWindow = require('ui/common/Mb_MessageboardAddWindow');
 	var CommentWindow = require('ui/common/Mb_CommentWindow');
 	var CacheHelper = require('helpers/cacheHelper');
-		
+
 	//OBJECTS INSTANTIATION
 	var messageboardHeader = new MessageboardHeader('Reya','Famous Lakorn');	
 	var addWindow = new MessageboardAddWindow(_programId);	
-		
+
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
@@ -20,7 +20,7 @@ function MessageboardMainWindow(_programId) {
 		title: "Message Board",
 		barColor: '#6d0a0c'
 	});
-	
+
 	var searchView = Ti.UI.createView({
 		top: 120,
 		width:'auto',
@@ -36,7 +36,7 @@ function MessageboardMainWindow(_programId) {
 		showCancel:false,
 		hintText:'Search here...',
 	});
-	
+
 	var addButton = Ti.UI.createButton({
 		right: 0,
 		top: 0,
@@ -46,7 +46,7 @@ function MessageboardMainWindow(_programId) {
 	});
 	searchView.add(searchTextField);
 	searchView.add(addButton);
-	
+
 	var allTopicTable = Ti.UI.createTableView({
 		top: 160,
 		left: 0,
@@ -57,7 +57,7 @@ function MessageboardMainWindow(_programId) {
 		searchHidden: true, //the bar is outside the table
 		backgroundColor: 'pink'
 	});	
-	
+
 	//ADDING UI COMPONENTS TO WINDOW
 	self.add(messageboardHeader);
 	self.add(searchView);
@@ -73,7 +73,7 @@ function MessageboardMainWindow(_programId) {
 		//clear current data in the table
 		allTopicTable.data = [];
 		var viewRowsData = [];//[searchbarTableViewRow];
-		
+
 		//retrieve from db
 		var allTopics = Topic.topicModel_fetchFromProgramId(_programId);
 		for (var i=0;i<allTopics.length;i++) {
@@ -82,13 +82,13 @@ function MessageboardMainWindow(_programId) {
 		}
 		allTopicTable.setData(viewRowsData);
 	}
-	
+
 	function addNewTopicTableViewRowCallback(e) {
 		var tableViewRowDetail = e.topicDetailForNewTableViewRow;
 		var topicRow = new MessageboardTableViewRow(tableViewRowDetail);
 		allTopicTable.insertRowBefore(0,topicRow);
 	}
-	
+
 	function topicCreatedACSCallback(e) {	
 		var newTopic = e.newTopic;	
 		var topicForTableViewRow = {
@@ -102,26 +102,26 @@ function MessageboardMainWindow(_programId) {
 		};
 		var topicRow = new MessageboardTableViewRow(topicForTableViewRow);
 		allTopicTable.updateRow(0,topicRow);
-		
+
 		Topic.topicModel_updateACSObjectIdField(e.newTopic);
 	}
-	
+
 	//BEGIN -- ADD EVENTLISTNERS
 	addButton.addEventListener('click', function(e) {
 		self.containingTab.open(addWindow);
 	});
-	
+
 
 	allTopicTable.addEventListener('click', function(e){
 		var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
 		self.containingTab.open(commentwin);
 	});		
-	
+
 	Ti.App.addEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);
 	Ti.App.addEventListener("topicsDbUpdated", topicsDbUpdatedCallback);
 	Ti.App.addEventListener("insertingTopicTableViewRow", addNewTopicTableViewRowCallback);
 	Ti.App.addEventListener('topicCreatedACS', topicCreatedACSCallback);
-	
+
 	searchTextField.addEventListener('return', function(e) {
 		searchTextField.blur();
 	});
@@ -137,10 +137,10 @@ function MessageboardMainWindow(_programId) {
 		Ti.App.removeEventListener('topicCreatedACS', topicCreatedACSCallback);
 	});	
 	//END -- ADD EVENTLISTNERS
-	
+
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+_programId, TopicACS.topicACS_fetchAllTopicsOfProgramId, _programId, 'topicsDbUpdated');
-	
+
 	return self;
 }
 module.exports = MessageboardMainWindow;

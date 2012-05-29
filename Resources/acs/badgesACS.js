@@ -1,28 +1,27 @@
-//pull all badges description and img url
-allBadges = []
+var badges = []
 
 function badgeSort(a,b) {
-	return a.badge_id - b.badge_id;
+	return a.custom_fields.badgeID - b.custom_fields.badgeID;
 }
-exports.BadgesACS_fetchedBadges = function() {
-	Cloud.Objects.query({
-		classname: 'Badges',	
-    	page: 1,
-    	per_page: 20
-	}, 
-	function (e) {
-    if (e.success) {
-    	 var badgesCollection = e.Badges; 
-    	badgesCollection.sort(badgeSort);
-       for (var i = 0; i < badgesCollection.length; i++) {
-        	 var curBadge = badgesCollection[i];
-              allBadges.push(curBadge);
-         }
-		Ti.App.fireEvent('BadgesLoaded',{fetchedMyBadges:allBadges});
-    } 
-    else {
-        alert('Error:\\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
-    	 }
-			});
+
+exports.fetchedBadges = function() {
+	Cloud.Photos.query({
+	    page: 1,
+	    per_page: 20,
+	    where: {tag: "badge"}
+	}, function (e) {
+	    if (e.success) {
+	    	var badgesCollection = e.photos; 
+    		badgesCollection.sort(badgeSort);
+			for (var i = 0; i < e.photos.length; i++) {
+				var photo = e.photos[i];    
+	            badges.push(photo);
+			}
+			Ti.App.fireEvent('badgeLoaded',{fetchedBadges:badges});
+	    }
+	    else {
+	        alert('Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
 };

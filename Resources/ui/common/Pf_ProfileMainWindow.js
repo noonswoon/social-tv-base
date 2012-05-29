@@ -34,7 +34,7 @@ function ProfileMainWindow() {
 			});
 		var header = Ti.UI.createTableViewSection();
 		var profileHeader = new ProfileHeader(self);
-		var detail = new Detail();
+		var detail = new Detail(self);
 		var UserProfile=[];
 		
 		self.setRightNavButton(settingButton);

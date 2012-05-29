@@ -61,7 +61,7 @@ ChannelInGuideWindow = function (_index){
 	});
 	
 	self.add(programsInChannelTableView);
-	TVProgramACS.tvprogramACS_fetchAllProgram();
+	 TVProgramACS.tvprogramACS_fetchAllProgram();
 	return self;
 }
 module.exports = ChannelInGuideWindow;

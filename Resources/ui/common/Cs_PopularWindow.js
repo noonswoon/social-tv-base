@@ -12,6 +12,7 @@ function PopularWindow(_parent) {
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
 			Ti.App.fireEvent("showDiscoveryPage");
+			// Ti.App.fireEvent("updatePopularProgramAtTime");
 		}
 	}
 	Ti.App.addEventListener('tvprogramsTitlesLoaded',function() {
@@ -40,14 +41,12 @@ function PopularWindow(_parent) {
 		programListTable.data = [];	
 		var allPrograms = e.fetchedPrograms;
 		TVProgram.tvprogramsModel_insertAllPrograms(allPrograms);
-		fetchProgramsAllCheckins(); 
+		// fetchProgramsAllCheckins(); 
 	}
 	Ti.App.addEventListener('tvprogramsLoaded',tvprogramLoadedCompleteCallback);
 	
 	function fetchProgramsAllCheckins() {
-		//select all programs in local db
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
-		//for each program, call ACS to get how many checkins in the Cloud
 		numProgramsToLoadCheckins = currentTVPrograms.length;
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id; 
@@ -67,17 +66,43 @@ function PopularWindow(_parent) {
 		isEverythingReady();
 	});
 	
-	Ti.App.addEventListener('showDiscoveryPage', function(){
-		var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
-		var viewRowsData = [];
-		for (var i=0;i<currentTVPrograms.length;i++) {
-			 var curTVProgram = currentTVPrograms[i];
-				var row = new PopularWindowTableViewRow(curTVProgram);
-				viewRowsData.push(row);
+	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
+		var timeIndex = e.timeIndex;
+		
+		if(timeIndex === 12){
+			var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex); 
+			var viewRowsData = [];
+				for (var i=0;i<selectedShowtime.length;i++) {
+			 		var curTVProgram = selectedShowtime[i];
+					var row = new PopularWindowTableViewRow(curTVProgram);
+					viewRowsData.push(row);
+				}
+			programListTable.setData(viewRowsData);
 		}
-		programListTable.setData(viewRowsData);
+		if(timeIndex === 17){
+			var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex,18); 
+			var viewRowsData = [];
+				for (var i=0;i<selectedShowtime.length;i++) {
+			 		var curTVProgram = selectedShowtime[i];
+					var row = new PopularWindowTableViewRow(curTVProgram);
+					viewRowsData.push(row);
+				}
+			programListTable.setData(viewRowsData);
+		}
 		
 	});
+	
+	// Ti.App.addEventListener('showDiscoveryPage', function(){
+		// var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
+		// var viewRowsData = [];
+		// for (var i=0;i<currentTVPrograms.length;i++) {
+			 // var curTVProgram = currentTVPrograms[i];
+				// var row = new PopularWindowTableViewRow(curTVProgram);
+				// viewRowsData.push(row);
+		// }
+		// programListTable.setData(viewRowsData);
+// 		
+	// });
 
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');	
@@ -93,6 +118,7 @@ function PopularWindow(_parent) {
 		});
 		_parent.containingTab.open(checkinmainwin);
 	});
+	
 	
 	self.add(timeSelectionView);
 	self.add(programListTable);

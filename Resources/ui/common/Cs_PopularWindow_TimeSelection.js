@@ -53,117 +53,22 @@ var TimeSelectionView = function(){
 		}
 	
 	});
-		
-	// var timeView00 =Ti.UI.createView({
-		// backgroundColor:'#336699',
-		// width:40,
-		// height: 20,
-		// left:10
-	// });
-	// var Label00 = Ti.UI.createLabel({
-		// text: '00.00',
- 		// font:{fontSize:13},
-		// width:'auto',
-		// textAlign:'center',
-		// height:'auto'
-	// });
-// 
-	// var timeView01 =Ti.UI.createView({
-		// backgroundColor:'#336699',
-		// width:40,
-		// height: 20,
-		// left:60
-	// });
-	// var Label01 = Ti.UI.createLabel({
-		// text: '01.00',
-		// font:{fontSize:13},
-		// width:'auto',
-		// textAlign:'center',
-		// height:'auto'
-	// });
-// 	
-	// var timeView02 =Ti.UI.createView({
-		// backgroundColor:'#336699',
-		// width:40,
-		// height: 20,
-		// left:110
-	// });
-	// var Label02 = Ti.UI.createLabel({
-		// text: '02.00',
-		// font:{fontSize:13},
-		// width:'auto',
-		// textAlign:'center',
-		// height:'auto'
-	// });
-// 	
-	// var timeView03 =Ti.UI.createView({
-		// backgroundColor:'#336699',
-		// width:40,
-		// height: 20,
-		// left:160
-	// });
-	// var Label03 = Ti.UI.createLabel({
-		// text: '03.00',
-		// font:{fontSize:13},
-		// width:'auto',
-		// textAlign:'center',
-		// height:'auto'
-	// });
-// 	
-	// var timeView04 =Ti.UI.createView({
-		// backgroundColor:'#336699',
-		// width:40,
-		// height: 20,
-		// left:210
-	// });
-	// var Label04 = Ti.UI.createLabel({
-		// text: '04.00',
-		// font:{fontSize:13},
-		// width:'auto',
-		// textAlign:'center',
-		// height:'auto'
-	// });
-// 	
 	
-	var margin = 10;
-	var time = '';
-	for(var i=0;i<=24;i++){
 
-		var timeView = Ti.UI.createView({
-			backgroundColor:'#336699',
-			width:40,
-			height: 20,
-			left:margin
+	var PopularTimeSelectionView = require('ui/common/Cs_PopularTimeSelectionView');
+	var hoursArray = [];
+	for(var i=0;i<24;i++){
+		
+		hoursArray[i] = new PopularTimeSelectionView(i);
+
+		hoursArray[i].addEventListener('click', function(e) {
+			var timeIndex = e.source.timeIndex;
+			alert(timeIndex);
+			Ti.App.fireEvent('updatePopularProgramAtTime',{timeIndex:timeIndex});
 		});
-		margin = margin+50;
+		selectionView.add(hoursArray[i]);
 		
-		if(i < 10)
-			time = '0'+i
-		else time = i.toString();
-		
-		var timeLabel = Ti.UI.createLabel({
-			text: time+'.00',
-			font:{fontSize:13},
-			width:'auto',
-			textAlign:'center',
-			height:'auto'
-		});	
-		timeView.add(timeLabel);
-		selectionView.add(timeView);
 	}
-
-
-
-	// selectionView.add(timeView00);
-	// selectionView.add(timeView01);
-	// selectionView.add(timeView02);
-	// selectionView.add(timeView03);
-	// selectionView.add(timeView04);
-	// timeView00.add(Label00);
-	// timeView01.add(Label01);
-	// timeView02.add(Label02);
-	// timeView03.add(Label03);
-	// timeView03.add(Label04);
 
 	self.add(selectionView);
 //	self.add(selectionBubble);

@@ -86,3 +86,40 @@ exports.TVProgramModel_fetchPopularPrograms = function() {
 	db.close();
 	return fetchedPrograms;
 };
+
+exports.TVProgramModel_fetchShowtimeSelection = function(_start){
+	var fetchedPrograms = [];
+	var now = moment(); 
+	var year = now.year();
+	var month = now.month();
+	month+=1;
+	var day = now.date();
+	var timeStr = year+'-0'+month+'-'+day+'T'+_start+':00:00+0000';
+	_start+=1;
+	var endStr = year+'-0'+month+'-'+day+'T'+_start+':00:00+0000';
+	
+	Ti.API.info(timeStr);
+	Ti.API.info(endStr);
+	
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM tvprograms WHERE start_time >= ? AND recurring_until <= ? ORDER BY start_time ASC', timeStr,endStr);
+	while(result.isValidRow()) {
+		fetchedPrograms.push({
+			id: result.fieldByName('id'),
+			name: result.fieldByName('name'),
+			photo: result.fieldByName('photo'),
+			start_time: result.fieldByName('start_time'),
+			recurring_until: result.fieldByName('recurring_until'),
+			number_checkins: result.fieldByName('number_checkins'),
+			channel_id: result.fieldByName('channel_id'),
+			hasChild:true
+		});
+		Ti.API.info('Name: '+result.fieldByName('name'));
+		Ti.API.info('Start: '+result.fieldByName('start_time'));
+		Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return fetchedPrograms;
+};

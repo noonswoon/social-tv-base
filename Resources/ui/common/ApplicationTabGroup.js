@@ -9,10 +9,10 @@ function ApplicationTabGroup() {
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     
-	var selectionMainWin = new ChatMainWindow();//new ChannelSelectionMainWindow();
+	var selectionMainWin = new SettingWindow();//new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow();
 	var messageboardwin =  new MessageboardMainWindow(1);		
-	var productwin = new ChatMainWindow();//new ProductMainWindow();
+	var productwin = new SettingWindow();//new ProductMainWindow();
 	var profilewin =  new SettingWindow();//new ProfileMainWindow();
 
 	var selectionTab = Ti.UI.createTab({
@@ -54,7 +54,6 @@ function ApplicationTabGroup() {
     self.addTab(messageboardTab);  
     self.addTab(productTab);
     self.addTab(profileTab);
-
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[2]);
     return self;

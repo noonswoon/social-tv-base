@@ -5,12 +5,6 @@
 var currentUser = null;
 var loggedIn = false;
 
-var Cloud = require('ti.cloud');
-// make sure you added your ACS keys to the tiapp.xml file!
-Cloud.apiKey = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
-Cloud.consumerKey = 'K25ozMNbVQ0wH2xpQ5YR8YEWomFO5M61';
-Cloud.consumerSecret = '6HjCZezCRZcQQZrOlEDApl3G4FEBGvn7';
-
 exports.isLoggedIn = function() {
 	return loggedIn;
 };
@@ -120,49 +114,4 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
-};
-
-exports.brag = function(message, photo, callback) {
-/*
- * Write a function that will use the ACS Statuses API to post a message for the logged in user
- *   - pass a message and a photo, no other params are needed
- *   - on success, call the callback function passing true
- *   - on failure, log the error to the console, call callback() passing false
-*/
-	if(loggedIn) {
-		Cloud.Statuses.create({
-			message:message,
-			photo:photo
-		}, function(e) {
-			if(e.success) {
-				callback(true);
-			} else {
-				Ti.API.info('Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
-		        callback(false);
-		    }
-		});
-	} else {
-		return false;
-	}
-};
-
-exports.getBragList = function(callback) {
-/*
- * Write a function that will use the ACS Statuses API to retrieve a list of messages for the logged in user
- *   - on success, call the callback function, passing the array of status messages returned by ACS
- *   - on failure, log the error and call callback() passing false
-*/
-	if(loggedIn) {
-		Cloud.Statuses.search({
-			user_id:currentUser.id
-		}, function(e) {
-			if (e.success) {
-		    	Ti.API.info('statuses = ' + JSON.stringify(e.statuses))
-		    	callback(e.statuses);
-		    } else {
-		        Ti.API.info('Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
-		        callback(false);
-		    }
-		});
-	}
 };

@@ -37,7 +37,20 @@ if (Ti.version < 1.8 ) {
 	//yourself what you consider a tablet form factor for android
 	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
 
-	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-	new ApplicationTabGroup().open();
+	Cloud.Users.showMe(function (e) {        
+		if (e.success) {
+			acs.setUserLoggedIn(e.users[0]);
+			acs.setLoggedInStatus(true);
+			Ti.API.info('should go to tab group page');
+			var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+			var maintabgroup = new ApplicationTabGroup();
+			maintabgroup.open();
+	    } else {
+	    	Ti.API.info("should go to login page");
+			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
+			var loginwin = new LoginFbOnlyWindow();
+			loginwin.open();   			
+   		}
+    });
 
 })();

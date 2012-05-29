@@ -19,7 +19,9 @@ function ProfileMainWindow() {
 			image: 'images/icon/19-gear.png'
 		});
 		settingButton.addEventListener('click',function(){
-			alert('setting');
+			var SettingWindow = require('ui/common/Am_SettingWindow');					
+			var settingwin = new SettingWindow();
+			self.containingTab.open(settingwin);
 		});
 
 		var headerView = Ti.UI.createView({

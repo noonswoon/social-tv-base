@@ -9,6 +9,11 @@ var PlaceholderWindow = function() {
 		layout: 'vertical'
 	});
 
+	var backBtn = Titanium.UI.createButton({
+		title:'Back',
+		style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
+	});
+	
 	var fbExplHeader = Ti.UI.createLabel({
 		top: 5,
 		left: 5,
@@ -81,7 +86,7 @@ var PlaceholderWindow = function() {
 	});
 	
 	//ADDING UI COMPONENTS
-	
+	pWin.setLeftNavButton(backBtn);
 	pWin.add(fbExplHeader);
 	pWin.add(fbExplPrelim);
 	pWin.add(fbExplFirst);
@@ -182,6 +187,11 @@ var PlaceholderWindow = function() {
 	}
 	
 	//EVENT REGISTERING
+	backBtn.addEventListener('click',function() {
+		pWin.close();
+	});
+
+
 	b1.addEventListener('click', function()
 	{
 		if (!Titanium.Facebook.loggedIn)

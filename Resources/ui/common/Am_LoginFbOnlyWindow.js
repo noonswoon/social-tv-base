@@ -47,15 +47,14 @@ var LoginFbOnlyWindow = function() {
 	whyFbBtn.addEventListener('click', function() {
 		var PlaceholderWindow = require('ui/common/PlaceholderWindow');
 		var placeholderwin = new PlaceholderWindow();
-		lWin.containingTab.open(placeholderwin);
+		placeholderwin.open({modal:true});
 	});
 			
 	Ti.include('helpers/facebookAuthenListeners.js'); //fb authen functionality		
 	Ti.Facebook.addEventListener('login', facebookAuthenCallback); //facebookAuthenCallback def is in helpers/facebookAuthenListeners.js
 	
-	lWin.addEventListener('close', function() {
+	lWin.addEventListener('blur', function() {
 		Ti.Facebook.removeEventListener('login',facebookAuthenCallback);
-		alert("closing the LoginFbwindow");
 	});
 	return lWin;
 };

@@ -4,7 +4,7 @@ function ApplicationTabGroup() {
     // create tab group, create module instance
     var self = Titanium.UI.createTabGroup();
 
-    var LoginWindow = require('ui/common/LoginWindow');
+    var LoginWindow = require('ui/common/Am_LoginFbOnlyWindow');
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 

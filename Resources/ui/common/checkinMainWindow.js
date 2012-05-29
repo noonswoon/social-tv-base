@@ -243,40 +243,8 @@ function isPointInPoly(poly, pt)
 		{x: 132, y:162},
 		{x:120, y:134}
 	];		
-	self.addEventListener('click',function(e)
-	{
-		if(checkinButton.enabled===true){
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
-				alert('Check in to activate the control');
-			}
-			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				alert('me');
-				meButton.image = 'images/checkin/checkin_me_enable.png';
-			}
-		}
-		if(checkinButton.enabled===false){			
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
-				alert('message board');
-				boardButton.image = 'images/checkin/checkin_board_enable.png';
-			}
-			if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				alert('me');
-				meButton.image = 'images/checkin/checkin_me_enable.png';
-			}
-			if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
-				alert('product');
-				productButton.image = 'images/checkin/checkin_products_enable.png';
-			}
-			if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
-				alert('chat');
-				chatButton.image = 'images/checkin/checkin_chat_enable.png';
-			}		
-		}		
-		else {};
-	});
-//touch start = mouseover	
-	self.addEventListener('touchstart',function(e)
-	{
+	
+	function highlightButton(e) {
 		if(checkinButton.enabled===true){
 			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
 			//	alert('Check in to activate the control');
@@ -299,8 +267,11 @@ function isPointInPoly(poly, pt)
 				chatButton.image = 'images/checkin/checkin_chat_mouseover.png';
 			}				
 		}
-				else {};
-	});
+	}
+	
+//touch start = mouseover	
+	self.addEventListener('touchstart',highlightButton);
+
 //touchend = mouseleave	
 	self.addEventListener('touchend',function(e)
 	{

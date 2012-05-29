@@ -1,20 +1,64 @@
 var PlaceholderWindow = function() {
 	
-	//SETUP 
-	var acs = require('lib/acs');
-	var Cloud = require('ti.cloud');
-	Titanium.Facebook.appid = "197422093706392";
-	Titanium.Facebook.permissions = ['publish_stream', 'read_stream', 'email'];
-
+	
 	//UI COMPONENTS DECLARATION
 	var pWin = Ti.UI.createWindow({
-		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
 		title: 'Random Stuff',
+		backgroundColor: 'white',
 		barColor: '#6d0a0c',
 		layout: 'vertical'
 	});
 
+	var fbExplHeader = Ti.UI.createLabel({
+		top: 5,
+		left: 5,
+		textAlign: 'center',
+		font: { fontSize: 20, fontFamily: 'Helvetica Neue', fontWeight:'bold'},
+		text: 	'Why we use Facebook'
+	});
+	
+	var fbExplPrelim = Ti.UI.createLabel({
+		top: 5,
+		left: 5,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		text: 	'Using Facebook as our login system helps improve the user experience in a number of ways:'
+	});
+	
+	var fbExplFirst = Ti.UI.createLabel({
+		top: 5,
+		left: 5,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		text: 	'1.) It makes it suer fast to sign up and create a Chatterbox profile'
+	});
+	
+	var fbExplSecond = Ti.UI.createLabel({
+		top: 5,
+		left: 5,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		text: 	'2.) It allows you to see what friends you have in common with other Chatterbox users'
+	});
+	
+	var fbExplThird = Ti.UI.createLabel({
+		top: 5,
+		left: 5,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		text: 	'3.) It helps ensure that people are using their real identities'
+	});
+	
+	var fbExplConclude = Ti.UI.createLabel({
+		top: 5,
+		left: 5,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		text: 	'We really want to earn your trust and we will not auto-post to your account or misuse your personal information in any way.'
+	});
+	
+	var fbExplContact = Ti.UI.createLabel({
+		top: 5,
+		left: 5,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		text: 'Please let us know if you\'d like more login options or have feedback on this. Thanks!'
+	});
+	
 	var b1 = Ti.UI.createButton({
 		title:'Run Query',
 		width:200,
@@ -37,6 +81,15 @@ var PlaceholderWindow = function() {
 	});
 	
 	//ADDING UI COMPONENTS
+	
+	pWin.add(fbExplHeader);
+	pWin.add(fbExplPrelim);
+	pWin.add(fbExplFirst);
+	pWin.add(fbExplSecond);
+	pWin.add(fbExplThird);
+	pWin.add(fbExplConclude);
+	pWin.add(fbExplContact);
+	
 	pWin.add(b1);
 	pWin.add(searchFriendsWithApp);
 	pWin.add(graphAPI);

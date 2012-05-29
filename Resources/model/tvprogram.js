@@ -15,7 +15,6 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 		_allPrograms[i].id,_allPrograms[i].name,_allPrograms[i].photo,_allPrograms[i].start_time,_allPrograms[i].recurring_until,_allPrograms[i].channel_id);
 	}
 	db.close();
-	// Ti.App.fireEvent("tvprogramsDbUpdated");	
 	Ti.App.fireEvent("tvprogramsTitlesLoaded");
 };
 
@@ -60,11 +59,10 @@ exports.TVProgramModel_fetchPrograms = function() {
 };
 
 exports.TVProgramModel_fetchPopularPrograms = function() {
-	//select some stuff from the local db..based on the future filtering
 	var fetchedPrograms = [];
 	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', now,now);
+	var result = db.execute('SELECT * FROM tvprograms WHERE start_time >= ? AND ? <= recurring_until ORDER BY start_time ASC', now,now);
 	while(result.isValidRow()) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),

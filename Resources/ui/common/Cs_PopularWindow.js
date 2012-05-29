@@ -12,7 +12,6 @@ function PopularWindow(_parent) {
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
 			Ti.App.fireEvent("showDiscoveryPage");
-			// Ti.App.fireEvent("updatePopularProgramAtTime");
 		}
 	}
 	Ti.App.addEventListener('tvprogramsTitlesLoaded',function() {
@@ -31,6 +30,7 @@ function PopularWindow(_parent) {
 		backgroundColor: 'transparent'
 	});	
 	timeSelectionView.add(timeSelection);
+
 	
 	var programListTable = Ti.UI.createTableView({
 		top: 35
@@ -92,17 +92,17 @@ function PopularWindow(_parent) {
 		
 	});
 	
-	// Ti.App.addEventListener('showDiscoveryPage', function(){
-		// var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
-		// var viewRowsData = [];
-		// for (var i=0;i<currentTVPrograms.length;i++) {
-			 // var curTVProgram = currentTVPrograms[i];
-				// var row = new PopularWindowTableViewRow(curTVProgram);
-				// viewRowsData.push(row);
-		// }
-		// programListTable.setData(viewRowsData);
-// 		
-	// });
+	Ti.App.addEventListener('showDiscoveryPage', function(){
+		var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
+		var viewRowsData = [];
+		for (var i=0;i<currentTVPrograms.length;i++) {
+			 var curTVProgram = currentTVPrograms[i];
+				var row = new PopularWindowTableViewRow(curTVProgram);
+				viewRowsData.push(row);
+		}
+		programListTable.setData(viewRowsData);
+		
+	});
 
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/checkinMainWindow');	

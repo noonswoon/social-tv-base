@@ -47,6 +47,7 @@ if (Ti.version < 1.8 ) {
 			maintabgroup.open();
 	    } else {
 	    	Ti.API.info("should go to login page");
+			Ti.Facebook.logout(); //just to be save
 			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
 			var loginwin = new LoginFbOnlyWindow();
 			loginwin.open();   			

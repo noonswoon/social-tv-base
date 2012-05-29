@@ -33,7 +33,7 @@ var EnterUsernameWindow = function() {
 	//EVENTS REGISTERING		
 	enterUsername.addEventListener('click', function() {
 		var providedUsername = usernameTextField.value;
-		alert('attempt to register username: '+usernameTextField.value);
+		
 		//update user-provided username and email address from graph api
 		Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function(e) {
 		    if (e.success) {
@@ -45,10 +45,15 @@ var EnterUsernameWindow = function() {
 				    if (e.success) {
 				        acs.setUserLoggedIn(e.users[0]);
 						acs.setLoggedInStatus(true);
+						//TODO: future --> close the enterUsername window before openning the applicationTabGroup
 				        var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');					
 						new ApplicationTabGroup().open();
 				    } else {
-				        alert({title: 'Registration Error', message:e.message});				    	
+				    	var a = Titanium.UI.createAlertDialog({
+									title:'Please try again',
+									message:e.message
+								});
+						a.show();
 				    }
 				});
 			} else if (e.error) {

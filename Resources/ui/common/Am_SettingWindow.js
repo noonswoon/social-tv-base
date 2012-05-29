@@ -25,6 +25,8 @@ var SettingWindow = function() {
 	function logoutCallback(event) {
 		if(event.success) {
 			Ti.API.info("successfully logged out");
+			//TODO: future-->close the tabgroup before openning login window
+			
 			//go to login page
 			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
 			var loginwin = new LoginFbOnlyWindow();

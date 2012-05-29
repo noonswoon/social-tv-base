@@ -14,16 +14,21 @@ function facebookAuthenCallback(e) {
 					if (e.success) {
 						if(e.users[0].username === undefined) {
 							//need to do the registering
+							//TODO: future-->need to close the LoginFbOnlyWindow
+							
 							var EnterUsernameWindow = require('ui/common/Am_EnterUsernameWindow');
 							var enterusernamewin = new EnterUsernameWindow();
 							enterusernamewin.open();
 						} else {
+							Ti.API.info('need to close login window to open applicationTabGroup window');
 							acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
 							var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 							new ApplicationTabGroup().open();
 				    	}
-				    }
+				   } else {
+				   		Ti.API.info("something wrong here at showMe");
+				   }
 			    });
 			} else {
 		        Ti.API.info('Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));

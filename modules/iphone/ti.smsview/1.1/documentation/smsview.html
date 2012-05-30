@@ -1,0 +1,121 @@
+<h1>Ti.SMSView.View</h1>
+<h2>Description</h2>
+<p>Displays an SMS-like view with the text area, scrollable view, and the message "balloons"</p>
+<h2>Requirements</h2>
+<ul>
+<li>Minimun Ti SDK is 1.7.2</li>
+<li>Move the smsview.bundle found in the "example" folder and put it your Resources dir</li>
+</ul>
+<h2>Methods</h2>
+<h3>sendMessage( string or blob )</h3>
+<p>displays a message on the right side of the scrollView</p>
+<h3>recieveMessage( string or blob )</h3>
+<p>displays a message on the left side of the scrollView</p>
+<h3>loadMessages( array )</h3>
+<p>Loads messages from an array</p>
+<p>Ex:
+<code>loadMessages(
+        [
+            {send:'Hello'},
+            {recieve:'World'}
+        ]
+    );</code></p>
+<h3>addLabel( string )</h3>
+<p>Inserts a label in the screen</p>
+<p>Ex:
+<code>addLabel( 'Jan 25, 2012' );</code></p>
+<h3>blur()</h3>
+<p>blurs the text area and brings the keyboard down</p>
+<h3>focus()</h3>
+<p>focuses the text area and brings the keyboard up</p>
+<h3>empty()</h3>
+<p>empties the view, clears all messages</p>
+<h2>Properties</h2>
+<h3>assets</h3>
+<p>String</p>
+<p>Folder where the "smsview.bundle" lives relative to the Resources directory. If nothing specified, then it must to places in the Resources itself.</p>
+<p>NOTE: Feel free to modify the contents of the smsview.bundle (it's a folder)</p>
+<h3>backgroundImage</h3>
+<p>String or blob</p>
+<p>Backround image of the scroll view</p>
+<h3>backgroundColor</h3>
+<p>String</p>
+<p>Backround color of the scroll view</p>
+<h3>sendColor</h3>
+<p>String</p>
+<p>Color of the "send" message balloon, these are the options:</p>
+<ul>
+<li>'Blue'</li>
+<li>'Purple'</li>
+<li>'Green' -- Default</li>
+<li>'Gray'</li>
+<li>'White'</li>
+</ul>
+<h3>recieveColor</h3>
+<p>String</p>
+<p>Color of the "recieve" message balloon, these are the options:</p>
+<ul>
+<li>'Blue'</li>
+<li>'Purple'</li>
+<li>'Green'</li>
+<li>'Gray'</li>
+<li>'White' -- Default</li>
+</ul>
+<h3>selectedColor</h3>
+<p>String</p>
+<p>Color of the "recieve" message balloon, these are the options:</p>
+<ul>
+<li>'Blue' -- Default</li>
+<li>'Purple'</li>
+<li>'Green'</li>
+<li>'Gray'</li>
+<li>'White'</li>
+</ul>
+<h3>buttonTitle</h3>
+<p>String</p>
+<p>Title of the "send" button</p>
+<h3>font</h3>
+<p>Dictionary</p>
+<p>Font of the text area, normal Ti font</p>
+<h3>textColor</h3>
+<p>String</p>
+<p>Color of the text in the text area</p>
+<h3>textAlignment</h3>
+<p>String</p>
+<p>Alignment of the text in the text area</p>
+<h3>autocorrect</h3>
+<p>Boolean</p>
+<p>Autocorrect of the text in the text area</p>
+<h3>editable</h3>
+<p>Boolean</p>
+<p>Kinda useless, it makes the text area non writable :)</p>
+<h3>returnType</h3>
+<p>Constant</p>
+<p>Return button of keyboard</p>
+<ul>
+<li>Ti.SMSView.RETURNKEY_DEFAULT</li>
+<li>Ti.SMSView.RETURNKEY_GO</li>
+<li>Ti.SMSView.RETURNKEY_GOOGLE</li>
+<li>Ti.SMSView.RETURNKEY_JOIN</li>
+<li>Ti.SMSView.RETURNKEY_NEXT</li>
+<li>Ti.SMSView.RETURNKEY_ROUTE</li>
+<li>Ti.SMSView.RETURNKEY_SEARCH</li>
+<li>Ti.SMSView.RETURNKEY_SEND</li>
+<li>Ti.SMSView.RETURNKEY_YAHOO</li>
+<li>Ti.SMSView.RETURNKEY_DONE</li>
+<li>Ti.SMSView.RETURNKEY_EMERGENCY_CALL</li>
+</ul>
+<h3>hasTab</h3>
+<p>Boolean</p>
+<p>Whether the window where the SMSView is has a bottom tab or not</p>
+<h2>Events</h2>
+<h3>click</h3>
+<p>Fires when the scroll view is clicked. Returns the "image", "view", "text" or "scrollView" property where clicked.</p>
+<h3>messageClicked</h3>
+<p>Identical as above.</p>
+<h3>buttonClicked</h3>
+<p>Fires when the "send" button is clicked</p>
+<h3>change</h3>
+<p>Fires when the value of the text area changed</p>
+<h3>camButtonClicked</h3>
+<p>Fires when a the camera button has been clicked.</p>

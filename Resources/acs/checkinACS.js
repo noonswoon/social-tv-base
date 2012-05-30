@@ -23,7 +23,7 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 exports.checkinACS_fetchedCheckIn = function(_id) {
 	Cloud.Checkins.query({
     page: 1,
-    per_page: 500,
+    per_page: 5,
     where: {user_id: _id,},
     order: '-updated_at',
 

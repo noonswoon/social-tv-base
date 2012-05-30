@@ -22,7 +22,7 @@ function PopularWindow(_parent) {
 	var self = Ti.UI.createWindow({
 	});
 	
-	var TimeSelection = require('ui/common/Cs_PopularWindow_TimeSelection');	
+	var TimeSelection = require('ui/common/Cs_PopularWindowScrollviewTimeSelection');	
 	var timeSelection = new TimeSelection();
 	var timeSelectionView = Ti.UI.createView({
 		height: 35,
@@ -50,7 +50,8 @@ function PopularWindow(_parent) {
 		numProgramsToLoadCheckins = currentTVPrograms.length;
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id; 
-			CheckinACS.checkinACS_fetchedCheckInOfProgram(curTVProgramId);
+			//CheckinACS.checkinACS_fetchedCheckInOfProgram(curTVProgramId);
+			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId);
 		}
 	};
 	
@@ -105,7 +106,7 @@ function PopularWindow(_parent) {
 	});
 
 	programListTable.addEventListener('click',function(e){
-		var CheckinMainWindow = require('ui/common/checkinMainWindow');	
+		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');	
 		checkinmainwin = new CheckinMainWindow({
 			programId: e.row.tvprogram.id,
 			programTitle: e.row.tvprogram.name,

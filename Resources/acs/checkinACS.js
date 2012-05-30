@@ -6,7 +6,7 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
     per_page: 500,
     where: {event_id: _eventId},
     order: '-updated_at'
-    
+
 }, function (e) {
     if (e.success) {
 			var totalCheckinOfEvent = e.checkins.length;
@@ -18,6 +18,8 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
     	 }
 	});
 };
+
+
 
 
 exports.checkinACS_fetchedCheckIn = function(_id) {
@@ -56,3 +58,27 @@ exports.checkinACS_createCheckin = function(_eventID){
 	    }
 	});
 };
+
+exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId) {
+	var programs = [];
+	
+	var eventId = _eventId;
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":"'+eventId+'"}&per_page=1';	
+	
+	Ti.API.info(url)
+	
+	var xhr = Ti.Network.createHTTPClient({
+	    onload: function() {
+	      	responseJSON = JSON.parse(this.responseText);
+	      	var total_results = responseJSON.meta.total_results;
+	        Ti.App.fireEvent("doneGettingNumCheckinsOfProgramId",{targetedProgramId: eventId, numCheckins:total_results});
+	    },onerror: function(e) {
+			// this function is called when an error occurs, including a timeout
+	        Ti.API.debug(e.error);
+	        alert('event error');
+	    },
+	    timeout:10000  /* in milliseconds */
+	});
+	xhr.open("GET", url);
+	xhr.send();
+}

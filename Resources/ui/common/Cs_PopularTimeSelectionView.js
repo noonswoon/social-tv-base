@@ -9,7 +9,7 @@ PopularTimeSelectionView = function(_timeIndex){
 		height: 20,
 		left:margin,
 	});
-	//margin = margin*_timeIndex+50;
+
 		
 	if(_timeIndex < 10)
 		time = '0'+_timeIndex;

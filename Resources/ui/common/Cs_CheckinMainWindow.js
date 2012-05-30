@@ -1,4 +1,4 @@
-Checkin = function (_datafromrow){
+CheckinMainWindow = function (_datafromrow){
 	
 	var CheckinACS = require('acs/checkinACS');
 	var CheckinModel = require('model/checkin');
@@ -332,7 +332,7 @@ function isPointInPoly(poly, pt)
 
 	checkinButton.addEventListener('click',function(){
 		alert('you have check in');
-		//CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
+		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
 		checkinButton.enabled = false;
 		checkinButton.image = 'images/checkin/checkin_check_checked.png';
 		chatButton.image = 'images/checkin/checkin_chat_enable.png';
@@ -363,4 +363,4 @@ function isPointInPoly(poly, pt)
 	return self;
 	
 }
-module.exports = Checkin;
+module.exports = CheckinMainWindow;

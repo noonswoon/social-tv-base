@@ -2,7 +2,6 @@
 
 exports.searchFriend = function(_userID){
 	var friends = [];
-	//alert('search friend');
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' +
 				'&user_id='+_userID;
 	var xhr = Ti.Network.createHTTPClient({
@@ -11,8 +10,6 @@ exports.searchFriend = function(_userID){
 	    	Ti.API.info("friends: "+responseJSON.response.users.length);
 		      	for (var i = 0; i < responseJSON.response.users.length; i++) {
 	            var friend = responseJSON.response.users[i];  
-	           // alert('friend ID :' + friend.id + 'Name: ' + friend.first_name +' ' + friend.last_name+
-	           // 'username: ' + friend.username);
 				var curFriend = {
 					my_id: _userID,
 					friend_id: friend.id,
@@ -144,3 +141,48 @@ exports.removedFriendFromACS = function(user_id){
 	xhr.send(parameters);  // request is actually sent with this statement
 };
 
+exports.friendsCheckins = function(_friendsList,_programsList){
+	var programsCheckins = [];
+	var friendsCheckins = [];
+
+	var allProgramsID = _programsList;
+	var allProgramsIDStr = '';
+	for(var i=0;i<allProgramsID.length;i++) {
+		allProgramsIDStr += '"'+allProgramsID[i]+'",';
+	}
+	allProgramsIDStr = allProgramsIDStr.substr(0,allProgramsIDStr.length-1);
+	
+	var allFriendsID = _friendsList;
+	var allFriendsIDStr = '';
+		for(var i=0;i<allFriendsID.length;i++) {
+		allFriendsIDStr += '"'+allFriendsID[i]+'",';
+	}
+	allFriendsIDStr = allFriendsIDStr.substr(0,allFriendsIDStr.length-1);
+	
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":{"$in":['+allProgramsIDStr+']},"user_id":{"$in":['+allFriendsIDStr+']}}';
+
+	Ti.API.info(url);
+	
+	var xhr = Ti.Network.createHTTPClient({
+	    onload: function() {
+	    	responseJSON = JSON.parse(this.responseText);
+		      	for (var i=0;i<responseJSON.response.checkins.length;i++) {
+	            var checkins = responseJSON.response.checkins[i];  
+				var ourprograms = checkins.event;
+				var ourfriends = checkins.user;
+				
+				programsCheckins.push(ourprograms);
+				friendsCheckins.push(ourfriends);
+			}  	
+	        Ti.App.fireEvent("friendsLoaded",{fetchedOurFriendsCheckins:friendsCheckins, fetchedOurProgramsCheckins:programsCheckins});
+	    },
+	    onerror: function(e) {
+			// this function is called when an error occurs, including a timeout
+	        Ti.API.debug(e.error);
+	        alert('error');
+	    },
+	    timeout:5000  /* in milliseconds */
+	});
+	xhr.open("GET", url);
+	xhr.send();
+};

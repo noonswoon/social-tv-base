@@ -1,4 +1,4 @@
-var TimeSelectionView = function(){
+var PopularWindowSrcollviewTimeSelection = function(){
 
 	var self = Ti.UI.createView({
 	backgroundColor: '#fff'
@@ -33,29 +33,11 @@ var TimeSelectionView = function(){
 	endPoint: { x: '0%', y: '100%' },
 	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]}
 	});
-	
+////////////////////////////////////////SCROLLVIEW ACCORDING WITH TIME
 	var now = moment().format('HH');
-	// if(now < 10){
-		// var x = 120;
-		// selectionView.scrollTo(x,0);
-	// }
-	// else{
-		var b = (10+now*50)/4;
-		// alert(b);
+		var b = ((now-3)*45)+24;
 		selectionView.scrollTo(b,0);
-	// }
-
-	var testbut = Ti.UI.createButton({
-		top:10,
-		zIndex: 10,
-		width: 20,
-		height:20
-	});
-	self.add(testbut);
-
-	testbut.addEventListener('click', function(){
-		selectionView.scrollTo(744,0);
-	});
+//////////////////////////////////////////////////////////////////////
 	
 	selectionView.addEventListener('scroll', function(e)
 	{
@@ -91,7 +73,7 @@ var TimeSelectionView = function(){
 
 		hoursArray[i].addEventListener('click', function(e) {
 			var timeIndex = e.source.timeIndex;
-			// alert(timeIndex);
+			alert(timeIndex);
 			Ti.App.fireEvent('updatePopularProgramAtTime',{timeIndex:timeIndex});
 		});
 		selectionView.add(hoursArray[i]);
@@ -106,4 +88,4 @@ var TimeSelectionView = function(){
 return self;
 }
 
-module.exports = TimeSelectionView;
+module.exports = PopularWindowSrcollviewTimeSelection;

@@ -3,7 +3,7 @@ BadgeView = function (_badge){
 //hard code
 	img = _badge.badgeImage;
 	title = _badge.badgeTitle;
-	detail = _badge.badgeDesc;
+	desc = _badge.badgeDesc;
 	unlock = _badge.badgeUnlock;
 //		
 	var self = Ti.UI.createWindow({
@@ -47,13 +47,13 @@ BadgeView = function (_badge){
 		font: {fontSize: 12}
 	});	
 	
-	//if badge unlock
+/*	//if badge unlock
 	if(unlock===1){
 		badgeImg.image = img;
 		badgeTitle.text = title;
 		badgeCons.text = 'Congratulations on Your Badge!';
 		badgeCons.left = 5,
-		badgeDesc.text = detail;
+		badgeDesc.text = desc;
 	}
 	else {
 		badgeImg.image = 'images/lockbadge.png';
@@ -61,7 +61,7 @@ BadgeView = function (_badge){
 		badgeCons.text = 'You have not unlock this badge yet';
 		badgeDesc.text = '';
 	};
-	
+*/	
 	badgeView.add(badgeImg);
 	badgeView.add(badgeTitle);
 	badgeView.add(badgeCons);
@@ -76,13 +76,37 @@ BadgeView = function (_badge){
 	
 	badgeView.addEventListener('click',function(){
 		self.animate(animateRight);
-	//	self.close();
 	});
 	
-	self._setBadgeTitle = function(_newTitle) {
-		badgeTitle.text = _newTitle;
+	self._setBadgeTitle = function(_newTitle,_unlock) {
+		if(_unlock===1){
+			badgeTitle.text = _newTitle;
+		} else {
+			badgeTitle.text ='';
+		}
 	};
 	
-	//write a setter function for image, detail, unlock
+	self._setBadgeImage = function(_newImage,_unlock) {
+		if(_unlock===1){
+			badgeImg.image = _newImage;
+		} else {
+			badgeImg.image = 'images/lockbadge.png';
+		}
+		
+	};
+	self._setBadgeDesc = function(_newDesc,_unlock) {
+		if(_unlock===1){
+			badgeDesc.text = _newDesc;
+			badgeCons.text = 'Congratulations on Your Badge!';
+			badgeCons.left = 5;
+			
+		} else {
+			badgeCons.text = 'You have not unlock this badge yet';
+			badgeDesc.text = '';
+		}
+	};
+	
+	return self;
+		
 }
 module.exports = BadgeView;

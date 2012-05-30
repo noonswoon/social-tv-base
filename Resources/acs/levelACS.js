@@ -9,12 +9,8 @@ exports.levelACS_fetchedLevel = function() {
     per_page: 20
 }, function (e) {
     if (e.success) {
-    	// Ti.API.info('CALL LEVEL SUCCESS');
         for (var i = 0; i < e.Level.length; i++) {
         	 var curLevel = e.Level[i];
- /*           Ti.API.info('Success:\\' +
-            	curLevel.level +' must have ' + curLevel.exp+
-            	'exp');*/
                level.push(curLevel);
          }
 		Ti.App.fireEvent('levelDbLoaded',{fetchedLevel:level});

@@ -1,21 +1,15 @@
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS levels(level TEXT PRIMARY KEY, exp INTEGER, tag TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS levels(levelName TEXT PRIMARY KEY, exp INTEGER);');
 db.close();
 
 // create data for local database
 exports.levelModel_updateLevelFromACS = function(_levelsCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
-	//	var version = 'v001';
 	db.execute('DELETE FROM levels');
 	for(var i=0;i < _levelsCollection.length; i++) {
-	//Ti.API.info('Tag for level is '+_levelsCollection[i].tag);
-	//	if(_levelsCollection[i].tag!==version){
-	//	Ti.API.info('Write new level');
 		var curLevel = _levelsCollection[i];
-		db.execute("INSERT INTO levels(level,exp,tag) VALUES(?,?,?)", curLevel.level,curLevel.exp,curLevel.tag);
-	//	}
-	//	else {Ti.API.info('SAME TAG');};
+		db.execute("INSERT INTO levels(levelName,exp) VALUES(?,?)", curLevel.levelName,curLevel.exp);
 	}
 	db.close();
 	Ti.App.fireEvent("levelDbUpdated");
@@ -28,9 +22,8 @@ exports.level_fetchLevel = function() {
 	var result = db.execute('SELECT * FROM levels');
 	while(result.isValidRow()) {
 		fetchedLevel.push({
-			level: result.fieldByName('level'),
-			exp: Number(result.fieldByName('exp')),
-			tag: result.fieldByName('tag')
+			level: result.fieldByName('levelName'),
+			exp: Number(result.fieldByName('exp'))
 		});
 		result.next();
 	}
@@ -43,7 +36,7 @@ exports.level_checkLevel = function(_exp) {
 	//Ti.API.info('level_checkLevel');
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * from levels where ? < exp ORDER BY exp ASC limit 0,1',_exp);
-	var myLevel = result.fieldByName('level');
+	var myLevel = result.fieldByName('levelName');
 	result.close();
 	db.close();
 	return myLevel;

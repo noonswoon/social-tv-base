@@ -4,6 +4,7 @@ Titanium.UI.setBackgroundColor('#000');
 
 Ti.include('/lib/date.js');
 var moment = require('/lib/moment');
+Ti.include('/lib/cacheFromRemote.js');
 
 //include xxxACS.js here
 //include xxx models here

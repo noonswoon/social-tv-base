@@ -40,7 +40,7 @@ var ProfileHeaderView = function(_parentWindow){
 ///LEVEL ACS///////////////////////////////////////////////////////
 		LevelACS.levelACS_fetchedLevel();
 		function levelDbLoadedCallBack(e){					
-		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
+			LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
 		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
 
 ///BADGE ACS////////////////////////////////////////////////////////
@@ -111,12 +111,7 @@ var ProfileHeaderView = function(_parentWindow){
 			bottom: 0,
 			right: 4			
 		});
-/*		tvBorder = Ti.UI.createImageView({
-			image: 'images/icon/tvBorder.png',
-			bottom: 2,
-			opacity: 0.2			
-		});		
-*/
+
 		var refreshButton = Ti.UI.createImageView({
 			image: 'images/icon/refresh.png',
 			right: 10,

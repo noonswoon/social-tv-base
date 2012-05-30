@@ -1,5 +1,3 @@
-var badges = []
-
 function badgeSort(a,b) {
 	return a.custom_fields.badgeID - b.custom_fields.badgeID;
 }
@@ -11,6 +9,7 @@ exports.fetchedBadges = function() {
 	    where: {tag: "badge"}
 	}, function (e) {
 	    if (e.success) {
+	    	var badges = [];
 	    	var badgesCollection = e.photos; 
     		badgesCollection.sort(badgeSort);
 			for (var i = 0; i < e.photos.length; i++) {

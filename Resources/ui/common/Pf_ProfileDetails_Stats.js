@@ -79,7 +79,7 @@ var ProfileStatsView = function(){
 			myRankScore.text = ProfileDataExp;
 			expBar.value = ProfileDataExp;
 			myLevelLabel.text = LevelModel.level_checkLevel(ProfileDataExp);
-			expBar_light.value = ProfileDataExp+1000;
+			expBar_light.value = (ProfileDataExp+15);
 		});
 					
 ///////////////////////////////////////////////////////////////////////////

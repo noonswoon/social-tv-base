@@ -1,9 +1,4 @@
 // ----------------------------------
-// Detect Platform
-// ----------------------------------
-var isAndroid = Ti.Platform.osname === 'android';
-
-// ----------------------------------
 // INIT PUBNUB
 // ----------------------------------
 var pubnub = require('pubnub').init({
@@ -13,30 +8,30 @@ var pubnub = require('pubnub').init({
     origin        : 'pubsub.pubnub.com'
 });
 
-// ----------------------------------
-// RANDOM COLOR
-// ----------------------------------
-function rnd_hex(light) { return Math.ceil(Math.random()*9) }
-function rnd_color() {
-    return '#'+pubnub.map(
-        Array(3).join().split(','), rnd_hex
-    ).join('');
-}
+//Integrating with SMSView module
+Titanium.SMSView = require('ti.smsview');
 
 Ti.App.Chat = function(setup) {
+    
+    var curUserInput = "";
     // ----------------------------------
     // LISTEN FOR MESSAGES
     // ----------------------------------
     pubnub.subscribe({
         channel  : setup['chat-room'],
         connect  : function() {
-            append_chat_message("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
+            textArea.recieveMessage("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
         },
         callback : function(message) {
-            append_chat_message( message.text, 'black' );
+        	Ti.API.info('message from sender: '+curUserInput);
+        	//since pubnub is a broadcaster, sender will receive his own message as well
+        	//prevent from having the user sees his own message when it got broadcasted
+        	if(message.text !== curUserInput) {
+            	textArea.recieveMessage(message.text);
+           }
         },
         error : function() {
-            append_chat_message( "Lost Connection...", "#f00" );
+        	Ti.API.info('Lost connection...');
         }
     });
 
@@ -60,114 +55,73 @@ Ti.App.Chat = function(setup) {
 
     // ----------------------------------
     // CREATE BASE UI TAB AND ROOT WINDOW
-    // ----------------------------------
-    var chat_window = Ti.UI.createWindow(setup['window']);
-    var textfield   = Ti.UI.createTextField({
-        width       : (isAndroid) ? '75%' : 247,
-        height      : (isAndroid) ? '50dp' : 30,
-        left        : 4,
-        top         : 4,
-        color       : "#111",
-        value       : "",
-        border      : 1,
-        borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-        borderRadius : 4,
-        font        : {
-            fontSize   : (isAndroid) ? '18dp' : 14,
-            fontWeight : 'bold'
-        }
-    });
+    // ----------------------------------    
 
-    // Text Chat History
-    var table = Ti.UI.createTableView({
-        separatorColor : (isAndroid) ? '#000' : '#fff',
-        top            : (isAndroid) ? '60dp' : 40,
-        height         : '80%'
-    });
+	var buttonBar = Ti.UI.createButtonBar({
+		labels:['Recieve','Empty','Get All','Disable','Enable'],
+		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
+	});
+	
+	var headerView = Ti.UI.createView();
+	headerView.add(buttonBar);
+	
+	var chat_window = Ti.UI.createWindow({
+		titleControl:buttonBar,
+		orientationModes:[1,2,3,4]
+	});
+	
+	var textArea = Ti.SMSView.createView({
+		//maxLines:6,				// <--- Defaults to 4
+		//minLines:2,				// <--- Defaults to 1
+		backgroundColor: '#dae1eb',	// <--- Defaults to #dae1eb
+		//assets: 'images/chat',			// <--- Defauls to nothing, smsview.bundle can be placed in the Resources dir
+		// sendColor: 'Green',		// <--- Defaults to "Green"
+		// recieveColor: 'White',	// <--- Defaults to "White"
+		// selectedColor: 'Blue',	// <--- Defaults to "Blue"
+		// editable: true,			// <--- Defautls to true, do no change it
+		// animated: false,			// <--- Defaults to true
+		// buttonTitle: 'Something',	// <--- Defaults to "Send"
+		// font: { fontSize: 12 ... },	// <--- Defaults to... can't remember
+		// autocorrect: false,		// <--- Defaults to true
+		// textAlignment: 'left',	// <--- Defaulst to left
+		// textColor: 'blue',		// <--- Defaults to "black"
+		returnType: Ti.SMSView.RETURNKEY_DONE, // <---- Defaults to Ti.SMSView.RETURNKEY_DEFAULT
+		camButton: false,				// <--- Defaults to false
+		hasTab:true				// <--- Defaults to false			
+	});
 
-    // Send Button
-    var button = Ti.UI.createButton({
-        title         : 'Send',
-        top           : 4,
-        right         : 4,
-        width         : (isAndroid) ? '60dp' : 60,
-        height        : (isAndroid) ? '50dp' : 30,
-        borderRadius  : 6,
-        shadowColor   : "#001",
-        shadowOffset  : { x : 1, y : 1 },
-        style         : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-        font          : {
-            fontSize   : (isAndroid) ? '18dp' : 16,
-            fontWeight : 'bold'
-        },
-        backgroundGradient : {
-            type          : 'linear',
-            colors        : [ '#058cf5', '#015fe6' ],
-            startPoint    : { x : 0, y : 0 },
-            endPoint      : { x : 2, y : 50 },
-            backFillStart : false
-        }
-    });
-
-    // Append First Row (Blank)
-    table.appendRow(Ti.UI.createTableViewRow({
-        className : "pubnub_chat"
-    }));
-
-    // Append New Chat Message
-    function append_chat_message( message, color ) {
-        var row = Ti.UI.createTableViewRow({
-            className          : "pubnub_chat",
-            backgroundColor: 'orange'
-        });
-
-        var label = Ti.UI.createLabel({
-            text   : message || "no-message",
-            height : (isAndroid) ? '50dp' : 'auto',
-            width  : 'auto',
-            color  : color || "#111",
-            left   : 10,
-            font   : { 
-            	fontSize : (isAndroid) ? '19dp' : 14,
-            	fontWeight: (isAndroid) ? 'bold' : 'normal'
-            }
-        });
-
-        row.add(label);
-        table.insertRowBefore( 0, row );
-    }
-
-    // Listen for Send Button Touch
-    button.addEventListener( 'touchstart', function(e) {
-        send_a_message(textfield.value);
-        textfield.value = "";
-        //textfield.focus();
-    });
-
-    // Listen for Return Key Press
-    textfield.addEventListener( 'return', function(e) {
-        send_a_message(textfield.value);
-        textfield.value = "";
-        //textfield.focus();
-    });
-
-    // Listen for Return Key Press
-    chat_window.addEventListener( 'open', function(e) {
-        //textfield.focus();
-    });
-
-    chat_window.add(table);
-    chat_window.add(button);
-    chat_window.add(textfield);
+	chat_window.add(textArea);
+	
+	buttonBar.addEventListener('click', function(e){
+		switch(e.index){
+			case 0:	textArea.recieveMessage('Hello World!'); break;
+			case 1: textArea.empty(); break;
+			case 2: Ti.API.info(textArea.getAllMessages()); break;
+			
+			// the camera button dissable property:
+				// case 3: textArea.camButtonDisabled = true; break;
+				// case 4: textArea.setCamButtonDisabled(false); break; 			
+			case 3: textArea.camButtonDisabled = true; break;
+			case 4: textArea.setCamButtonDisabled(false); break;
+		}
+	});
+	
+	textArea.addEventListener('click', function(e){
+		if(e.scrollView){
+			textArea.blur();
+		}
+	});
+	
+	textArea.addEventListener('buttonClicked', function(e){
+		// fires when clicked on the send button
+	    curUserInput = e.value;
+	    textArea.addLabel(new Date()+"");
+	    textArea.sendMessage(e.value);
+	    send_a_message(e.value);
+	});
 
     this.chat_window = chat_window;
-    this.my_color    = rnd_color();
     this.pubnub      = pubnub;
-
-    append_chat_message(" ");
-    append_chat_message(" ");
-    append_chat_message(" ");
-    append_chat_message("Connecting...");
 
     return this;
 };

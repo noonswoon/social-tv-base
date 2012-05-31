@@ -1,8 +1,8 @@
 /*badgeID TEXT PRIMARY KEY
  *title TEXT
  *desc TEXT
- * path TEXT
-*/
+ *path TEXT 
+ *url TEXT*/
 
 var db = Ti.Database.open('Chatterbox');
 db.execute('CREATE TABLE IF NOT EXISTS badges(badgeID TEXT PRIMARY KEY, title TEXT, desc TEXT, path TEXT, url TEXT);');

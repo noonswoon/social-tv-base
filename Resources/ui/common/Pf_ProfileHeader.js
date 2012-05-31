@@ -1,20 +1,23 @@
-
 var ProfileHeaderView = function(_parentWindow){
-				
-//CALL DATA
-	    var user_id = '4fa17dd70020440df700950c';
-		var CheckinACS = require('acs/checkinACS');		
-		var PointACS = require('acs/pointACS');
-		var LevelACS = require('acs/levelACS');	
-		var myBadgeACS = require('acs/myBadgeACS');
-		var CheckinModel = require('model/checkin');
-		var PointModel = require('model/point');	
-		var LevelModel = require('model/level');
-		var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
-		var CacheHelper = require('helpers/cacheHelper');
+	
+	var user_id = '4fa17dd70020440df700950c';
+	var totalCheckins=0;
+	var	profileDataName= 'Titanium Mick';
+	var	profileDataImg = 'images/kuma100x100.png';
+		
+	var CheckinACS = require('acs/checkinACS');		
+	var PointACS = require('acs/pointACS');
+	var LevelACS = require('acs/levelACS');	
+	var myBadgeACS = require('acs/myBadgeACS');
+	
+	var CheckinModel = require('model/checkin');
+	var PointModel = require('model/point');	
+	var LevelModel = require('model/level');
+	var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
+	var CacheHelper = require('helpers/cacheHelper');
 					
 //CHECK IN//////////////////////////////////////////////////////////////////////
-		function checkinDbLoadedCallBack(e){			
+	function checkinDbLoadedCallBack(e){			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		};
 		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
@@ -28,15 +31,13 @@ var ProfileHeaderView = function(_parentWindow){
 		// Using cache		
 		CacheHelper.fetchACSDataOrCache('userCheckin'+user_id, CheckinACS.checkinACS_fetchedCheckIn,user_id, 'checkinsDbUpdated');
 	
-		
 /////POINT ACS/////////////////////////////////////////////	
 	PointACS.pointACS_fetchedPoint(user_id);
 	function pointDbLoadedCallBack(e){
 			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
 	};
 		
-		Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);	
-	
+		Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);		
 ///LEVEL ACS///////////////////////////////////////////////////////
 		LevelACS.levelACS_fetchedLevel();
 		function levelDbLoadedCallBack(e){					
@@ -45,7 +46,6 @@ var ProfileHeaderView = function(_parentWindow){
 
 ///BADGE ACS////////////////////////////////////////////////////////
 	myBadgeACS.myBadgeACS_fetchedBadge(user_id);
-
 ///////////////////////////////////////////////////////////////////
 	var headerView = Ti.UI.createView({
 			backgroundGradient: {
@@ -54,10 +54,6 @@ var ProfileHeaderView = function(_parentWindow){
 	        	endPoint: { x: '0%', y: '100%' },
 	        	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]}
 	});
-	
-		var totalCheckins=0;
-		var	profileDataName= 'Titanium Mick';
-		var	profileDataImg = 'images/kuma100x100.png';
 	
 		var columnCheckInCount = Ti.UI.createLabel({
 			text: '',
@@ -90,13 +86,12 @@ var ProfileHeaderView = function(_parentWindow){
 			height: 30,
 			font: { fontWeight: 'bold', fontSize: 15}
 		})
-		//Facebook login
+		
 		var socialNet = Ti.UI.createView({
 			top: 40,
 			left: 120,
 			width: 60,
 			height: 70,
-
 		});
 		
 		fbButton = Ti.UI.createImageView({
@@ -119,7 +114,6 @@ var ProfileHeaderView = function(_parentWindow){
 			height:20,
 			width:20
 		});
-		//checkin count
 		var columnCheckIn = Ti.UI.createView({
 			top: 40,
 			left: 250,
@@ -142,8 +136,7 @@ var ProfileHeaderView = function(_parentWindow){
 			height: 30,
 			bottom:10
 		});
-				
-		//number of friends
+
 		var columnFriend = Ti.UI.createView({
 			top: 40,
 			left: 185,
@@ -152,8 +145,6 @@ var ProfileHeaderView = function(_parentWindow){
 			backgroundColor: '#a7c63d',
 			borderRadius: 10,
 		});
-		
-		
 		//img
 		var columnFriendImage = Ti.UI.createImageView({
 			image: 'images/icon/112-group.png',
@@ -174,7 +165,6 @@ var ProfileHeaderView = function(_parentWindow){
 		});	
 		
 	profilePictureContain.add(profilePicture);
-//	socialNet.add(tvBorder);
 	socialNet.add(fbButton);
 	socialNet.add(twButton);
 	columnCheckIn.add(columnCheckInImage);

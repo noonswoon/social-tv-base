@@ -18,11 +18,12 @@ var ProfileDetailView = function(_parent){
 			index:0
 		});	
 		profileMenu.add(profileTab);
+		
 ///DETAIL//////////////////////////////////////////////////////////
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
-		//backgroundImage: 'images/icon/bg.png',
+		backgroundImage: 'images/bg.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	var profileDetailScroll = Ti.UI.createScrollView({
@@ -31,7 +32,7 @@ var ProfileDetailView = function(_parent){
 		backgroundColor: 'transparent',
 		top:0,
 		showVerticalScrollIndicator:true,
-		showHorizontalScrollIndicator:true,
+		showHorizontalScrollIndicator:false,
 		width: 312,
 		height: 198,
 		disableBounce: true
@@ -66,8 +67,7 @@ var ProfileDetailView = function(_parent){
 		
 	profileDetailScroll.add(profileStats);
 	profileDetail.add(profileDetailScroll);
-//////////////////////////////////////////////////////////////////
-
+	
 	detail.headerView = profileMenu;
 	detail.add(profileDetail);
 

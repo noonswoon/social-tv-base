@@ -1,11 +1,5 @@
 BadgeView = function (_badge){
-	
-//hard code
-	img = _badge.badgeImage;
-	title = _badge.badgeTitle;
-	desc = _badge.badgeDesc;
-	unlock = _badge.badgeUnlock;
-//		
+
 	var self = Ti.UI.createWindow({
 		top: 0,
 		left: 320,
@@ -14,7 +8,7 @@ BadgeView = function (_badge){
 		zIndex: 1,
 		backgroundImage: 'images/badge/badgewin.png'
 	});
-	
+	//make click event avaliable
 	var badgeView = Ti.UI.createView({
 		left: 20
 	});
@@ -46,22 +40,7 @@ BadgeView = function (_badge){
 		color: '#999',
 		font: {fontSize: 12}
 	});	
-	
-/*	//if badge unlock
-	if(unlock===1){
-		badgeImg.image = img;
-		badgeTitle.text = title;
-		badgeCons.text = 'Congratulations on Your Badge!';
-		badgeCons.left = 5,
-		badgeDesc.text = desc;
-	}
-	else {
-		badgeImg.image = 'images/lockbadge.png';
-		badgeTitle.text = '';
-		badgeCons.text = 'You have not unlock this badge yet';
-		badgeDesc.text = '';
-	};
-*/	
+
 	badgeView.add(badgeImg);
 	badgeView.add(badgeTitle);
 	badgeView.add(badgeCons);
@@ -79,28 +58,21 @@ BadgeView = function (_badge){
 	});
 	
 	self._setBadgeTitle = function(_newTitle,_unlock) {
-		if(_unlock===1){
-			badgeTitle.text = _newTitle;
-		} else {
-			badgeTitle.text ='';
-		}
+		if(_unlock===1){badgeTitle.text = _newTitle;} 
+		else {badgeTitle.text ='';}
 	};
 	
 	self._setBadgeImage = function(_newImage,_unlock) {
-		if(_unlock===1){
-			badgeImg.image = _newImage;
-		} else {
-			badgeImg.image = 'images/lockbadge.png';
-		}
-		
+		if(_unlock===1){badgeImg.image = _newImage;}
+		else {badgeImg.image = 'images/lockbadge.png';}
 	};
 	self._setBadgeDesc = function(_newDesc,_unlock) {
 		if(_unlock===1){
 			badgeDesc.text = _newDesc;
 			badgeCons.text = 'Congratulations on Your Badge!';
-			badgeCons.left = 5;
-			
-		} else {
+			badgeCons.left = 5;	
+		}
+		else{
 			badgeCons.text = 'You have not unlock this badge yet';
 			badgeDesc.text = '';
 		}

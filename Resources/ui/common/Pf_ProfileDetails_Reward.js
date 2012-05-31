@@ -8,15 +8,6 @@ var ProfileRewardView = function(){
 	});
 	
 	rewardView.add(detail);
-
-
-//DUMB SCREEN FOR CHECK IN -> CHECK BADGE//////////////////////////////
-/*	var Checkin = require('ui/common/checkin_checkBadge');
-	var checkin = new Checkin();
-	
-	rewardView.add(checkin);
-*/	
-//////////////////////////////////////////////////////////////////////	
 	
 return rewardView;
 }

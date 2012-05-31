@@ -153,7 +153,6 @@ var ProfileActivityView = function(){
 	}
 
 //////////////////////////////////////////////////////////////
-
 	var userActivity = Ti.UI.createTableView({
 		width: 300,
 		height: 200,

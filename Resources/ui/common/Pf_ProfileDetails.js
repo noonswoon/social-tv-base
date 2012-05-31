@@ -66,6 +66,7 @@ var ProfileDetailView = function(_parent){
 	});		
 		
 	profileDetailScroll.add(profileStats);
+	//profileDetailScroll.add(profileBadge);
 	profileDetail.add(profileDetailScroll);
 	
 	detail.headerView = profileMenu;

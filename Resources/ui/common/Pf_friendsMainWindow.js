@@ -6,8 +6,8 @@ FriendsMainView = function(_parentWindow){
 	var friendsProfile = require('ui/common/Pf_friendsProfile');
 	var friendModel = require('model/friend');
 	var userID = '4fa17dd70020440df700950c';
-	var friendsACS = require('acs/friendsACS');
-	friendsACS.searchFriend(userID);
+//	var friendsACS = require('acs/friendsACS');
+//	friendsACS.searchFriend(userID);
 
 	var self = Ti.UI.createWindow({
 		backgroundColor:'#fff',
@@ -63,11 +63,11 @@ FriendsMainView = function(_parentWindow){
 		backgroundColor: '#eee'
 	});
 
-	function friendDbLoadedCallBack(e){
+/*	function friendDbLoadedCallBack(e){
 		friendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
 	};
 	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
-
+*/
 	Ti.App.addEventListener('friendsDbUpdated',function(e){
 		var myFriendsList = [];
 		myFriends = friendModel.friendModel_fetchFriend(userID);

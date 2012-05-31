@@ -8,7 +8,7 @@ exports.searchFriend = function(_userID){
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
-	    	Ti.API.info("friends: "+responseJSON.response.users.length);
+	    	alert("friends: "+responseJSON.response.users.length);
 		      	for (var i = 0; i < responseJSON.response.users.length; i++) {
 	            var friend = responseJSON.response.users[i];  
 	           // alert('friend ID :' + friend.id + 'Name: ' + friend.first_name +' ' + friend.last_name+

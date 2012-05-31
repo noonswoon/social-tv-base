@@ -14,11 +14,11 @@ function ApplicationTabGroup() {
 	
 	var chatwin = new ChatMainWindow();
 
-	var messageboardwin =  new MessageboardMainWindow(1);		
-    var loginwin = new LoginWindow();
-	var productwin = new ProductMainWindow();
+	var messageboardwin =   new ChatMainWindow();//new MessageboardMainWindow(1);		
+    var loginwin =  new LoginWindow();
+	var productwin =  new ChatMainWindow();//new ProductMainWindow();
 	var profilewin =  new ProfileMainWindow();
-	var selectionMainWin = new ChannelSelectionMainWindow();
+	var selectionMainWin =  new ChatMainWindow();//new ChannelSelectionMainWindow();
 
     var chatTab = Titanium.UI.createTab({  
         icon:'/images/icon/Chat-Bubble.png',

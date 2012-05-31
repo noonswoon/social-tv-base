@@ -16,7 +16,7 @@ exports.badgesLoadedFromACS = function(_badgesCollection){
 		db.execute("INSERT INTO badges(badgeID, title, desc, path, url) VALUES(?,?,?,?,?)", _badgesCollection[i].custom_fields.badgeID, _badgesCollection[i].custom_fields.title, _badgesCollection[i].custom_fields.desc, _badgesCollection[i].path, _badgesCollection[i].urls.original);
 	}
 	db.close();
-	Ti.App.fireEvent("badgesLoaded");
+	Ti.App.fireEvent("badgesDBLoaded");
 }
 
 exports.badge_fetchBadges = function(){

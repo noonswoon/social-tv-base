@@ -1,21 +1,30 @@
 var ProfileHeaderView = function(_parentWindow){
-	
+//HARD CODE	
 	var user_id = '4fa17dd70020440df700950c';
+//	var user_id = '4fb2089db685537039014cd7';
 	var totalCheckins=0;
 	var	profileDataName= 'Titanium Mick';
 	var	profileDataImg = 'images/kuma100x100.png';
 		
 	var CheckinACS = require('acs/checkinACS');		
-	var PointACS = require('acs/pointACS');
+//	var PointACS = require('acs/pointACS');
+	var FriendACS = require('acs/friendsACS');
 	var LevelACS = require('acs/levelACS');	
 	var myBadgeACS = require('acs/myBadgeACS');
-	
+	var LeaderACS = require('acs/leaderBoardACS');
+	var BadgesACS = require('acs/badgesACS');
+
 	var CheckinModel = require('model/checkin');
-	var PointModel = require('model/point');	
+//	var PointModel = require('model/point');	
+	var FriendModel = require('model/friend');
 	var LevelModel = require('model/level');
+	
 	var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
 	var CacheHelper = require('helpers/cacheHelper');
-					
+	
+	LevelACS.levelACS_fetchedLevel();
+	BadgesACS.fetchedBadges();
+	myBadgeACS.myBadgeACS_fetchedBadge(user_id);				
 //CHECK IN//////////////////////////////////////////////////////////////////////
 	function checkinDbLoadedCallBack(e){			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
@@ -32,21 +41,72 @@ var ProfileHeaderView = function(_parentWindow){
 		CacheHelper.fetchACSDataOrCache('userCheckin'+user_id, CheckinACS.checkinACS_fetchedCheckIn,user_id, 'checkinsDbUpdated');
 	
 /////POINT ACS/////////////////////////////////////////////	
-	PointACS.pointACS_fetchedPoint(user_id);
+/*	PointACS.pointACS_fetchedPoint(user_id);
 	function pointDbLoadedCallBack(e){
 			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
 	};
 		
-		Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);		
+	Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);		
+*/	
 ///LEVEL ACS///////////////////////////////////////////////////////
-		LevelACS.levelACS_fetchedLevel();
+		
 		function levelDbLoadedCallBack(e){					
 			LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
 		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
 
 ///BADGE ACS////////////////////////////////////////////////////////
-	myBadgeACS.myBadgeACS_fetchedBadge(user_id);
-///////////////////////////////////////////////////////////////////
+
+///LEADERBOARD ACS////////////////////////////////////////////////////////
+	//FRIEND ACS
+//	var friendsACS = require('acs/friendsACS');
+//	var myFriends = friendsACS.searchFriend(user_id);
+
+//	var rankList = [];
+//	rankList[0] = user_id;
+	
+/*	for(var i = 1; i<myFriends.length;i++){
+		var curUser = myFriends[i];
+		rankList[i] =  myFriends[i].id;
+	};
+*/	
+	//LEADER ACS
+//	LeaderACS.leaderACS_fetchedRank(rankList);
+//CALL ACS/////////////////////////////////////////////////////////
+		var refreshButton = Ti.UI.createImageView({
+			image: 'images/icon/refresh.png',
+			right: 10,
+			top: 5,
+			height:20,
+			width:20
+		});
+//REFRESH BUTTON TO RELOAD THE ACS//
+	refreshButton.addEventListener('click',function(){
+		FriendACS.searchFriend(user_id);
+	});
+///////////////////////////////////	
+//friend
+	function friendDbLoadedCallBack(e){
+		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
+	};
+	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
+	Ti.App.addEventListener('friendsDbUpdated',function(e){
+		Ti.API.info('Friends Database Updated');
+		var rankList = [];
+		rankList[0] = user_id;
+		var myFriends = FriendModel.friendModel_fetchFriend();
+		for(var i = 0; i<myFriends.length;i++){
+			var curUser = myFriends[i].user.id;
+			Ti.API.info(curUser);
+			rankList.push(curUser);
+		};
+		Ti.API.info('total user in rank: '+rankList.length);
+		 columnFriendCount.text = FriendModel.friendModel_count(user_id);
+		LeaderACS.leaderACS_fetchedRank(rankList);
+		//** update rank so what!!!!? -> add to database -> pf_STATS: fetched data into array = [] -> create tableView 
+	});
+	
+	
+///////////////////////////////////////////////////////////////////	
 	var headerView = Ti.UI.createView({
 			backgroundGradient: {
 	        	type: 'linear',
@@ -99,14 +159,15 @@ var ProfileHeaderView = function(_parentWindow){
 			borderRadius: 7,
 			bottom:0,
 			left: 4
-		});
+		});			
+
 		twButton = Ti.UI.createImageView({
 			image: 'images/icon/twitter-icon_24x24.png',
 			borderRadius: 7,
 			bottom: 0,
 			right: 4			
 		});
-
+/*
 		var refreshButton = Ti.UI.createImageView({
 			image: 'images/icon/refresh.png',
 			right: 10,
@@ -114,6 +175,7 @@ var ProfileHeaderView = function(_parentWindow){
 			height:20,
 			width:20
 		});
+*/
 		var columnCheckIn = Ti.UI.createView({
 			top: 40,
 			left: 250,
@@ -152,7 +214,7 @@ var ProfileHeaderView = function(_parentWindow){
 		});
 		// count
 		var columnFriendCount = Ti.UI.createLabel({
-			text: '27',
+			text: '',
 			font: {fontSize: 20, fontStyle: 'bold'},
 			color: '#fff',
 			shadowColor: '#999',

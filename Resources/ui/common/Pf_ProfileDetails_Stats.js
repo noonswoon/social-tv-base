@@ -1,13 +1,18 @@
 var ProfileStatsView = function(){
-	var PointModel = require('model/point');
+	var LeaderACS = require('acs/leaderBoardACS');
+	
+//	var PointModel = require('model/point');
 	var LevelModel = require('model/level');
+	var friendModel = require('model/friend');
+	
+	var leaderBoardData = [];
 	var ProfileDataExp;
 	var	ProfileDataLevelUp;
 	
 	//test data			
 	var	ProfileDataName= 'Titanium Mick';
 	var	ProfileDataImg = 'images/kuma100x100.png';
-
+	var user_id = '4fa17dd70020440df700950c';
 
 	var profileStats = Ti.UI.createView({
 		backgroundColor: 'transparent',
@@ -46,7 +51,7 @@ var ProfileStatsView = function(){
 		backgroundColor: 'transparent',
     });
     
-        var expBar_light = Ti.UI.createSlider({
+	var expBar_light = Ti.UI.createSlider({
 		top:25,
 		width:300,
 		min:0,
@@ -56,21 +61,47 @@ var ProfileStatsView = function(){
 		touchEnabled: false,
     });
 /////////////////////////////////////////////////////////////////////////////
-		//ACS
-		Ti.App.addEventListener('createPointDB', createPointDBCallBack);
-	
-		function createPointDBCallBack(e){
-		PointModel.points_updateNewPoint(e.fetchedPoint);
-		};	
-		
-		Ti.App.addEventListener('updateNewPoint',function(){
-			//TODO: สงสัยว่าน่าจะเกิดการ  call event ซ้ำ recheck again
-			//alert('updateNewPoint');
-			Ti.App.fireEvent('pointsDbUpdated');
-		});
+		//AFTER CREATE POINT TO ACS
+//	Ti.App.addEventListener('createPointDB', createPointDBCallBack);
+//		function createPointDBCallBack(e){
+//		PointModel.points_updateNewPoint(e.fetchedPoint);	//UPDATE POINT IN POINTS
+//TODO: UPDATE LEADERBOARD
+//	};	
+//	Ti.App.addEventListener('updateNewPoint',function(){
+//		Ti.Api.info('updateNewPoint');
+//	});
+
+//	Ti.App.addEventListener('leaderDBLoaded',leaderDBCallBack);
+//	function leaderDBCallBack(e){
+//		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
+//	};
+//	Ti.App.addEventListener('LeaderDbUpdated',function(){
+//		leaderBoardData = PointModel.pointModel_fetchRank();
+//		Ti.API.info('Done loading Leaderboard from database');	
+//	});
+//TODO: ARRANGE INTO TABLEVIEW
+
+//////////////////////////////////////////////////////////////////
+
+/*	var rankList = [];
+	rankList[0] = user_id;
+	Ti.App.addEventListener('friendsDbUpdated',function(e){
+	//	var myFriends = friendModel.friendModel_fetchFriend(userID);
+	//	for(var i = 0; i<myFriends.length;i++){
+	//		var curUser = myFriends[i].user.id;
+	//		alert(curUser);
+	//		rankList.push(curUser);
+	//	};
+	});
+	LeaderACS.leaderACS_fetchedRank(rankList);
+*/	
+//////////////////////////////////////////////////////////////////	
+	//UPDATE DATA
 		
 		Ti.App.addEventListener('pointsDbUpdated', function(){
-			totalPoints = PointModel.points_sumPoints();
+			totalPoints = PointModel.pointModel_fetchMyPoint(user_id);
+			//totalPoints = LeaderACS.leaderACS_fetchedRank(user_id);
+			//totalPoints = 20;
 			ProfileDataExp = totalPoints;
 			ProfileDataLevelUp = LevelModel.level_nextLevel(ProfileDataExp);
 			expLabel.text=ProfileDataExp + '/' + ProfileDataLevelUp;
@@ -94,7 +125,7 @@ var ProfileStatsView = function(){
 		top:0
 	});
 		
-	var userRankInfo = [];
+/*	var userRankInfo = [];
 		for(var i=0;i<5;i++){
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
@@ -158,6 +189,7 @@ var ProfileStatsView = function(){
 		height: 250,
 		data: userRankInfo
 	});
+*/	
 //////////////////////////////////////////////////
 	var myRankInfo = [];
 			var myRank = Ti.UI.createTableViewRow({
@@ -211,7 +243,7 @@ var ProfileStatsView = function(){
 //////////////////////////////////////////////////	
 	
 	var myRankTable = Ti.UI.createTableView({
-		top: leaderTable.top+leaderTable.height+10,
+		top: 30, //leaderTable.top+leaderTable.height+10,
 		borderRadius: 10,
 		scrollable:false,
 		width: 300,
@@ -234,9 +266,10 @@ var ProfileStatsView = function(){
 		expSec.add(expBar);
 		profileStats.add(expSec);
 		leaderSec.add(leaderLabel);
-		leaderSec.add(leaderTable);
+//		leaderSec.add(leaderTable);
 		leaderSec.add(myRankTable);
 		profileStats.add(leaderSec);
+
 
 	return profileStats;
 }

@@ -52,6 +52,7 @@ function MessageboardMainWindow(_programId) {
 		left: 0,
 		right: 0,
 		scrollable: true,
+		//separatorColor: 'transparent',
 		search: searchTextField,//messageboardHeader.searchTextField,
 		filterAttribute: 'filter',
 		searchHidden: true, //the bar is outside the table

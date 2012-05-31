@@ -24,25 +24,50 @@ function ApplicationTabGroup() {
 	var productwin = new SettingWindow();//new ProductMainWindow();
 	var profilewin =  new SettingWindow();//new ProfileMainWindow();
 
+	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
 		title: 'Selection',
 		icon: '/images/tv.png',
 		window: selectionMainWin
 	});
 	selectionMainWin.containingTab = selectionTab;
+	selectionTab.addEventListener('focus', function() {
+		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+	});
 	
     var chatTab = Titanium.UI.createTab({  
         icon:'/images/icon/Chat-Bubble.png',
         title:'Chat',
-        window:chatwin
+       // window:chatwin
     });
     chatwin.containingTab = chatTab;
+    
+    chatTab.addEventListener('focus', function() {
+    	var w = Ti.UI.createWindow({backgroundColor:"red"});
+		var b = Ti.UI.createButton({
+			title:"Close with Animation",
+			width:180,
+			height:40
+		});
+		w.add(b);
+		b.addEventListener('click',function()
+		{
+			w.close({animated:true});
+//			Ti.API.info('prevTab: '+tabIndex);
+			self.setActiveTab(self.tabs[tabIndexToComeBack]);
+		});
+		w.open();
+    });
+    
     var messageboardTab = Titanium.UI.createTab({  
         icon:'/images/captured.png',
         title:'Board',
         window:messageboardwin
     });
     messageboardwin.containingTab = messageboardTab;
+	messageboardTab.addEventListener('focus', function() {
+		tabIndexToComeBack = 2;	
+	});
 	
 	var productTab = Ti.UI.createTab({
 		icon: '/images/captured.png',
@@ -50,6 +75,9 @@ function ApplicationTabGroup() {
 		window: productwin
 	});
 	productwin.containingTab = productTab;
+	productTab.addEventListener('focus', function() {
+		tabIndexToComeBack = 3;	
+	});
 	
 	var profileTab = Ti.UI.createTab({
 		icon: '/images/fugitives.png',
@@ -57,6 +85,9 @@ function ApplicationTabGroup() {
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;
+	profileTab.addEventListener('focus', function() {
+		tabIndexToComeBack = 4;	
+	});
 	
 	self.addTab(selectionTab);
     self.addTab(chatTab);  
@@ -64,7 +95,7 @@ function ApplicationTabGroup() {
     self.addTab(productTab);
     self.addTab(profileTab);
     //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[1]);
+   	self.setActiveTab(self.tabs[2]);
     return self;
 };
 

@@ -8,8 +8,7 @@ var pubnub = require('pubnub').init({
     origin        : 'pubsub.pubnub.com'
 });
 
-//Integrating with SMSView module
-Titanium.SMSView = require('ti.smsview');
+var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
 
 Ti.App.Chat = function(setup) {
     
@@ -20,18 +19,18 @@ Ti.App.Chat = function(setup) {
     pubnub.subscribe({
         channel  : setup['chat-room'],
         connect  : function() {
-            textArea.recieveMessage("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
+            //textArea.recieveMessage("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
         },
         callback : function(message) {
         	Ti.API.info('message from sender: '+curUserInput);
         	//since pubnub is a broadcaster, sender will receive his own message as well
         	//prevent from having the user sees his own message when it got broadcasted
         	if(message.text !== curUserInput) {
-            	textArea.recieveMessage(message.text);
+            	//textArea.recieveMessage(message.text);
            }
         },
         error : function() {
-        	Ti.API.info('Lost connection...');
+        	//Ti.API.info('Lost connection...');
         }
     });
 
@@ -57,68 +56,76 @@ Ti.App.Chat = function(setup) {
     // CREATE BASE UI TAB AND ROOT WINDOW
     // ----------------------------------    
 
-	var buttonBar = Ti.UI.createButtonBar({
-		labels:['Recieve','Empty','Get All','Disable','Enable'],
-		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
-	});
+	// var buttonBar = Ti.UI.createButtonBar({
+		// labels:['Recieve','Empty','Get All','Disable','Enable'],
+		// style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
+	// });
 	
-	var headerView = Ti.UI.createView();
-	headerView.add(buttonBar);
+
 	
 	var chat_window = Ti.UI.createWindow({
-		titleControl:buttonBar,
-		orientationModes:[1,2,3,4]
-	});
-	
-	var textArea = Ti.SMSView.createView({
-		//maxLines:6,				// <--- Defaults to 4
-		//minLines:2,				// <--- Defaults to 1
-		backgroundColor: '#dae1eb',	// <--- Defaults to #dae1eb
-		//assets: 'images/chat',			// <--- Defauls to nothing, smsview.bundle can be placed in the Resources dir
-		// sendColor: 'Green',		// <--- Defaults to "Green"
-		// recieveColor: 'White',	// <--- Defaults to "White"
-		// selectedColor: 'Blue',	// <--- Defaults to "Blue"
-		// editable: true,			// <--- Defautls to true, do no change it
-		// animated: false,			// <--- Defaults to true
-		// buttonTitle: 'Something',	// <--- Defaults to "Send"
-		// font: { fontSize: 12 ... },	// <--- Defaults to... can't remember
-		// autocorrect: false,		// <--- Defaults to true
-		// textAlignment: 'left',	// <--- Defaulst to left
-		// textColor: 'blue',		// <--- Defaults to "black"
-		returnType: Ti.SMSView.RETURNKEY_DONE, // <---- Defaults to Ti.SMSView.RETURNKEY_DEFAULT
-		camButton: false,				// <--- Defaults to false
-		hasTab:true				// <--- Defaults to false			
+		backgroundColor:'transparent',
+		backgroundImage: '/images/grain.png',
+		title: "Group Chat",
+		barColor: '#6d0a0c'
 	});
 
-	chat_window.add(textArea);
-	
-	buttonBar.addEventListener('click', function(e){
-		switch(e.index){
-			case 0:	textArea.recieveMessage('Hello World!'); break;
-			case 1: textArea.empty(); break;
-			case 2: Ti.API.info(textArea.getAllMessages()); break;
-			
-			// the camera button dissable property:
-				// case 3: textArea.camButtonDisabled = true; break;
-				// case 4: textArea.setCamButtonDisabled(false); break; 			
-			case 3: textArea.camButtonDisabled = true; break;
-			case 4: textArea.setCamButtonDisabled(false); break;
-		}
+	var header = Ti.UI.createView({
+		top: 0,
+		left:0,
+		height: 40,
+		backgroundColor: 'pink'
 	});
 	
-	textArea.addEventListener('click', function(e){
-		if(e.scrollView){
-			textArea.blur();
-		}
+	var headerLabel = Ti.UI.createLabel({
+		text: 'Lost the Finale',
+		top: 5,
+		left: 5,
+		width: 'auto',
+		height: 25, 
+		font: { fontSize: 20, fontFamily: 'Helvetica Neue' }
+	});	
+	
+	header.add(headerLabel);
+	chat_window.add(header);
+
+	var scrollView = Ti.UI.createScrollView({
+		backgroundColor: 'white',
+		contentWidth:600,
+		contentHeight:35,
+		top:40,
+		height:50,
+		width:320,
 	});
 	
-	textArea.addEventListener('buttonClicked', function(e){
-		// fires when clicked on the send button
-	    curUserInput = e.value;
-	    textArea.addLabel(new Date()+"");
-	    textArea.sendMessage(e.value);
-	    send_a_message(e.value);
+	for(var i=0;i<10;i++){
+		var dummyImage = Ti.UI.createImageView({
+			image:'dummy.png',
+			height:50,
+			width:50,
+			left:i*55+5,
+		});
+		scrollView.add(dummyImage);	
+	}
+	chat_window.add(scrollView);
+	
+	var chatMessagesTableView = Ti.UI.createTableView({
+		top:90,
+		height: 250,
+		backgroundColor: 'orange'
 	});
+	
+	chat_window.add(chatMessagesTableView);
+//	var chatParticipantsScrollView = new ChatParticipantsScrollView();
+//	chat_window.add(chatParticipationScrollView);
+	
+	// textArea.addEventListener('buttonClicked', function(e){
+		// // fires when clicked on the send button
+	    // curUserInput = e.value;
+	    // textArea.addLabel(new Date()+"");
+	    // textArea.sendMessage(e.value);
+	    // send_a_message(e.value);
+	// });
 
     this.chat_window = chat_window;
     this.pubnub      = pubnub;

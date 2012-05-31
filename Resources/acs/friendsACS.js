@@ -144,6 +144,7 @@ exports.removedFriendFromACS = function(user_id){
 exports.friendsCheckins = function(_friendsList,_programsList){
 	var programsCheckins = [];
 	var friendsCheckins = [];
+	var allFriendsCheckins = [];
 
 	var allProgramsID = _programsList;
 	var allProgramsIDStr = '';
@@ -168,13 +169,15 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	    	responseJSON = JSON.parse(this.responseText);
 		      	for (var i=0;i<responseJSON.response.checkins.length;i++) {
 	            var checkins = responseJSON.response.checkins[i];  
-				var ourprograms = checkins.event;
-				var ourfriends = checkins.user;
-				
-				programsCheckins.push(ourprograms);
-				friendsCheckins.push(ourfriends);
+	           
+	            var friendsCheckins ={
+	            	program: checkins.event,
+	            	friend: checkins.user
+	            }
+	            allFriendsCheckins.push(friendsCheckins);
 			}  	
-	        Ti.App.fireEvent("friendsLoaded",{fetchedOurFriendsCheckins:friendsCheckins, fetchedOurProgramsCheckins:programsCheckins});
+
+		    Ti.App.fireEvent("friendsLoaded",{fetchedAllFriendsCheckins: allFriendsCheckins});
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout

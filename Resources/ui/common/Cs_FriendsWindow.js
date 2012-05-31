@@ -4,6 +4,7 @@ FriendsWindow = function(){
 	var friend = require('model/friend');
 	var tvprogram = require('model/tvprogram');
 	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
+	var ProgramWithFriends = require('helpers/ProgramWithFriends');
 	
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'orange'
@@ -38,19 +39,41 @@ FriendsWindow = function(){
 	
 	//EventListener
 	Ti.App.addEventListener('friendsLoaded',function(e){
-		var friendsCheckins = e.fetchedOurFriendsCheckins;
-		var programsCheckins = e.fetchedOurProgramsCheckins;
-
-		var viewRowsData = []; 		
-		for (var i=0;i<programsCheckins.length;i++) {
-			for(var j=0;j<friendsCheckins.length;j++){
-			 	var programs = programsCheckins[i];
-				var friends = friendsCheckins[i];
-				var row = new FriendsWindowTableViewRow(programs,friends);
-				viewRowsData.push(row);
+		
+		var checkinsOfFriends =e.fetchedAllFriendsCheckins;
+		var results = [];
+		
+		for(var i=0;i<checkinsOfFriends.length;i++){
+			var programObj = checkinsOfFriends[i].program;
+			var friendObj = checkinsOfFriends[i].friend; //check here if it is just an id or a whole user object
+	
+			var isExisted = false;
+			var indexFound = -1;
+			for(var j=0;j < results.length;j++) {
+				if(programObj.id === results[j].programId) {
+					indexFound = j;
+					isExisted = true;
+					break;
+				}
+			}
+			if(!isExisted) {
+				//create a new ProgramWithFriends
+				var newProgramWithFriends = new ProgramWithFriends(programObj); 
+				newProgramWithFriends.friends.push(friendObj);
+				results.push(newProgramWithFriends);
+			} else {
+				results[indexFound].friends.push(friendObj);
 			}
 		}
-		friendsTableView.setData(viewRowsData);
+		
+		//loop results array, and each element of result array, create tableviewrow to add to table view
+		var viewRowData = [];
+			for(var i=0;i<results.length;i++){
+				var program = results[i];
+					var row = new FriendsWindowTableViewRow(program);
+					viewRowData.push(row);
+			}
+		friendsTableView.setData(viewRowData);
 	});
 	
 	self.add(friendsTableView);

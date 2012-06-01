@@ -26,15 +26,7 @@ function CommentWindow(_topicId) {
 		selectedToCommentRow: null,
 	});
 	
-	var toolActInd = Titanium.UI.createActivityIndicator({
-		font:{fontFamily:'Helvetica Neue', fontSize:15,fontWeight:'bold'},
-		color:'white',
-		message: 'Loading...',
-		style: Titanium.UI.iPhone.ActivityIndicatorStyle.PLAIN
-	});
-	
 	//ADDING UI COMPONENTS
-	self.setToolbar([toolActInd],{animated:true});
 	self.add(commentsTable);
 	
 	//HELPER FUNCTIONS
@@ -125,9 +117,8 @@ function CommentWindow(_topicId) {
 		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
 		//LOGIC/Controllers 		
-		//take out the Loading... spinning wheel n
-		toolActInd.hide();
-		self.setToolbar(null,{animated:true});
+		//take out the Loading...
+		hidePreloader(self);
 	}
 	
 	function commentCreatedACSCallback(e) {
@@ -251,7 +242,8 @@ function CommentWindow(_topicId) {
 	});
 	
 	//PAGE LOGIC/CONTROLLER
-	toolActInd.show();
+	showPreloader(self,'Loading...');
+	
 
 	//*** ON-THE-PLANE STUFF 
 	//Comment.contentsDuringOffline();

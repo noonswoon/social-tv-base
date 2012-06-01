@@ -51,7 +51,6 @@ Ti.App.Chat = function(setup) {
         });
     }
 
-
     // ----------------------------------
     // CREATE BASE UI TAB AND ROOT WINDOW
     // ----------------------------------    
@@ -61,13 +60,12 @@ Ti.App.Chat = function(setup) {
 		// style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 	// });
 	
-
-	
 	var chat_window = Ti.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/grain.png',
 		title: "Group Chat",
-		barColor: '#6d0a0c'
+		barColor: '#6d0a0c',
+		tabBarHidden: true
 	});
 
 	var header = Ti.UI.createView({
@@ -86,9 +84,6 @@ Ti.App.Chat = function(setup) {
 		font: { fontSize: 20, fontFamily: 'Helvetica Neue' }
 	});	
 	
-	header.add(headerLabel);
-	chat_window.add(header);
-
 	var scrollView = Ti.UI.createScrollView({
 		backgroundColor: 'white',
 		contentWidth:600,
@@ -107,15 +102,85 @@ Ti.App.Chat = function(setup) {
 		});
 		scrollView.add(dummyImage);	
 	}
-	chat_window.add(scrollView);
 	
 	var chatMessagesTableView = Ti.UI.createTableView({
 		top:90,
-		height: 250,
+		height: 290,
 		backgroundColor: 'orange'
 	});
 	
+	var chatInputView = Ti.UI.createView({
+		left: 0,
+		bottom: 0,
+		height: 30,
+		width: '100%',
+		zIndex: 2
+	});
+	var chatInputTextField   = Ti.UI.createTextField({
+        width       : 247,
+        height      : 30,
+        left        : 4,
+        bottom      : 4,
+        color       : "#111",
+        value       : "",
+        border      : 1,
+        borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+        font        : {
+            fontSize   : 14,
+            fontWeight : 'bold'
+        },
+        zIndex:2
+    });
+	
+	chatInputTextField.addEventListener('focus', function() {
+	//	alert('about to enter text');
+		chatInputTextField.top = 150;
+		sendButton.top = 150;
+	});
+	
+	chatInputTextField.addEventListener('blur', function() {
+		//alert('textfield blur');
+		chatInputTextField.top = 384;
+		sendButton.top = 384;
+	});
+	
+
+    // Send Button
+    var sendButton = Ti.UI.createButton({
+        title         : 'Send',
+        bottom        : 4,
+        right         : 4,
+        width         : 60,
+        height        : 30,
+        borderRadius  : 6,
+        shadowColor   : "#001",
+        shadowOffset  : { x : 1, y : 1 },
+        style         : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+        font          : {
+            fontSize   : 16,
+            fontWeight : 'bold'
+        },
+        backgroundGradient : {
+            type          : 'linear',
+            colors        : [ '#058cf5', '#015fe6' ],
+            startPoint    : { x : 0, y : 0 },
+            endPoint      : { x : 2, y : 50 },
+            backFillStart : false
+        },
+        zIndex:2
+    });
+	chatInputView.add(chatInputTextField);
+	chatInputView.add(sendButton);
+	
+	header.add(headerLabel);
+	chat_window.add(header);
+	chat_window.add(scrollView);
 	chat_window.add(chatMessagesTableView);
+	
+//	chat_window.add(chatInputTextField);
+//	chat_window.add(sendButton);
+	chat_window.add(chatInputView);
+				
 //	var chatParticipantsScrollView = new ChatParticipantsScrollView();
 //	chat_window.add(chatParticipationScrollView);
 	

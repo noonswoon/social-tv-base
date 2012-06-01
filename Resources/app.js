@@ -4,6 +4,8 @@ Titanium.UI.setBackgroundColor('#000');
 
 Ti.include('/lib/date.js');
 Ti.include('/lib/rankingScore.js');
+Ti.include('/lib/TiPreloader.js');
+
 var moment = require('/lib/moment');
 
 //include xxxACS.js here

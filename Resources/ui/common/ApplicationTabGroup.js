@@ -8,9 +8,7 @@ function ApplicationTabGroup() {
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
-    
-	var selectionMainWin = new SettingWindow();//new ChannelSelectionMainWindow();
-	
+    	
 	var programDummy = {
 				programId: '4fb3618c0020442a2b0186c0', 
 				programTitle:'Khun Suuk', 
@@ -19,44 +17,40 @@ function ApplicationTabGroup() {
 				programChannel: 'C3',
 				programNumCheckin: 25345
 			};
+	
+	var selectionwin = new SettingWindow();//new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programDummy);
-	var messageboardwin =  new MessageboardMainWindow(1);		
+	var messageboardwin = SettingWindow();//new MessageboardMainWindow(1);		
 	var productwin = new SettingWindow();//new ProductMainWindow();
-	var profilewin =  new SettingWindow();//new ProfileMainWindow();
+	var profilewin = new SettingWindow();//new ProfileMainWindow();
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
 		title: 'Selection',
 		icon: '/images/tv.png',
-		window: selectionMainWin
+		window: selectionwin
 	});
-	selectionMainWin.containingTab = selectionTab;
+	selectionwin.containingTab = selectionTab;
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+		if(selectionwin == null)	//lazy loading
+			selectionwin = new ChannelSelectionMainWindow(); 
+		//selectionTab.window = selectionMainWin;
 	});
 	
     var chatTab = Titanium.UI.createTab({  
-        icon:'/images/icon/Chat-Bubble.png',
-        title:'Chat',
-       // window:chatwin
+        icon: '/images/fugitives.png',
+		title: 'Chat',
+        //window:chatwin
     });
     chatwin.containingTab = chatTab;
-    
     chatTab.addEventListener('focus', function() {
-    	var w = Ti.UI.createWindow({backgroundColor:"red"});
-		var b = Ti.UI.createButton({
-			title:"Close with Animation",
-			width:180,
-			height:40
-		});
-		w.add(b);
-		b.addEventListener('click',function()
-		{
-			w.close({animated:true});
-//			Ti.API.info('prevTab: '+tabIndex);
-			self.setActiveTab(self.tabs[tabIndexToComeBack]);
-		});
-		w.open();
+    	 if(chatwin == null)
+    		chatwin = ChatMainWindow(programDummy);	
+    	chatwin.containingTab.open(chatwin);
+    });
+    chatwin.addEventListener('close', function() {
+    	self.setActiveTab(self.tabs[tabIndexToComeBack]);
     });
     
     var messageboardTab = Titanium.UI.createTab({  
@@ -66,7 +60,10 @@ function ApplicationTabGroup() {
     });
     messageboardwin.containingTab = messageboardTab;
 	messageboardTab.addEventListener('focus', function() {
-		tabIndexToComeBack = 2;	
+		tabIndexToComeBack = 2;
+		if(messageboardwin == null)
+			messageboardwin = new MessageboardMainWindow(1);
+		//messageboardTab.window = messageboardwin;
 	});
 	
 	var productTab = Ti.UI.createTab({
@@ -77,6 +74,9 @@ function ApplicationTabGroup() {
 	productwin.containingTab = productTab;
 	productTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 3;	
+		if(productwin == null)
+			productwin = new ProductMainWindow();
+		//productTab.window = productwin;
 	});
 	
 	var profileTab = Ti.UI.createTab({
@@ -87,6 +87,8 @@ function ApplicationTabGroup() {
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 4;	
+		if(profilewin == null)
+			profilewin = new SettingWindow();//new ProfileMainWindow();
 	});
 	
 	self.addTab(selectionTab);
@@ -95,7 +97,7 @@ function ApplicationTabGroup() {
     self.addTab(productTab);
     self.addTab(profileTab);
     //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[2]);
+   	self.setActiveTab(self.tabs[1]);
     return self;
 };
 

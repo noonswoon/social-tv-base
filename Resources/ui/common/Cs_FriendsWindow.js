@@ -41,6 +41,7 @@ FriendsWindow = function(){
 	Ti.App.addEventListener('friendsLoaded',function(e){
 		
 		var checkinsOfFriends =e.fetchedAllFriendsCheckins;
+		var totalFriendCheckins = e.fetchedTotalFriendCheckins;
 		var results = [];
 		
 		for(var i=0;i<checkinsOfFriends.length;i++){
@@ -70,7 +71,7 @@ FriendsWindow = function(){
 		var viewRowData = [];
 			for(var i=0;i<results.length;i++){
 				var program = results[i];
-					var row = new FriendsWindowTableViewRow(program);
+					var row = new FriendsWindowTableViewRow(program,totalFriendCheckins);
 					viewRowData.push(row);
 			}
 		friendsTableView.setData(viewRowData);

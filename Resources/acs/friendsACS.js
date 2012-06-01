@@ -167,17 +167,19 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
+	    		var totalFriendCheckins = responseJSON.meta.total_results;
+	    		
 		      	for (var i=0;i<responseJSON.response.checkins.length;i++) {
 	            var checkins = responseJSON.response.checkins[i];  
 	           
 	            var friendsCheckins ={
 	            	program: checkins.event,
-	            	friend: checkins.user
+	            	friend: checkins.user,
 	            }
 	            allFriendsCheckins.push(friendsCheckins);
 			}  	
 
-		    Ti.App.fireEvent("friendsLoaded",{fetchedAllFriendsCheckins: allFriendsCheckins});
+		    Ti.App.fireEvent("friendsLoaded",{fetchedAllFriendsCheckins: allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout

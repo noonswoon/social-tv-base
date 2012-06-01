@@ -20,7 +20,7 @@ function ApplicationTabGroup() {
 	
 	var selectionwin = new SettingWindow();//new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programDummy);
-	var messageboardwin = SettingWindow();//new MessageboardMainWindow(1);		
+	var messageboardwin = new MessageboardMainWindow(1);		
 	var productwin = new SettingWindow();//new ProductMainWindow();
 	var profilewin = new SettingWindow();//new ProfileMainWindow();
 
@@ -97,7 +97,7 @@ function ApplicationTabGroup() {
     self.addTab(productTab);
     self.addTab(profileTab);
     //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[1]);
+   	self.setActiveTab(self.tabs[0]);
     return self;
 };
 

@@ -68,10 +68,10 @@ Ti.App.Chat = function(setup) {
 		tabBarHidden: true
 	});
 
-	var header = Ti.UI.createView({
+	var headerView = Ti.UI.createView({
 		top: 0,
 		left:0,
-		height: 40,
+		height: 90,
 		backgroundColor: 'pink'
 	});
 	
@@ -106,49 +106,38 @@ Ti.App.Chat = function(setup) {
 	var chatMessagesTableView = Ti.UI.createTableView({
 		top:90,
 		height: 290,
-		backgroundColor: 'orange'
+		backgroundColor: 'transparent',
+		separatorColor: 'transparent',
 	});
 	
 	var chatInputView = Ti.UI.createView({
 		left: 0,
 		bottom: 0,
-		height: 30,
+		height: 40,
 		width: '100%',
-		zIndex: 2
+		zIndex: 2,
+		backgroundImage: '/images/grain.png',
 	});
-	var chatInputTextField   = Ti.UI.createTextField({
+	var chatInputTextField   = Ti.UI.createTextArea({
         width       : 247,
         height      : 30,
         left        : 4,
-        bottom      : 4,
+        top	        : 5,
         color       : "#111",
         value       : "",
         border      : 1,
-        borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+        borderRadius: 3,
         font        : {
             fontSize   : 14,
             fontWeight : 'bold'
         },
-        zIndex:2
+        suppressReturn: false
     });
 	
-	chatInputTextField.addEventListener('focus', function() {
-	//	alert('about to enter text');
-		chatInputTextField.top = 150;
-		sendButton.top = 150;
-	});
-	
-	chatInputTextField.addEventListener('blur', function() {
-		//alert('textfield blur');
-		chatInputTextField.top = 384;
-		sendButton.top = 384;
-	});
-	
-
     // Send Button
     var sendButton = Ti.UI.createButton({
         title         : 'Send',
-        bottom        : 4,
+        top        : 5,
         right         : 4,
         width         : 60,
         height        : 30,
@@ -166,35 +155,93 @@ Ti.App.Chat = function(setup) {
             startPoint    : { x : 0, y : 0 },
             endPoint      : { x : 2, y : 50 },
             backFillStart : false
-        },
-        zIndex:2
+        }
     });
+    
 	chatInputView.add(chatInputTextField);
 	chatInputView.add(sendButton);
 	
-	header.add(headerLabel);
-	chat_window.add(header);
-	chat_window.add(scrollView);
+	headerView.add(headerLabel);
+	headerView.add(scrollView);
+	chat_window.add(headerView);
 	chat_window.add(chatMessagesTableView);
-	
-//	chat_window.add(chatInputTextField);
-//	chat_window.add(sendButton);
 	chat_window.add(chatInputView);
-				
-//	var chatParticipantsScrollView = new ChatParticipantsScrollView();
-//	chat_window.add(chatParticipationScrollView);
+	///////////////////////////////////////////////////////////////////////////////////////////			
 	
-	// textArea.addEventListener('buttonClicked', function(e){
-		// // fires when clicked on the send button
-	    // curUserInput = e.value;
-	    // textArea.addLabel(new Date()+"");
-	    // textArea.sendMessage(e.value);
-	    // send_a_message(e.value);
-	// });
-
+	var chatData = []; 
+	var chatAvatar = Ti.UI.createImageView({
+		top:5,
+		left: 5,
+		width: 28,
+		borderRadius: 14,
+		image: 'dummy.png'
+		
+	})
+	var chatContent = Ti.UI.createLabel({
+		top:5,
+		left: 35, //other people comments
+		height: 'auto',
+		width: 'auto', //but cap at length x-->check with the content
+		text: 'Hello world, testing comment',
+		backgroundColor: 'orange'
+	})
+	
+	var chatTableViewRow = Ti.UI.createTableViewRow({
+		height: 'auto'
+	});
+	chatTableViewRow.add(chatAvatar);
+	chatTableViewRow.add(chatContent);
+	chatData.push(chatTableViewRow);
+	
+	var chat2Avatar = Ti.UI.createImageView({
+		top:5,
+		right: 5,
+		width: 28,
+		borderRadius: 14,
+		image: 'dummy.png'
+		
+	})
+	var chat2Content = Ti.UI.createLabel({
+		top:5,
+		right: 35, //other people comments
+		height: 'auto',
+		width: 240, //but cap at length x-->check with the content
+		text: 'Hello world, testing comment  testing comment testing comment testing comment',
+		backgroundColor: 'green'
+	})
+	
+	var chatTableViewRow2 = Ti.UI.createTableViewRow({
+		height: 'auto'
+	});
+	
+	chatTableViewRow2.add(chat2Avatar);
+	chatTableViewRow2.add(chat2Content);
+	chatData.push(chatTableViewRow2);
+	
+	chatMessagesTableView.setData(chatData);
+	
+	//////////////////////////////////////////////////////////////////////////////////
     this.chat_window = chat_window;
     this.pubnub      = pubnub;
 
+	chatInputTextField.addEventListener('focus', function() {
+		chatInputView.top = 140;
+		chatInputView.height = 60;
+		chatInputTextField.height = 50;
+	});
+	
+	chatInputTextField.addEventListener('blur', function() {
+		chatInputView.top = 375;
+		chatInputView.height = 40;
+		chatInputTextField.height = 30;
+	});
+	
+    sendButton.addEventListener('click', function() {
+		alert("posting: "+chatInputTextField.value);
+		chatInputTextField.value = "";
+    	chatInputTextField.blur();
+    });
+    
     return this;
 };
 

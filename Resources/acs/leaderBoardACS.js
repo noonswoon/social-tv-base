@@ -13,7 +13,6 @@ exports.leaderACS_fetchedRank = function(_id){
         for (var i = 0; i < e.LeaderBoard.length; i++){
         	 var curRank = e.LeaderBoard[i];
         	 leaders.push(curRank);
-        	 alert(curRank.user.id + curRank.totalPoint);
          }
 		Ti.App.fireEvent('leaderDBLoaded',{fetchedLeader:leaders});
     } 
@@ -23,3 +22,5 @@ exports.leaderACS_fetchedRank = function(_id){
     	 }
 			});
 };
+
+//update totalPoint

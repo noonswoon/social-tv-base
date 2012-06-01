@@ -4,21 +4,14 @@ var ProfileActivityView = function(){
 	var	ProfileDataImg = 'images/kuma100x100.png';
 	var activity =[];
 	var request =[];
+	var requestUsers = []; //data to show in the request table view
+	
 	var activityView = Ti.UI.createView({
 		top: 5
 	});
-//FRIEND REQUEST//////////////////////////////////////////////
-	var requestLabel = Ti.UI.createLabel({
-		text: 'FRIEND REQUEST',
-		font: {fontSize: 14, fontWeight: 'bold'},
-		color: '#fff',
-		height:30,
-		textAlign: 'left',
-		left: 10,
-		top:0
-	});
-	requestCount = 2;
-	for(var i=0;i<requestCount;i++){
+	
+	var createRequestFriends = function(){
+	for(var i=0; i<requestUsers.length; i++){
 		var requestRow = Ti.UI.createTableViewRow({
 			selectedBackgroundColor: '#fff'
 		});
@@ -42,7 +35,7 @@ var ProfileActivityView = function(){
 				left: 55,
 				height:40,
 				width:120,
-				text: ProfileDataName + ' wants to add you as a friend'
+				text: requestUsers[i].user.first_name+' '+ requestUsers[i].user.first_name + ' wants to add you as a friend'
 		});
 		var acceptButton = Ti.UI.createButton({
 			backgroundColor: '#5baad1',
@@ -78,16 +71,35 @@ var ProfileActivityView = function(){
 		requestRow.add(declineButton);
 		request[i] = requestRow;
 	}
-		var requestActivity = Ti.UI.createTableView({
+		requestActivity.height = (requestUsers.length*50)-(requestUsers.length*5);
+		requestActivity.data = request;
+		ActivityLabel.top = requestActivity.top + requestActivity.height +5;
+		userActivityView.top = ActivityLabel.top+ActivityLabel.height+5;
+	};
+
+//	
+	Ti.App.addEventListener('requestsLoaded',function(e){
+		requestUsers = e.fetchedRequests[i];
+		createRequestFriends();
+	});
+//FRIEND REQUEST//////////////////////////////////////////////
+	var requestLabel = Ti.UI.createLabel({
+		text: 'FRIEND REQUEST',
+		font: {fontSize: 14, fontWeight: 'bold'},
+		color: '#fff',
+		height:30,
+		textAlign: 'left',
+		left: 10,
+		top:0
+	});
+	var requestActivity = Ti.UI.createTableView({
 		width: 300,
 		backgroundColor: '#fff',
-		height: (requestCount*50)-(requestCount*5),
+		height: 'auto',
 		borderRadius: 10,
 		top: 30,
 		scrollable: false,
-		data:request,
 	});
-	
 //ACTIVITY////////////////////////////////////////////////////
 	var ActivityLabel = Ti.UI.createLabel({
 		text: 'ACTIVITY',
@@ -96,7 +108,6 @@ var ProfileActivityView = function(){
 		height:30,
 		textAlign: 'left',
 		left: 10,
-		top: requestActivity.top + requestActivity.height +5
 	});
 	for(var i =0;i<5;i++){
 		var userActivityRow = Ti.UI.createTableViewRow({
@@ -166,7 +177,6 @@ var ProfileActivityView = function(){
 	var userActivityView = Ti.UI.createView({
 		width: 312,
 		height: 210,
-		top: ActivityLabel.top+ActivityLabel.height+5,
 	});
 	
 	userActivityView.add(userActivity);

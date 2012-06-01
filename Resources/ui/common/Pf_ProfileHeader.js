@@ -7,7 +7,6 @@ var ProfileHeaderView = function(_parentWindow){
 	var	profileDataImg = 'images/kuma100x100.png';
 		
 	var CheckinACS = require('acs/checkinACS');		
-//	var PointACS = require('acs/pointACS');
 	var FriendACS = require('acs/friendsACS');
 	var LevelACS = require('acs/levelACS');	
 	var myBadgeACS = require('acs/myBadgeACS');
@@ -15,7 +14,7 @@ var ProfileHeaderView = function(_parentWindow){
 	var BadgesACS = require('acs/badgesACS');
 
 	var CheckinModel = require('model/checkin');
-//	var PointModel = require('model/point');	
+	var PointModel = require('model/point');	
 	var FriendModel = require('model/friend');
 	var LevelModel = require('model/level');
 	
@@ -25,87 +24,64 @@ var ProfileHeaderView = function(_parentWindow){
 	LevelACS.levelACS_fetchedLevel();
 	BadgesACS.fetchedBadges();
 	myBadgeACS.myBadgeACS_fetchedBadge(user_id);				
-//CHECK IN//////////////////////////////////////////////////////////////////////
+	
 	function checkinDbLoadedCallBack(e){			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
-		};
-		Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
-		Ti.App.addEventListener('checkinsDbUpdated', function(){
+	};
+	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+	Ti.App.addEventListener('checkinsDbUpdated', function(){
 			columnCheckInCount.text = CheckinModel.checkins_count(user_id);
-		});
-		Ti.App.addEventListener('updateHeaderCheckin',function(){
+	});
+	Ti.App.addEventListener('updateHeaderCheckin',function(){
 			columnCheckInCount.text=CheckinModel.checkins_count(user_id);
-		});
+	});
 		
-		// Using cache		
-		CacheHelper.fetchACSDataOrCache('userCheckin'+user_id, CheckinACS.checkinACS_fetchedCheckIn,user_id, 'checkinsDbUpdated');
-	
-/////POINT ACS/////////////////////////////////////////////	
-/*	PointACS.pointACS_fetchedPoint(user_id);
-	function pointDbLoadedCallBack(e){
-			PointModel.pointModel_updatePointsFromACS(e.fetchedPoint);
+	// Using cache		
+	CacheHelper.fetchACSDataOrCache('userCheckin'+user_id, CheckinACS.checkinACS_fetchedCheckIn,user_id, 'checkinsDbUpdated');
+		
+	function levelDbLoadedCallBack(e){					
+		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
 	};
-		
-	Ti.App.addEventListener('pointsDbLoaded',pointDbLoadedCallBack);		
-*/	
-///LEVEL ACS///////////////////////////////////////////////////////
-		
-		function levelDbLoadedCallBack(e){					
-			LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);};
-		Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
+	Ti.App.addEventListener('levelDbLoaded',levelDbLoadedCallBack);
 
-///BADGE ACS////////////////////////////////////////////////////////
+	var refreshButton = Ti.UI.createImageView({
+		image: 'images/icon/refresh.png',
+		right: 10,
+		top: 5,
+		height:20,
+		width:20
+	});
 
-///LEADERBOARD ACS////////////////////////////////////////////////////////
-	//FRIEND ACS
-//	var friendsACS = require('acs/friendsACS');
-//	var myFriends = friendsACS.searchFriend(user_id);
-
-//	var rankList = [];
-//	rankList[0] = user_id;
-	
-/*	for(var i = 1; i<myFriends.length;i++){
-		var curUser = myFriends[i];
-		rankList[i] =  myFriends[i].id;
-	};
-*/	
-	//LEADER ACS
-//	LeaderACS.leaderACS_fetchedRank(rankList);
-//CALL ACS/////////////////////////////////////////////////////////
-		var refreshButton = Ti.UI.createImageView({
-			image: 'images/icon/refresh.png',
-			right: 10,
-			top: 5,
-			height:20,
-			width:20
-		});
 //REFRESH BUTTON TO RELOAD THE ACS//
 	refreshButton.addEventListener('click',function(){
 		FriendACS.searchFriend(user_id);
+		FriendsACS.showFriendsRequest();
 	});
-///////////////////////////////////	
-//friend
+
 	function friendDbLoadedCallBack(e){
 		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
 	};
 	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
-	Ti.App.addEventListener('friendsDbUpdated',function(e){
+	Ti.App.addEventListener('friendsDbUpdated',function(){
 		Ti.API.info('Friends Database Updated');
 		var rankList = [];
 		rankList[0] = user_id;
-		var myFriends = FriendModel.friendModel_fetchFriend();
-		for(var i = 0; i<myFriends.length;i++){
-			var curUser = myFriends[i].user.id;
+		var myFriends = FriendModel.friendModel_fetchFriend(user_id);
+		for(var i = 0; i< myFriends.length;i++){
+			var curUser = myFriends[i].friend_id;
 			Ti.API.info(curUser);
 			rankList.push(curUser);
 		};
 		Ti.API.info('total user in rank: '+rankList.length);
-		 columnFriendCount.text = FriendModel.friendModel_count(user_id);
+		columnFriendCount.text = FriendModel.friendModel_count(user_id);
 		LeaderACS.leaderACS_fetchedRank(rankList);
-		//** update rank so what!!!!? -> add to database -> pf_STATS: fetched data into array = [] -> create tableView 
 	});
 	
-	
+	function leaderDBLoadedCallBack(e){
+		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
+	};
+	Ti.App.addEventListener('leaderDBLoaded',leaderDBLoadedCallBack);
+		
 ///////////////////////////////////////////////////////////////////	
 	var headerView = Ti.UI.createView({
 			backgroundGradient: {

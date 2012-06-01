@@ -1,15 +1,13 @@
 var ProfileStatsView = function(){
-	var LeaderACS = require('acs/leaderBoardACS');
-	
-//	var PointModel = require('model/point');
+	var PointModel = require('model/point');
 	var LevelModel = require('model/level');
 	var friendModel = require('model/friend');
 	
 	var leaderBoardData = [];
-	var ProfileDataExp;
+	var userRankInfo = [];
 	var	ProfileDataLevelUp;
 	
-	//test data			
+//test data			
 	var	ProfileDataName= 'Titanium Mick';
 	var	ProfileDataImg = 'images/kuma100x100.png';
 	var user_id = '4fa17dd70020440df700950c';
@@ -61,59 +59,28 @@ var ProfileStatsView = function(){
 		touchEnabled: false,
     });
 /////////////////////////////////////////////////////////////////////////////
-		//AFTER CREATE POINT TO ACS
-//	Ti.App.addEventListener('createPointDB', createPointDBCallBack);
-//		function createPointDBCallBack(e){
-//		PointModel.points_updateNewPoint(e.fetchedPoint);	//UPDATE POINT IN POINTS
-//TODO: UPDATE LEADERBOARD
-//	};	
-//	Ti.App.addEventListener('updateNewPoint',function(){
-//		Ti.Api.info('updateNewPoint');
-//	});
+	//sort from max totalPoint	
+	function totalPointSort(a,b) {
+		return b.totalPoint - a.totalPoint;
+	}
 
-//	Ti.App.addEventListener('leaderDBLoaded',leaderDBCallBack);
-//	function leaderDBCallBack(e){
-//		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
-//	};
-//	Ti.App.addEventListener('LeaderDbUpdated',function(){
-//		leaderBoardData = PointModel.pointModel_fetchRank();
-//		Ti.API.info('Done loading Leaderboard from database');	
-//	});
-//TODO: ARRANGE INTO TABLEVIEW
 
-//////////////////////////////////////////////////////////////////
-
-/*	var rankList = [];
-	rankList[0] = user_id;
-	Ti.App.addEventListener('friendsDbUpdated',function(e){
-	//	var myFriends = friendModel.friendModel_fetchFriend(userID);
-	//	for(var i = 0; i<myFriends.length;i++){
-	//		var curUser = myFriends[i].user.id;
-	//		alert(curUser);
-	//		rankList.push(curUser);
-	//	};
-	});
-	LeaderACS.leaderACS_fetchedRank(rankList);
-*/	
-//////////////////////////////////////////////////////////////////	
-	//UPDATE DATA
+	Ti.App.addEventListener('LeaderDbUpdated',function(){
+		Ti.API.info('Leaderboard updated into database /model/point');
+		//UPDATE DATA IN EXP SECTION
+		totalPoints = PointModel.pointModel_fetchMyPoint(user_id);
+		ProfileDataLevelUp = LevelModel.level_nextLevel(totalPoints);
+		expLabel.text= totalPoints + '/' + ProfileDataLevelUp;
+		expBar.max = ProfileDataLevelUp;
+		expBar_light.max = ProfileDataLevelUp;
+		expBar.value = totalPoints;
+		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
+		expBar_light.value = (totalPoints+15);
 		
-		Ti.App.addEventListener('pointsDbUpdated', function(){
-			totalPoints = PointModel.pointModel_fetchMyPoint(user_id);
-			//totalPoints = LeaderACS.leaderACS_fetchedRank(user_id);
-			//totalPoints = 20;
-			ProfileDataExp = totalPoints;
-			ProfileDataLevelUp = LevelModel.level_nextLevel(ProfileDataExp);
-			expLabel.text=ProfileDataExp + '/' + ProfileDataLevelUp;
-			expBar.max= ProfileDataLevelUp;
-			expBar_light.max= ProfileDataLevelUp;
-			myRankScore.text = ProfileDataExp;
-			expBar.value = ProfileDataExp;
-			myLevelLabel.text = LevelModel.level_checkLevel(ProfileDataExp);
-			expBar_light.value = (ProfileDataExp+15);
-		});
-					
-///////////////////////////////////////////////////////////////////////////
+		leaderBoardData = PointModel.pointModel_fetchRank();
+    	leaderBoardData.sort(totalPointSort);
+    	createLeaderBoardView();
+	});
 
 	var leaderLabel = Ti.UI.createLabel({
 		text: 'LEADERBOARD',
@@ -124,9 +91,17 @@ var ProfileStatsView = function(){
 		left: 10,
 		top:0
 	});
-		
-/*	var userRankInfo = [];
-		for(var i=0;i<5;i++){
+
+	var createLeaderBoardView = function(){
+		var myIndex;
+		for(i=0; i<leaderBoardData.length; i++){
+			if(leaderBoardData[i].user_id===user_id){
+				myIndex=i;
+				break;}
+		};	
+		Ti.API.info('myIndex: ' + myIndex);
+
+		for(var i=0; i<myIndex+4; i++){
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
 				width: 300,
@@ -146,7 +121,7 @@ var ProfileStatsView = function(){
 				height: 36,
 				width: 36
 				});
-			
+
 			var userRankPictureView = Ti.UI.createView({
 				backgroundColor: '#fff',
 				borderWidth: 1,
@@ -156,15 +131,16 @@ var ProfileStatsView = function(){
 			});	
 				
 			var userRankName = Ti.UI.createLabel({
-				text: ProfileDataName, 
+				text: leaderBoardData[i].name,
 				left: 90,
 				width: 'auto',
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 14},
 				color: '#666'
 				});
+
 			var userRankScore = Ti.UI.createLabel({
-				text: 50-i, 
+				text: leaderBoardData[i].totalPoint, 
 				top: 10,
 				right: 5,
 				width: 'auto',
@@ -173,84 +149,32 @@ var ProfileStatsView = function(){
 				font: { fontWeight: 'bold', fontSize: 26},
 				color: '#666'
 			});
+
+			if(i===myIndex){
+				userRankNo.color = '#000';
+				userRankName.color = '#000';
+				userRankScore.color = '#000';
+			};			
+			
 			userRankPictureView.add(userRankPicture);
 			userRank.add(userRankNo);
 			userRank.add(userRankPictureView);
 			userRank.add(userRankName);
 			userRank.add(userRankScore);
-			userRankInfo[i]= userRank;
+			userRankInfo.push(userRank);
 		}
+	leaderTable.height = (userRankInfo.length)*50;
+	leaderTable.data = userRankInfo;
+	leaderTable.bottom = 10;
+	};
 	
 	var leaderTable = Ti.UI.createTableView({
 		top: 30,
 		borderRadius: 10,
 		scrollable:false,
 		width: 300,
-		height: 250,
-		data: userRankInfo
-	});
-*/	
-//////////////////////////////////////////////////
-	var myRankInfo = [];
-			var myRank = Ti.UI.createTableViewRow({
-				width: 300,
-				height: 50,
-				selectedBackgroundColor: 'transparent'
-				});
-			var myRankNo = Ti.UI.createLabel({
-				text: '#' + 1,
-				left: 15,
-				height:30,
-				font: {fontSize: 16}
-				});
-			var myRankPicture = Ti.UI.createImageView({
-				image: ProfileDataImg,
-				height: 36,
-				width: 36
-				});
-				
-			var myRankPictureView = Ti.UI.createView({
-				backgroundColor: '#fff',
-				borderWidth: 1,
-				width:40, height:40,
-				left: 40,
-				borderColor: '#E2E5EE',
-			});	
-				
-			var myRankName = Ti.UI.createLabel({
-				text: ProfileDataName, 
-				left: 90,
-				width: 'auto',
-				height: 30,
-				font: { fontWeight: 'bold', fontSize: 14}
-				});
-			var myRankScore = Ti.UI.createLabel({
-				text: '',
-				top: 10,
-				right: 5,
-				width: 'auto',
-				textAlign: 'right',
-				height: 30,
-				font: { fontWeight: 'bold', fontSize: 26}
-			});
-			myRankPictureView.add(myRankPicture);			
-			myRank.add(myRankNo);
-			myRank.add(myRankPictureView);
-			myRank.add(myRankName);
-			myRank.add(myRankScore);
-			myRankInfo[0] = myRank;
-		
-//////////////////////////////////////////////////	
-	
-	var myRankTable = Ti.UI.createTableView({
-		top: 30, //leaderTable.top+leaderTable.height+10,
-		borderRadius: 10,
-		scrollable:false,
-		width: 300,
-		height: 50,
-		data: myRankInfo
-	});
-	
+		height: 'auto',
+	});		
 
 	var expSec = Ti.UI.createView({
 		top: 5
@@ -259,17 +183,14 @@ var ProfileStatsView = function(){
 			top:50
 	});
 		
-		
 		expSec.add(expLabel);
 		expSec.add(myLevelLabel);
 		expSec.add(expBar_light);
 		expSec.add(expBar);
 		profileStats.add(expSec);
 		leaderSec.add(leaderLabel);
-//		leaderSec.add(leaderTable);
-		leaderSec.add(myRankTable);
+		leaderSec.add(leaderTable);
 		profileStats.add(leaderSec);
-
 
 	return profileStats;
 }

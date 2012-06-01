@@ -2,7 +2,7 @@ var ProfileDetailView = function(_parent){
 	
 ///MENU//////////////////////////////////////////////////////////
 		var profileMenu = Ti.UI.createView({
-			height: 50,
+			height: 40,
 		 backgroundGradient: {
         	type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
@@ -23,7 +23,7 @@ var ProfileDetailView = function(_parent){
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
-		backgroundImage: 'images/bg.png',
+//		backgroundImage: 'images/bg.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	var profileDetailScroll = Ti.UI.createScrollView({
@@ -34,7 +34,7 @@ var ProfileDetailView = function(_parent){
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:false,
 		width: 312,
-		height: 198,
+		height: 220,
 		disableBounce: true
 	});	
 	

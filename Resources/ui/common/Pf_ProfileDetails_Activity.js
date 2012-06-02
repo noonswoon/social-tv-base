@@ -82,10 +82,12 @@ var ProfileActivityView = function(){
 	}
 		requestActivity.height = (requestUsers.length*45);
 		requestActivity.data = request;
-		userActivityView.top = requestActivity.height+30;
-		userRequestView.add(requestActivity);
-		userRequestView.add(requestLabel);
-		activityView.add(userRequestView);
+		if(requestUsers.length){
+			userActivityView.top = requestActivity.height+30;
+			userRequestView.add(requestActivity);
+			userRequestView.add(requestLabel);
+			activityView.add(userRequestView);			
+		};
 		activityView.height = 'auto';
 	};
 
@@ -113,7 +115,7 @@ var ProfileActivityView = function(){
 		top: 25,
 		scrollable: false,
 	});
-//TODO
+	
 	requestActivity.addEventListener('click',function(e){
 		if(e.source.title==="Accept")
 		requestActivity.deleteRow(e.index);
@@ -123,6 +125,8 @@ var ProfileActivityView = function(){
 		userActivityView.top = requestActivity.height+ 30;
 		if(requestUsers.length===0){
 			userActivityView.top = 0;
+			userRequestView.remove(requestActivity);
+			userRequestView.remove(requestLabel);
 			activityView.remove(userRequestView);
 		}; 
 	});
@@ -216,9 +220,10 @@ var ProfileActivityView = function(){
 	userActivityView.add(userActivity);
 	userActivityView.add(ActivityLabel);
 	
+	userRequestView.add(requestActivity);
+	userRequestView.add(requestLabel);
+	
 	if(requestUsers.length!==0){
-		userRequestView.add(requestActivity);
-		userRequestView.add(requestLabel);
 		activityView.add(userRequestView);
 	};
 

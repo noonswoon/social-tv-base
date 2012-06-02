@@ -1,6 +1,7 @@
 var ProfileHeaderView = function(_parentWindow){
 //HARD CODE	
 	var user_id = '4fa17dd70020440df700950c';
+//	var user_id = String(acs.getUserLoggedIn().id);
 	var totalCheckins=0;
 	var	profileDataName= 'Titanium Mick';
 	var	profileDataImg = 'images/kuma100x100.png';
@@ -55,6 +56,7 @@ var ProfileHeaderView = function(_parentWindow){
 	refreshButton.addEventListener('click',function(){
 		FriendACS.searchFriend(user_id);
 		FriendACS.showFriendsRequest();
+		//activityACS.activityACS_fetchedMyActivity(user_id);
 	});
 
 	function friendDbLoadedCallBack(e){
@@ -142,15 +144,7 @@ var ProfileHeaderView = function(_parentWindow){
 			bottom: 0,
 			right: 4			
 		});
-/*
-		var refreshButton = Ti.UI.createImageView({
-			image: 'images/icon/refresh.png',
-			right: 10,
-			top: 5,
-			height:20,
-			width:20
-		});
-*/
+		
 		var columnCheckIn = Ti.UI.createView({
 			top: 40,
 			left: 250,

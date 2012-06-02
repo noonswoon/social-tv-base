@@ -10,7 +10,7 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	var ChannelSelectionMainWindow = require('ui/common/Ct_ChatMainWindow');//require('ui/common/Cs_ChannelSelectionMainWindow');	
+	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');	
 	
 	var chatwin = new ChatMainWindow();
 

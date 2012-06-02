@@ -1,7 +1,6 @@
 var ProfileHeaderView = function(_parentWindow){
 //HARD CODE	
 	var user_id = '4fa17dd70020440df700950c';
-//	var user_id = '4fb2089db685537039014cd7';
 	var totalCheckins=0;
 	var	profileDataName= 'Titanium Mick';
 	var	profileDataImg = 'images/kuma100x100.png';
@@ -55,7 +54,7 @@ var ProfileHeaderView = function(_parentWindow){
 //REFRESH BUTTON TO RELOAD THE ACS//
 	refreshButton.addEventListener('click',function(){
 		FriendACS.searchFriend(user_id);
-		FriendsACS.showFriendsRequest();
+		FriendACS.showFriendsRequest();
 	});
 
 	function friendDbLoadedCallBack(e){

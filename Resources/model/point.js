@@ -8,6 +8,13 @@ db.close();
 exports.pointModel_updateLeadersFromACS = function(_leadersCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
 	db.execute('DELETE FROM leaderboard');
+	// var result = db.execute('SELECT * FROM leaderboard');
+	// var dummyCount = 0;
+	// while(result.isValidRow()) {
+		// dummyCount++;
+		// result.next();
+	// }
+	// Ti.API.info('numRows in leaderboard after deleted: '+dummyCount);
 	for(var i=0;i < _leadersCollection.length; i++) {
 		var curRank = _leadersCollection[i];
 		var name =  curRank.user.first_name +' '+ curRank.user.last_name;

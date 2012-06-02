@@ -11,8 +11,6 @@ exports.searchFriend = function(_userID){
 	    	alert("friends: "+responseJSON.response.users.length);
 		      	for (var i = 0; i < responseJSON.response.users.length; i++) {
 	            var friend = responseJSON.response.users[i];  
-	           // alert('friend ID :' + friend.id + 'Name: ' + friend.first_name +' ' + friend.last_name+
-	           // 'username: ' + friend.username);
 				var curFriend = {
 					my_id: _userID,
 					friend_id: friend.id,

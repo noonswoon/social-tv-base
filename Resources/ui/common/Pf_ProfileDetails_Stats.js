@@ -15,6 +15,7 @@ var ProfileStatsView = function(){
 	var profileStats = Ti.UI.createView({
 		backgroundColor: 'transparent',
 		bottom: 10,
+		height: 'auto',
 	});
 	
 	//experience point
@@ -76,7 +77,6 @@ var ProfileStatsView = function(){
 		expBar.value = totalPoints;
 		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
 		expBar_light.value = (totalPoints+15);
-		
 		leaderBoardData = PointModel.pointModel_fetchRank();
     	leaderBoardData.sort(totalPointSort);
     	createLeaderBoardView();
@@ -94,18 +94,24 @@ var ProfileStatsView = function(){
 
 	var createLeaderBoardView = function(){
 		var myIndex;
+		userRankInfo =[];
 		for(i=0; i<leaderBoardData.length; i++){
 			if(leaderBoardData[i].user_id===user_id){
 				myIndex=i;
-				break;}
+				break;
+			}
 		};	
 		Ti.API.info('myIndex: ' + myIndex);
 
-		for(var i=0; i<myIndex+4; i++){
+		for(var i=0; i<leaderBoardData.length; i++){
+			//Ti.API.info(i+': '+leaderBoardData[i].name);
+			
+			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
+			
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
-				width: 300,
-				height: 50,
+				//width: 290,
+				height: 45,
 				selectedBackgroundColor: '#fff',
 				color: '#666'
 			});
@@ -119,21 +125,15 @@ var ProfileStatsView = function(){
 			var userRankPicture = Ti.UI.createImageView({
 				image: ProfileDataImg,
 				height: 36,
-				width: 36
+				width: 36,
+				borderRadius: 5,
+				left: 40
 				});
-
-			var userRankPictureView = Ti.UI.createView({
-				backgroundColor: '#fff',
-				borderWidth: 1,
-				width:40, height:40,
-				left: 40,
-				borderColor: '#E2E5EE',
-			});	
 				
 			var userRankName = Ti.UI.createLabel({
 				text: leaderBoardData[i].name,
 				left: 90,
-				width: 'auto',
+				width: 150,
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 14},
 				color: '#666'
@@ -141,7 +141,7 @@ var ProfileStatsView = function(){
 
 			var userRankScore = Ti.UI.createLabel({
 				text: leaderBoardData[i].totalPoint, 
-				top: 10,
+				//top: 10,
 				right: 5,
 				width: 'auto',
 				textAlign: 'right',
@@ -156,23 +156,24 @@ var ProfileStatsView = function(){
 				userRankScore.color = '#000';
 			};			
 			
-			userRankPictureView.add(userRankPicture);
 			userRank.add(userRankNo);
-			userRank.add(userRankPictureView);
+			userRank.add(userRankPicture);
 			userRank.add(userRankName);
 			userRank.add(userRankScore);
 			userRankInfo.push(userRank);
 		}
-	leaderTable.height = (userRankInfo.length)*50;
+	leaderTable.height = (userRankInfo.length)*userRank.height;
 	leaderTable.data = userRankInfo;
 	leaderTable.bottom = 10;
+	profileStats.height = expSec.height + leaderSec.height;
 	};
 	
 	var leaderTable = Ti.UI.createTableView({
 		top: 30,
 		borderRadius: 10,
-		scrollable:false,
-		width: 300,
+		scrollable:true,
+		disableBounce: true,
+		width: 290,
 		height: 'auto',
 	});		
 

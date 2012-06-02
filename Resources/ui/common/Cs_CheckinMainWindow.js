@@ -275,6 +275,7 @@ function isPointInPoly(poly, pt)
 		else {};
 	});
 //touch start = mouseover	
+
 	self.addEventListener('touchstart',function(e)
 	{
 		if(checkinButton.enabled===true){
@@ -329,16 +330,18 @@ function isPointInPoly(poly, pt)
 		else {};
 	});	
 /////////////////////////////////////////////////////////////
-
+	
 	checkinButton.addEventListener('click',function(){
 		alert('you have check in');
 		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
+		myCurrentCheckinPrograms.push(_datafromrow.programId);
 		checkinButton.enabled = false;
 		checkinButton.image = 'images/checkin/checkin_check_checked.png';
 		chatButton.image = 'images/checkin/checkin_chat_enable.png';
 		productButton.image = 'images/checkin/checkin_products_enable.png';
 		boardButton.image = 'images/checkin/checkin_board_enable.png';		
 	});
+
 
 	function oneCheckinUpdatedCallback(_checkinID) {
 		PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);

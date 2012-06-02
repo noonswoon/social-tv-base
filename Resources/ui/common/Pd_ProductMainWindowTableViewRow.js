@@ -1,9 +1,9 @@
-ProductMainWindowTableViewRow = function(){
+ProductMainWindowTableViewRow = function(_product){
 	
 	var row = Ti.UI.createTableViewRow();
 	
 	var productName = Ti.UI.createLabel({
-		text: 'Reya Dress',
+		text: _product.product_name,
 		textAlign: 'left',
 		color: '#333',
 		left: 145,
@@ -15,7 +15,7 @@ ProductMainWindowTableViewRow = function(){
 	row.add(productName);
 	
 	var productDescription = Ti.UI.createLabel({
-		text: 'Chom wear this dress in lakorn ka',
+		text: _product.description,
 		color: 'gray',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
@@ -25,7 +25,7 @@ ProductMainWindowTableViewRow = function(){
 	row.add(productDescription);
 	
 	var productPrice = Ti.UI.createLabel({
-		text: 'Price: 200 Baht',
+		text: 'Price: '+_product.price,
 		color: 'gray',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
@@ -35,7 +35,7 @@ ProductMainWindowTableViewRow = function(){
 	row.add(productPrice);
 	
 	var productContact = Ti.UI.createLabel({
-		text: 'Tel: 0-2555-5555',
+		text: 'Tel: '+_product.contact,
 		color: 'gray',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
@@ -45,10 +45,12 @@ ProductMainWindowTableViewRow = function(){
 	row.add(productContact);
 	
 	var productImage = Ti.UI.createImageView({
-		image: 'http://storage.cloud.appcelerator.com/Za6GkEHPsBrL0y22LT1XibgwazZTVhnE/photos/98/5c/4fc9a618e421372344000018/Screen%20Shot%202555-06-02%20at%2012.34.20%20PM_original.png',
+		image: _product.product_image,
 		left: 5,
-		width:150,
-		height:125,
+		width: 150,
+		height: 100,
+		bottom: 10,
+		top: 10
 	});
 	row.add(productImage);
 

@@ -25,9 +25,9 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 exports.checkinACS_fetchedCheckIn = function(_id) {
 	Cloud.Checkins.query({
     page: 1,
-    per_page: 500,
-    where: {user_id: _id,},
-    order: '-updated_at',
+    per_page: 5,
+    where: {user_id: _id},
+    order: '-updated_at'
 
 }, function (e) {
     if (e.success) {
@@ -51,6 +51,7 @@ exports.checkinACS_createCheckin = function(_eventID){
 	}, function (e) {
 	    if (e.success) {
 	        var checkin = e.checkins[0];
+	        var programId = e.checkins[0].event.custom_fields.program_id;
 	        Ti.App.fireEvent('createCheckinDB',{fetchedACheckin:checkin});
 	    } else {
 	        alert('Error:\\n' +

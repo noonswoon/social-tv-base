@@ -37,7 +37,8 @@ Ti.App.Chat = function(setup) {
         	if(message.text !== curUserInput) {
             	//textArea.recieveMessage(message.text);
            		var newChatRow = new ChatMessageTableViewRow(message.text,userObject,false);
-           		chatMessagesTableView.insertRowBefore(0,newChatRow);
+           		chatMessagesTableView.appendRow(newChatRow);
+           		chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
            	}
         },
         error : function() {
@@ -62,15 +63,6 @@ Ti.App.Chat = function(setup) {
         });
     }
 
-    // ----------------------------------
-    // CREATE BASE UI TAB AND ROOT WINDOW
-    // ----------------------------------    
-
-	// var buttonBar = Ti.UI.createButtonBar({
-		// labels:['Recieve','Empty','Get All','Disable','Enable'],
-		// style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
-	// });
-	
 	var chat_window = Ti.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/grain.png',
@@ -211,7 +203,8 @@ Ti.App.Chat = function(setup) {
 		if(chatInputTextField.value === "") return;
 
 		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
-        chatMessagesTableView.insertRowBefore(0,newChatRow);
+        chatMessagesTableView.appendRow(newChatRow);
+        chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
         		
 		curUserInput = chatInputTextField.value;
 		send_a_message(chatInputTextField.value);

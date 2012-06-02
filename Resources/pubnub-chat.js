@@ -1,7 +1,12 @@
 // ----------------------------------
+// INCLUDE PUBNUB
+// ----------------------------------
+Ti.include('./pubnub.js');
+
+// ----------------------------------
 // INIT PUBNUB
 // ----------------------------------
-var pubnub = require('pubnub').init({
+var pubnub = Ti.PubNub.init({
     publish_key   : 'pub-5d5a8d08-52e1-4011-b632-da2a91d6a2b9',
     subscribe_key : 'sub-de622063-9eb3-11e1-8dea-0b2d0bf49bb9',
     ssl           : false,
@@ -9,7 +14,11 @@ var pubnub = require('pubnub').init({
 });
 
 var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
+var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
 
+//dummy userobject
+var userObject = {id:'aaaa',imageUrl: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc4/41563_202852_9270_q.jpg'}
+	
 Ti.App.Chat = function(setup) {
     
     var curUserInput = "";
@@ -19,18 +28,20 @@ Ti.App.Chat = function(setup) {
     pubnub.subscribe({
         channel  : setup['chat-room'],
         connect  : function() {
+            Ti.API.info("connecting...");
             //textArea.recieveMessage("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
         },
         callback : function(message) {
-        	Ti.API.info('message from sender: '+curUserInput);
         	//since pubnub is a broadcaster, sender will receive his own message as well
         	//prevent from having the user sees his own message when it got broadcasted
         	if(message.text !== curUserInput) {
             	//textArea.recieveMessage(message.text);
-           }
+           		var newChatRow = new ChatMessageTableViewRow(message.text,userObject,false);
+           		chatMessagesTableView.insertRowBefore(0,newChatRow);
+           	}
         },
         error : function() {
-        	//Ti.API.info('Lost connection...');
+       		Ti.API.info("Lost connection...");
         }
     });
 
@@ -42,7 +53,7 @@ Ti.App.Chat = function(setup) {
 
         pubnub.publish({
             channel  : setup['chat-room'],
-            message  : { text : message, color : this.my_color },
+            message  : { text : message, color : 'pink' },
             callback : function(info) {
                 if (!info[0]) setTimeout(function() {
                     send_a_message(message)
@@ -169,59 +180,19 @@ Ti.App.Chat = function(setup) {
 	///////////////////////////////////////////////////////////////////////////////////////////			
 	
 	var chatData = []; 
-	var chatAvatar = Ti.UI.createImageView({
-		top:5,
-		left: 5,
-		width: 28,
-		borderRadius: 14,
-		image: 'dummy.png'
-		
-	})
-	var chatContent = Ti.UI.createLabel({
-		top:5,
-		left: 35, //other people comments
-		height: 'auto',
-		width: 'auto', //but cap at length x-->check with the content
-		text: 'Hello world, testing comment',
-		backgroundColor: 'orange'
-	})
+	var chatTableViewRow1 = new ChatMessageTableViewRow('Hello world, how are you doing there?',userObject,false);
+	var chatTableViewRow2 = new ChatMessageTableViewRow('Hello world, testing comment testing comment testing comment :)',userObject,true);
+	var chatTableViewRow3 = new ChatMessageTableViewRow('Hellaluya..I love my life. And Chatterbox will hit the roof',userObject,false);
 	
-	var chatTableViewRow = Ti.UI.createTableViewRow({
-		height: 'auto'
-	});
-	chatTableViewRow.add(chatAvatar);
-	chatTableViewRow.add(chatContent);
-	chatData.push(chatTableViewRow);
-	
-	var chat2Avatar = Ti.UI.createImageView({
-		top:5,
-		right: 5,
-		width: 28,
-		borderRadius: 14,
-		image: 'dummy.png'
-		
-	})
-	var chat2Content = Ti.UI.createLabel({
-		top:5,
-		right: 35, //other people comments
-		height: 'auto',
-		width: 240, //but cap at length x-->check with the content
-		text: 'Hello world, testing comment  testing comment testing comment testing comment',
-		backgroundColor: 'green'
-	})
-	
-	var chatTableViewRow2 = Ti.UI.createTableViewRow({
-		height: 'auto'
-	});
-	
-	chatTableViewRow2.add(chat2Avatar);
-	chatTableViewRow2.add(chat2Content);
+	chatData.push(chatTableViewRow1);
 	chatData.push(chatTableViewRow2);
+	chatData.push(chatTableViewRow3);
 	
 	chatMessagesTableView.setData(chatData);
 	
 	//////////////////////////////////////////////////////////////////////////////////
     this.chat_window = chat_window;
+    this.my_color    = 'pink';
     this.pubnub      = pubnub;
 
 	chatInputTextField.addEventListener('focus', function() {
@@ -237,7 +208,14 @@ Ti.App.Chat = function(setup) {
 	});
 	
     sendButton.addEventListener('click', function() {
-		alert("posting: "+chatInputTextField.value);
+		if(chatInputTextField.value === "") return;
+
+		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
+        chatMessagesTableView.insertRowBefore(0,newChatRow);
+        		
+		curUserInput = chatInputTextField.value;
+		send_a_message(chatInputTextField.value);
+	
 		chatInputTextField.value = "";
     	chatInputTextField.blur();
     });

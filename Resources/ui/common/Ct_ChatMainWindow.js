@@ -1,7 +1,7 @@
 function ChatMainWindow(_program) {
 
     // -------------------------------------------------------------------------
-	// INCLUDE PUBNUB CHAT MODULE
+	// INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
 	// -------------------------------------------------------------------------
 	Ti.include('./pubnub-chat.js');
 	
@@ -21,12 +21,7 @@ function ChatMainWindow(_program) {
 	    }
 	});
 		
-	// -------------------------------------------------------------------------
-	// TITANIUM WINDOW OBJECT
-	// -------------------------------------------------------------------------
-	//
-	// Open Chat Window
-	//
+
 	return pubnub_chat_window.chat_window;
 }
 

@@ -68,7 +68,7 @@ function ApplicationTabGroup() {
     self.addTab(selectionTab);
     self.addTab(profileTab);
    	self.addTab(loginTab);
-    //self.addTab(productTab);
+    self.addTab(productTab);
     
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[1]);

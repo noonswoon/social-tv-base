@@ -22,7 +22,8 @@ exports.tvprogramACS_fetchAllProgramShowingNow = function() {
 	            	photo: 'program.photo.urls.original',
 	            	start_time: program.start_time,
 	            	recurring_until: program.recurring_until,
-	            	channel_id: program.custom_fields.channel_id
+	            	channel_id: program.custom_fields.channel_id,
+	            	program_id: program.custom_fields.program_id
 	            }
 				programs.push(curProgram);
 			}

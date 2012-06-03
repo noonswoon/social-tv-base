@@ -113,7 +113,7 @@ exports.commentModel_updateRankingScore = function(_topicId) {
 		var totalVotes = commentModel_getNumberOfVotes(commentACSId);
 		var positiveVotes = commentModel_getPositiveVotes(commentACSId);
 		var rankingScore = calculateRankingScore(totalVotes,positiveVotes);
-		Ti.API.info('comment id: '+commentACSId+' has ranking score of: '+rankingScore);
+		//Ti.API.info('comment id: '+commentACSId+' has ranking score of: '+rankingScore);
 	}
 }
 
@@ -182,7 +182,6 @@ exports.contentsDuringOffline = function() {
 	var db = Ti.Database.open('Chatterbox'); 
 	//clean stuff
 	db.execute("DELETE FROM comments");
-	
 	
 	//comment 1
 	var ct1 = moment();

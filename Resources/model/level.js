@@ -1,4 +1,3 @@
-
 var db = Ti.Database.open('Chatterbox');
 db.execute('CREATE TABLE IF NOT EXISTS levels(level TEXT PRIMARY KEY, exp INTEGER, tag TEXT);');
 db.close();

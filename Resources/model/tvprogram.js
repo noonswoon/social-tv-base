@@ -30,6 +30,7 @@ exports.TVProgramModel_countCheckins = function(_eventId){
 	var db = Ti.Database.open('Chatterbox');
 	var result = db.execute('SELECT COUNT(number_checkins) as numCheckinsOfProgram  FROM tvprograms WHERE id = ?',_eventId);
 	number_checkins = Number(result.fieldByName('numCheckinsOfProgram'));
+	result.close();
 	db.close();
 	return number_checkins;
 };

@@ -38,13 +38,13 @@ exports.point_fetchPoint = function() {
 
 //function: sum score
 exports.points_sumPoints = function(){
-		var db = Ti.Database.open('Chatterbox'); 
-		var result = db.execute('SELECT SUM(point) as totalScore from points');
-		var totalScore = Number(result.fieldByName('totalScore'));
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT SUM(point) as totalScore from points');
+	var totalScore = Number(result.fieldByName('totalScore'));
 
-		result.close();
-		db.close();
-		return totalScore;
+	result.close();
+	db.close();
+	return totalScore;
 };
 
 exports.points_updateNewPoint = function(_pointsCollection) {

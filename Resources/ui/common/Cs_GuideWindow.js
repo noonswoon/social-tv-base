@@ -13,7 +13,6 @@ function GuideWindow(_parent) {
 	var selectChannelToolbar = Ti.UI.createView({
 		top: 0,
 		height: 40,
-		//barColor: '#e0e0e0'
 		backgroundGradient: {			
 	        	type: 'linear',
 	        	startPoint: { x: '0%', y: '0%' },

@@ -1,5 +1,5 @@
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS checkins(id TEXT PRIMARY KEY, event_id TEXT, score INTEGER, user_id TEXT, updated_at TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS checkins(id TEXT PRIMARY KEY, event_id TEXT, score INTEGER, user_id TEXT, updated_at TEXT, program_id TEXT);');
 db.close();
 
 
@@ -11,7 +11,7 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	var result = db.execute('DELETE FROM checkins');
 	for(var i=0;i < _checkinsCollection.length; i++) {
 		var curCheckin = _checkinsCollection[i];
-		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at) VALUES(?,?,?,?,?)", curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
+		db.execute("INSERT INTO checkins(id,event_id,score,user_id,updated_at,program_id) VALUES(?,?,?,?,?,?)", curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at,curCheckin.program_id);
 	}
 	db.close();
 	Ti.App.fireEvent("checkinsDbUpdated");
@@ -28,7 +28,8 @@ exports.checkin_fetchCheckin = function() {
 			event_id: result.fieldByName('event_id'),
 			score: Number(result.fieldByName('score')),
 			user_id: result.fieldByName('user_id'),
-			updated_at: result.fieldByName('updated_at')
+			updated_at: result.fieldByName('updated_at'),
+			program_id: result.fieldByName('program_id')
 		});
 		result.next();
 	}

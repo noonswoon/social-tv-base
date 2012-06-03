@@ -1,7 +1,6 @@
 ChannelInGuideWindow = function (_index){
 	
 	var TVProgram = require('model/tvprogram');
-	var TVProgramACS = require('acs/tvprogramACS');
 	var ChannelInGuideTableViewRow = require('ui/common/Cs_ChannelInGuideTableViewRow');
 		
 	var self = Ti.UI.createWindow({
@@ -10,15 +9,9 @@ ChannelInGuideWindow = function (_index){
 	});
 	
 	var programsInChannelTableView = Ti.UI.createTableView();
-	
-	function tvprogramLoadedAllTimeCompleteCallback(e) {
-		var allPrograms = e.fetchedPrograms;
-		TVProgram.tvprogramsModel_insertAllPrograms(allPrograms);
-	}
-	
-	function tvprogramsTitlesLoadedCallback(e) {
-		var programsInChannel = [];		
-		var allprograms = TVProgram.TVProgramModel_fetchPrograms(); 
+
+	var programsInChannel = [];		
+	var allprograms = TVProgram.TVProgramModel_fetchPrograms(); 
 
 		for(var i=0;i<allprograms.length;i++){
 			
@@ -50,18 +43,8 @@ ChannelInGuideWindow = function (_index){
 		}
 		programsInChannelTableView.data = [];
 		programsInChannelTableView.setData(programsInChannel);	
-	}
-	
-	Ti.App.addEventListener('tvprogramsLoadedAllTime',tvprogramLoadedAllTimeCompleteCallback);
-	Ti.App.addEventListener('tvprogramsTitlesLoaded', tvprogramsTitlesLoadedCallback);
-	
-	Ti.App.addEventListener('close', function() {
-		Ti.App.removeEventListener('tvprogramsLoadedAllTime',tvprogramLoadedAllTimeCompleteCallback);
-		Ti.App.removeEventListener('tvprogramsTitlesLoaded', tvprogramsTitlesLoadedCallback);
-	});
-	
+
 	self.add(programsInChannelTableView);
-	TVProgramACS.tvprogramACS_fetchAllProgram();
 	return self;
 }
 module.exports = ChannelInGuideWindow;

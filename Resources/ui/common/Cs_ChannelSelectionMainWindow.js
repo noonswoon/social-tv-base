@@ -2,7 +2,7 @@ function ChannelSelectionMainWindow(){
 	
 	var PopularWindow = require('ui/common/Cs_PopularWindow');
 	var GuideWindow = require('ui/common/Cs_GuideWindow');
-//	var FriendWindow = require('ui/common/Cs_FriendWindow');
+	var FriendsWindow = require('ui/common/Cs_FriendsWindow');
 
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'transparent',
@@ -11,11 +11,11 @@ function ChannelSelectionMainWindow(){
 	});
 	
 	var popularwin = new PopularWindow(self); 
-	var guidewin = new GuideWindow(self);
-//	var friendwin = new FriendWindow();
+	var guidewin = null; //new GuideWindow(self);
+	var friendswin = new FriendsWindow();
 
 	var tabBar = Ti.UI.iOS.createTabbedBar({
-		labels: ['Popular','Guide'],
+		labels: ['Popular','Guide','Friends'],
 		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		backgroundColor:'#398bb0',
 		height:35,
@@ -39,14 +39,19 @@ function ChannelSelectionMainWindow(){
 		}		
 		if(e.index==0){
 			mainView.add(popularwin);
-			guidewin._closePopupWindow();
+			if(guidewin != null)
+				guidewin._closePopupWindow();
 		}
 		else if (e.index==1){
+			if(guidewin == null)
+				guidewin = new GuideWindow(self);
 			mainView.add(guidewin);
 		}
-		// else if (e.index==2){
-			// mainView.add(self);
-		// }	
+		else if (e.index==2){
+			mainView.add(friendswin);
+			if(guidewin != null)
+				guidewin._closePopupWindow();
+		}	
 	});
 	
 	self.add(mainView);

@@ -21,6 +21,8 @@ var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in 
 var acs = require('lib/acs');
 var Cloud = require('ti.cloud');
 
+var myCurrentCheckinPrograms = ['CH3_0REYA']; //should be reset every hour to empty array
+
 //bootstrap and check dependencies
 if (Ti.version < 1.8 ) {
 	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');

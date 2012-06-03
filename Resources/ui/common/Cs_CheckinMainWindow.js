@@ -1,4 +1,4 @@
-Checkin = function (_datafromrow){
+CheckinMainWindow = function (_datafromrow){
 	
 	var CheckinACS = require('acs/checkinACS');
 	var CheckinModel = require('model/checkin');
@@ -243,8 +243,41 @@ function isPointInPoly(poly, pt)
 		{x: 132, y:162},
 		{x:120, y:134}
 	];		
-	
-	function highlightButton(e) {
+
+	self.addEventListener('click',function(e)
+	{
+		if(checkinButton.enabled===true){
+			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
+				alert('Check in to activate the control');
+			}
+			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
+				alert('me');
+				meButton.image = 'images/checkin/checkin_me_enable.png';
+			}
+		}
+		if(checkinButton.enabled===false){			
+			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
+				alert('message board');
+				boardButton.image = 'images/checkin/checkin_board_enable.png';
+			}
+			if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
+				alert('me');
+				meButton.image = 'images/checkin/checkin_me_enable.png';
+			}
+			if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
+				alert('product');
+				productButton.image = 'images/checkin/checkin_products_enable.png';
+			}
+			if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
+				alert('chat');
+				chatButton.image = 'images/checkin/checkin_chat_enable.png';
+			}		
+		}
+	});
+//touch start = mouseover	
+
+	function highlightButton(e)
+	{
 		if(checkinButton.enabled===true){
 			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
 			//	alert('Check in to activate the control');
@@ -300,16 +333,18 @@ function isPointInPoly(poly, pt)
 		else {};
 	});	
 /////////////////////////////////////////////////////////////
-
+	
 	checkinButton.addEventListener('click',function(){
 		alert('you have check in');
-		//CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
+		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
+		myCurrentCheckinPrograms.push(_datafromrow.programId);
 		checkinButton.enabled = false;
 		checkinButton.image = 'images/checkin/checkin_check_checked.png';
 		chatButton.image = 'images/checkin/checkin_chat_enable.png';
 		productButton.image = 'images/checkin/checkin_products_enable.png';
 		boardButton.image = 'images/checkin/checkin_board_enable.png';		
 	});
+
 
 	function oneCheckinUpdatedCallback(_checkinID) {
 		PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
@@ -334,4 +369,4 @@ function isPointInPoly(poly, pt)
 	return self;
 	
 }
-module.exports = Checkin;
+module.exports = CheckinMainWindow;

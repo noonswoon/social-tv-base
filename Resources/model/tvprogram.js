@@ -1,7 +1,7 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, photo TEXT, start_time TEXT, recurring_until TEXT, number_checkins INTEGER, channel_id TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, photo TEXT, start_time TEXT, recurring_until TEXT, number_checkins INTEGER, channel_id TEXT, program_id TEXT);');
 db.close();
 
 exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
@@ -11,13 +11,13 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 	db.execute('DELETE FROM tvprograms');
 	
 	for(var i =0;i<_allPrograms.length;i++) {
-		db.execute('INSERT INTO tvprograms(id,name,photo,start_time,recurring_until,channel_id) VALUES(?,?,?,?,?,?)',
-		_allPrograms[i].id,_allPrograms[i].name,_allPrograms[i].photo,_allPrograms[i].start_time,_allPrograms[i].recurring_until,_allPrograms[i].channel_id);
+		db.execute('INSERT INTO tvprograms(id,name,photo,start_time,recurring_until,channel_id,program_id) VALUES(?,?,?,?,?,?,?)',
+		_allPrograms[i].id,_allPrograms[i].name,_allPrograms[i].photo,_allPrograms[i].start_time,_allPrograms[i].recurring_until,_allPrograms[i].channel_id,_allPrograms[i].program_id);
 	}
 	db.close();
-	// Ti.App.fireEvent("tvprogramsDbUpdated");	
 	Ti.App.fireEvent("tvprogramsTitlesLoaded");
 };
+
 
 exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins) {	
 	var db = Ti.Database.open('Chatterbox'); 
@@ -49,6 +49,7 @@ exports.TVProgramModel_fetchPrograms = function() {
 			recurring_until: result.fieldByName('recurring_until'),
 			number_checkins: result.fieldByName('number_checkins'),
 			channel_id: result.fieldByName('channel_id'),
+			program_id: result.fieldByName('program_id'),
 			hasChild:true
 		});
 		result.next();
@@ -56,5 +57,70 @@ exports.TVProgramModel_fetchPrograms = function() {
 	result.close();
 	db.close();
 	return fetchedPrograms;
+};
+
+exports.TVProgramModel_fetchPopularPrograms = function() {
+	var fetchedPrograms = [];
+	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM tvprograms WHERE start_time >= ? AND ? <= recurring_until ORDER BY start_time ASC', now,now);
+	while(result.isValidRow()) {
+		fetchedPrograms.push({
+			id: result.fieldByName('id'),
+			name: result.fieldByName('name'),
+			photo: result.fieldByName('photo'),
+			start_time: result.fieldByName('start_time'),
+			recurring_until: result.fieldByName('recurring_until'),
+			number_checkins: result.fieldByName('number_checkins'),
+			channel_id: result.fieldByName('channel_id'),
+			program_id: result.fieldByName('program_id'),
+			hasChild:true
+		});
+		Ti.API.info('Name: '+result.fieldByName('name'));
+		Ti.API.info('Start: '+result.fieldByName('start_time'));
+		Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
+		Ti.API.info('Now: '+now);
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return fetchedPrograms;
+};
+
+exports.TVProgramModel_fetchShowtimeSelection = function(_start){
+	var fetchedPrograms = [];
+	var now = moment(); 
+	var year = now.year();
+	var month = now.month();
+	month+=1;
+	var day = now.date();
+	var timeStr = year+'-0'+month+'-'+day+'T'+_start+':00:00+0000';
+	_start+=1;
+	var endStr = year+'-0'+month+'-'+day+'T'+_start+':00:00+0000';
 	
+	Ti.API.info(timeStr);
+	Ti.API.info(endStr);
+	
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM tvprograms WHERE start_time >= ? AND recurring_until <= ? ORDER BY start_time ASC', timeStr,endStr);
+	while(result.isValidRow()) {
+		fetchedPrograms.push({
+			id: result.fieldByName('id'),
+			name: result.fieldByName('name'),
+			photo: result.fieldByName('photo'),
+			start_time: result.fieldByName('start_time'),
+			recurring_until: result.fieldByName('recurring_until'),
+			number_checkins: result.fieldByName('number_checkins'),
+			channel_id: result.fieldByName('channel_id'),
+			program_id: result.fieldByName('program_id'),
+			hasChild:true
+		});
+		Ti.API.info('Name: '+result.fieldByName('name'));
+		Ti.API.info('Start: '+result.fieldByName('start_time'));
+		Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return fetchedPrograms;
 };

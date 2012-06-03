@@ -12,7 +12,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		top:0,
 		height: 'auto',
 		allowsSelection: false,
-		className: "ReplyTableViewRow",
+		className: "CommentRow",
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	

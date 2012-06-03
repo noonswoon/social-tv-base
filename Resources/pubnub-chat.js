@@ -17,8 +17,11 @@ var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollVie
 var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
 
 //dummy userobject
-var userObject = {id:'aaaa',imageUrl: 'https://fbcdn-profile-a.akamaihd.net/hprofile-ak-snc4/41563_202852_9270_q.jpg'}
-	
+var userObject = {id:acs.getUserId(),fbId: acs.getUserFbId(),imageUrl: acs.getUserImage()};
+var adminUserObject = {id: '', imageUrl: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png'}; //for the greet message
+var historyMessages = [];
+var lastHistoryLoadedIndex = 0;
+
 Ti.App.Chat = function(setup) {
     
     var curUserInput = "";
@@ -29,14 +32,16 @@ Ti.App.Chat = function(setup) {
         channel  : setup['chat-room'],
         connect  : function() {
             Ti.API.info("connecting...");
+            var newChatRow = new ChatMessageTableViewRow("Welcome to Chatterbox "+setup['chat-room']+" Chat Room. Please help keep our place clean.",adminUserObject,false);
+           	chatMessagesTableView.appendRow(newChatRow);
             //textArea.recieveMessage("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
         },
         callback : function(message) {
         	//since pubnub is a broadcaster, sender will receive his own message as well
         	//prevent from having the user sees his own message when it got broadcasted
         	if(message.text !== curUserInput) {
-            	//textArea.recieveMessage(message.text);
-           		var newChatRow = new ChatMessageTableViewRow(message.text,userObject,false);
+            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
+           		var newChatRow = new ChatMessageTableViewRow(message.text,senderObj,false);
            		chatMessagesTableView.appendRow(newChatRow);
            		chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
            	}
@@ -54,7 +59,7 @@ Ti.App.Chat = function(setup) {
 
         pubnub.publish({
             channel  : setup['chat-room'],
-            message  : { text : message, color : 'pink' },
+            message  : { text : message, senderId: userObject.id, senderFbId: userObject.fbId, time: moment().format('YYYY-MM-DD, HH:mm:ss')},
             callback : function(info) {
                 if (!info[0]) setTimeout(function() {
                     send_a_message(message)
@@ -112,6 +117,17 @@ Ti.App.Chat = function(setup) {
 		backgroundColor: 'transparent',
 		separatorColor: 'transparent',
 	});
+	
+	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
+		height: 30
+	});
+	var loadHistoryButton = Ti.UI.createButton({
+		width: '90%',
+		height: 25,
+		title: 'Load Earlier Messages'
+	});
+	loadHistoryMessagesRow.add(loadHistoryButton);
+	
 	
 	var chatInputView = Ti.UI.createView({
 		left: 0,
@@ -171,21 +187,53 @@ Ti.App.Chat = function(setup) {
 	chat_window.add(chatInputView);
 	///////////////////////////////////////////////////////////////////////////////////////////			
 	
-	var chatData = []; 
-	var chatTableViewRow1 = new ChatMessageTableViewRow('Hello world, how are you doing there?',userObject,false);
-	var chatTableViewRow2 = new ChatMessageTableViewRow('Hello world, testing comment testing comment testing comment :)',userObject,true);
-	var chatTableViewRow3 = new ChatMessageTableViewRow('Hellaluya..I love my life. And Chatterbox will hit the roof',userObject,false);
-	
-	chatData.push(chatTableViewRow1);
-	chatData.push(chatTableViewRow2);
-	chatData.push(chatTableViewRow3);
-	
+	var chatData = [loadHistoryMessagesRow]; 	
 	chatMessagesTableView.setData(chatData);
 	
 	//////////////////////////////////////////////////////////////////////////////////
     this.chat_window = chat_window;
-    this.my_color    = 'pink';
     this.pubnub      = pubnub;
+    
+    loadHistoryMessagesRow.addEventListener('click', function() {
+    	// Request History
+		if(historyMessages.length == 0) {
+			//load it to the history array
+			pubnub.history({
+			    // Set channel to 'example'
+			    channel : setup['chat-room'],
+			    // Set limit of returned
+			    limit : 100
+			    // Set Callback Function when History Returns
+			}, function(messages) {
+			    // Show History
+			    Ti.API.info(messages);
+				for(var i = messages.length -1;i >= 0; i--) {
+					messageObj = {
+						text: messages[i].text,
+						senderId: messages[i].senderId,
+						senderFbId: messages[i].senderFbId,
+						time: messages[i].time
+					}
+					historyMessages.push(messageObj);
+				}
+				// add in the last 10 messages
+				var numMessagesToLoad = 10; 
+				if(messages.length < 10) numMessagesToLoad = messages.length;
+				for(var i = 0; i < numMessagesToLoad -1;i++) {
+					var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture'};
+					var isYourMessage = false;
+					if(historyMessages[i].senderFbId === userObject.fbId) isYourMessage = true;
+					var newChatRow = new ChatMessageTableViewRow(historyMessages[i].text,historyUserObj,isYourMessage);
+           			chatMessagesTableView.insertRowAfter(0,newChatRow);
+				}
+				lastHistoryLoadedIndex = numMessagesToLoad;
+			});
+		} else {
+			//continue...adding from the last inserted
+			
+		}
+    });
+    
 
 	chatInputTextField.addEventListener('focus', function() {
 		chatInputView.top = 140;

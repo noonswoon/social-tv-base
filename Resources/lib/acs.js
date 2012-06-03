@@ -17,6 +17,33 @@ exports.setUserLoggedIn = function(user) {
 	currentUser = user;
 };
 
+exports.getUserId = function() {
+	return currentUser.id;
+};
+
+function getUserFbId() {
+	if(currentUser.external_accounts === undefined) return -1;
+	
+	var fbId = 0;
+	var numExternalAccounts = currentUser.external_accounts.length;
+	
+	for(var i=0;i < numExternalAccounts; i++) {
+		var curExternalAccount = currentUser.external_accounts[0];
+		if(curExternalAccount.external_type === "facebook") {
+			fbId = curExternalAccount.external_id;
+			break;
+		}
+	}
+	return fbId;
+};
+exports.getUserFbId = getUserFbId; 
+
+exports.getUserImage = function() {
+	var fbId = getUserFbId(); 
+	if(fbId == 0 || fbId == -1) return "";
+	else return "https://graph.facebook.com/"+fbId+"/picture"
+}
+
 exports.setLoggedInStatus = function(isLoggedIn) {
 	loggedIn = isLoggedIn;
 };

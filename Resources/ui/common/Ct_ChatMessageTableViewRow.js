@@ -1,5 +1,6 @@
 ChatMessageTableViewRow = function(_chatMessage, _chatOwner, _isASender) {
 	var self = Ti.UI.createTableViewRow({
+		className: 'ChatMessageRow',
 		height: 'auto',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	});

@@ -33,22 +33,18 @@ function ApplicationTabGroup() {
 	selectionwin.containingTab = selectionTab;
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
-		if(selectionwin == null)	//lazy loading
-			selectionwin = new ChannelSelectionMainWindow(); 
-		//selectionTab.window = selectionMainWin;
 	});
 	
     var chatTab = Titanium.UI.createTab({  
         icon: '/images/fugitives.png',
 		title: 'Chat',
-        //window:chatwin
+		//window: NO WINDOW FOR CHAT
     });
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
-    	 if(chatwin == null)
-    		chatwin = ChatMainWindow(programDummy);	
-    	chatwin.containingTab.open(chatwin);
+    	 chatwin.containingTab.open(chatwin);
     });
+   
     chatwin.addEventListener('close', function() {
     	self.setActiveTab(self.tabs[tabIndexToComeBack]);
     });
@@ -56,14 +52,11 @@ function ApplicationTabGroup() {
     var messageboardTab = Titanium.UI.createTab({  
         icon:'/images/captured.png',
         title:'Board',
-        window:messageboardwin
+        window: messageboardwin
     });
     messageboardwin.containingTab = messageboardTab;
-	messageboardTab.addEventListener('focus', function() {
+    messageboardTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 2;
-		if(messageboardwin == null)
-			messageboardwin = new MessageboardMainWindow(1);
-		//messageboardTab.window = messageboardwin;
 	});
 	
 	var productTab = Ti.UI.createTab({
@@ -74,9 +67,6 @@ function ApplicationTabGroup() {
 	productwin.containingTab = productTab;
 	productTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 3;	
-		if(productwin == null)
-			productwin = new ProductMainWindow();
-		//productTab.window = productwin;
 	});
 	
 	var profileTab = Ti.UI.createTab({
@@ -87,8 +77,6 @@ function ApplicationTabGroup() {
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 4;	
-		if(profilewin == null)
-			profilewin = new SettingWindow();//new ProfileMainWindow();
 	});
 	
 	self.addTab(selectionTab);

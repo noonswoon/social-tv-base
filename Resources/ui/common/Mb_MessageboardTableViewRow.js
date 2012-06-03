@@ -5,7 +5,7 @@ MessageboardTableViewRow = function(_topic) {
 		height:'auto',
 		backgroundColor: 'pink',
 		allowsSelection: true,
-		className: "TopicTableViewRow"
+		className: "TopicRow"
 	});
 	
 	row.topicLabel = Ti.UI.createLabel({

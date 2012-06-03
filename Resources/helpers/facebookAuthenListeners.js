@@ -1,6 +1,6 @@
 function facebookAuthenCallback(e) {
 	if (e.success) {
-		alert('facebookAuthenListners.js FB login event cb');
+		//alert('facebookAuthenListners.js FB login event cb');
 		//CREATING/LOGGIN IN TO CHATTERBOX VIA THIRD-PARTY METHOD
 		Cloud.SocialIntegrations.externalAccountLogin({
 	    	type: 'facebook',

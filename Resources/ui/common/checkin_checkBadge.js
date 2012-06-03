@@ -1,6 +1,6 @@
 var checkinBadgeView = function(){
 	//hard data
-	var userID = '4fa17dd70020440df700950c';
+	var userID = acs.getUserId();
 	var eventID = '4fa8dbe60020442a2b0099f8';
 	var CheckinACS = require('acs/checkinACS');
 	var CheckinModel = require('model/checkin');

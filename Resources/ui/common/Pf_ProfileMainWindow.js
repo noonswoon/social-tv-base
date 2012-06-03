@@ -15,7 +15,6 @@ function ProfileMainWindow() {
 		});
 		
 		var settingButton = Titanium.UI.createButton({
-			//systemButton:Titanium.UI.iPhone.SystemButton.CONTACT_ADD
 			image: 'images/icon/19-gear.png'
 		});
 		settingButton.addEventListener('click',function(){
@@ -37,7 +36,7 @@ function ProfileMainWindow() {
 			});
 		var header = Ti.UI.createTableViewSection();
 		var profileHeader = new ProfileHeader(self);
-		var detail = new Detail();
+		var detail = new Detail(self);
 		var UserProfile=[];
 		
 		self.setRightNavButton(settingButton);

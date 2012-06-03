@@ -8,7 +8,7 @@ CheckinMainWindow = function (_datafromrow){
 	var TVProgram = require('model/tvprogram');
 	var checkinPoint = 10;
 	
-	var userID = '4fa17dd70020440df700950c';
+	var userID = acs.getUserId();
 
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',

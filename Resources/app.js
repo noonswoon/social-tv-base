@@ -7,6 +7,7 @@ Ti.include('/lib/rankingScore.js');
 Ti.include('/lib/TiPreloader.js');
 
 var moment = require('/lib/moment');
+Ti.include('/lib/cacheFromRemote.js');
 
 //include xxxACS.js here
 //include xxx models here
@@ -45,12 +46,12 @@ if (Ti.version < 1.8 ) {
 		if (e.success) {
 			acs.setUserLoggedIn(e.users[0]);
 			acs.setLoggedInStatus(true);
-			Ti.API.info('should go to tab group page');
+			//Ti.API.info('should go to tab group page');
 			var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 			var maintabgroup = new ApplicationTabGroup();
 			maintabgroup.open();
 	    } else {
-	    	Ti.API.info("should go to login page");
+	    	//Ti.API.info("should go to login page");
 			Ti.Facebook.logout(); //just to be save
 			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
 			var loginwin = new LoginFbOnlyWindow();

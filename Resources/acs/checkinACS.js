@@ -1,4 +1,4 @@
-var checkin =[];
+
 
 exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 	Cloud.Checkins.query({
@@ -9,7 +9,8 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 
 }, function (e) {
     if (e.success) {
-			var totalCheckinOfEvent = e.checkins.length;
+    var checkin =[];	
+		var totalCheckinOfEvent = e.checkins.length;
 		Ti.App.fireEvent('doneGettingNumCheckinsOfProgramId',{targetedProgramId: _eventId, numCheckins:totalCheckinOfEvent});
     } 
     else {
@@ -31,6 +32,7 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
 
 }, function (e) {
     if (e.success) {
+        var checkin =[];
         for (var i = 0; i < e.checkins.length; i++) {
         	 var curCheckin = e.checkins[i]; 
                checkin.push(curCheckin);

@@ -1,7 +1,6 @@
-myBadges = [];
 
 exports.myBadgeACS_fetchedBadge = function(_id) {
-	Ti.API.info('call myBadgeACS_fetchedBadge');
+	//Ti.API.info('call myBadgeACS_fetchedBadge');
 	Cloud.Objects.query({
 	classname: 'BadgeUnlock',	
     page: 1,
@@ -10,6 +9,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
     where: {user_id: _id},
 }, function (e) {
     if (e.success) {
+    	myBadges = [];
         for (var i = 0; i < e.BadgeUnlock.length; i++) {
         	 var curBadge = e.BadgeUnlock[i];
               myBadges.push(curBadge);
@@ -17,7 +17,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
 		Ti.App.fireEvent('myBadgesLoaded',{fetchedMyUnlockBadges:myBadges});
     } 
     else {
-        alert('Error:\\n' +
+        alert('Badge Module Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});

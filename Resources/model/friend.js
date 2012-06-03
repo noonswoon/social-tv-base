@@ -1,3 +1,9 @@
+/*number INTEGER PRIMARY KEY,
+ *my_id TEXT,
+ *friend_id TEXT,
+ *username TEXT,
+ *first_name TEXT, last_name TEXT, email TEXT);
+*/
 var db = Ti.Database.open('Chatterbox');
 db.execute('CREATE TABLE IF NOT EXISTS friends(number INTEGER PRIMARY KEY, my_id TEXT, friend_id TEXT, username TEXT, first_name TEXT, last_name TEXT, email TEXT);');
 db.close();
@@ -49,4 +55,13 @@ exports.friendModel_removeFriend = function(_friendID){
 	db.execute('DELETE FROM friends where friend_id = ?',_friendID);
 	db.close();
 	Ti.App.fireEvent('removedFriend');
+};	
+
+exports.friendModel_count = function(_myID){
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT COUNT(*) as friends_count from friends where my_id = ?', _myID);
+	var friends = Number(result.fieldByName('friends_count'));
+	result.close();
+	db.close();
+	return friends;
 };

@@ -1,14 +1,15 @@
-var point =[];
 
 exports.pointACS_fetchedPoint = function(_id) {
 	Cloud.Objects.query({
 	classname: 'Points',	
     page: 1,
-    per_page: 500,
+    per_page: 100,
     where: {user_id: _id},
     order: '-updated_at'
 }, function (e) {
     if (e.success) {
+    	var point =[];
+
         for (var i = 0; i < e.Points.length; i++) {
         	 var curPoint = e.Points[i];
                point.push(curPoint);
@@ -42,4 +43,3 @@ exports.pointACS_createPoint = function(_userID,_point,_earnedby,_objID){
 	    }
 	});
 };
-

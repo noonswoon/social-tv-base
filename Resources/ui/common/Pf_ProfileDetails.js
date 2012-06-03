@@ -1,8 +1,8 @@
-var ProfileDetailView = function(){
+var ProfileDetailView = function(_parent){
 	
 ///MENU//////////////////////////////////////////////////////////
 		var profileMenu = Ti.UI.createView({
-			height: 50,
+			height: 40,
 		 backgroundGradient: {
         	type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
@@ -18,11 +18,12 @@ var ProfileDetailView = function(){
 			index:0
 		});	
 		profileMenu.add(profileTab);
+		
 ///DETAIL//////////////////////////////////////////////////////////
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
-		//backgroundImage: 'images/icon/bg.png',
+//		backgroundImage: 'images/bg.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	var profileDetailScroll = Ti.UI.createScrollView({
@@ -31,21 +32,21 @@ var ProfileDetailView = function(){
 		backgroundColor: 'transparent',
 		top:0,
 		showVerticalScrollIndicator:true,
-		showHorizontalScrollIndicator:true,
+		showHorizontalScrollIndicator:false,
 		width: 312,
-		height: 198,
+		height: 220,
 		disableBounce: true
 	});	
 	
 ///////////////////////////////////////////////////////////////////
 	var ProfileStats = require('ui/common/Pf_ProfileDetails_Stats');
-	var profileStats = new ProfileStats();
+	var profileStats = new ProfileStats(_parent);
 	var ProfileActivity = require('ui/common/Pf_ProfileDetails_Activity');
-	var profileActivity = new ProfileActivity();
+	var profileActivity = new ProfileActivity(_parent);
 	var ProfileBadge = require('ui/common/Pf_ProfileDetails_Badge');
-	var profileBadge = new ProfileBadge();	
+	var profileBadge = new ProfileBadge(_parent);	
 	var ProfileReward = require('ui/common/Pf_ProfileDetails_Reward');
-	var profileReward = new ProfileReward();
+	var profileReward = new ProfileReward(_parent);
 		
 	profileTab.addEventListener('click',function(e){
 		for (var i in profileDetailScroll.children){
@@ -65,9 +66,9 @@ var ProfileDetailView = function(){
 	});		
 		
 	profileDetailScroll.add(profileStats);
+	//profileDetailScroll.add(profileBadge);
 	profileDetail.add(profileDetailScroll);
-//////////////////////////////////////////////////////////////////
-
+	
 	detail.headerView = profileMenu;
 	detail.add(profileDetail);
 

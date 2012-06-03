@@ -8,7 +8,7 @@ FriendsAddNewView = function(){
 //USER TABLE/////////////////////////////////////////
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
 	var friendsACS = require('acs/friendsACS');
-	var userID = '4fa17dd70020440df700950c';
+	var userID = acs.getUserId();
 	
 	friendsACS.showFriendsRequest();
 	Ti.App.addEventListener('requestsLoaded',function(e){

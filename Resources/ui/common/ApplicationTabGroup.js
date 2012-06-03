@@ -10,18 +10,18 @@ function ApplicationTabGroup() {
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     	
 	var programDummy = {
-				programId: '4fb3618c0020442a2b0186c0', 
-				programTitle:'Khun Suuk', 
-				programSubname:'Fighting!',
-				programImage: 'dummy.png',
-				programChannel: 'C3',
-				programNumCheckin: 25345
-			};
+		programId: '4fb3618c0020442a2b0186c0', 
+		programTitle:'Khun Suuk', 
+		programSubname:'Fighting!',
+		programImage: 'dummy.png',
+		programChannel: 'C3',
+		programNumCheckin: 25345
+	};
 	
-	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ChatMainWindow(programDummy);
-	var messageboardwin = new MessageboardMainWindow(1);		
-	var productwin = new ProductMainWindow();
+	var selectionwin = new SettingWindow();//new ChannelSelectionMainWindow();
+	var chatwin = new SettingWindow();//new ChatMainWindow(programDummy);
+	var messageboardwin = new SettingWindow();//new MessageboardMainWindow(1);		
+	var productwin = new SettingWindow();//new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();
 
 	var tabIndexToComeBack = 0;
@@ -87,6 +87,7 @@ function ApplicationTabGroup() {
 
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
+
     return self;
 };
 

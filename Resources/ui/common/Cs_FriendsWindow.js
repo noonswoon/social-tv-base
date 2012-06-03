@@ -16,7 +16,7 @@ FriendsWindow = function(){
 	//Get all friends from DB
 	//with mock user_id
 	
-	var user_id = '4fa17dd70020440df700950c';
+	var user_id = acs.getUserId();
 	var friendsList = [];
 
 	allMyFriends = friend.friendModel_fetchFriend(user_id);

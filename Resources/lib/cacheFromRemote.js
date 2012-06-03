@@ -2,7 +2,7 @@
  * A good example of caching images to the device.
  */
  
- /* example on how to use it
+/* example on how to use it
 var win = Ti.UI.createWindow();
 win.addEventListener("open", onOpen);
 win.open();
@@ -21,13 +21,14 @@ function onProgress(progress){
     TI.API.info("progress being made " + progress);
 }
 */ 
-
+ 
 function get_remote_file(filename, url, fn_end, fn_progress ) {
     var file_obj = {file:filename, url:url, path: null};
+ 
     var file = Titanium.Filesystem.getFile(Titanium.Filesystem.applicationDataDirectory,filename);
     if ( file.exists() ) {
         file_obj.path = Titanium.Filesystem.applicationDataDirectory+Titanium.Filesystem.separator;
-        fn_end(file_obj);
+        if(fn_end) fn_end(file_obj);
     }
     else {
         if ( Titanium.Network.online ) {
@@ -40,10 +41,10 @@ function get_remote_file(filename, url, fn_end, fn_progress ) {
                     f.write(this.responseData);
                     file_obj.path = Titanium.Filesystem.applicationDataDirectory+Titanium.Filesystem.separator;
  
-                }else{
+                } else{
                     file_obj.error = 'file not found'; // to set some errors codes
                 }
-                fn_end(file_obj);
+                if(fn_end) fn_end(file_obj);
             };
             c.ondatastream = function(e)
             {
@@ -52,14 +53,14 @@ function get_remote_file(filename, url, fn_end, fn_progress ) {
             c.error = function(e)
             {
                 file_obj.error = e.error;
-                fn_end(file_obj);
+                if(fn_end) fn_end(file_obj);
             };
             c.open('GET',url);
             c.send();           
         }
         else {
             file_obj.error = 'no internet';
-            fn_end(file_obj);
+            if(fn_end) fn_end(file_obj);
         }
     }
 };

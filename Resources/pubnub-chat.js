@@ -21,6 +21,7 @@ var userObject = {id:acs.getUserId(),fbId: acs.getUserFbId(),imageUrl: acs.getUs
 var adminUserObject = {id: '', imageUrl: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png'}; //for the greet message
 var historyMessages = [];
 var lastHistoryLoadedIndex = 0;
+var totalHistoryMessages = 0;
 
 Ti.App.Chat = function(setup) {
     
@@ -124,7 +125,7 @@ Ti.App.Chat = function(setup) {
 	var loadHistoryButton = Ti.UI.createButton({
 		width: '90%',
 		height: 25,
-		title: 'Load Earlier Messages'
+		title: 'Load Earlier Messages',
 	});
 	loadHistoryMessagesRow.add(loadHistoryButton);
 	
@@ -207,6 +208,7 @@ Ti.App.Chat = function(setup) {
 			}, function(messages) {
 			    // Show History
 			    Ti.API.info(messages);
+				totalHistoryMessages = messages.length;
 				for(var i = messages.length -1;i >= 0; i--) {
 					messageObj = {
 						text: messages[i].text,
@@ -218,7 +220,9 @@ Ti.App.Chat = function(setup) {
 				}
 				// add in the last 10 messages
 				var numMessagesToLoad = 10; 
-				if(messages.length < 10) numMessagesToLoad = messages.length;
+				if(messages.length < 10) {
+					numMessagesToLoad = messages.length;
+				}
 				for(var i = 0; i < numMessagesToLoad -1;i++) {
 					var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture'};
 					var isYourMessage = false;
@@ -226,11 +230,28 @@ Ti.App.Chat = function(setup) {
 					var newChatRow = new ChatMessageTableViewRow(historyMessages[i].text,historyUserObj,isYourMessage);
            			chatMessagesTableView.insertRowAfter(0,newChatRow);
 				}
-				lastHistoryLoadedIndex = numMessagesToLoad;
+				lastHistoryLoadedIndex = numMessagesToLoad - 1;
 			});
 		} else {
 			//continue...adding from the last inserted
-			
+			var nextHistoryLoadedIndex = lastHistoryLoadedIndex + 1; 	
+			if(nextHistoryLoadedIndex >= historyMessages.length) {
+				alert("No more chat history");
+				loadHistoryButton.enabled = false;
+			} else {
+				var historyIndexToLoadTo = nextHistoryLoadedIndex + 9; 
+				if(historyIndexToLoadTo >= historyMessages.length)
+					historyIndexToLoadTo = historyMessages.length - 1;
+				lastHistoryLoadedIndex = historyIndexToLoadTo; 
+				
+				for(var i = nextHistoryLoadedIndex; i <= historyIndexToLoadTo;i++) {
+					var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture'};
+					var isYourMessage = false;
+					if(historyMessages[i].senderFbId === userObject.fbId) isYourMessage = true;
+					var newChatRow = new ChatMessageTableViewRow(historyMessages[i].text,historyUserObj,isYourMessage);
+	          		chatMessagesTableView.insertRowAfter(0,newChatRow);
+				}
+			}				
 		}
     });
     

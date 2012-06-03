@@ -17,7 +17,7 @@ exports.pointACS_fetchedPoint = function(_id) {
 		Ti.App.fireEvent('pointsDbLoaded',{fetchedPoint:point});
     } 
     else {
-        alert('Error:\\n' +
+        alert('pointACS_fetchedPoint Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});
@@ -38,7 +38,7 @@ exports.pointACS_createPoint = function(_userID,_point,_earnedby,_objID){
 	        Ti.API.info('pointsCreated Success:');
 	        Ti.App.fireEvent('createPointDB',{fetchedPoint:curPoint});
 	    } else {
-	        alert('Error:\\n' +
+	        alert('pointACS_createPoint Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

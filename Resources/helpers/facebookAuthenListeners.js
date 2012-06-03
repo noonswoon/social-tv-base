@@ -31,7 +31,7 @@ function facebookAuthenCallback(e) {
 				   }
 			    });
 			} else {
-		        Ti.API.info('Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
+		        Ti.API.info('facebookAuthenCallback Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
 			}
 		});
 	} else if (e.error) {

@@ -57,7 +57,7 @@ var EnterUsernameWindow = function() {
 				    }
 				});
 			} else if (e.error) {
-		        Ti.API.info(e.error);
+		        Ti.API.info('EnterUsernameWindow error: '+e.error);
 		    } else {
 		        Ti.API.info('Unknown response');
 		    }

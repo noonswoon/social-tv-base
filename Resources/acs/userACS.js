@@ -2,7 +2,7 @@
 exports.userACS_fetchAllUser = function(_myusername){
 	Cloud.Users.query({
     page: 1,
-    per_page: 5,
+    per_page: 20,
 	where: {username: {"$ne": _myusername}
   }
 }, function (e) {
@@ -17,7 +17,7 @@ exports.userACS_fetchAllUser = function(_myusername){
        //  alert('calling userLoaded');
            Ti.App.fireEvent('userLoaded',{fetchedUsers:userCollection});
     } else {
-        alert('Error:\\n' +
+        alert('userACS_fetchAllUser Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     }
 });

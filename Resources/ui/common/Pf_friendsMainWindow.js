@@ -50,7 +50,7 @@ FriendsMainView = function(_parentWindow){
 	});
 	
 	var editFriends = Titanium.UI.createButton({
-	systemButton:Titanium.UI.iPhone.SystemButton.EDIT
+		systemButton:Titanium.UI.iPhone.SystemButton.EDIT
 	});
 	self.setRightNavButton(editFriends);
 	editFriends.addEventListener('click',function(){

@@ -29,7 +29,7 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 			}
 	        Ti.App.fireEvent("topicsLoadedComplete",{topicsOfProgram:topicsOfProgram});
 	    } else {
-	        Ti.API.info('Fetching Topic Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        Ti.API.info('topicACS_fetchAllTopicsOfProgramId Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
 }
@@ -46,7 +46,7 @@ exports.topicACS_create = function(_title,_programId,_localId) {
 		    	Ti.API.info('Posting Success: id: ' + post.id);
 		    	Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
 		    } else {
-		        Ti.API.info('Posting Error: '+((e.error && e.message) || JSON.stringify(e)));
+		        Ti.API.info('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
 		   	}
 		}
 	);

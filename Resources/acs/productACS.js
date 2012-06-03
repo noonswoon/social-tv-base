@@ -13,7 +13,7 @@ exports.productACS_fetchedAllProducts = function() {
         Ti.App.fireEvent('fetchedAllProduct',{fetchedAllProduct:product});
     } 
     else {
-        alert('Error:\\n' +
+        alert('productACS_fetchedAllProducts Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});

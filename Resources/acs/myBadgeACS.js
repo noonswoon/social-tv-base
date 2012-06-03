@@ -17,7 +17,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
 		Ti.App.fireEvent('myBadgesLoaded',{fetchedMyUnlockBadges:myBadges});
     } 
     else {
-        alert('Badge Module Error:\\n' +
+        alert('myBadgeACS-> fetchedBadge Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});
@@ -38,7 +38,7 @@ exports.myBadgeACS_createNewBadge = function(_userID,_badgeID){
 			badgeID: badgeUnlock.badge_id
 			});	        
 	    } else {
-	        alert('Error:\\n' +
+	        alert('myBadgeACS->createNewBadge: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

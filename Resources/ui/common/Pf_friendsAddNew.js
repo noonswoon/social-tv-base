@@ -3,11 +3,11 @@ FriendsAddNewView = function(){
 		backgroundColor:'#fff',
 		title: "Add Friends",
 	});
+	
 	var addNewTableView = Ti.UI.createTableView({
 	});
 //USER TABLE/////////////////////////////////////////
-	var userName = 'titaniummick';
-	
+	var userName = acs.getUserLoggedIn()['username'];
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
 	var userACS = require('acs/userACS');
 	
@@ -20,7 +20,7 @@ FriendsAddNewView = function(){
 			var userRow = new tableViewRow(curUser,'addNew');
 			tempUsers.push(userRow);
 		};
-	addNewTableView.setData(tempUsers);
+		addNewTableView.setData(tempUsers);
 	});
 	
 	addNewTableView.addEventListener('click',function(e){

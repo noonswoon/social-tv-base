@@ -183,12 +183,13 @@ var ProfileHeaderView = function(_parentWindow){
 		});
 		// count
 		var columnFriendCount = Ti.UI.createLabel({
-			text: '',
+			text: 'aa',
 			font: {fontSize: 20, fontStyle: 'bold'},
 			color: '#fff',
 			shadowColor: '#999',
 			height: 30,
-			bottom: 10
+			bottom: 10,
+			backgroundColor: 'red'
 		});
 
 		columnFriendCount.addEventListener('click',function(){

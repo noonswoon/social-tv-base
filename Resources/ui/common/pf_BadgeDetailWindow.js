@@ -1,4 +1,4 @@
-BadgeView = function (_badge){
+BadgeDetailWindow = function (_badge){
 
 	var self = Ti.UI.createWindow({
 		top: 0,
@@ -77,8 +77,6 @@ BadgeView = function (_badge){
 			badgeDesc.text = '';
 		}
 	};
-	
 	return self;
-		
 }
-module.exports = BadgeView;
+module.exports = BadgeDetailWindow;

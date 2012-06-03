@@ -15,6 +15,7 @@ exports.getUserLoggedIn = function() {
 
 exports.setUserLoggedIn = function(user) {
 	currentUser = user;
+	Ti.API.info("currentLoggedInUser: "+JSON.stringify(currentUser));
 };
 
 exports.getUserId = function() {
@@ -68,7 +69,7 @@ exports.login = function(usernameOrEmail, password, callback) {
 			Ti.API.info('user = '+JSON.stringify(e));
 			callback(loggedIn);
 		} else {
-			Ti.API.info('Error:\\n' + ((e.error &&e.message) || JSON.stringify(e)));
+			Ti.API.info('acs-> Cloud.Users.login Error:\\n' + ((e.error &&e.message) || JSON.stringify(e)));
 			loggedIn = false;
 			currentUser = null;
 			callback(loggedIn);
@@ -137,7 +138,7 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 				);
 			}    	
 	    } else {
-	        alert('Error:\\n' +
+	        alert('acs-> createUser Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

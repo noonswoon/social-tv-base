@@ -1,23 +1,24 @@
 var ProfileDetailView = function(_parent){
 	
 ///MENU//////////////////////////////////////////////////////////
-		var profileMenu = Ti.UI.createView({
-			height: 40,
-		 backgroundGradient: {
-        	type: 'linear',
+	var profileMenu = Ti.UI.createView({
+		height: 40,
+		backgroundGradient: {
+			type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
         	endPoint: { x: '0%', y: '100%' },
         	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]},
 		});
-		var profileTab = Titanium.UI.iOS.createTabbedBar({
-			labels:['Stats', 'Activity', 'Badges', 'Rewards'],
-			backgroundColor:'#5baad1',
-			style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
-			height:30,
-			width:300,
-			index:0
-		});	
-		profileMenu.add(profileTab);
+		
+	var profileTab = Titanium.UI.iOS.createTabbedBar({
+		labels:['Stats', 'Activity', 'Badges', 'Rewards'],
+		backgroundColor:'#5baad1',
+		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
+		height:30,
+		width:300,
+		index:0
+	});	
+	profileMenu.add(profileTab);
 		
 ///DETAIL//////////////////////////////////////////////////////////
 	var detail = Ti.UI.createTableViewSection();
@@ -40,14 +41,15 @@ var ProfileDetailView = function(_parent){
 	
 ///////////////////////////////////////////////////////////////////
 	var ProfileStats = require('ui/common/Pf_ProfileDetails_Stats');
-	var profileStats = new ProfileStats(_parent);
 	var ProfileActivity = require('ui/common/Pf_ProfileDetails_Activity');
-	var profileActivity = new ProfileActivity(_parent);
 	var ProfileBadge = require('ui/common/Pf_ProfileDetails_Badge');
-	var profileBadge = new ProfileBadge(_parent);	
 	var ProfileReward = require('ui/common/Pf_ProfileDetails_Reward');
-	var profileReward = new ProfileReward(_parent);
-		
+	
+	var profileStatsView = new ProfileStats(_parent);
+	var profileActivityView = new ProfileActivity(_parent);
+	var profileBadgeView = new ProfileBadge(_parent);	
+	var profileRewardView = new ProfileReward(_parent);
+			
 	profileTab.addEventListener('click',function(e){
 		for (var i in profileDetailScroll.children){
 			if (profileDetailScroll.children.hasOwnProperty(i)) {
@@ -56,23 +58,23 @@ var ProfileDetailView = function(_parent){
 		}			
 		
 		if(e.index==0){
-			profileDetailScroll.add(profileStats);}
+			profileDetailScroll.add(profileStatsView);}
 		else if (e.index==1) {
-			profileDetailScroll.add(profileActivity);}
+			profileDetailScroll.add(profileActivityView);}
 		else if (e.index==2) {
-			profileDetailScroll.add(profileBadge);}	
+			profileDetailScroll.add(profileBadgeView);}	
 		else{
-			profileDetailScroll.add(profileReward);}
+			profileDetailScroll.add(profileRewardView);}
 	});		
 		
-	profileDetailScroll.add(profileStats);
-	//profileDetailScroll.add(profileBadge);
+	profileDetailScroll.add(profileStatsView);
+	//profileDetailScroll.add(profileBadgeView);
 	profileDetail.add(profileDetailScroll);
 	
 	detail.headerView = profileMenu;
 	detail.add(profileDetail);
 
-return detail;
+	return detail;
 }
 
 module.exports = ProfileDetailView;

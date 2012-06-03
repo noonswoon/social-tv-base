@@ -18,7 +18,7 @@ exports.leaderACS_fetchedRank = function(_id){
 		Ti.App.fireEvent('leaderDBLoaded',{fetchedLeader:leaders});
     } 
     else {
-        alert('Error:\\n' +
+        alert('leaderboardACS-> fetchedRank: Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});

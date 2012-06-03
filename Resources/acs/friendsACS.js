@@ -23,8 +23,7 @@ exports.searchFriend = function(_userID){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.debug(e.error);
-	        alert('error');
+	        alert('friendsACS->searchFriend: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -43,8 +42,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.debug(e.error);
-	        alert('error');
+	        alert('friendsACS->addFriend: Error: '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -68,8 +66,7 @@ exports.approveFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.debug(e.error);
-	        alert('error');
+	         alert('friendsACS->approveFriend: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -107,8 +104,7 @@ exports.showFriendsRequest = function(){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.debug(e.error);
-	        alert('error');
+	        alert('friendsACS->showFriendsRequest: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -127,8 +123,7 @@ exports.removedFriendFromACS = function(user_id){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.debug(e.error);
-	        alert('error');
+			 alert('friendsACS->removedFriendFromACS: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -161,7 +156,7 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":{"$in":['+allProgramsIDStr+']},"user_id":{"$in":['+allFriendsIDStr+']}}';
 
-	Ti.API.info(url);
+	//Ti.API.info(url);
 	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
@@ -182,8 +177,7 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.debug(e.error);
-	        alert('error');
+			alert('friendsACS->friendsCheckins: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});

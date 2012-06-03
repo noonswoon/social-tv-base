@@ -46,7 +46,7 @@ if (Ti.version < 1.8 ) {
 		if (e.success) {
 			acs.setUserLoggedIn(e.users[0]);
 			acs.setLoggedInStatus(true);
-			//Ti.API.info('should go to tab group page');
+			
 			var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 			var maintabgroup = new ApplicationTabGroup();
 			maintabgroup.open();

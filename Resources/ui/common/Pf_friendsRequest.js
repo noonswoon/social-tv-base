@@ -23,8 +23,7 @@ FriendsAddNewView = function(){
 
 /*		requestTableView.addEventListener('click',function(e){
 		if(e.source.title==="Approve")
-		//alert("delete row");
-		requestTableView.deleteRow(e.index);
+			requestTableView.deleteRow(e.index);
 		//need to check if e.source..xxx has the content of 'x' or not
 		//if it is, remove that row
 	});*/

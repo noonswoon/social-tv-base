@@ -251,25 +251,20 @@ function isPointInPoly(poly, pt)
 				alert('Check in to activate the control');
 			}
 			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				alert('me');
 				meButton.image = 'images/checkin/checkin_me_enable.png';
 			}
 		}
 		if(checkinButton.enabled===false){			
 			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
-				alert('message board');
 				boardButton.image = 'images/checkin/checkin_board_enable.png';
 			}
 			if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				alert('me');
 				meButton.image = 'images/checkin/checkin_me_enable.png';
 			}
 			if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
-				alert('product');
 				productButton.image = 'images/checkin/checkin_products_enable.png';
 			}
 			if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
-				alert('chat');
 				chatButton.image = 'images/checkin/checkin_chat_enable.png';
 			}		
 		}

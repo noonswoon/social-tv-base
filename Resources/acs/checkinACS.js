@@ -56,7 +56,7 @@ exports.checkinACS_createCheckin = function(_eventID){
 	        var programId = e.checkins[0].event.custom_fields.program_id;
 	        Ti.App.fireEvent('createCheckinDB',{fetchedACheckin:checkin});
 	    } else {
-	        alert('Error:\\n' +
+	        Ti.API.info('checkinACS_createCheckin Error: ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
@@ -78,7 +78,7 @@ exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId) {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
-	        alert('event error');
+	        Ti.API.info('checkinACS_getTotalNumCheckinOfProgram error');
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

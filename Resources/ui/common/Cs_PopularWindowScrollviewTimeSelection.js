@@ -30,7 +30,6 @@ var PopularWindowSrcollviewTimeSelection = function(){
 
 		hoursArray[i].addEventListener('click', function(e) {
 			var timeIndex = e.source.timeIndex;
-			alert(timeIndex);
 			Ti.App.fireEvent('updatePopularProgramAtTime',{timeIndex:timeIndex});
 		});
 		selectionView.add(hoursArray[i]);

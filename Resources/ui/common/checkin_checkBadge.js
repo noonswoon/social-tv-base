@@ -30,7 +30,6 @@ var checkinBadgeView = function(){
 	});
 	
 	checkinButton.addEventListener('click',function(){
-		//alert('Checking in..');
 		CheckinACS.checkinACS_createCheckin(eventID);
 	});
 	

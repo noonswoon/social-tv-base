@@ -155,8 +155,7 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 				);
 			}    	
 	    } else {
-	        alert('acs-> createUser Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
+	        alert('acs -> createUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
 };

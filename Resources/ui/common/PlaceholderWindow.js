@@ -222,12 +222,11 @@ var PlaceholderWindow = function() {
 	graphAPI.addEventListener('click', function() {
 		Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function(e) {
 		    if (e.success) {
-		        alert(e.result);
-		        alert(JSON.parse(e.result).email);
+		        Ti.API.info(JSON.stringify(e));
 		    } else if (e.error) {
-		        alert(e.error);
+		       	Ti.API.info(JSON.stringify(e));
 		    } else {
-		        alert('Unknown response');
+		        Ti.API.info('Unknown response');
 		    }
 		});
 	});

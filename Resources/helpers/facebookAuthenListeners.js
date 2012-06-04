@@ -1,6 +1,6 @@
 function facebookAuthenCallback(e) {
 	if (e.success) {
-		alert('facebookAuthenListners.js FB login event cb');
+		//alert('facebookAuthenListners.js FB login event cb');
 		//Successfully login to facebook
 		//1. check if this fb user already has an account >> need to do this just to make Friend Module works
 		//2. if so, get the email address and authtoken (as a password) and then login 

@@ -15,7 +15,7 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 //		Ti.App.fireEvent('myBadgesLoaded',{fetchedMyUnlockBadges:myBadges});
     } 
     else {
-        alert('Error:\\n' +
+        Ti.API.info('activityACS_fetchedMyActivity Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});

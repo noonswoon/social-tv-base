@@ -11,12 +11,11 @@ db.close();
 // create data for local database
 exports.friendModel_updateFriendsFromACS = function(_friendsCollection) {
 	var db = Ti.Database.open('Chatterbox');
-	var result = db.execute('DELETE FROM friends');
+	db.execute('DELETE FROM friends');
 	for(var i=0;i < _friendsCollection.length; i++) {
 		var curFriend = _friendsCollection[i];
 		db.execute("INSERT INTO friends(number,my_id,friend_id,username,first_name,last_name,email) VALUES(?,?,?,?,?,?,?)", null,curFriend.my_id,curFriend.friend_id,curFriend.username,curFriend.first_name,curFriend.last_name,curFriend.email);
 	}
-	result.close();
 	db.close();
 	Ti.App.fireEvent("friendsDbUpdated");
 };

@@ -1,4 +1,4 @@
-var EnterUsernameWindow = function() {
+var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		
 	//UI STUFF
 	var lWin = Ti.UI.createWindow({
@@ -25,48 +25,53 @@ var EnterUsernameWindow = function() {
 		height:40,
 	});
 	
-	
 	//ADDING UI COMPONENTS TO WINDOW
 	lWin.add(usernameTextField);
 	lWin.add(enterUsername);
 
-	//EVENTS REGISTERING		
+	//EVENTS REGISTERING
 	enterUsername.addEventListener('click', function() {
 		var providedUsername = usernameTextField.value;
-		
-		//update user-provided username and email address from graph api
-		Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function(e) {
+		Cloud.Users.create({
+		    email: _email,
+		    username: providedUsername,
+		    first_name: _firstName,
+		    last_name: _lastName,
+		    password: (Ti.Facebook.accessToken).substr(0,20),
+		    password_confirmation: (Ti.Facebook.accessToken).substr(0,20)
+		}, function (e) {
 		    if (e.success) {
-		    	var fbGraphObj = JSON.parse(e.result)
-		        var email = fbGraphObj.email;
-		        //need to ask explicitly for username from the user
-		        //UPDATING THE ACCOUNT WITH EMAIL PROVIDED BY FB GRAPH API
-		        Cloud.Users.update({username: providedUsername,email: email} , function (e) {
+		        //Ti.API.info('create user successful: '+e.users.length);
+				//Ti.API.info('user created: '+JSON.stringify(e));
+				
+				//link with third party account
+				Cloud.SocialIntegrations.externalAccountLink({
+				    type: 'facebook',
+				    token: Ti.Facebook.accessToken
+				}, function (e) {
 				    if (e.success) {
-				        acs.setUserLoggedIn(e.users[0]);
+				    	//Ti.API.info('link external acct successful: '+e.users.length);
+				    	//Ti.API.info('user created: '+JSON.stringify(e));
+				    	acs.setUserLoggedIn(e.users[0]);
 						acs.setLoggedInStatus(true);
-						//TODO: future --> close the enterUsername window before openning the applicationTabGroup
-				        var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');					
-						new ApplicationTabGroup().open();
+						
+						var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+						var maintabgroup = new ApplicationTabGroup();
+						maintabgroup.open();
 				    } else {
-				    	var a = Titanium.UI.createAlertDialog({
-									title:'Please try again',
-									message:e.message
-								});
-						a.show();
+				        alert('Linking external acct Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 				    }
 				});
-			} else if (e.error) {
-		        Ti.API.info('EnterUsernameWindow error: '+e.error);
 		    } else {
-		        Ti.API.info('Unknown response');
+		    	var a = Titanium.UI.createAlertDialog({
+		       				title:'Please try again',
+		         			message:e.message
+		       			});
+		       	a.show();
 		    }
 		});
-	});
-	
-	
+	});		
 	return lWin;
-	
 };
 
 module.exports = EnterUsernameWindow;

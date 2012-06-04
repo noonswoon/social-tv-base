@@ -15,7 +15,7 @@ exports.getUserLoggedIn = function() {
 
 exports.setUserLoggedIn = function(user) {
 	currentUser = user;
-	Ti.API.info("currentLoggedInUser: "+JSON.stringify(currentUser));
+	//Ti.API.info("currentLoggedInUser: "+JSON.stringify(currentUser));
 };
 
 exports.getUserId = function() {
@@ -37,7 +37,24 @@ function getUserFbId() {
 	}
 	return fbId;
 };
+
 exports.getUserFbId = getUserFbId; 
+
+exports.getUserFbToken = function() {
+	if(currentUser.external_accounts === undefined) return "";
+	
+	var fbToken = "";
+	var numExternalAccounts = currentUser.external_accounts.length;
+	
+	for(var i=0;i < numExternalAccounts; i++) {
+		var curExternalAccount = currentUser.external_accounts[0];
+		if(curExternalAccount.external_type === "facebook") {
+			fbToken = curExternalAccount.token;
+			break;
+		}
+	}
+	return fbToken;
+};
 
 exports.getUserImage = function() {
 	var fbId = getUserFbId(); 

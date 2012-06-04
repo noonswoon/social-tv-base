@@ -19,7 +19,7 @@ exports.fetchedBadges = function() {
 			Ti.App.fireEvent('badgeLoaded',{fetchedBadges:badges});
 	    }
 	    else {
-	        alert('Error:\\n' +
+	        Ti.API.info('badgesACS fetchedBadges Error: ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

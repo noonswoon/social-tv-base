@@ -44,14 +44,36 @@ if (Ti.version < 1.8 ) {
 
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
-			acs.setUserLoggedIn(e.users[0]);
-			acs.setLoggedInStatus(true);
+			Ti.API.info("already logged in: "+JSON.stringify(e));
+			var userEmail = e.users[0].email;
+			Ti.API.info('userEmail: '+userEmail);
 			
-			var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-			var maintabgroup = new ApplicationTabGroup();
-			maintabgroup.open();
+			Cloud.Users.logout(function (e) {
+			    if (e.success) {
+			    	//Ti.API.info('logging out to login again...'); //<--just to make Friends Module works
+			    	Cloud.Users.login({
+						login: userEmail,
+					    password: (Ti.Facebook.accessToken).substr(0,20)
+					}, function (e) {
+						if (e.success) {
+							//Ti.API.info("logging again.."+e.users.length);
+							acs.setUserLoggedIn(e.users[0]);
+							acs.setLoggedInStatus(true);
+									
+							var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+							var maintabgroup = new ApplicationTabGroup();
+							maintabgroup.open();
+						} else {
+							Ti.API.info("relogging in failed: "+e.error);
+					    }
+					}); 
+			    } else {
+			        Ti.API.info('Logout Error:\\n' +
+			            ((e.error && e.message) || JSON.stringify(e)));
+			    }
+			});
 	    } else {
-	    	//Ti.API.info("should go to login page");
+	    	Ti.API.info("should go to login page");
 			Ti.Facebook.logout(); //just to be save
 			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
 			var loginwin = new LoginFbOnlyWindow();

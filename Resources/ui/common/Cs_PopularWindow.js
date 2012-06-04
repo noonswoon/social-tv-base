@@ -12,6 +12,7 @@ function PopularWindow(_parent) {
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
 			Ti.App.fireEvent("showDiscoveryPage");
+			hidePreloader(self);
 		}
 	}
 	Ti.App.addEventListener('tvprogramsTitlesLoaded',function() {
@@ -125,6 +126,7 @@ function PopularWindow(_parent) {
 	self.add(programListTable);
 	self.hideNavBar();
 	
+	showPreloader(self,'Loading...');
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
 	return self;
 }

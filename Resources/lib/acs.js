@@ -62,6 +62,18 @@ exports.getUserImage = function() {
 	else return "https://graph.facebook.com/"+fbId+"/picture"
 }
 
+exports.getUserImageNormal = function() {
+	var fbId = getUserFbId(); 
+	if(fbId == 0 || fbId == -1) return "";
+	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
+}
+
+exports.getUserImageLarge = function() {
+	var fbId = getUserFbId(); 
+	if(fbId == 0 || fbId == -1) return "";
+	else return "https://graph.facebook.com/"+fbId+"/picture?type=large"
+}
+
 exports.setLoggedInStatus = function(isLoggedIn) {
 	loggedIn = isLoggedIn;
 };

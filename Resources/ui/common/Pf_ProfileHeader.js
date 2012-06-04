@@ -3,8 +3,8 @@ var ProfileHeaderView = function(_parentWindow){
 	var user_id = acs.getUserId();
 //	var user_id = String(acs.getUserLoggedIn().id);
 	var totalCheckins=0;
-	var	profileDataName= 'Titanium Mick';
-	var	profileDataImg = 'images/kuma100x100.png';
+	var	profileDataName= acs.getUserLoggedIn().first_name + ' '+ acs.getUserLoggedIn().last_name;
+	var	profileDataImg = acs.getUserImageNormal();
 		
 	var CheckinACS = require('acs/checkinACS');		
 	var FriendACS = require('acs/friendsACS');

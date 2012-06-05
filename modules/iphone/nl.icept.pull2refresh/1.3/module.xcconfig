@@ -1,0 +1,31 @@
+//
+// PLACE ANY BUILD DEFINITIONS IN THIS FILE AND THEY WILL BE 
+// PICKED UP DURING THE APP BUILD FOR YOUR MODULE
+//
+// see the following webpage for instructions on the settings
+// for this file:
+// http://developer.apple.com/mac/library/documentation/DeveloperTools/Conceptual/XcodeBuildSystem/400-Build_Configurations/build_configs.html
+// 
+
+//
+// How to add a Framework (example)
+//
+// OTHER_LDFLAGS=$(inherited) -framework Foo
+//
+// Adding a framework for a specific version(s) of iPhone:
+//
+// OTHER_LDFLAGS[sdk=iphoneos4*]=$(inherited) -framework Foo
+// OTHER_LDFLAGS[sdk=iphonesimulator4*]=$(inherited) -framework Foo
+//
+//
+// How to add a compiler define:
+//
+// OTHER_CFLAGS=$(inherited) -DFOO=1
+//
+//
+// IMPORTANT NOTE: always use $(inherited) in your overrides
+// 
+
+OTHER_CFLAGS=$(inherited) -DUSE_TI_API -DUSE_TI_FILESYSTEM -DUSE_TI_UTILS -DUSE_TI_UI -DUSE_TI_UILABEL -DUSE_TI_UIACTIVITYINDICATOR -DUSE_TI_UIIPHONE -DUSE_TI_UIIPHONEACTIVITYINDICATORSTYLE -DUSE_TI_UI2DMATRIX -DUSE_TI_UIANIMATION
+
+GCC_PREPROCESSOR_DEFINITIONS=$(inherited) USE_TI_API USE_TI_FILESYSTEM USE_TI_UTILS USE_TI_UI USE_TI_UILABEL USE_TI_UIACTIVITYINDICATOR USE_TI_UIIPHONE USE_TI_UIIPHONEACTIVITYINDICATORSTYLE USE_TI_UI2DMATRIX USE_TI_UIANIMATION

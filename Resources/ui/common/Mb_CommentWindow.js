@@ -243,7 +243,18 @@ function CommentWindow(_topicId) {
 	
 	//PAGE LOGIC/CONTROLLER
 	showPreloader(self,'Loading...');
-	
+
+	//pull2refresh module
+	pullToRefreshModule.addASyncPullRefreshToTableView(commentsTable, function() {
+		setTimeout(function() {
+			//tableData.push({ title: 'Row ' + (tableData.length+1) });
+			//tableView.setData(tableData);
+			
+			//indicate the refresh is finished, since this is a async refresh
+			alert('done loading acs');
+			commentsTable.refreshFinished();
+		}, 2000);
+	});	
 
 	//*** ON-THE-PLANE STUFF 
 	//Comment.contentsDuringOffline();

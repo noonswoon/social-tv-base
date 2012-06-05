@@ -19,9 +19,9 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new SettingWindow();//ChatMainWindow(programDummy);
-	var messageboardwin = new SettingWindow();//new MessageboardMainWindow(1);		
-	var productwin = new SettingWindow();//new ProductMainWindow();
+	var chatwin = ChatMainWindow(programDummy);
+	var messageboardwin = new MessageboardMainWindow(1);		
+	var productwin = new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();
 
 	var tabIndexToComeBack = 0;

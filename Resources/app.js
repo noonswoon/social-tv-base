@@ -22,6 +22,7 @@ var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in 
 
 var acs = require('lib/acs');
 var Cloud = require('ti.cloud');
+var pullToRefreshModule = require('nl.icept.pull2refresh');
 
 var myCurrentCheckinPrograms = ['CH3_0REYA']; //should be reset every hour to empty array
 

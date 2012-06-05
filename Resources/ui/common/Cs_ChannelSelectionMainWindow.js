@@ -12,7 +12,7 @@ function ChannelSelectionMainWindow(){
 	
 	var popularwin = new PopularWindow(self); 
 	var guidewin = null; //new GuideWindow(self);
-	var friendswin = new FriendsWindow();
+	var friendswin = null;// new FriendsWindow();
 
 	var tabBar = Ti.UI.iOS.createTabbedBar({
 		labels: ['Popular','Guide','Friends'],
@@ -37,10 +37,13 @@ function ChannelSelectionMainWindow(){
 				mainView.remove(mainView.children[i]);
 			}
 		}		
+		//TODO: revisit this logic
 		if(e.index==0){
 			mainView.add(popularwin);
 			if(guidewin != null)
 				guidewin._closePopupWindow();
+			if(friendswin != null)
+				friendswin._closePopupWindow();
 		}
 		else if (e.index==1){
 			if(guidewin == null)
@@ -48,9 +51,9 @@ function ChannelSelectionMainWindow(){
 			mainView.add(guidewin);
 		}
 		else if (e.index==2){
+			if(friendswin == null)
+				friendswin = new FriendsWindow();
 			mainView.add(friendswin);
-			if(guidewin != null)
-				guidewin._closePopupWindow();
 		}	
 	});
 	

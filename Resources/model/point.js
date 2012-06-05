@@ -1,6 +1,6 @@
 var db = Ti.Database.open('Chatterbox');
 //db.execute('CREATE TABLE IF NOT EXISTS points(id TEXT PRIMARY KEY, user_id TEXT, point INTEGER, earned_by TEXT, object TEXT);');
-db.execute('CREATE TABLE IF NOT EXISTS leaderboard(user_id TEXT PRIMARY KEY, name TEXT, totalPoint INTEGER);');
+db.execute('CREATE TABLE IF NOT EXISTS leaderboard(id INTEGER PRIMARY KEY, user_id TEXT, name TEXT, totalPoint INTEGER);');
 db.close();
 
 //LEADERBOARD
@@ -19,7 +19,7 @@ exports.pointModel_updateLeadersFromACS = function(_leadersCollection) {
 	for(var i=0;i < _leadersCollection.length; i++) {
 		var curRank = _leadersCollection[i];
 		var name =  curRank.user.first_name +' '+ curRank.user.last_name;
-		db.execute("INSERT INTO leaderboard(user_id, name, totalPoint) VALUES(?,?,?)", curRank.user.id, name, curRank.totalPoint);
+		db.execute("INSERT INTO leaderboard(id, user_id, name, totalPoint) VALUES(NULL,?,?,?)", curRank.user.id, name, curRank.totalPoint);
 	}
 	Ti.API.info('leaderBoard database length: '+ i);
 	db.close();
@@ -55,16 +55,34 @@ exports.pointModel_fetchRank = function() {
 	return fetchedRank;
 };
 
-exports.pointModel_updateLeaderToACS = function(_user_id,_point) {
+exports.pointModel_updateLeaderToACS = function(_point) {
 	var db = Ti.Database.open('Chatterbox');
-	var TotalPoint = db.execute('SELECT totalPoint FROM leaderboard where user_id = ?', _user_id);
-	var currentTotalPoint = Number(TotalPoint.fieldByName('totalPoint'));
-	var update = db.execute('UPDATE leaderboard SET totalPoint = ? where user_id = ?', currentTotalPoint+_point, _user_id);
+	var result = db.execute('SELECT id, totalPoint FROM leaderboard where user_id = ?', _point.user_id);
 	
-	currentTotalPoint.close();
-	update.close();
+	var newId = 0;
+	var isExisted = false;
+	var userPoints = 0;
+	while(result.isValidRow()) {
+		isExisted = true;
+		userPoints = Number(result.fieldByName('totalPoint'));
+		newId = Number(result.fieldByName('id'));
+		break;
+	}
+	
+	if(isExisted) {
+		db.execute('UPDATE leaderboard SET totalPoint = ? where user_id = ?', userPoints+_point.point, _point.user_id);
+	} else {
+		//insert something here
+		db.execute("INSERT INTO leaderboard(id, user_id, name, totalPoint) VALUES(NULL,?,?,?)", _point.user_id, _point.name, _point.point);		
+		//get newId
+		newId = db.lastInsertRowId;
+	}
+
+	result.close();
 	db.close();
-	return fetchedRank;
+	Ti.App.fireEvent("LeaderDbUpdated");
+	return newId;
+	//return fetchedRank;
 };
 
 // create data for local database

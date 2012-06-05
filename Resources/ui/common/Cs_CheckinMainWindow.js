@@ -331,8 +331,12 @@ function isPointInPoly(poly, pt)
 	
 	checkinButton.addEventListener('click',function(){
 		alert('you have check in');
-		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
-		myCurrentCheckinPrograms.push(_datafromrow.programId);
+//		
+		var updateActivity = require('helpers/updateActivity');
+		updateActivity.updateActivity_myDatabase('checkin',_datafromrow);	
+//		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
+//		myCurrentCheckinPrograms.push(_datafromrow.programId);
+	
 		checkinButton.enabled = false;
 		checkinButton.image = 'images/checkin/checkin_check_checked.png';
 		chatButton.image = 'images/checkin/checkin_chat_enable.png';
@@ -340,9 +344,9 @@ function isPointInPoly(poly, pt)
 		boardButton.image = 'images/checkin/checkin_board_enable.png';		
 	});
 
-
+//TODO: make this update to leaderboard and else!!
 	function oneCheckinUpdatedCallback(_checkinID) {
-		PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
+		//PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
 		// checkinCount.text = CheckinModel.checkins_count(userID);
 		BadgeCondition.badgeCondition_check();
 		

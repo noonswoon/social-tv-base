@@ -22,7 +22,7 @@ var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in 
 var acs = require('lib/acs');
 var Cloud = require('ti.cloud');
 
-var myCurrentCheckinPrograms = ['CH3_0REYA']; //should be reset every hour to empty array
+var myCurrentCheckinPrograms = ['CH9_CSINY','CH7_0LOST']; //should be reset every hour to empty array
 
 //bootstrap and check dependencies
 if (Ti.version < 1.8 ) {
@@ -50,13 +50,13 @@ if (Ti.version < 1.8 ) {
 			
 			Cloud.Users.logout(function (e) {
 			    if (e.success) {
-			    	//Ti.API.info('logging out to login again...'); //<--just to make Friends Module works
+			    	Ti.API.info('logging out to login again...'); //<--just to make Friends Module works
 			    	Cloud.Users.login({
 						login: userEmail,
 					    password: (Ti.Facebook.accessToken).substr(0,20)
 					}, function (e) {
 						if (e.success) {
-							//Ti.API.info("logging again.."+e.users.length);
+							Ti.API.info("logging again.."+e.users.length);
 							acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
 									

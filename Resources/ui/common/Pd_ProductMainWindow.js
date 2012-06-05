@@ -4,6 +4,7 @@ function ProductMainWindow() {
 	var ProductACS = require('acs/productACS');
 	var Checkin = require('model/checkin');
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
+	var TVProgram = require('model/tvprogram');
 	
 	var dataForTab = [];
 	
@@ -73,29 +74,25 @@ function ProductMainWindow() {
 	//Add UI
 	shopSelectorPopupWin.add(tableViewForTab);
 
+
 	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-			var ProgramIdOfCheckin = myCurrentCheckinPrograms[i];
-			var programOfCheckin = new ProductTabTableViewRow(ProgramIdOfCheckin[i]);
-			dataForTab.push(programOfCheckin);
-		}
+		var programCheckinId = myCurrentCheckinPrograms[i];
+		var programCheckinName = TVProgram.TVProgramModel_getProgramNameWithProgramId(programCheckinId);
+			// for(var i=0;i<programOfCheckin.length;i++){
+			//	var prgChk = programOfCheckin[0];
+		var checkinProgramRow = new ProductTabTableViewRow(programCheckinId, programCheckinName);
+		dataForTab.push(checkinProgramRow);
+			
+	}
 	tableViewForTab.setData(dataForTab);
 
+	
 	var productTableView = Ti.UI.createTableView({
 		top: 40
 	});
 	self.add(productTableView);
-	
-	var viewRowData = [];
-	ProductACS.productACS_fetchedAllProducts();
-	Ti.App.addEventListener('fetchedAllProduct', function(e){
-		for(var i=0;i<e.fetchedAllProduct.length;i++){
-			var productOfProgram = e.fetchedAllProduct[i];
-			var row = new ProductMainWindowTableViewRow(productOfProgram);
-			viewRowData.push(row);
-		}
-	productTableView.setData(viewRowData);
-	});
 
+	
 	//EVENT LISTENERS
 	var shopSelectorToggle = true; //true means it closes
 	productSelectProgramButton.addEventListener('click',function(e){
@@ -108,50 +105,29 @@ function ProductMainWindow() {
 			shopSelectorPopupWin.close();
 			self.remove(triangleImage);
 		}
+	}); 
+		
+	tableViewForTab.addEventListener('click',function(e){
+		ProductACS.productACS_fetchedAllProducts(e.row.programId);	
+		showPreloader(self,'Loading...');
 	});
 	
 	
-	//add event listener for each tableviewrow
-	for(var i=0;i<dataForTab.length;i++) {
-		var curChannel = dataForTab[i];
-		curChannel.addEventListener('click', function(e) {
-			var index = e.index;
-			if(index === 0){
-				var ch3 = new ChannelInGuideWindow(index);
-				self.add(ch3);				
-				selectChannelLabel.text = 'CH3';
-			}
-			else if(index === 1){
-				var ch5 = new ChannelInGuideWindow(index);
-				self.add(ch5);
-				selectChannelLabel.text = 'CH5';	
-			}
-			else if(index === 2){
-				var ch7 = new ChannelInGuideWindow(index);
-				self.add(ch7);
-				selectChannelLabel.text = 'CH7';	
-			}
-			else if(index === 3){
-				var ch9 = new ChannelInGuideWindow(index);
-				self.add(ch9);	
-				selectChannelLabel.text = 'CH9';
-			}
-			else if(index === 4){
-				var ch11 = new ChannelInGuideWindow(index);
-				self.add(ch11);	
-				selectChannelLabel.text = 'CH11';
-			}
-			else if(index === 5){
-				var thaiPBS = new ChannelInGuideWindow(index);
-				self.add(thaiPBS);
-				selectChannelLabel.text = 'ThaiPBS';
-			}
-			channelSelectorToggle = true;
-			channelSelectorPopupWin.close();
-			self.remove(triangleImage);
-		});
-	}
-
+	Ti.App.addEventListener('fetchedAllProduct', function(e){
+		var viewRowData = [];
+		for(var i=0;i<e.fetchedAllProduct.length;i++){
+			var productOfProgram = e.fetchedAllProduct[i];
+			var row = new ProductMainWindowTableViewRow(productOfProgram);
+			viewRowData.push(row);
+		}
+		productTableView.setData(viewRowData);
+		shopSelectorToggle = true;
+		shopSelectorPopupWin.close();
+		self.remove(triangleImage);	
+		hidePreloader(self);
+	});	
+	
+	
 	
 	return self;
 }

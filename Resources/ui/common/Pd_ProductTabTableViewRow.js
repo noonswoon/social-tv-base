@@ -1,19 +1,21 @@
-ProductTabTableViewRow = function(){
+ProductTabTableViewRow = function(_programId, _programName){
 
 	var row = Ti.UI.createTableViewRow({
-		height: 50
+		height: 50,
+		programId: _programId,
+		programName: _programName
 	});
 	
-	row.programName = Ti.UI.createLabel({
-		text: 'Test',
+	var programName = Ti.UI.createLabel({
+		text: _programName,
 		textAlign: 'left',
 		left: 120,
 		font:{fontWeight:'bold',fontSize:18},
 		top: 10
 	});
-	row.add(row.programName);
+	row.add(programName);
 
-	row.programImage = Ti.UI.createImageView({
+	var programImage = Ti.UI.createImageView({
 		image: 'dummy.png',
 		top: 5,
 		left: 10,
@@ -21,7 +23,7 @@ ProductTabTableViewRow = function(){
 		width:125,
 		height:40
 	});
-	row.add(row.programImage);
+	row.add(programImage);
 	
 	return row;
 	

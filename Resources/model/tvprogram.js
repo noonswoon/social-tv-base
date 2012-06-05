@@ -60,6 +60,22 @@ exports.TVProgramModel_fetchPrograms = function() {
 	return fetchedPrograms;
 };
 
+
+exports.TVProgramModel_getProgramNameWithProgramId = function(_programId) {
+	//select some stuff from the local db..based on the future filtering
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT name FROM tvprograms WHERE program_id = ? ORDER BY start_time ASC',_programId);
+	var programName = ""
+	while(result.isValidRow()) {
+		programName = result.fieldByName('name');
+		break;
+	}	
+	result.close();
+	db.close();
+	return programName;
+};
+
+
 exports.TVProgramModel_fetchPopularPrograms = function() {
 	var fetchedPrograms = [];
 	var now = moment().format('YYYY-MM-DDTHH:mm:ss');

@@ -7,9 +7,6 @@ var ProfileStatsView = function(){
 	var userRankInfo = [];
 	var	ProfileDataLevelUp;
 	
-//test data			
-	var	ProfileDataName= 'Titanium Mick';
-	var	ProfileDataImg = 'images/kuma100x100.png';
 	var user_id = acs.getUserId();
 
 	var profileStats = Ti.UI.createView({
@@ -29,7 +26,7 @@ var ProfileStatsView = function(){
 	});
 		
 	var myLevelLabel = Ti.UI.createLabel({
-		text: '',
+		text: 'First Login? Nice to meet you:)',
 		font: {fontSize: 16, fontWeight: 'bold'},
 		color: '#53b4df',
 		textAlign: 'left',
@@ -59,6 +56,7 @@ var ProfileStatsView = function(){
 		rightTrackImage:'images/slider/slider_lightbar.png',
 		touchEnabled: false,
     });
+    
 /////////////////////////////////////////////////////////////////////////////
 	//sort from max totalPoint	
 	function totalPointSort(a,b) {
@@ -75,8 +73,11 @@ var ProfileStatsView = function(){
 		expBar.max = ProfileDataLevelUp;
 		expBar_light.max = ProfileDataLevelUp;
 		expBar.value = totalPoints;
+		if(expBar.value === 0){
+   			expBar.thumbImage = 'images/empty_thumb.png';
+   		};
 		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
-		expBar_light.value = (totalPoints+15);
+		expBar_light.value = (totalPoints+10);
 		leaderBoardData = PointModel.pointModel_fetchRank();
     	leaderBoardData.sort(totalPointSort);
     	createLeaderBoardView();
@@ -93,7 +94,7 @@ var ProfileStatsView = function(){
 	});
 
 	var createLeaderBoardView = function(){
-		var myIndex;
+		var myIndex = 0;
 		userRankInfo =[];
 		for(i=0; i<leaderBoardData.length; i++){
 			if(leaderBoardData[i].user_id===user_id){
@@ -104,8 +105,6 @@ var ProfileStatsView = function(){
 		Ti.API.info('myIndex: ' + myIndex);
 
 		for(var i=0; i<leaderBoardData.length; i++){
-			//Ti.API.info(i+': '+leaderBoardData[i].name);
-			
 			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
 			
 			var userRank = Ti.UI.createTableViewRow({
@@ -123,13 +122,13 @@ var ProfileStatsView = function(){
 				color: '#666'
 				});
 			var userRankPicture = Ti.UI.createImageView({
-				image: ProfileDataImg,
+				image: acs.getUserImageNormal(),
 				height: 36,
 				width: 36,
 				borderRadius: 5,
 				left: 40
 				});
-				
+			
 			var userRankName = Ti.UI.createLabel({
 				text: leaderBoardData[i].name,
 				left: 90,
@@ -149,7 +148,7 @@ var ProfileStatsView = function(){
 				font: { fontWeight: 'bold', fontSize: 26},
 				color: '#666'
 			});
-
+		
 			if(i===myIndex){
 				userRankNo.color = '#000';
 				userRankName.color = '#000';
@@ -162,10 +161,11 @@ var ProfileStatsView = function(){
 			userRank.add(userRankScore);
 			userRankInfo.push(userRank);
 		}
-	leaderTable.height = (userRankInfo.length)*userRank.height;
-	leaderTable.data = userRankInfo;
-	leaderTable.bottom = 10;
-	profileStats.height = expSec.height + leaderSec.height;
+		Ti.API.info('hey dog');
+		leaderTable.height = (userRankInfo.length)*45;
+		leaderTable.data = userRankInfo;
+		leaderTable.bottom = 10;
+		profileStats.height = expSec.height + leaderSec.height;
 	};
 	
 	var leaderTable = Ti.UI.createTableView({
@@ -192,6 +192,10 @@ var ProfileStatsView = function(){
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);
 		profileStats.add(leaderSec);
+
+		if(leaderBoardData.length===0){
+			leaderSec.visible = false;
+		};
 
 	return profileStats;
 }

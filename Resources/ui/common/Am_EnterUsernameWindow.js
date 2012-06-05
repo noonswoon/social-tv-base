@@ -44,6 +44,10 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		        //Ti.API.info('user created: '+JSON.stringify(e));
 				
 				//link with third party account
+				//TODO: create leaderBoard
+				var leaderBoardACS = require('acs/leaderBoardACS');
+				leaderBoardACS.leaderACS_createUserInfo(e.users[0].id);
+				//
 				Cloud.SocialIntegrations.externalAccountLink({
 				    type: 'facebook',
 				    token: Ti.Facebook.accessToken

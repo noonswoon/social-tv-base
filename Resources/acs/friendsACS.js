@@ -19,7 +19,11 @@ exports.searchFriend = function(_userID){
 				};
 				friends.push(curFriend);
 			}  	
-	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
+			if(friends.length===0) {
+				emptyFriend = [];
+				Ti.App.fireEvent("friendsLoaded",{fetchedFriends:emptyFriend});
+				}
+	        else Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
@@ -161,19 +165,17 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
-	    		var totalFriendCheckins = responseJSON.meta.total_results;
-	    		
-		      	for (var i=0;i<responseJSON.response.checkins.length;i++) {
-	            var checkins = responseJSON.response.checkins[i];  
-	           
-	            var friendsCheckins ={
-	            	program: checkins.event,
-	            	friend: checkins.user,
-	            }
-	            allFriendsCheckins.push(friendsCheckins);
+	    	var totalFriendCheckins = responseJSON.meta.total_results;	
+		    
+		    for (var i=0;i<responseJSON.response.checkins.length;i++) {
+	           	var checkins = responseJSON.response.checkins[i];  
+		        var friendsCheckins ={
+		           	program: checkins.event,
+		           	friend: checkins.user,
+		          }
+		        allFriendsCheckins.push(friendsCheckins);
 			}  	
-
-		    Ti.App.fireEvent("friendsLoaded",{fetchedAllFriendsCheckins: allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
+			Ti.App.fireEvent("friendsLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout

@@ -5,7 +5,6 @@ function ProfileMainWindow() {
 
 
 	var self = Titanium.UI.createWindow({
-	//	backgroundColor:'#fff',
 		title: "My Profile",
 		barColor:'#398bb0'
 	});

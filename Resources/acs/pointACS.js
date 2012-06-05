@@ -22,7 +22,7 @@ exports.pointACS_fetchedPoint = function(_id) {
     	 }
 			});
 };
-
+//TODO: check this creating point!
 exports.pointACS_createPoint = function(_userID,_point,_earnedby,_objID){
 	Cloud.Objects.create({
 	    classname: 'Points',

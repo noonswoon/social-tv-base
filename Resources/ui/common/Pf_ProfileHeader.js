@@ -1,7 +1,6 @@
 var ProfileHeaderView = function(_parentWindow){
 //HARD CODE	
 	var user_id = acs.getUserId();
-//	var user_id = String(acs.getUserLoggedIn().id);
 	var totalCheckins=0;
 	var	profileDataName= acs.getUserLoggedIn().first_name + ' '+ acs.getUserLoggedIn().last_name;
 	var	profileDataImg = acs.getUserImageNormal();
@@ -12,6 +11,7 @@ var ProfileHeaderView = function(_parentWindow){
 	var myBadgeACS = require('acs/myBadgeACS');
 	var LeaderACS = require('acs/leaderBoardACS');
 	var BadgesACS = require('acs/badgesACS');
+	var ActivityACS = require('acs/activityACS');
 
 	var CheckinModel = require('model/checkin');
 	var PointModel = require('model/point');	
@@ -23,7 +23,10 @@ var ProfileHeaderView = function(_parentWindow){
 	
 	LevelACS.levelACS_fetchedLevel();
 	BadgesACS.fetchedBadges();
-	myBadgeACS.myBadgeACS_fetchedBadge(user_id);				
+	myBadgeACS.myBadgeACS_fetchedBadge(user_id);
+	FriendACS.searchFriend(user_id);
+	FriendACS.showFriendsRequest();
+	ActivityACS.activityACS_fetchedMyActivity(user_id);			
 	
 	function checkinDbLoadedCallBack(e){			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
@@ -53,11 +56,12 @@ var ProfileHeaderView = function(_parentWindow){
 	});
 
 //REFRESH BUTTON TO RELOAD THE ACS//
-	refreshButton.addEventListener('click',function(){
-		FriendACS.searchFriend(user_id);
-		FriendACS.showFriendsRequest();
-		//activityACS.activityACS_fetchedMyActivity(user_id);
-	});
+//	refreshButton.addEventListener('click',function(){
+//		FriendACS.searchFriend(user_id);
+//		FriendACS.showFriendsRequest();
+//		ActivityACS.activityACS_fetchedMyActivity(user_id);
+//		ActivityACS.activityACS_fetchedMyActivity('4fa17dd70020440df700950c');
+//	});
 
 	function friendDbLoadedCallBack(e){
 		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
@@ -183,13 +187,12 @@ var ProfileHeaderView = function(_parentWindow){
 		});
 		// count
 		var columnFriendCount = Ti.UI.createLabel({
-			text: 'aa',
+			text: '0',
 			font: {fontSize: 20, fontStyle: 'bold'},
 			color: '#fff',
 			shadowColor: '#999',
 			height: 30,
-			bottom: 10,
-			backgroundColor: 'red'
+			bottom: 10
 		});
 
 		columnFriendCount.addEventListener('click',function(){

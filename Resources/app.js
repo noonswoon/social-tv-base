@@ -59,10 +59,15 @@ if (Ti.version < 1.8 ) {
 							Ti.API.info("logging again.."+e.users.length);
 							acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
-									
+							
+							//For Testing APP 
 							var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 							var maintabgroup = new ApplicationTabGroup();
 							maintabgroup.open();
+							//For Testing UI
+							// var ApplicationTabGroup_UI = require('ui/common/ApplicationTabGroup_UI');
+							// var maintabgroup_UI = new ApplicationTabGroup_UI();
+							// maintabgroup_UI.open();
 						} else {
 							Ti.API.info("relogging in failed: "+e.error);
 					    }

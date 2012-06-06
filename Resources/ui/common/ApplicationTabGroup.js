@@ -8,7 +8,7 @@ function ApplicationTabGroup() {
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
-    	
+
 	var programDummy = {
 		programId: '4fb3618c0020442a2b0186c0', 
 		programTitle:'Khun Suuk', 
@@ -19,10 +19,10 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin =new ChannelSelectionMainWindow();
-	var chatwin = new SettingWindow();//new ChatMainWindow(programDummy);
-	var messageboardwin =  new SettingWindow();//new MessageboardMainWindow(1);		
+	var chatwin = new SettingWindow(); //ChatMainWindow(programDummy);
+	var messageboardwin =  new MessageboardMainWindow(1);		
 	var productwin = new ProductMainWindow();
-	var profilewin =  new SettingWindow();//new ProfileMainWindow();
+	var profilewin = new ProfileMainWindow();
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
@@ -33,6 +33,7 @@ function ApplicationTabGroup() {
 	selectionwin.containingTab = selectionTab;
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+		productwin._closeProductPopupWindow();
 	});
 	
     var chatTab = Titanium.UI.createTab({  
@@ -42,7 +43,8 @@ function ApplicationTabGroup() {
     });
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
-    	 chatwin.containingTab.open(chatwin);
+    	chatwin.containingTab.open(chatwin);
+		productwin._closeProductPopupWindow();
     });
    
     chatwin.addEventListener('close', function() {
@@ -57,6 +59,7 @@ function ApplicationTabGroup() {
     messageboardwin.containingTab = messageboardTab;
     messageboardTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 2;
+		productwin._closeProductPopupWindow();
 	});
 	
 	var productTab = Ti.UI.createTab({
@@ -76,7 +79,8 @@ function ApplicationTabGroup() {
  	});
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
-		tabIndexToComeBack = 4;	
+		tabIndexToComeBack = 4;
+		productwin._closeProductPopupWindow();
 	});
 	
 	self.addTab(selectionTab);
@@ -87,7 +91,7 @@ function ApplicationTabGroup() {
 
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
-
+   	
     return self;
 };
 

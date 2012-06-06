@@ -78,8 +78,6 @@ function ProductMainWindow() {
 	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 		var programCheckinId = myCurrentCheckinPrograms[i];
 		var programCheckinName = TVProgram.TVProgramModel_getProgramNameWithProgramId(programCheckinId);
-			// for(var i=0;i<programOfCheckin.length;i++){
-			//	var prgChk = programOfCheckin[0];
 		var checkinProgramRow = new ProductTabTableViewRow(programCheckinId, programCheckinName);
 		dataForTab.push(checkinProgramRow);
 			
@@ -126,6 +124,14 @@ function ProductMainWindow() {
 		self.remove(triangleImage);	
 		hidePreloader(self);
 	});	
+	
+	self._closeProductPopupWindow = function() {
+		if(!shopSelectorToggle) { //only close if it is still open
+			shopSelectorToggle = true;
+			shopSelectorPopupWin.close();
+			self.remove(triangleImage);
+		}
+	};
 	
 	
 	

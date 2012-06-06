@@ -12,7 +12,8 @@ function MessageboardMainWindow(_programId) {
 	//OBJECTS INSTANTIATION
 	var messageboardHeader = new MessageboardHeader('Reya','Famous Lakorn');	
 	var addWindow = new MessageboardAddWindow(_programId);	
-
+	var usingPull2Refresh = false;
+	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
@@ -68,6 +69,13 @@ function MessageboardMainWindow(_programId) {
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db
 		Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,_programId); 
+		
+		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
+		if(usingPull2Refresh) {
+			allTopicTable.refreshFinished();
+			usingPull2Refresh = false;
+			CacheHelper.resetCacheTime('topicsOfProgram'+_programId);
+		}
 	}
 
 	function topicsDbUpdatedCallback(e) {
@@ -139,6 +147,22 @@ function MessageboardMainWindow(_programId) {
 	});	
 	//END -- ADD EVENTLISTNERS
 
+	//pull2refresh
+	//pull2refresh module
+	var lastUpdatedDateObj = CacheHelper.getCacheTime('topicsOfProgram'+_programId);
+	var lastUpdatedStr = "No updated";
+	if(lastUpdatedDateObj != null) {
+		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
+	}
+	pullToRefreshModule.addASyncPullRefreshToTableView(allTopicTable, function() {
+		usingPull2Refresh = true;
+		TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
+	}, { //settings
+		updateLabel: {
+			text: 'Last Updated: '+lastUpdatedStr,
+		}
+	});	
+	
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+_programId, TopicACS.topicACS_fetchAllTopicsOfProgramId, _programId, 'topicsDbUpdated');
 

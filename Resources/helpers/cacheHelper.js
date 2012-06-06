@@ -19,3 +19,17 @@ exports.fetchACSDataOrCache = function(key, acsCallback, acsParam, eventToFire) 
 	}	
 }
 
+exports.resetCacheTime = function(key) {
+	if(Ti.App.Properties.hasProperty(key)) {
+		var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 
+		Ti.App.Properties.setString(key,nowStr);
+	}
+}
+
+exports.getCacheTime = function(key) {
+	if(Ti.App.Properties.hasProperty(key)) { //do some caching
+		var cacheDateStr = Ti.App.Properties.getString(key);
+		var cacheDate = moment(cacheDateStr,"YYYY-MM-DDTHH:mm:ss");
+		return cacheDate;
+	}
+}

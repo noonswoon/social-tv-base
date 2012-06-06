@@ -17,7 +17,7 @@ Ti.Facebook.appid = "197422093706392";
 Ti.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
-var CACHE_TIMEOUT_IN_MINUTES = 1; 
+var CACHE_TIMEOUT_IN_MINUTES = 100; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 
 var acs = require('lib/acs');

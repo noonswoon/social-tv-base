@@ -21,3 +21,27 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 			});
 		
 };
+
+exports.activityACS_createMyActivity = function(_activity){
+		Cloud.Objects.create({
+	    classname: 'Activity',
+		fields: {
+        	user: _activity.user_id,
+				targetedUserID: _activity.targetedUserID,
+				category: _activity.category,
+				targetedObjectID:_activity.targetedObjectID,
+				additionalData: _activity.additionalData,
+   		}
+	}, function (e) {
+	    if (e.success) {
+	        var activity = e.Activity[0];
+	       Ti.API.info('Success create data in Activity');
+			//add eventlistener + fetched to update
+	    } else {
+	        alert('Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
+	
+	
+};

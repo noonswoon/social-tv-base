@@ -23,20 +23,19 @@ exports.pointACS_fetchedPoint = function(_id) {
 			});
 };
 //TODO: check this creating point!
-exports.pointACS_createPoint = function(_userID,_point,_earnedby,_objID){
+exports.pointACS_createPoint = function(_point,_objId,_earnedby){
 	Cloud.Objects.create({
 	    classname: 'Points',
 	    fields: {
-	    	user: _userID,
-	        point: _point,
+	    	user: _point.user_id,
+	        point: _point.point,
 	        earned_by: _earnedby,
-	        object: _objID
+	        object: _objId
 	    }
 	}, function (e) {
 	    if (e.success) {
 	        var curPoint = e.Points[0];
-	        Ti.API.info('pointsCreated Success:');
-	        Ti.App.fireEvent('createPointDB',{fetchedPoint:curPoint});
+	        Ti.API.info('pointsCreated Success');
 	    } else {
 	        alert('pointACS_createPoint Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));

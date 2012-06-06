@@ -27,20 +27,29 @@ var ProfileHeaderView = function(_parentWindow){
 	FriendACS.searchFriend(user_id);
 	FriendACS.showFriendsRequest();
 	ActivityACS.activityACS_fetchedMyActivity(user_id);			
+	CheckinACS.checkinACS_fetchedUserTotalCheckIns(user_id);
+	//CheckinACS.checkinACS_fetchedUserCheckIn(user_id);
+	
 	
 	function checkinDbLoadedCallBack(e){			
 			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 	};
+
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	Ti.App.addEventListener('checkinsDbUpdated', function(){
-			columnCheckInCount.text = CheckinModel.checkins_count(user_id);
+//		Ti.API.info('done updating database');
 	});
 	Ti.App.addEventListener('updateHeaderCheckin',function(){
-			columnCheckInCount.text=CheckinModel.checkins_count(user_id);
+//		CheckinACS.checkinACS_fetchedUserTotalCheckIns();
 	});
-		
-	// Using cache		
-	CacheHelper.fetchACSDataOrCache('userCheckin'+user_id, CheckinACS.checkinACS_fetchedCheckIn,user_id, 'checkinsDbUpdated');
+
+//	CacheHelper.fetchACSDataOrCache('userCheckin'+user_id,CheckinACS.checkinACS_fetchedUserTotalCheckIns,user_id, 'checkinsDbUpdated');
+
+
+	Ti.App.addEventListener('UserTotalCheckInsFromACS', function(e){
+		//alert('e.result :' + e.result);
+		columnCheckInCount.text = e.result;	
+	});	
 		
 	function levelDbLoadedCallBack(e){					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
@@ -56,12 +65,11 @@ var ProfileHeaderView = function(_parentWindow){
 	});
 
 //REFRESH BUTTON TO RELOAD THE ACS//
-//	refreshButton.addEventListener('click',function(){
-//		FriendACS.searchFriend(user_id);
-//		FriendACS.showFriendsRequest();
-//		ActivityACS.activityACS_fetchedMyActivity(user_id);
-//		ActivityACS.activityACS_fetchedMyActivity('4fa17dd70020440df700950c');
-//	});
+	refreshButton.addEventListener('click',function(){
+		FriendACS.searchFriend(user_id);
+		FriendACS.showFriendsRequest();
+		ActivityACS.activityACS_fetchedMyActivity(user_id);
+	});
 
 	function friendDbLoadedCallBack(e){
 		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
@@ -164,7 +172,7 @@ var ProfileHeaderView = function(_parentWindow){
 			});
 			//count
 		var columnCheckInCount = Ti.UI.createLabel({
-			text: '',
+			text: CheckinACS.checkinACS_fetchedUserTotalCheckIns(user_id),
 			font: {fontSize: 20, fontStyle: 'bold'},
 			shadowColor: '#999',
 			color: '#fff',

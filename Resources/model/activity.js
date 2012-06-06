@@ -48,13 +48,13 @@ exports.activityModel_fetchActivity = function(_id) {
 	return fetchedActivity;
 };
 //create temporary activity into database
-exports.activityModel_create = function(_activity,_type){
+exports.activityModel_create = function(_activity){
 	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
 	var db = Ti.Database.open('Chatterbox'); 
 	//type = checkin
 	var curActivity = _activity;
 	//TODO
-	db.execute("INSERT INTO activity(id,activity_acs_id,user_id,targetedUserID,category,targetedObjectID,additionalData,updated_at) VALUES(NULL,NULL,?,?,?,?,?,?)", acs.getUserLoggedIn().id,acs.getUserLoggedIn().id,_type,curActivity.programId,curActivity.programTitle,now);
+	db.execute("INSERT INTO activity(id,activity_acs_id,user_id,targetedUserID,category,targetedObjectID,additionalData,updated_at) VALUES(NULL,NULL,?,?,?,?,?,?)", curActivity.user_id,curActivity.targetedUserID,curActivity.category,curActivity.targetedObjectID,curActivity.additionalData,now);
 	//
 	db.close();
 	//Ti.App.fireEvent("createActivityDbUpdated",_activity);

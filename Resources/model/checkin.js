@@ -1,5 +1,5 @@
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS checkins(local_id INTEGER PRIMARY KEY,id TEXT, event_id TEXT, score INTEGER, user_id TEXT, updated_at TEXT, program_id TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS checkins(id INTEGER PRIMARY KEY,checkin_acs_id TEXT, event_id TEXT, score INTEGER, user_id TEXT, updated_at TEXT, program_id TEXT);');
 db.close();
 
 
@@ -11,7 +11,7 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	db.execute('DELETE FROM checkins');
 	for(var i=0;i < _checkinsCollection.length; i++) {
 		var curCheckin = _checkinsCollection[i];
-		db.execute("INSERT INTO checkins(local_id,id,event_id,score,user_id,updated_at,program_id) VALUES(?,?,?,?,?,?,?)", null,curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at,curCheckin.program_id);
+		db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at,program_id) VALUES(?,?,?,?,?,?,?)", null,curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at,curCheckin.program_id);
 	}
 	db.close();
 	Ti.App.fireEvent("checkinsDbUpdated");
@@ -24,8 +24,8 @@ exports.checkin_fetchCheckin = function() {
 	var result = db.execute('SELECT * FROM checkins');
 	while(result.isValidRow()) {
 		fetchedCheckin.push({
-			local_id: result.fieldByName('local_id'),
 			id: result.fieldByName('id'),
+			checkin_acs_id: result.fieldByName('checkin_acs_id'),
 			event_id: result.fieldByName('event_id'),
 			score: Number(result.fieldByName('score')),
 			user_id: result.fieldByName('user_id'),
@@ -66,12 +66,21 @@ exports.checkin_create = function(_checkinsCollection){
 	var db = Ti.Database.open('Chatterbox'); 
 	var curCheckin = _checkinsCollection;
 	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
-	db.execute("INSERT INTO checkins(local_id,id,event_id,score,user_id,updated_at) VALUES(NULL,NULL,?,?,?,?)",curCheckin.event_id,curCheckin.score,curCheckin.user_id,now);
+	db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at) VALUES(NULL,NULL,?,?,?,?)",curCheckin.event_id,curCheckin.score,curCheckin.user_id,now);
 	var newId = db.lastInsertRowId;
 	db.close();
 	//return to helpers/updateActivity.js to continue updating
 	
 	//Ti.App.fireEvent("oneCheckinUpdated");
-	//,{local_id: curCheckin.id}
+	//,{id: curCheckin.id}
 	return newId;
+};
+
+exports.checkin_updateOne = function(_checkin){
+	var db = Ti.Database.open('Chatterbox'); 
+	var curCheckin = _checkin;
+	db.execute("UPDATE checkins SET checkin_acs_id = ? WHERE id= ?",curCheckin.id,curCheckin.custom_fields.local_id);
+	Ti.API.info("checkin_updateOne success");
+	db.close();
+	Ti.App.fireEvent("oneCheckinUpdated", {id: curCheckin.id});
 };

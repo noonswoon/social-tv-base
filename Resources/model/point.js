@@ -1,6 +1,6 @@
 var db = Ti.Database.open('Chatterbox');
 //db.execute('CREATE TABLE IF NOT EXISTS points(id TEXT PRIMARY KEY, user_id TEXT, point INTEGER, earned_by TEXT, object TEXT);');
-db.execute('CREATE TABLE IF NOT EXISTS leaderboard(id INTEGER PRIMARY KEY, user_id TEXT, name TEXT, totalPoint INTEGER);');
+db.execute('CREATE TABLE IF NOT EXISTS leaderboard(id INTEGER PRIMARY KEY, leader_acs_id TEXT, user_id TEXT, name TEXT, totalPoint INTEGER);');
 db.close();
 
 //LEADERBOARD
@@ -9,17 +9,10 @@ exports.pointModel_updateLeadersFromACS = function(_leadersCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
 
 	db.execute('DELETE FROM leaderboard');
-	// var result = db.execute('SELECT * FROM leaderboard');
-	// var dummyCount = 0;
-	// while(result.isValidRow()) {
-		// dummyCount++;
-		// result.next();
-	// }
-	// Ti.API.info('numRows in leaderboard after deleted: '+dummyCount);
 	for(var i=0;i < _leadersCollection.length; i++) {
 		var curRank = _leadersCollection[i];
 		var name =  curRank.user.first_name +' '+ curRank.user.last_name;
-		db.execute("INSERT INTO leaderboard(id, user_id, name, totalPoint) VALUES(NULL,?,?,?)", curRank.user.id, name, curRank.totalPoint);
+		db.execute("INSERT INTO leaderboard(id, leader_acs_id, user_id, name, totalPoint) VALUES(NULL,?,?,?,?)", curRank.id, curRank.user.id, name, curRank.totalPoint);
 	}
 	Ti.API.info('leaderBoard database length: '+ i);
 	db.close();
@@ -57,83 +50,36 @@ exports.pointModel_fetchRank = function() {
 
 exports.pointModel_updateLeaderToACS = function(_point) {
 	var db = Ti.Database.open('Chatterbox');
-	var result = db.execute('SELECT id, totalPoint FROM leaderboard where user_id = ?', _point.user_id);
+	var result = db.execute('SELECT id, leader_acs_id, totalPoint FROM leaderboard where user_id = ?', _point.user_id);
 	
 	var newId = 0;
 	var isExisted = false;
 	var userPoints = 0;
+	var returnPoint = []; //ACS id + new point
 	while(result.isValidRow()) {
 		isExisted = true;
 		userPoints = Number(result.fieldByName('totalPoint'));
+		acsId = result.fieldByName('leader_acs_id');
 		newId = Number(result.fieldByName('id'));
+		returnPoint.push(acsId);
 		break;
 	}
-	
+	var newPoint = userPoints + _point.point;
 	if(isExisted) {
-		db.execute('UPDATE leaderboard SET totalPoint = ? where user_id = ?', userPoints+_point.point, _point.user_id);
+		db.execute('UPDATE leaderboard SET totalPoint = ? where user_id = ?', newPoint, _point.user_id);
 	} else {
 		//insert something here
-		db.execute("INSERT INTO leaderboard(id, user_id, name, totalPoint) VALUES(NULL,?,?,?)", _point.user_id, _point.name, _point.point);		
+		db.execute("INSERT INTO leaderboard(id, leader_acs_id, user_id, name, totalPoint) VALUES(NULL,NULL,?,?,?)", _point.user_id, _point.name, _point.point);		
 		//get newId
 		newId = db.lastInsertRowId;
 	}
-
+	returnPoint.push(newPoint);
 	result.close();
 	db.close();
-	Ti.App.fireEvent("LeaderDbUpdated");
-	return newId;
-	//return fetchedRank;
+	//Ti.App.fireEvent("LeaderDbUpdated");
+	
+	
+	return returnPoint; //return object id on acs
 };
-
-// create data for local database
-// exports.pointModel_updatePointsFromACS = function(_pointsCollection) {
-	// var db = Ti.Database.open('Chatterbox'); 
-	// //need to clear records with the given programId
-	// var result = db.execute('DELETE FROM points');
-	// for(var i=0;i < _pointsCollection.length; i++) {
-		// var curPoint = _pointsCollection[i];
-		// db.execute("INSERT INTO points(id,user_id,point,earned_by,object) VALUES(?,?,?,?,?)", curPoint.id,curPoint.user_id,curPoint.point,curPoint.earned_by, curPoint.object);
-	// }
-	// db.close();
-	// Ti.App.fireEvent("pointsDbUpdated");
-// };
-
-//select data from local database
-// exports.point_fetchPoint = function() {
-	// var fetchedPoint = [];
-	// var db = Ti.Database.open('Chatterbox'); 
-	// var result = db.execute('SELECT * FROM points');
-	// while(result.isValidRow()) {
-		// fetchedPoint.push({
-			// id: result.fieldByName('id'),
-			// user_id: result.fieldByName('user_id'),
-			// point: Number(result.fieldByName('point')),
-			// earned_by: result.fieldByName('earned_by'),
-			// object: result.fieldByName('object')
-		// });
-		// result.next();
-	// }
-	// result.close();
-	// db.close();
-	// return fetchedPoint;
-// };
-// 
-// exports.points_updateNewPoint = function(_pointsCollection) {
-	// var db = Ti.Database.open('Chatterbox'); 
-	// var curPoint = _pointsCollection;
-	// db.execute("INSERT INTO points(id,user_id,point,earned_by,object) VALUES(?,?,?,?,?)", curPoint.id,curPoint.user_id,curPoint.point,curPoint.earned_by, curPoint.object);
-	// db.close();
-	// Ti.App.fireEvent("updateNewPoint");
-// };
-// 
-// //DONT USE LAEW NA!
-// exports.points_sumPoints = function(){
-		// var db = Ti.Database.open('Chatterbox'); 
-		// var result = db.execute('SELECT SUM(point) as totalPoint from points');
-		// var totalPoint = Number(result.fieldByName('totalPoint'));
-	// //	var total = db.execute('SELECT SUM(point) as totalPoint from points');
-		// db.close();
-		// return totalPoint;
-// };
 
 

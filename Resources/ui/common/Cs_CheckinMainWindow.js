@@ -3,7 +3,9 @@ CheckinMainWindow = function (_datafromrow){
 	var CheckinACS = require('acs/checkinACS');
 	var CheckinModel = require('model/checkin');
 	var PointACS = require('acs/pointACS');
-	var PointModel = require('model/point');
+	//var PointModel = require('model/point');
+	var LeaderBoardACS = require('acs/leaderBoardACS');
+	var ActivityACS = require('acs/activityACS');
 	var BadgeCondition = require('helpers/badgeCondition');
 	var TVProgram = require('model/tvprogram');
 	var checkinPoint = 10;
@@ -269,7 +271,6 @@ function isPointInPoly(poly, pt)
 			}		
 		}
 	});
-//touch start = mouseover	
 
 	function highlightButton(e)
 	{
@@ -333,10 +334,28 @@ function isPointInPoly(poly, pt)
 		alert('you have check in');
 //		
 		var updateActivity = require('helpers/updateActivity');
-		updateActivity.updateActivity_myDatabase('checkin',_datafromrow);	
-//		CheckinACS.checkinACS_createCheckin(_datafromrow.programId);
-//		myCurrentCheckinPrograms.push(_datafromrow.programId);
+		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_datafromrow);
+		var allActivityDataForACS =  ActivityDataIdForACS[0];	
+		var allIdDataForACS = ActivityDataIdForACS[1];
+		//checkinData / leaderboardData / activityData	
+		var checkinData = allActivityDataForACS[0];
+		var leaderboardData = allActivityDataForACS[1];
+		var activityData = allActivityDataForACS[2];
+		// checkinId / leaderboardId / activityId
+		var leaderboardId = allIdDataForACS[1]; //local id
+		
+		var checkinId = allIdDataForACS[0]; //local id
+		//var activityId = allIdDataForACS[2]; //acs id
 	
+		//require callback from acs
+		CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//local id attached
+		ActivityACS.activityACS_createMyActivity(activityData);
+
+		//done after adding to acs
+		PointACS.pointACS_createPoint(leaderboardData,_datafromrow.programId,'checkin');
+		LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+		
+		myCurrentCheckinPrograms.push(_datafromrow.programId);
 		checkinButton.enabled = false;
 		checkinButton.image = 'images/checkin/checkin_check_checked.png';
 		chatButton.image = 'images/checkin/checkin_chat_enable.png';
@@ -345,17 +364,21 @@ function isPointInPoly(poly, pt)
 	});
 
 //TODO: make this update to leaderboard and else!!
-	function oneCheckinUpdatedCallback(_checkinID) {
-		//PointACS.pointACS_createPoint(userID,checkinPoint,'checkin',_checkinID.id);
-		// checkinCount.text = CheckinModel.checkins_count(userID);
-		BadgeCondition.badgeCondition_check();
-		
-		var num = TVProgram.TVProgramModel_countCheckins(_datafromrow.programId);
-		programNumCheckin.text = programNumCheckin.text + 1;
-		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_datafromrow.programId,{numCheckin:num});
+//	Ti.App.fireEvent('update1checkin',{fetchedACheckin:checkin}); //fetched back with local id:)
+	function update1checkinCallBack(e) {
 		Ti.App.fireEvent('updateHeaderCheckin');
-	}
+		programNumCheckin.text = programNumCheckin.text + 1;
+		CheckinModel.checkin_updateOne(e.fetchedACheckin);
+	};
 	
+	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
+
+	function oneCheckinUpdatedCallback(_checkinID) {
+		//checkinCount.text = CheckinModel.checkins_count(userID);
+		var num = TVProgram.TVProgramModel_countCheckins(_datafromrow.programId);
+		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_datafromrow.programId,{numCheckin:num});
+
+	}
 	Ti.App.addEventListener('oneCheckinUpdated',oneCheckinUpdatedCallback);
 
 	

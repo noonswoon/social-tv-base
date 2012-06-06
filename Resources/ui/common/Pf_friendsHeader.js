@@ -18,9 +18,9 @@ FriendsHeaderView = function(_friend){
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
 			columnCheckInCount.text = CheckinModel.checkins_count(_friend.friend_id);
 		});
-		Ti.App.addEventListener('updateHeaderCheckin',function(){ ///confuse ????????
-			columnCheckInCount.text=CheckinModel.checkins_count(_friend.friend_id);
-		});
+	//	Ti.App.a ddEventListener('updateHeaderCheckin',function(){ ///confuse ????????
+	//		columnCheckInCount.text=CheckinModel.checkins_count(_friend.friend_id);
+	//	});
 		
 		// Using cache		
 		CacheHelper.fetchACSDataOrCache('userCheckin'+_friend.friend_id, CheckinACS.checkinACS_fetchedCheckIn, _friend.friend_id, 'checkinsDbUpdated');

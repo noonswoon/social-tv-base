@@ -2,7 +2,7 @@ var ProfileStatsView = function(){
 	var PointModel = require('model/point');
 	var LevelModel = require('model/level');
 	var friendModel = require('model/friend');
-	
+	var createtime = 0;
 	var leaderBoardData = [];
 	var userRankInfo = [];
 	var	ProfileDataLevelUp;
@@ -65,7 +65,7 @@ var ProfileStatsView = function(){
 
 
 	Ti.App.addEventListener('LeaderDbUpdated',function(){
-		Ti.API.info('Leaderboard updated into database /model/point');
+		//alert('Leaderboard updated into database /model/point');
 		//UPDATE DATA IN EXP SECTION
 		totalPoints = PointModel.pointModel_fetchMyPoint(user_id);
 		ProfileDataLevelUp = LevelModel.level_nextLevel(totalPoints);
@@ -74,8 +74,8 @@ var ProfileStatsView = function(){
 		expBar_light.max = ProfileDataLevelUp;
 		expBar.value = totalPoints;
 		if(expBar.value === 0){
-   			expBar.thumbImage = 'images/empty_thumb.png';
-   		};
+   		   	expBar.thumbImage = 'images/empty_thumb.png';
+   		} else expBar.thumbImage = 'images/slider/thumb_bar.png';
 		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
 		expBar_light.value = (totalPoints+10);
 		leaderBoardData = PointModel.pointModel_fetchRank();
@@ -94,6 +94,7 @@ var ProfileStatsView = function(){
 	});
 
 	var createLeaderBoardView = function(){
+		alert('createLeaderBoardView');
 		var myIndex = 0;
 		userRankInfo =[];
 		for(i=0; i<leaderBoardData.length; i++){
@@ -105,7 +106,7 @@ var ProfileStatsView = function(){
 		Ti.API.info('myIndex: ' + myIndex);
 
 		for(var i=0; i<leaderBoardData.length; i++){
-			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
+			//if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
 			
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
@@ -161,7 +162,6 @@ var ProfileStatsView = function(){
 			userRank.add(userRankScore);
 			userRankInfo.push(userRank);
 		}
-		Ti.API.info('hey dog');
 		leaderTable.height = (userRankInfo.length)*45;
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;
@@ -171,7 +171,7 @@ var ProfileStatsView = function(){
 	var leaderTable = Ti.UI.createTableView({
 		top: 30,
 		borderRadius: 10,
-		scrollable:true,
+		scrollable:false,
 		disableBounce: true,
 		width: 290,
 		height: 'auto',
@@ -193,9 +193,6 @@ var ProfileStatsView = function(){
 		leaderSec.add(leaderTable);
 		profileStats.add(leaderSec);
 
-		if(leaderBoardData.length===0){
-			leaderSec.visible = false;
-		};
 
 	return profileStats;
 }

@@ -28,7 +28,7 @@ exports.leaderACS_createUserInfo = function(_id){
 	Cloud.Objects.create({
 	    classname: 'LeaderBoard',
 		fields: {
-        	user_id: _id,
+        	user: _id,
         	totalPoint: 0,
     	}
 	}, function (e) {
@@ -38,6 +38,7 @@ exports.leaderACS_createUserInfo = function(_id){
 	            'username: ' + LeaderBoard.user.username + '\\n' +
 	            'totalPoint: ' + LeaderBoard.totalPoint + '\\n' +
 	            'created_at: ' + LeaderBoard.created_at);
+			Ti.App.fireEvent("createLeaderBoardUser",{fetchedUser: user});
 	    } else {
 	        alert('Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
@@ -51,14 +52,15 @@ Cloud.Objects.update({
     classname: 'LeaderBoard',
     id: _id,
     fields: {
-        totalPoint:  totalPoint + _point,
+    	//update +++
+        totalPoint: _point,
     }
 }, function (e) {
     if (e.success) {
-        var car = e.cars[0];
+        var leaderBoard = e.LeaderBoard[0];
         alert('Success:\\n' +
-            'totalPoint: ' + LeaderBoard.totalPoint + '\\n' +
-            'updated_at: ' + LeaderBoard.updated_at);
+            'totalPoint: ' + leaderBoard.totalPoint);
+            //fireevent update database
     } else {
         alert('Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));

@@ -23,10 +23,33 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 
 
 
-exports.checkinACS_fetchedCheckIn = function(_id) {
+exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
+	var checkin = [];
+	var id = _id;
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"user_id":"'+id+'"}';	
+	Ti.API.info(url)
+	
+	var xhr = Ti.Network.createHTTPClient({
+	    onload: function() {
+	      	responseJSON = JSON.parse(this.responseText);
+	      	var total_results = Number(responseJSON.meta.total_results);
+	       Ti.App.fireEvent('UserTotalCheckInsFromACS', {result: total_results});
+	    },onerror: function(e) {
+			// this function is called when an error occurs, including a timeout
+	        Ti.API.debug(e.error);
+	        Ti.API.info('checkinACS_getTotalNumCheckinOfProgram error');
+	    },
+	    timeout:10000  /* in milliseconds */
+	});
+	xhr.open("GET", url);
+	xhr.send();
+
+};
+
+exports.checkinACS_fetchedUserCheckIn = function(_id) {
 	Cloud.Checkins.query({
     page: 1,
-    per_page: 5,
+    per_page: 20,
     where: {user_id: _id},
     order: '-updated_at'
 
@@ -44,17 +67,18 @@ exports.checkinACS_fetchedCheckIn = function(_id) {
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});
+		
 };
 
-exports.checkinACS_createCheckin = function(_eventID){
+exports.checkinACS_createCheckin = function(checkinData,local_id){
 	Cloud.Checkins.create({
-    event_id: _eventID,
-    custom_fields: {score: 10},
+    event_id: checkinData.event_id,
+    user_id: checkinData.user_id,
+    custom_fields: {score: checkinData.score, local_id: local_id},
 	}, function (e) {
 	    if (e.success) {
 	        var checkin = e.checkins[0];
-	        var programId = e.checkins[0].event.custom_fields.program_id;
-	        Ti.App.fireEvent('createCheckinDB',{fetchedACheckin:checkin});
+	        Ti.App.fireEvent('update1checkin',{fetchedACheckin:checkin}); //fetched back with local id:)
 	    } else {
 	        Ti.API.info('checkinACS_createCheckin Error: ' +
 	            ((e.error && e.message) || JSON.stringify(e)));

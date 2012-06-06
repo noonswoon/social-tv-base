@@ -47,6 +47,12 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 				//TODO: create leaderBoard
 				var leaderBoardACS = require('acs/leaderBoardACS');
 				leaderBoardACS.leaderACS_createUserInfo(e.users[0].id);
+				var pointModel = require('model/point');
+				var leaderboardCallBack = function(e){
+					pointModel.pointModel_updateLeadersFromACS(e.fetchedUser);
+				};
+				Ti.App.addEventListener("createLeaderBoardUser",leaderboardCallBack);
+				
 				//
 				Cloud.SocialIntegrations.externalAccountLink({
 				    type: 'facebook',

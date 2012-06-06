@@ -1,6 +1,6 @@
 /* 4 possible activity
  * 		1. checkin		(+10)
- * 		2. post topic	(+5)
+ * //		2. post topic	(+5)
  * 		3. comment		(+1)
  * 		4. get badge	(+10)
  */
@@ -9,18 +9,31 @@ exports.updateActivity_myDatabase = function(_type,_act){
 	var id = acs.getUserId();
 	var name = acs.getUserLoggedIn().first_name + ' '+ acs.getUserLoggedIn().last_name;
 	var _point;
+	var	resultArray = [];
+	var idArray = [];
 	switch (_type){
 		case 'checkin': {
 	  		Ti.API.info("update type:"+_type);
 	  		_point = 10;
+	  	// 1. update checkin / activity data	
 	  		var CheckinModel = require('model/checkin');
-	  		var checkinActivity = {
-	  		event_id: _act.programId,
-	  		user_id: id,
-			score: _point};
-	  		
-	  		typeID = CheckinModel.checkin_create(checkinActivity);
-	  		//id, event_id, score, user_id, updated_at
+	  		var checkinData = {
+	  			event_id: _act.programId,
+	  			user_id: id,
+				score: _point
+			};
+	  		checkinId = CheckinModel.checkin_create(checkinData);
+	  		idArray.push(checkinId);
+			resultArray.push(checkinData);
+			
+			var activityData = {
+				user_id: id,
+				targetedUserID: id,
+				category: 'checkin',
+				targetedObjectID: _act.programId,
+				additionalData: _act.programTitle,
+			};
+
 			break;
 		};
 		case 'post': {
@@ -40,7 +53,6 @@ exports.updateActivity_myDatabase = function(_type,_act){
 			_point = 10;	
 			break;
 		};
-		
 		default: {
 			Ti.API.info("_default");
 		};
@@ -49,28 +61,30 @@ exports.updateActivity_myDatabase = function(_type,_act){
 	var PointModel = require('model/point');
 	var ActivityModel = require('model/activity');
 	var BadgeCondition = require('helpers/badgeCondition');
-	
-	// 1. update leaderboard + level
-	var pointUpdate = {
+	// 2. update leaderboard
+	var leaderboardData = {
 		user_id: id,
 		name: name,
 		point: _point
 	};
-	leaderID = PointModel.pointModel_updateLeaderToACS(pointUpdate);
-	// 2. update activity
-	activityID = ActivityModel.activityModel_create(_act,_type);
-		//user_id,targetedUserID,category,targetedObjectID,additionalData
-	// 3. check badge
+	var leaderboard =[]; //acs id + newPoint
+	leaderboard = PointModel.pointModel_updateLeaderToACS(leaderboardData);
+	leaderboardId = leaderboard[0];
+	leaderboardData.point = Number(leaderboard[1]);
+	idArray.push(leaderboardId);	
+	resultArray.push(leaderboardData);
+	// 3. update activity
+	activityId = ActivityModel.activityModel_create(activityData);
+	idArray.push(activityId);
+	resultArray.push(activityData);
+	// 4. check badge
 	BadgeCondition.badgeCondition_check();	
 	
-		var localID = {
-		type:  typeID,
-		leader: leaderID,
-		activity: activityID
-	};
 	alert('create localID');
-};
-
-exports.updateActivity_callACS = function(_id,_act){
-	
+	var returnArray = [];
+	returnArray.push(resultArray);
+	returnArray.push(idArray);
+	return returnArray;
+	//result array = checkinData / leaderboardData / activityData
+	//idArray = checkinId / leaderboardId / activityId
 };

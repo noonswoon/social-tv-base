@@ -37,21 +37,23 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		    username: providedUsername,
 		    first_name: _firstName,
 		    last_name: _lastName,
-		    password: (Ti.Facebook.accessToken).substr(0,20),
-		    password_confirmation: (Ti.Facebook.accessToken).substr(0,20)
+		    password: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10),
+		    password_confirmation: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10)
 		}, function (e) {
 		    if (e.success) {
-		        //Ti.API.info('create user successful: '+e.users.length);
-				//Ti.API.info('user created: '+JSON.stringify(e));
+		        //Ti.API.info('user created: '+JSON.stringify(e));
 				
 				//link with third party account
+				//TODO: create leaderBoard
+				var leaderBoardACS = require('acs/leaderBoardACS');
+				leaderBoardACS.leaderACS_createUserInfo(e.users[0].id);
+				//
 				Cloud.SocialIntegrations.externalAccountLink({
 				    type: 'facebook',
 				    token: Ti.Facebook.accessToken
 				}, function (e) {
 				    if (e.success) {
-				    	//Ti.API.info('link external acct successful: '+e.users.length);
-				    	//Ti.API.info('user created: '+JSON.stringify(e));
+				    	//Ti.API.info('link external acct successful');
 				    	acs.setUserLoggedIn(e.users[0]);
 						acs.setLoggedInStatus(true);
 						

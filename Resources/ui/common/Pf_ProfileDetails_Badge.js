@@ -12,7 +12,8 @@ var ProfileBadgeView = function(_parent){
 	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
 	
 	var badgeView = Ti.UI.createView({
-		width: 320
+		width: 320,
+		height: 'auto'
 	});
 	
 	var myUnlockedBadges = []; //array of 9 with 0/1 value
@@ -85,7 +86,6 @@ var ProfileBadgeView = function(_parent){
 			badgeView.add(badgeIndex[count]);
 
 			badgeIndex[count].addEventListener('click', function(e) {
-				//Ti.API.info(String(e.source.image));
 	        	var index = e.source.myIndex;
 	            Ti.App.fireEvent('openBadgeDetailPopupWindow',{index:index});
         	});
@@ -109,6 +109,7 @@ var ProfileBadgeView = function(_parent){
 		if(myUnlockedBadges[checkBadge]===0){
 			Ti.API.info('creating your new badge..');
 			BadgeCondition.badgeCondition_createBadgeUnlocked(checkBadge);
+	//TODO: create new activity = getBadge :D		
 		}
 	});
 	Ti.App.addEventListener('updatedMyBadge',function(_user){

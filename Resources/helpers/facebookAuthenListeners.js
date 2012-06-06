@@ -1,5 +1,8 @@
 function facebookAuthenCallback(e) {
+	//alert("in fbAuthenCallback");
 	if (e.success) {
+		//alert('in cb login success');
+			
 		//alert('facebookAuthenListners.js FB login event cb');
 		//Successfully login to facebook
 		//1. check if this fb user already has an account >> need to do this just to make Friend Module works
@@ -28,13 +31,11 @@ function facebookAuthenCallback(e) {
 				}, function (e) {
 				    if (e.success) {
 				    	if(e.users.length > 0) {
-				    		Ti.API.info('already registered..logging in; length: '+e.users.length); 	
 							Cloud.Users.login({
 							    login: email,
-							    password: (Ti.Facebook.accessToken).substr(0,20)
+							    password: Ti.Utils.md5HexDigest(email+"ch@tterb0x").substr(0,10)
 							}, function (e) {
 							    if (e.success) {
-									//Ti.API.info("successful login: "+e.users.length);
 									acs.setUserLoggedIn(e.users[0]);
 									acs.setLoggedInStatus(true);
 									
@@ -46,7 +47,6 @@ function facebookAuthenCallback(e) {
 							    }
 							});
 				    	} else {
-				    		Ti.API.info('not yet creating an account..long story here');
 				    		//go to another page to ask user for the username
 				    		var EnterUsernameWindow = require('ui/common/Am_EnterUsernameWindow');
 				    		var enterusernamewin = new EnterUsernameWindow(email,firstName,lastName);
@@ -57,12 +57,14 @@ function facebookAuthenCallback(e) {
 				    }
 				});
 			} else if (e.error) {
-				Ti.API.info('cannot request GraphPath: '+e.error);		
+				alert('cannot request GraphPath: '+e.error);		
 			}
 		});
 	} else if (e.error) {
-		Ti.API.info("fb login error: "+e.error);
+		alert("fb login error: ");
 	} else if (e.cancelled) {
-		Ti.API.info("fb login Canceled");
+		alert("fb login Canceled");
+	} else {
+		alert("what the hell is going on?" + JSON.stringify(e));
 	}
 }

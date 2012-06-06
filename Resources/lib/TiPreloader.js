@@ -39,11 +39,8 @@ function showPreloader(customWin,loadingText) {
 	loggingInIndicator.show();
 
 	customWin.add(loggingInView);
-
-	Ti.API.info('-- PRELOADER ADDED --')
 }
 
 function hidePreloader(customWin) {
 	customWin.remove(loggingInView);
-	Ti.API.info('-- PRELOADER REMOVED --')
 }

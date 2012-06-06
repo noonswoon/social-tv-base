@@ -18,11 +18,11 @@ function ApplicationTabGroup() {
 		programNumCheckin: 25345
 	};
 	
-	var selectionwin =new ChannelSelectionMainWindow();
-	var chatwin = new SettingWindow(); //ChatMainWindow(programDummy);
-	var messageboardwin =  new MessageboardMainWindow(1);		
+	var selectionwin = new ChannelSelectionMainWindow();
+	var chatwin = ChatMainWindow(programDummy);
+	var messageboardwin = new MessageboardMainWindow(1);		
 	var productwin = new ProductMainWindow();
-	var profilewin = new ProfileMainWindow();
+	var profilewin =  new ProfileMainWindow();
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({

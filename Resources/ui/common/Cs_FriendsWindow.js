@@ -39,8 +39,9 @@ FriendsWindow = function(){
 	
 	//EventListener
 	Ti.App.addEventListener('friendsLoaded',function(e){
-		
-		var checkinsOfFriends =e.fetchedAllFriendsCheckins;
+		var checkinsOfFriends;
+		if(e.fetchedAllFriendsCheckins=== undefined) checkinsOfFriends = 0;
+		else checkinsOfFriends =e.fetchedAllFriendsCheckins;
 		var totalFriendCheckins = e.fetchedTotalFriendCheckins;
 		var results = [];
 		

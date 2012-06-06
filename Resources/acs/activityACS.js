@@ -11,8 +11,8 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 		for(var i=0; i<e.Activity.length || i< 20; i++){
 			var curActivity = e.Activity[i];
 			recentActivity.push(curActivity);
-		}
-//		Ti.App.fireEvent('myBadgesLoaded',{fetchedMyUnlockBadges:myBadges});
+		}		
+//		Ti.App.fireEvent('ActivityLoaded',{fetchedActivity:recentActivity});
     } 
     else {
         Ti.API.info('activityACS_fetchedMyActivity Error:\\n' +

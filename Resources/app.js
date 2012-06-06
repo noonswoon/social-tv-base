@@ -13,14 +13,16 @@ Ti.include('/lib/cacheFromRemote.js');
 //include xxx models here
 
 //GLOBAL VARIABLES DECARATION
-Titanium.Facebook.appid = "197422093706392";
-Titanium.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
+Ti.Facebook.appid = "197422093706392";
+Ti.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
+Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
 var CACHE_TIMEOUT_IN_MINUTES = 1; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 
 var acs = require('lib/acs');
 var Cloud = require('ti.cloud');
+var pullToRefreshModule = require('nl.icept.pull2refresh');
 
 var myCurrentCheckinPrograms = ['CH9_CSINY','CH7_0LOST']; //should be reset every hour to empty array
 
@@ -44,19 +46,17 @@ if (Ti.version < 1.8 ) {
 
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
-			Ti.API.info("already logged in: "+JSON.stringify(e));
+			Ti.API.info("should go to maintab screen");
 			var userEmail = e.users[0].email;
-			Ti.API.info('userEmail: '+userEmail);
-			
 			Cloud.Users.logout(function (e) {
 			    if (e.success) {
 			    	Ti.API.info('logging out to login again...'); //<--just to make Friends Module works
 			    	Cloud.Users.login({
 						login: userEmail,
-					    password: (Ti.Facebook.accessToken).substr(0,20)
+					    password: Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10),
 					}, function (e) {
 						if (e.success) {
-							Ti.API.info("logging again.."+e.users.length);
+							Ti.API.info("logging again..successful"+e.users.length);
 							acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
 							
@@ -69,11 +69,11 @@ if (Ti.version < 1.8 ) {
 							// var maintabgroup_UI = new ApplicationTabGroup_UI();
 							// maintabgroup_UI.open();
 						} else {
-							Ti.API.info("relogging in failed: "+e.error);
+							alert("relogging in failed: "+e.error);
 					    }
 					}); 
 			    } else {
-			        Ti.API.info('Logout Error:\\n' +
+			        alert('Logout Error:\\n' +
 			            ((e.error && e.message) || JSON.stringify(e)));
 			    }
 			});

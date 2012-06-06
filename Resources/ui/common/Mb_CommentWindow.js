@@ -9,6 +9,7 @@ function CommentWindow(_topicId) {
 	
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
+	var usingPull2Refresh = false;
 	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
@@ -61,6 +62,13 @@ function CommentWindow(_topicId) {
 		//add to db
 		//Ti.API.info(e.fetchedComments);
 		Comment.commentModel_updateCommentsOnTopicFromACS(e.fetchedComments,_topicId); 
+		
+		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
+		if(usingPull2Refresh) {
+			commentsTable.refreshFinished();
+			usingPull2Refresh = false;
+			CacheHelper.resetCacheTime('commentsOfTopic'+_topicId);
+		}
 	}
 	
 	function commentsDbUpdatedCallback(e) {
@@ -245,16 +253,20 @@ function CommentWindow(_topicId) {
 	showPreloader(self,'Loading...');
 
 	//pull2refresh module
+	var lastUpdatedDateObj = CacheHelper.getCacheTime('commentsOfTopic'+_topicId);
+	var lastUpdatedStr = "No updated";
+	if(lastUpdatedDateObj != null) {
+		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
+	}
 	pullToRefreshModule.addASyncPullRefreshToTableView(commentsTable, function() {
-		setTimeout(function() {
-			//tableData.push({ title: 'Row ' + (tableData.length+1) });
-			//tableView.setData(tableData);
-			
-			//indicate the refresh is finished, since this is a async refresh
-			alert('done loading acs');
-			commentsTable.refreshFinished();
-		}, 2000);
+		usingPull2Refresh = true;
+		CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
+	}, { //settings
+		updateLabel: {
+			text: 'Last Updated: '+lastUpdatedStr,
+		}
 	});	
+
 
 	//*** ON-THE-PLANE STUFF 
 	//Comment.contentsDuringOffline();

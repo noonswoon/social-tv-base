@@ -161,7 +161,7 @@ var ProfileStatsView = function(){
 			userRank.add(userRankScore);
 			userRankInfo.push(userRank);
 		}
-		Ti.API.info('hey dog');
+		
 		leaderTable.height = (userRankInfo.length)*45;
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;

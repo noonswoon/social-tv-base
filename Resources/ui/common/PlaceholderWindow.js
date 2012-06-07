@@ -33,7 +33,7 @@ var PlaceholderWindow = function() {
 		top: 5,
 		left: 5,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'1.) It makes it suer fast to sign up and create a Chatterbox profile'
+		text: 	'1.) It makes it super fast to sign up and create a Chatterbox profile'
 	});
 	
 	var fbExplSecond = Ti.UI.createLabel({

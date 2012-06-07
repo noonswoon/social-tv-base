@@ -65,8 +65,8 @@ exports.registerDeviceToken = function(_deviceToken) {
 	    ],
 	    "badge": 2,
 	    "quiettime": {
-	        "start": "22:00",
-	        "end": "8:00"
+	        "start": "6:00",
+	        "end": "7:00"
 	    },
 	    "tz": "America/Los_Angeles"
 	};

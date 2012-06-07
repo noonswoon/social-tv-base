@@ -50,7 +50,7 @@ function PopularWindow(_parent) {
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
 		numProgramsToLoadCheckins = currentTVPrograms.length;
 		for(var i=0;i<currentTVPrograms.length;i++){
-			var curTVProgramId = currentTVPrograms[i].id; 
+			var curTVProgramId = currentTVPrograms[i].id;
 			//CheckinACS.checkinACS_fetchedCheckInOfProgram(curTVProgramId);
 			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId);
 		}

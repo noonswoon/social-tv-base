@@ -65,19 +65,20 @@ var ProfileStatsView = function(){
 
 
 	Ti.App.addEventListener('LeaderDbUpdated',function(){
-		//alert('Leaderboard updated into database /model/point');
-		//UPDATE DATA IN EXP SECTION
 		totalPoints = PointModel.pointModel_fetchMyPoint(user_id);
 		ProfileDataLevelUp = LevelModel.level_nextLevel(totalPoints);
 		expLabel.text= totalPoints + '/' + ProfileDataLevelUp;
 		expBar.max = ProfileDataLevelUp;
 		expBar_light.max = ProfileDataLevelUp;
 		expBar.value = totalPoints;
+		
 		if(expBar.value === 0){
    		   	expBar.thumbImage = 'images/empty_thumb.png';
-   		} else expBar.thumbImage = 'images/slider/thumb_bar.png';
+   		} 
+   		else expBar.thumbImage = 'images/slider/thumb_bar.png';
+		
 		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
-		expBar_light.value = (totalPoints+10);
+		expBar_light.value = (totalPoints+5);
 		leaderBoardData = PointModel.pointModel_fetchRank();
     	leaderBoardData.sort(totalPointSort);
     	createLeaderBoardView();
@@ -94,7 +95,7 @@ var ProfileStatsView = function(){
 	});
 
 	var createLeaderBoardView = function(){
-		alert('createLeaderBoardView');
+		//alert('createLeaderBoardView');
 		var myIndex = 0;
 		userRankInfo =[];
 		for(i=0; i<leaderBoardData.length; i++){
@@ -123,6 +124,8 @@ var ProfileStatsView = function(){
 				color: '#666'
 				});
 			var userRankPicture = Ti.UI.createImageView({
+//*****************CHECK PHOTO!!
+ 				//image: "https://graph.facebook.com/"+leaderBoardData[i].fb_id+"/picture?type=normal",			
 				image: acs.getUserImageNormal(),
 				height: 36,
 				width: 36,
@@ -154,6 +157,7 @@ var ProfileStatsView = function(){
 				userRankNo.color = '#000';
 				userRankName.color = '#000';
 				userRankScore.color = '#000';
+			//	userRankPicture.image= acs.getUserImageNormal();
 			};			
 			
 			userRank.add(userRankNo);

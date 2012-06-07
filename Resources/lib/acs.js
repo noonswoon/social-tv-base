@@ -29,7 +29,7 @@ function getUserFbId() {
 	var numExternalAccounts = currentUser.external_accounts.length;
 	
 	for(var i=0;i < numExternalAccounts; i++) {
-		var curExternalAccount = currentUser.external_accounts[0];
+		var curExternalAccount = currentUser.external_accounts[i];
 		if(curExternalAccount.external_type === "facebook") {
 			fbId = curExternalAccount.external_id;
 			break;
@@ -47,7 +47,7 @@ exports.getUserFbToken = function() {
 	var numExternalAccounts = currentUser.external_accounts.length;
 	
 	for(var i=0;i < numExternalAccounts; i++) {
-		var curExternalAccount = currentUser.external_accounts[0];
+		var curExternalAccount = currentUser.external_accounts[i];
 		if(curExternalAccount.external_type === "facebook") {
 			fbToken = curExternalAccount.token;
 			break;

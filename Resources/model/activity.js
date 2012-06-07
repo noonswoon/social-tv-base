@@ -51,11 +51,21 @@ exports.activityModel_fetchActivity = function(_id) {
 exports.activityModel_create = function(_activity){
 	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
 	var db = Ti.Database.open('Chatterbox'); 
-	//type = checkin
 	var curActivity = _activity;
-	//TODO
+	Ti.API.info('activityModel_create: ' +curActivity.user_id + ' has been ' + curActivity.category + ' at ' + curActivity.additionalData+ ': ' + curActivity.targetedObjectID + ' at '+now);
 	db.execute("INSERT INTO activity(id,activity_acs_id,user_id,targetedUserID,category,targetedObjectID,additionalData,updated_at) VALUES(NULL,NULL,?,?,?,?,?,?)", curActivity.user_id,curActivity.targetedUserID,curActivity.category,curActivity.targetedObjectID,curActivity.additionalData,now);
-	//
-	db.close();
+	var newId = db.lastInsertRowId;
+	Ti.API.info('activityModel_create / db.lastInsertRowId: '+ newId);
+	db.close(); 
 	//Ti.App.fireEvent("createActivityDbUpdated",_activity);
+	return newId;
+};
+
+exports.activity_updateOne = function(_activity){
+	var db = Ti.Database.open('Chatterbox'); 
+	var curActivity = _activity;
+	db.execute("UPDATE activity SET activity_acs_id = ? WHERE id= ?", curActivity.id,curActivity.custom_fields.local_id);
+	Ti.API.info("activity_updateOne success");
+	Ti.API.info("activity database row: " + curActivity.custom_fields.local_id + " activity acs id: " + curActivity.id);
+	db.close();
 };

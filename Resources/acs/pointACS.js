@@ -1,4 +1,5 @@
 
+//fetched point! //i dont use this LOL
 exports.pointACS_fetchedPoint = function(_id) {
 	Cloud.Objects.query({
 	classname: 'Points',	
@@ -22,7 +23,8 @@ exports.pointACS_fetchedPoint = function(_id) {
     	 }
 			});
 };
-//TODO: check this creating point!
+
+//create point when any get-point activity happens:)
 exports.pointACS_createPoint = function(_point,_objId,_earnedby){
 	Cloud.Objects.create({
 	    classname: 'Points',

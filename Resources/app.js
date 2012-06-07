@@ -51,6 +51,7 @@ if (Ti.version < 1.8 ) {
 			Cloud.Users.logout(function (e) {
 			    if (e.success) {
 			    	Ti.API.info('logging out to login again...'); //<--just to make Friends Module works
+			    	Ti.API.info('my password: '+Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10));
 			    	Cloud.Users.login({
 						login: userEmail,
 					    password: Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10),

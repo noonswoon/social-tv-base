@@ -1,34 +1,44 @@
 //check if you reach new badge or not!
 exports.badgeCondition_check = function(){
+	alert("badgeCondition_check");
 	var userID = acs.getUserId();
 	var CheckinACS = require('acs/checkinACS');
-	var CheckinModel = require('model/checkin');			
+	//var CheckinModel = require('model/checkin');
+	//var checkinCount;			
 //CONDITION 1: NUMBER OF CHECK IN////////////////////////////////////
-	var checkinCount = CheckinModel.checkins_count(userID);
-	//badge desc: nice to meet you
-	//condition: 1st check in
-	//badge id: 0
-	if(checkinCount >=1){
-		Ti.App.fireEvent('checkinCountUpdate',{
-			badgeID: 0
-		});	
-	}
-	//badge desc: fall for you	
-	//condition: 10th check in	
-	//badge id: 1
-	if(checkinCount >=10){
-		Ti.App.fireEvent('checkinCountUpdate',{
-			badgeID: 1
-		});	
-	}
-	//badge desc: i'm loving it		
-	//condition: 20th check in
-	//badge id: 2
-	if(checkinCount >=20){
-		Ti.App.fireEvent('checkinCountUpdate',{
-			badgeID: 2
-		});	
-	}
+	//CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
+	var checkCountCondition = function(e){
+		var checkinCount = e.result;
+		//badge desc: nice to meet you
+		//condition: 1st check in
+		//badge id: 0
+		if(checkinCount >=1){
+			Ti.App.fireEvent('checkinCountUpdate',{
+				badgeID: 0
+			});	
+		}
+		//badge desc: fall for you	
+		//condition: 10th check in	
+		//badge id: 1
+		if(checkinCount >=10){
+			Ti.App.fireEvent('checkinCountUpdate',{
+				badgeID: 1
+			});	
+		}
+		//badge desc: i'm loving it		
+		//condition: 20th check in
+		//badge id: 2
+		if(checkinCount >=20){
+			Ti.App.fireEvent('checkinCountUpdate',{
+				badgeID: 2
+			});	
+		}
+	};
+	Ti.App.addEventListener('UserTotalCheckInsFromACS', checkCountCondition);
+	// function(e){
+	//	checkCountCondition(e.result);
+	//});	
+
 /////////////////////////////////////////////////////////////////////
 };
 

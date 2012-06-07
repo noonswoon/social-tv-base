@@ -13,6 +13,7 @@ exports.badgesLoadedFromACS = function(_badgesCollection){
 	var result = db.execute('DELETE FROM badges');
 	for(var i=0;i < _badgesCollection.length; i++) {
 		var curBadge = _badgesCollection[i];
+		Ti.API.info('_badgesCollection[i].path' + _badgesCollection[i].path);
 		db.execute("INSERT INTO badges(badgeID, title, desc, path, url) VALUES(?,?,?,?,?)", _badgesCollection[i].custom_fields.badgeID, _badgesCollection[i].custom_fields.title, _badgesCollection[i].custom_fields.desc, _badgesCollection[i].path, _badgesCollection[i].urls.original);
 	}
 	db.close();

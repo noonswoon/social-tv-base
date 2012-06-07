@@ -21,33 +21,30 @@ var ProfileHeaderView = function(_parentWindow){
 	var FriendsMainWindow = require('ui/common/Pf_friendsMainWindow');
 	var CacheHelper = require('helpers/cacheHelper');
 	
+	//not frequently update
 	LevelACS.levelACS_fetchedLevel();
 	BadgesACS.fetchedBadges();
+	
+	//frequently update
 	myBadgeACS.myBadgeACS_fetchedBadge(user_id);
 	FriendACS.searchFriend(user_id);
 	FriendACS.showFriendsRequest();
 	ActivityACS.activityACS_fetchedMyActivity(user_id);			
 	CheckinACS.checkinACS_fetchedUserTotalCheckIns(user_id);
-	//CheckinACS.checkinACS_fetchedUserCheckIn(user_id);
-	
-	
-	function checkinDbLoadedCallBack(e){			
-			CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
-	};
+	CheckinACS.checkinACS_fetchedUserCheckIn(user_id);	//fetch checkin data from ACS to keep in database only! for today:)
 
+	function checkinDbLoadedCallBack(e){			
+		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+	};
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	Ti.App.addEventListener('checkinsDbUpdated', function(){
-//		Ti.API.info('done updating database');
+		Ti.API.info('DONE: updating CHECKIN database');
 	});
+	
 	Ti.App.addEventListener('updateHeaderCheckin',function(){
-//		CheckinACS.checkinACS_fetchedUserTotalCheckIns();
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(user_id);
 	});
-
-//	CacheHelper.fetchACSDataOrCache('userCheckin'+user_id,CheckinACS.checkinACS_fetchedUserTotalCheckIns,user_id, 'checkinsDbUpdated');
-
-
-	Ti.App.addEventListener('UserTotalCheckInsFromACS', function(e){
-		//alert('e.result :' + e.result);
+Ti.App.addEventListener('UserTotalCheckInsFromACS', function(e){
 		columnCheckInCount.text = e.result;	
 	});	
 		
@@ -69,6 +66,9 @@ var ProfileHeaderView = function(_parentWindow){
 		FriendACS.searchFriend(user_id);
 		FriendACS.showFriendsRequest();
 		ActivityACS.activityACS_fetchedMyActivity(user_id);
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(user_id);
+		myBadgeACS.myBadgeACS_fetchedBadge(user_id);
+		BadgesACS.fetchedBadges();
 	});
 
 	function friendDbLoadedCallBack(e){
@@ -166,10 +166,10 @@ var ProfileHeaderView = function(_parentWindow){
 			borderRadius: 10,
 		});
 			//img
-			var columnCheckInImage = Ti.UI.createImageView({
-				image: 'images/icon/checkin.png',
-				top: 10
-			});
+		var columnCheckInImage = Ti.UI.createImageView({
+			image: 'images/icon/checkin.png',
+			top: 10
+		});
 			//count
 		var columnCheckInCount = Ti.UI.createLabel({
 			text: CheckinACS.checkinACS_fetchedUserTotalCheckIns(user_id),

@@ -23,7 +23,7 @@ exports.leaderACS_fetchedRank = function(_id){
 			});
 };
 
-//creare new user info for first time logging in
+//create only when create user for the first time entering into this application: totalPoint starts at 0 
 exports.leaderACS_createUserInfo = function(_id){
 	Cloud.Objects.create({
 	    classname: 'LeaderBoard',

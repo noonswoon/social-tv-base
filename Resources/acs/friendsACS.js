@@ -6,9 +6,22 @@ exports.searchFriend = function(_userID){
 				'&user_id='+_userID;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
+	    	alert(this.responseText);
 	    	responseJSON = JSON.parse(this.responseText);
 		      	for (var i = 0; i < responseJSON.response.users.length; i++) {
-	            var friend = responseJSON.response.users[i];  
+	            var friend = responseJSON.response.users[i];     
+	            //get fbId out from friend user object
+	            var fbId = 0;
+				var numExternalAccounts = friend.external_accounts.length;
+				
+				for(var i=0;i < numExternalAccounts; i++) {
+					var curExternalAccount = friend.external_accounts[i];
+					if(curExternalAccount.external_type === "facebook") {
+						fbId = curExternalAccount.external_id;
+						break;
+					}
+				}
+	            //end getFbId
 				var curFriend = {
 					my_id: _userID,
 					friend_id: friend.id,

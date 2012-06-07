@@ -19,7 +19,7 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = ChatMainWindow(programDummy);
+	var chatwin = new ProductMainWindow();//ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(1);		
 	var productwin = new ProductMainWindow();
 	var profilewin =  new ProfileMainWindow();

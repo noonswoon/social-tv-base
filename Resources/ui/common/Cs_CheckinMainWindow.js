@@ -3,11 +3,14 @@ CheckinMainWindow = function (_datafromrow){
 	var CheckinACS = require('acs/checkinACS');
 	var CheckinModel = require('model/checkin');
 	var PointACS = require('acs/pointACS');
-	//var PointModel = require('model/point');
 	var LeaderBoardACS = require('acs/leaderBoardACS');
 	var ActivityACS = require('acs/activityACS');
+	var ActivityModel = require('model/activity');
 	var BadgeCondition = require('helpers/badgeCondition');
 	var TVProgram = require('model/tvprogram');
+	
+	var updateActivity = require('helpers/updateActivity');
+	
 	var checkinPoint = 10;
 	
 	var userID = acs.getUserId();
@@ -153,7 +156,6 @@ CheckinMainWindow = function (_datafromrow){
 ///////////////////////////////////////////////////Checkin Section
 
 	var checkinView = Ti.UI.createView({
-		//backgroundColor: '#333',
 		top: 110,
 		left:0,
 		height: 265,
@@ -163,7 +165,6 @@ CheckinMainWindow = function (_datafromrow){
 	self.add(checkinView);
 	
 //add button as image
-
 	var meButton = Ti.UI.createImageView({
 		image: '/images/checkin/checkin_me_enable.png',
 		right: 43,
@@ -211,7 +212,6 @@ function isPointInPoly(poly, pt)
         ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y)) && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x) && (c = !c);
     return c;
 }
- 
 	var boardPoint = [
 		{x: 81, y:53},
 		{x: 161, y:18},
@@ -219,8 +219,7 @@ function isPointInPoly(poly, pt)
 		{x: 191, y:105},
 		{x: 158, y:95},
 		{x: 131, y:105}
-	];		
-	
+	];			
 	var mePoint = [
 		{x: 192, y:108},
 		{x: 243, y:55},
@@ -331,26 +330,24 @@ function isPointInPoly(poly, pt)
 /////////////////////////////////////////////////////////////
 	
 	checkinButton.addEventListener('click',function(){
-		alert('you have check in');
-//		
-		var updateActivity = require('helpers/updateActivity');
+		alert('you have check in');		
 		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_datafromrow);
-		var allActivityDataForACS =  ActivityDataIdForACS[0];	
-		var allIdDataForACS = ActivityDataIdForACS[1];
+		
+		var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
+		var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
 		//checkinData / leaderboardData / activityData	
 		var checkinData = allActivityDataForACS[0];
 		var leaderboardData = allActivityDataForACS[1];
 		var activityData = allActivityDataForACS[2];
 		// checkinId / leaderboardId / activityId
-		var leaderboardId = allIdDataForACS[1]; //local id
-		
-		var checkinId = allIdDataForACS[0]; //local id
-		//var activityId = allIdDataForACS[2]; //acs id
-	
-		//require callback from acs
-		CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//local id attached
-		ActivityACS.activityACS_createMyActivity(activityData);
+		var checkinId = allIdDataForACS[0]; 			//local id
+		var leaderboardId = allIdDataForACS[1]; 		//acs id
+		var activityId = allIdDataForACS[2]; 			//local id
 
+		//require callback from acs
+		CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+		ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+		
 		//done after adding to acs
 		PointACS.pointACS_createPoint(leaderboardData,_datafromrow.programId,'checkin');
 		LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
@@ -364,26 +361,25 @@ function isPointInPoly(poly, pt)
 	});
 
 //TODO: make this update to leaderboard and else!!
-//	Ti.App.fireEvent('update1checkin',{fetchedACheckin:checkin}); //fetched back with local id:)
 	function update1checkinCallBack(e) {
-		Ti.App.fireEvent('updateHeaderCheckin');
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
-	};
-	
-	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
-
-	function oneCheckinUpdatedCallback(_checkinID) {
-		//checkinCount.text = CheckinModel.checkins_count(userID);
 		var num = TVProgram.TVProgramModel_countCheckins(_datafromrow.programId);
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_datafromrow.programId,{numCheckin:num});
+		BadgeCondition.badgeCondition_check();
+		Ti.App.fireEvent('updateHeaderCheckin');
+		Ti.App.fireEvent('LeaderDbUpdated');
+	};
+	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
 
-	}
-	Ti.App.addEventListener('oneCheckinUpdated',oneCheckinUpdatedCallback);
+	function update1activityCallBack(e) {
+		ActivityModel.activity_updateOne(e.fetchedAnActivity);
+		//TODO: UPDATE ANY ACTIVITY TO SHOW ON PROFILE:)
+	};
+	Ti.App.addEventListener('update1activity',update1activityCallBack);
 
-	
 	self.addEventListener("close", function(e) {
-		Ti.App.removeEventListener('oneCheckinUpdated',oneCheckinUpdatedCallback);
+		Ti.App.removeEventListener('update1checkin', update1checkinCallBack);
 	});
 
 	self.showNavBar();

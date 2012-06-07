@@ -22,7 +22,7 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 
 
 
-
+//this function give only total results for checkins
 exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	var checkin = [];
 	var id = _id;
@@ -37,7 +37,7 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
-	        Ti.API.info('checkinACS_getTotalNumCheckinOfProgram error');
+	        Ti.API.info('checkinACS_fetchedUserTotalCheckIns error');
 	    },
 	    timeout:10000  /* in milliseconds */
 	});
@@ -45,17 +45,20 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	xhr.send();
 
 };
-
+//fetch checkin data only for today to keep in database
 exports.checkinACS_fetchedUserCheckIn = function(_id) {
+	var start_of_the_day = moment().sod().format('YYYY-MM-DD, HH:mm:ss');
 	Cloud.Checkins.query({
     page: 1,
-    per_page: 20,
-    where: {user_id: _id},
+    per_page: 100,
+    where: {user_id: _id, updated_at: {"$gte": start_of_the_day}},
+    //update- at : today only // greater than start of the day : moment-> save in database 
     order: '-updated_at'
 
 }, function (e) {
     if (e.success) {
         var checkin =[];
+        Ti.API.info("checkinACS_fetchedUserCheckIn/You have check in today: " + e.checkins.length);
         for (var i = 0; i < e.checkins.length; i++) {
         	 var curCheckin = e.checkins[i]; 
                checkin.push(curCheckin);
@@ -88,7 +91,6 @@ exports.checkinACS_createCheckin = function(checkinData,local_id){
 
 exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId) {
 	var programs = [];
-	
 	var eventId = _eventId;
 	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":"'+eventId+'"}&per_page=1';	
 	

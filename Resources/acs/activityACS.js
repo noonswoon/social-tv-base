@@ -22,21 +22,22 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 		
 };
 
-exports.activityACS_createMyActivity = function(_activity){
+exports.activityACS_createMyActivity = function(_activity,local_id){
 		Cloud.Objects.create({
 	    classname: 'Activity',
 		fields: {
         	user: _activity.user_id,
-				targetedUserID: _activity.targetedUserID,
-				category: _activity.category,
-				targetedObjectID:_activity.targetedObjectID,
-				additionalData: _activity.additionalData,
+			targetedUserID: _activity.targetedUserID,
+			category: _activity.category,
+			targetedObjectID:_activity.targetedObjectID,
+			additionalData: _activity.additionalData,
+			custom_fields: {local_id: local_id},
    		}
 	}, function (e) {
 	    if (e.success) {
 	        var activity = e.Activity[0];
-	       Ti.API.info('Success create data in Activity');
-			//add eventlistener + fetched to update
+	        Ti.App.fireEvent('update1activity',{fetchedAnActivity:activity}); //fetched back with local id:)
+
 	    } else {
 	        alert('Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));

@@ -16,9 +16,8 @@ function MessageboardMainWindow(_programId) {
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
 		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
+		barImage: 'images/NavBG.png',
 		title: "Message Board",
-		barColor: '#6d0a0c'
 	});
 
 	var searchView = Ti.UI.createView({

@@ -19,15 +19,15 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = ChatMainWindow(programDummy);
+	var chatwin = new SettingWindow() //ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(1);		
 	var productwin = new ProductMainWindow();
-	var profilewin =  new ProfileMainWindow();
+	var profilewin = new ProfileMainWindow();
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
-		title: 'Selection',
-		icon: '/images/tv.png',
+		title: 'Discover',
+		icon: '/images/discover.png',
 		window: selectionwin
 	});
 	selectionwin.containingTab = selectionTab;
@@ -37,7 +37,7 @@ function ApplicationTabGroup() {
 	});
 	
     var chatTab = Titanium.UI.createTab({  
-        icon: '/images/fugitives.png',
+        icon: '/images/chat-2.png',
 		title: 'Chat',
 		//window: NO WINDOW FOR CHAT
     });
@@ -52,7 +52,7 @@ function ApplicationTabGroup() {
     });
     
     var messageboardTab = Titanium.UI.createTab({  
-        icon:'/images/captured.png',
+        icon:'/images/messageboard.png',
         title:'Board',
         window: messageboardwin
     });
@@ -63,7 +63,7 @@ function ApplicationTabGroup() {
 	});
 	
 	var productTab = Ti.UI.createTab({
-		icon: '/images/captured.png',
+		icon: '/images/product.png',
 		title: 'Product',
 		window: productwin
 	});
@@ -73,8 +73,8 @@ function ApplicationTabGroup() {
 	});
 	
 	var profileTab = Ti.UI.createTab({
-		icon: '/images/fugitives.png',
-		title: 'Profile',
+		icon: '/images/me.png',
+		title: 'Me',
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;

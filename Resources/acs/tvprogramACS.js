@@ -19,7 +19,7 @@ exports.tvprogramACS_fetchAllProgramShowingNow = function() {
 	            var curProgram = {
 	            	id: program.id,
 	            	name: program.name,
-	            	photo: 'program.photo.urls.original',
+	            	photo: program.photo.urls.original,
 	            	start_time: program.start_time,
 	            	recurring_until: program.recurring_until,
 	            	channel_id: program.custom_fields.channel_id,

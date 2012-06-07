@@ -2,19 +2,18 @@ var LoginFbOnlyWindow = function() {
 		
 	//UI STUFF
 	var lWin = Ti.UI.createWindow({
-		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
+		backgroundColor:'white',
 		title: "Login",
 		barColor: '#6d0a0c',
 		layout: 'vertical'
 	});
 		
 	var fbLoginButton = Ti.UI.createButton({
-		title:'fb_login',
 		top:5,
 		width:200,
 		height:40,
-		visible:true
+		visible:true,
+		backgroundImage: 'images/loginbutton.png'
 	});
 	
 	var fbLoginStatuslbl = Ti.UI.createLabel({

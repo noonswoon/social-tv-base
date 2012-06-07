@@ -12,12 +12,8 @@ function GuideWindow(_parent) {
 
 	var selectChannelToolbar = Ti.UI.createView({
 		top: 0,
-		height: 40,
-		backgroundGradient: {			
-	        	type: 'linear',
-	        	startPoint: { x: '0%', y: '0%' },
-	        	endPoint: { x: '0%', y: '100%' },
-	        	colors: [ { color: '#fff', offset: 0.0}, { color: '#d0d0d0', offset: 1.0 } ]}
+		height: 44,
+		backgroundImage: 'images/ToolbarBG.png'
 	});
 	self.add(selectChannelToolbar);
 	
@@ -65,7 +61,7 @@ function GuideWindow(_parent) {
 	borderRadius: 15,
 	zIndex: 3
 	});
-
+	
 	var triangleImage = Ti.UI.createImageView({
 	image: 'images/triangle.png',
 	height: 20,
@@ -87,6 +83,10 @@ function GuideWindow(_parent) {
 	tableViewForTab.setData(dataForTab);
 	
 	//EVENT LISTENERS
+	//TODO: bad programming style here
+	//need to change and close the popup window in this file
+	//the current closing popup window logic are at ApplicationTabGroup and Cs_ChannelSelection files
+	//somehow self's blur/close events aren't functional
 	var channelSelectorToggle = true; //true means it closes
 	selectChannelButton.addEventListener('click',function(e){
 		if(channelSelectorToggle) {

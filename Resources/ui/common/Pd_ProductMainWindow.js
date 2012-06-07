@@ -10,17 +10,13 @@ function ProductMainWindow() {
 	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
-		backgroundImage: '/images/grain.png',
+		barImage: 'images/NavBG.png',
 	});
 
 	var productSelectProgramToolbar = Ti.UI.createView({
 		top: 0,
-		height: 40,
-		backgroundGradient: {			
-	        	type: 'linear',
-	        	startPoint: { x: '0%', y: '0%' },
-	        	endPoint: { x: '0%', y: '100%' },
-	        	colors: [ { color: '#fff', offset: 0.0}, { color: '#d0d0d0', offset: 1.0 } ]}
+		height: 44,
+		backgroundImage: 'images/ToolbarBG.png'
 	});
 	self.add(productSelectProgramToolbar);
 	
@@ -60,7 +56,7 @@ function ProductMainWindow() {
 	borderRadius: 15,
 	zIndex: 3
 	});
-
+	
 	var triangleImage = Ti.UI.createImageView({
 	image: 'images/triangle.png',
 	height: 20,
@@ -92,6 +88,10 @@ function ProductMainWindow() {
 
 	
 	//EVENT LISTENERS
+	//TODO: bad programming style here
+	//need to change and close the popup window in this file
+	//the current closing popup window logic are at ApplicationTabGroup files
+	//somehow self's blur/close events aren't functional
 	var shopSelectorToggle = true; //true means it closes
 	productSelectProgramButton.addEventListener('click',function(e){
 		if(shopSelectorToggle) {

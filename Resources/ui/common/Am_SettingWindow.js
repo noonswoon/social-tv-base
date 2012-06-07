@@ -1,5 +1,5 @@
 var SettingWindow = function() {
-		
+	
 	//UI STUFF
 	var win = Ti.UI.createWindow({
 		backgroundColor:'transparent',
@@ -19,7 +19,7 @@ var SettingWindow = function() {
 	
 	//ADDING UI COMPONENTS TO WINDOW
 	win.add(fbLogoutButton);
-	win.add(fbLogoutButton);
+	
 	
 	//CALLBACK FUNCTIONS	
 	function logoutCallback(event) {
@@ -42,9 +42,7 @@ var SettingWindow = function() {
 		acs.logout(logoutCallback); //logout from chatterbox
 	});
 	
-	
 	return win;
-	
 };
 
 module.exports = SettingWindow;

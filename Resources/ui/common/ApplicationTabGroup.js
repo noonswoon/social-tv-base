@@ -19,10 +19,10 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = ChatMainWindow(programDummy);
-	var messageboardwin = new MessageboardMainWindow(1);		
-	var productwin = new ProductMainWindow();
-	var profilewin =  new ProfileMainWindow();
+	var chatwin = new ChatMainWindow(programDummy);
+	var messageboardwin =  new MessageboardMainWindow(1);		
+	var productwin =  new ProductMainWindow();
+	var profilewin =   new SettingWindow();//new ProfileMainWindow(); //<<-- causing some problem on the device
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({

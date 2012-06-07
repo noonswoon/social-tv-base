@@ -1,4 +1,3 @@
-//:D
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 Titanium.UI.setBackgroundColor('#000');
 
@@ -19,17 +18,16 @@ Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
 var CACHE_TIMEOUT_IN_MINUTES = 100; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
-
+	
 var acs = require('lib/acs');
+var UrbanAirship = require('lib/UrbanAirship');
+
+var Debug = require('lib/debug');
 var Cloud = require('ti.cloud');
-var pullToRefreshModule = require('nl.icept.pull2refresh');
+var PullToRefresh = require('nl.icept.pull2refresh');
 
 var myCurrentCheckinPrograms = ['CH9_CSINY','CH7_0LOST']; //should be reset every hour to empty array
 
-//bootstrap and check dependencies
-if (Ti.version < 1.8 ) {
-	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');
-}
 
 // This is a single context application with mutliple windows in a stack
 (function() {
@@ -46,39 +44,43 @@ if (Ti.version < 1.8 ) {
 
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
-			Ti.API.info("should go to maintab screen");
+			Debug.debug_print("should go to maintab screen");
+			
 			var userEmail = e.users[0].email;
 			Cloud.Users.logout(function (e) {
 			    if (e.success) {
-			    	Ti.API.info('logging out to login again...'); //<--just to make Friends Module works
+			    	Debug.debug_print("logging out to login again");
 			    	Cloud.Users.login({
 						login: userEmail,
 					    password: Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10),
 					}, function (e) {
 						if (e.success) {
-							Ti.API.info("logging again..successful"+e.users.length);
+							Debug.debug_print("logging in again..successful");
+							
 							acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
 									
 							var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+							Debug.debug_print("app.js - creating new appTabGroup [watchout!]");
 							var maintabgroup = new ApplicationTabGroup();
 							maintabgroup.open();
 						} else {
-							alert("relogging in failed: "+e.error);
+							alert("ReloggingIn Error: "+JSON.stringify(e));
 					    }
 					}); 
 			    } else {
-			        alert('Logout Error:\\n' +
-			            ((e.error && e.message) || JSON.stringify(e)));
+			        alert('Logout Error: '+((e.error && e.message) || JSON.stringify(e)));
 			    }
 			});
 	    } else {
-	    	Ti.API.info("should go to login page");
+	    	Debug.debug_print("should go to login screen");
 			Ti.Facebook.logout(); //just to be save
 			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
+			var SettingWindow = require('ui/common/Am_SettingWindow');
+			//var loginwin = new SettingWindow();
 			var loginwin = new LoginFbOnlyWindow();
+			
 			loginwin.open();   			
    		}
     });
-
 })();

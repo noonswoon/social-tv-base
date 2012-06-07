@@ -154,7 +154,7 @@ function MessageboardMainWindow(_programId) {
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
 	}
-	pullToRefreshModule.addASyncPullRefreshToTableView(allTopicTable, function() {
+	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
 		usingPull2Refresh = true;
 		TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
 	}, { //settings

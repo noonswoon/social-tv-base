@@ -258,7 +258,7 @@ function CommentWindow(_topicId) {
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
 	}
-	pullToRefreshModule.addASyncPullRefreshToTableView(commentsTable, function() {
+	PullToRefresh.addASyncPullRefreshToTableView(commentsTable, function() {
 		usingPull2Refresh = true;
 		CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
 	}, { //settings

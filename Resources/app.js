@@ -76,8 +76,6 @@ var myCurrentCheckinPrograms = ['CH9_CSINY','CH7_0LOST']; //should be reset ever
 	    	Debug.debug_print("should go to login screen");
 			Ti.Facebook.logout(); //just to be save
 			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
-			var SettingWindow = require('ui/common/Am_SettingWindow');
-			//var loginwin = new SettingWindow();
 			var loginwin = new LoginFbOnlyWindow();
 			
 			loginwin.open();   			

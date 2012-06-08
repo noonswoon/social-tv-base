@@ -24,9 +24,9 @@ var ProfileDetailView = function(_parent){
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
-//		backgroundImage: 'images/bg.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
+	
 	var profileDetailScroll = Ti.UI.createScrollView({
 		contentWidth:312,
 		contentHeight:'auto',

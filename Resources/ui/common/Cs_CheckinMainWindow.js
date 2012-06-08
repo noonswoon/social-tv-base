@@ -374,12 +374,13 @@ function isPointInPoly(poly, pt)
 
 	function update1activityCallBack(e) {
 		ActivityModel.activity_updateOne(e.fetchedAnActivity);
-		//TODO: UPDATE ANY ACTIVITY TO SHOW ON PROFILE:)
+		Ti.App.fireEvent('activityDbUpdated');
 	};
 	Ti.App.addEventListener('update1activity',update1activityCallBack);
 
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener('update1checkin', update1checkinCallBack);
+		Ti.App.removeEventListener('update1activity',update1activityCallBack);
 	});
 
 	self.showNavBar();

@@ -18,7 +18,7 @@ function ApplicationTabGroup() {
 		programNumCheckin: 25345
 	};
 	
-	var selectionwin = new SettingWindow(); // ChannelSelectionMainWindow();
+	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new SettingWindow(); //ChatMainWindow(programDummy);
 	var messageboardwin = new SettingWindow(); //MessageboardMainWindow(1);		
 	var productwin = new SettingWindow(); //ProductMainWindow();

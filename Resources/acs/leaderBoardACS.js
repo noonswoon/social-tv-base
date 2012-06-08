@@ -54,14 +54,12 @@ Cloud.Objects.update({
     classname: 'LeaderBoard',
     id: _id,
     fields: {
-    	//update +++
         totalPoint: _point,
     }
 }, function (e) {
     if (e.success) {
         var leaderBoard = e.LeaderBoard[0];
-        alert('Success:\\n' +
-            'totalPoint: ' + leaderBoard.totalPoint);
+        Ti.API.info('Success:\\n' + 'totalPoint: ' + leaderBoard.totalPoint);
             //fireevent update database
     } else {
         alert('Error:\\n' +

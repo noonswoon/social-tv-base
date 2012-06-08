@@ -2,17 +2,20 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 	Cloud.Objects.query({
 	classname: 'Activity',	
     page: 1,
-    per_page: 20,
+    per_page: 10,
     order: '-created_at',
-    where: {user_id: _id},
+    where: {targetedUserID: _id},
 }, function (e) {
     if (e.success) {
 		recentActivity = [];
-		for(var i=0; i<e.Activity.length || i< 20; i++){
+		for(var i=0; i<e.Activity.length || i< 10; i++){
 			var curActivity = e.Activity[i];
+			Ti.API.info('before converted time: '+curActivity.updated_at);
+			curActivity.updated_at = convertACSTimeToLocalTime(curActivity.updated_at);
+			Ti.API.info('after converted time: '+curActivity.updated_at);
 			recentActivity.push(curActivity);
-		}		
-//		Ti.App.fireEvent('ActivityLoaded',{fetchedActivity:recentActivity});
+		}	
+		Ti.App.fireEvent('activityLoaded',{fetchedActivity:recentActivity});
     } 
     else {
         Ti.API.info('activityACS_fetchedMyActivity Error:\\n' +

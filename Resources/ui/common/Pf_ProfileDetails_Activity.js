@@ -2,10 +2,10 @@ var ProfileActivityView = function(){
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
 //test data			
-	var _user = acs.getUserId();
+	var user_id = acs.getUserId();
 	var	ProfileDataName= 'Jaew Panisa';
 	var	ProfileDataImg = 'images/kuma100x100.png';
-	var activity =[];
+	var activity = [];
 	var request =[];
 	var requestUsers = []; //data to show in the request table view
 	
@@ -133,60 +133,70 @@ var ProfileActivityView = function(){
 	
 	
 //ACTIVITY////////////////////////////////////////////////////
-	for(var i =0;i<5;i++){
-		var userActivityRow = Ti.UI.createTableViewRow({
-			backgroundColor: '#fff',
-			width: 290,
-			height: 50,
-			selectedBackgroundColor: '#fff'
-		});
-		var activityType = Ti.UI.createImageView({
-			left: 10,
-			opacity: 0.6
-		});
-		//randomly set activity image
-		if(i%3===0){activityType.image= 'images/icon/act_add.png'}
-		else if(i%3===1){activityType.image= 'images/icon/act_chat.png'}
-		else{activityType.image= 'images/icon/act_checkin.png'};
+//	Ti.App.fireEvent('ActivityLoaded',{fetchedActivity:recentActivity});
+	var activityModel = require('model/activity');
+	var activityLoadedCallBack = function(e){
+		activityModel.activityModel_fetchedActivityFromACS(e.fetchedActivity);
+	};
+	Ti.App.addEventListener('activityLoaded',activityLoadedCallBack);
+	Ti.App.addEventListener('activityDbUpdated',function(){
+		myActivity = activityModel.activityModel_fetchActivity(user_id);
+		createActivityTable(myActivity);
+	});
+	
+	var createActivityTable = function(myActivity){
+		var numLoops = 5; 
+		if(myActivity.length < numLoops) numLoops = myActivity.length;
 		
-		var userPicture = Ti.UI.createImageView({
-			image: ProfileDataImg,
-			height: 30,
-			width: 30,
-		});			
-		var userPictureView = Ti.UI.createView({
-			height: 34,
-			width: 34,
-			border: 1,
-			borderColor: '#E2E5EE',
-			backgroundColor: '#fff',
-			left: 50
-		});
-		
-		var activityInfo = Ti.UI.createLabel({
-				font: {fontSize: 12},
-				color: '#666',
-				top: 5,
-				left: 90,
-				height:20,
-				text: 'Jaew Panisa added you as a friend aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-		});
-		var activityTime = Ti.UI.createLabel({
-				font: {fontSize: 12},
-				color: '#999',
-				top: 20,
-				left: 90,
-				height:20,
-				text: '3 hours ago'
-			});	
-		userPictureView.add(userPicture);
-		userActivityRow.add(activityType);	
-		userActivityRow.add(userPictureView);
-		userActivityRow.add(activityInfo);
-		userActivityRow.add(activityTime);
-		activity[i] = userActivityRow;
-	}
+		for(var i =0;i< numLoops;i++){
+			var userActivityRow = Ti.UI.createTableViewRow({
+				backgroundColor: '#fff',
+				width: 290,
+				height: 50,
+				selectedBackgroundColor: '#fff'
+			});
+			var activityType = Ti.UI.createImageView({
+				left: 10,
+			});
+			var activityInfo = Ti.UI.createLabel({
+					font: {fontSize: 12},
+					color: '#666',
+					top: 5,
+					left: 50,
+					height:20,
+					width: 220,
+			});
+			var activityTime = Ti.UI.createLabel({
+					font: {fontSize: 12},
+					color: '#999',
+					top: 20,
+					left: 50,
+					height:20,
+				});	
+			//randomly set activity image
+			if(myActivity[i].category==='addfriend'){activityType.image= 'images/icon/act_add_color.png'}
+			else if(myActivity[i].category==='post'){activityType.image= 'images/icon/act_chat_color.png'}
+			else if(myActivity[i].category==='getbadge'){
+				activityType.image= 'images/icon/act_badge_color.png';
+				activityInfo.text = 'You have got a new badge: ' + myActivity[i].additionalData;
+			}
+			else if(myActivity[i].category==='checkin'){
+				activityType.image= 'images/icon/act_checkin_color.png';
+				activityInfo.text = 'You have checked in to ' + myActivity[i].additionalData;
+			}
+			var dm = moment(myActivity[i].updated_at, "YYYY-MM-DDTHH:mm:ss");
+			var activityDateStr = since(dm);
+			activityTime.text = activityDateStr;
 
+			userActivityRow.add(activityType);	
+			userActivityRow.add(activityInfo);
+			userActivityRow.add(activityTime);
+			activity[i] = userActivityRow;
+		Ti.API.info('activity table: ' + i);
+		}
+		Ti.API.info('activity table okay');
+		userActivity.data = activity;
+	};
 //////////////////////////////////////////////////////////////
 	var ActivityLabel = Ti.UI.createLabel({
 		text: 'ACTIVITY',
@@ -201,7 +211,6 @@ var ProfileActivityView = function(){
 		height: 200,
 		backgroundColor: '#fff',
 		borderRadius: 10,
-		data: activity,
 		scrollable: false,
 		bottom: 10,
 		top: 30

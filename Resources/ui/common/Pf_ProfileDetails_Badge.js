@@ -51,6 +51,28 @@ var ProfileBadgeView = function(_parent){
 		
 		Ti.App.fireEvent('addBadgeDataReady');
 	});
+	var updateActivity = require('helpers/updateActivity');
+	var ActivityACS = require('acs/activityACS');
+	var newBadgeUnlockCallback = function(e){
+		badgeData = BadgeModel.fetchedBadgeSearch(e.badgeID);
+		alert('badgeData');
+		alert('badgeData.title: '+badgeData.title);
+		Ti.App.fireEvent('updatedMyBadge',{badgeID: e.badgeID});
+		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('getbadge',badgeData);
+		var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
+		var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
+		var leaderboardData = allActivityDataForACS[0];
+		var activityData = allActivityDataForACS[1];
+		// leaderboardId / activityId			//local id
+		var leaderboardId = allIdDataForACS[0]; 		//acs id
+		var activityId = allIdDataForACS[1]; 			//local id
+		//require callback from acs	
+		ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+		//done after adding to acs
+		PointACS.pointACS_createPoint(leaderboardData,e.badgeID,'getbadge');
+		LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+	};	
+	Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);
 	
 	Ti.App.addEventListener('myBadgesLoaded',function(e){
 		//set the value of myUnlockedBadges to be 1 if user got badges
@@ -76,8 +98,9 @@ var ProfileBadgeView = function(_parent){
 		for (var i in badgeView.children){
 			if (badgeView.children.hasOwnProperty(i)) {
 				badgeView.remove(badgeView.children[i]);
-		   }
-		}			
+		  };
+		}	
+			
 		var count = 0;
 		for(var i=0;i<3;i++){
 			for(var j=0;j<3;j++){
@@ -125,16 +148,14 @@ var ProfileBadgeView = function(_parent){
 		var checkBadge = _id.badgeID;
 		if(myUnlockBadgesReady){
 			if(myUnlockedBadges[checkBadge]===0){
-				alert('creating your new badge..');
 				BadgeCondition.badgeCondition_createBadgeUnlocked(checkBadge);
-				//TODO: create new activity = getBadge :D
 			}
 		}
 	});
 	Ti.App.addEventListener('updatedMyBadge',function(_user){
 		var badgeUpdated = _user.badgeID;
 		myUnlockedBadges[badgeUpdated]=1;
-		alert('CONGRATS! You have got a new badge');
+		alert('CONGRATS! You have unlock a new badge');
 		Ti.App.fireEvent('updatedmyUnlockedBadges');
 	});
 	return badgeView;

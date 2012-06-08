@@ -32,7 +32,6 @@ exports.level_fetchLevel = function() {
 };
 
 exports.level_checkLevel = function(_exp) {
-	//Ti.API.info('level_checkLevel');
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * from levels where ? < exp ORDER BY exp ASC limit 0,1',_exp);
 	var myLevel = result.fieldByName('levelName');
@@ -42,7 +41,6 @@ exports.level_checkLevel = function(_exp) {
 };
 
 exports.level_nextLevel = function(_exp) {
-	//Ti.API.info('level_nextLevel');
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * from levels where ? < exp ORDER BY exp ASC limit 0,1',_exp);
 	var NextLevel = Number(result.fieldByName('exp'));

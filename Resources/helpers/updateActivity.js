@@ -31,7 +31,7 @@ exports.updateActivity_myDatabase = function(_type,_act){
 			var activityData = {
 				user_id: id,
 				targetedUserID: id,
-				category: 'checkin',
+				category: _type,
 				targetedObjectID: _act.programId,
 				additionalData: _act.programTitle,
 			};
@@ -47,6 +47,14 @@ exports.updateActivity_myDatabase = function(_type,_act){
 		case 'getbadge': {
 			Ti.API.info("update type:"+_type);	
 			_point = 5;	
+			
+		var activityData = {
+			user_id: id,
+			targetedUserID: id,
+			category: _type,
+			targetedObjectID: _act.badgeID,
+			additionalData: _act.title,
+		};
 			break;
 		};
 		default: {

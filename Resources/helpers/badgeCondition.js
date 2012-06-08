@@ -1,12 +1,8 @@
 //check if you reach new badge or not!
 exports.badgeCondition_check = function(){
-	alert("badgeCondition_check");
 	var userID = acs.getUserId();
-	var CheckinACS = require('acs/checkinACS');
-	//var CheckinModel = require('model/checkin');
-	//var checkinCount;			
+	var CheckinACS = require('acs/checkinACS');		
 //CONDITION 1: NUMBER OF CHECK IN////////////////////////////////////
-	//CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
 	var checkCountCondition = function(e){
 		var checkinCount = e.result;
 		//badge desc: nice to meet you
@@ -47,4 +43,5 @@ exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	var userID = acs.getUserId();
 	Ti.API.info('badgeCondition_createBadgeUnlocked: '+ _badgeID);
 	myBadgeACS.myBadgeACS_createNewBadge(userID,_badgeID);
+	
 };

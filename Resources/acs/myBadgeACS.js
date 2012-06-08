@@ -34,9 +34,10 @@ exports.myBadgeACS_createNewBadge = function(_userID,_badgeID){
 	}, function (e) {
 	    if (e.success) {
 	        var badgeUnlock = e.BadgeUnlock[0];
-			Ti.App.fireEvent('updatedMyBadge',{
-			badgeID: badgeUnlock.badge_id
-			});	        
+			//Ti.App.fireEvent('updatedMyBadge',{
+			//	badgeID: badgeUnlock.badge_id
+			//});
+			Ti.App.fireEvent('newBadgeUnlock', {badgeID: badgeUnlock.badge_id});   
 	    } else {
 	        alert('myBadgeACS->createNewBadge: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));

@@ -15,7 +15,7 @@ function MessageboardMainWindow(_programId) {
 
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
-		backgroundColor:'transparent',
+		backgroundImage: 'images/messageboard/appBG.png',
 		barImage: 'images/NavBG.png',
 		title: "Message Board",
 	});
@@ -23,39 +23,44 @@ function MessageboardMainWindow(_programId) {
 	var searchView = Ti.UI.createView({
 		top: 120,
 		width:'auto',
-		height:44,
-		backgroundColor: 'pink',
-		zIndex:2
+		height:50,
+		zIndex: 2,
+		// backgroundColor: 'green'
+		backgroundImage: 'images/messageboard/testBG.png'
 	});
+	
+
 	var searchTextField = Titanium.UI.createSearchBar({
-		top: 0, 
-		left: 0,
-		width: 285,
-		barColor:'#6d0a0c',
+		top: 1, 
+		left: 7,
+		width: 260,
+		backgroundImage: 'images/messageboard/test2.png',
+        backgroundRepeat:true,
 		showCancel:false,
 		hintText:'Search here...',
 	});
 
 	var addButton = Ti.UI.createButton({
-		right: 0,
-		top: 0,
-		width: 40,
-		height: 40,
-		title: '+'
+		right: 10,
+		top: 9,
+		width: 45,
+		height: 29,
+		backgroundImage: 'images/messageboard/addnewtopic.png',
+		backgroundSelectedImage: 'images/messageboard/addnewtopic_onclick.png'
 	});
 	searchView.add(searchTextField);
 	searchView.add(addButton);
 
 	var allTopicTable = Ti.UI.createTableView({
-		top: 160,
-		left: 0,
-		right: 0,
+		top: 170,
+		bottom: 10,
 		scrollable: true,
 		//separatorColor: 'transparent',
 		search: searchTextField,//messageboardHeader.searchTextField,
 		filterAttribute: 'filter',
 		searchHidden: true, //the bar is outside the table
-		backgroundColor: 'pink'
+		backgroundColor: 'transparent',
+		style:Titanium.UI.iPhone.TableViewStyle.GROUPED,
 	});	
 
 	//ADDING UI COMPONENTS TO WINDOW

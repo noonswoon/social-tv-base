@@ -10,6 +10,7 @@ function CommentWindow(_topicId) {
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
 	var usingPull2Refresh = false;
+	var topicOwnerDeviceTokenId = "";
 	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
@@ -78,7 +79,8 @@ function CommentWindow(_topicId) {
 		//getting topicInfo from the db
 		
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
-		Ti.API.info('topicData: '+JSON.stringify(curTopic));
+		topicOwnerDeviceTokenId = curTopic.deviceTokenId;
+				
 		commentHeader._setTitle(curTopic.title);
 		
 		//use momentjs for helping on converting dateObject from string
@@ -103,8 +105,8 @@ function CommentWindow(_topicId) {
 				votesOfComments.push(curComment);
 			}
 		}
-		Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
-		Ti.API.info('num votesOfComments: '+votesOfComments.length);
+		//Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
+		//Ti.API.info('num votesOfComments: '+votesOfComments.length);
 		
 		var commentRowsData = [commentHeader];
 		
@@ -212,6 +214,7 @@ function CommentWindow(_topicId) {
 		commentsTable.insertRowAfter(0,commentRow);
 		
 		CommentACS.commentACS_createCommentOfTopic(commentHeader._getReplyTextAreaContent(),newId,_topicId);
+		Ti.API.info('sending notification to deviceTokenId: '+topicOwnerDeviceTokenId);
 		commentHeader._setReplyTextArea("");
 		commentHeader._blurReplyTextArea();
 	}

@@ -88,3 +88,7 @@ exports.unRegisterDeviceToken = function() {
     request.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(getAppKey() + ':' + getAppSecret()));
     request.send();
 }
+
+exports.sendNotification = function() {
+	//implement stuff here
+}

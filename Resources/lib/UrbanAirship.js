@@ -6,12 +6,16 @@ var URBAN_AIRSHIP_APP_PROD_SECRET = "";
 var MY_DEVICE_TOKEN_SYM = 'myDeviceToken';
 
 var getDeviceToken = function() {
-	var deviceToken = "";
-	if(Ti.App.Properties.hasProperty(MY_DEVICE_TOKEN_SYM)) {
-		deviceToken =  Ti.App.Properties.getString(MY_DEVICE_TOKEN_SYM);
-	} else deviceToken = "";
-	//alert('deviceToken: '+deviceToken);
-	return deviceToken;
+	if(!IS_ON_DEVICE)
+		return "82DFA37CD520A0CBF2EF92A2138550AE88829C08EC01DE2109FE61FC3ADE82D5";
+	else {
+		var deviceToken = "";
+		if(Ti.App.Properties.hasProperty(MY_DEVICE_TOKEN_SYM)) {
+			deviceToken =  Ti.App.Properties.getString(MY_DEVICE_TOKEN_SYM);
+		} else deviceToken = "";
+		//alert('deviceToken: '+deviceToken);
+		return deviceToken;
+	}
 };
 exports.getDeviceToken = getDeviceToken;
 

@@ -16,6 +16,7 @@ Ti.Facebook.appid = "197422093706392";
 Ti.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
+var IS_ON_DEVICE = false;
 var CACHE_TIMEOUT_IN_MINUTES = 100; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 	
@@ -27,7 +28,6 @@ var Cloud = require('ti.cloud');
 var PullToRefresh = require('nl.icept.pull2refresh');
 
 var myCurrentCheckinPrograms = ['CH9_CSINY','CH7_0LOST']; //should be reset every hour to empty array
-
 
 // This is a single context application with mutliple windows in a stack
 (function() {

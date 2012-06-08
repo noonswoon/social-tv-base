@@ -39,7 +39,12 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		    first_name: _firstName,
 		    last_name: _lastName,
 		    password: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10),
-		    password_confirmation: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10)
+		    password_confirmation: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10),
+			custom_fields: {
+				"device_token_id": UrbanAirship.getDeviceToken(),
+				"mac_address": Ti.Platform.macaddress,
+				"banned": false
+			}
 		}, function (e) {
 		    if (e.success) {
 		       	Debug.debug_print("succesfully created user"+JSON.stringify(e));

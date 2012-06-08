@@ -14,19 +14,30 @@ CheckinMainWindow = function (_datafromrow){
 	var checkinPoint = 10;
 	
 	var userID = acs.getUserId();
-
+	
+	var btnBack = Ti.UI.createButton({
+        backgroundImage:'images/Backbutton.png',
+        width:57,height:34
+	});
+	
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
+		barImage: 'images/NavBG.png',
+	 	leftNavButton:btnBack
+	});
+	
+	btnBack.addEventListener('click', function(){
+   		self.close();
 	});
 	
 	var headerView = Ti.UI.createView({
 		top: 0,
-		height: 110,
+		height: 121,
 		backgroundGradient: {
-        	type: 'linear',
-        	startPoint: { x: '0%', y: '0%' },
-        	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ]
+       		type: 'linear',
+       		startPoint: { x: '0%', y: '0%' },
+       		endPoint: { x: '0%', y: '100%' },
+       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ]
     	} 
 	});
 	self.add(headerView);
@@ -36,7 +47,7 @@ CheckinMainWindow = function (_datafromrow){
 		text: _datafromrow.programTitle,
 		textAlign: 'left',
 		color: '#333',
-		left: 145,
+		left: 155,
 		height: 30,
 		width: 142,
 		font:{fontWeight:'bold',fontSize:17},
@@ -49,24 +60,22 @@ CheckinMainWindow = function (_datafromrow){
 		color: '#333',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
-		top: 33,
-		left:145
+		top: 35,
+		left:155
 	});
 	headerView.add(programSubname);
 	
 	var programImage = Ti.UI.createImageView({
 		image: _datafromrow.programImage,
-		width:125,
+		width:120,
 		height:90
 	});
 		var programImageView = Ti.UI.createView({
-		width: 131,
-		height: 96,
-		borderColor: '#D1CBCD',
-		borderWidth: 1,
-		backgroundColor: '#fff',
+		width: 133,
+		height: 104,
+		backgroundImage: 'images/ProgramImageBorder.png',
 		top: 10,
-		left:5,
+		left:10,
 		bottom:10
 	});
 	programImageView.add(programImage);
@@ -156,7 +165,7 @@ CheckinMainWindow = function (_datafromrow){
 ///////////////////////////////////////////////////Checkin Section
 
 	var checkinView = Ti.UI.createView({
-		top: 110,
+		top: 121,
 		left:0,
 		height: 265,
 		width:320,

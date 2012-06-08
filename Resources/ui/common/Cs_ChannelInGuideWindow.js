@@ -5,7 +5,7 @@ ChannelInGuideWindow = function (_index){
 		
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'orange',
-		top: 40
+		top: 42
 	});
 	
 	var programsInChannelTableView = Ti.UI.createTableView();

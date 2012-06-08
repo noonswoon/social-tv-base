@@ -30,7 +30,6 @@ function facebookAuthenCallback(e) {
 				    }
 				}, function (e) {
 				    if (e.success) {
-				    	Ti.API.info('mypassword: '+Ti.Utils.md5HexDigest(email+"ch@tterb0x").substr(0,10));
 				    	if(e.users.length > 0) {
 							Cloud.Users.login({
 							    login: email,

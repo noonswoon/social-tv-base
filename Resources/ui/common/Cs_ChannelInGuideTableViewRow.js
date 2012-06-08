@@ -1,11 +1,12 @@
 ChannelInGuideTableViewRow = function(_program){
 	
 	var row = Ti.UI.createTableViewRow({
+		height: 121,
 		backgroundGradient: {
-        	type: 'linear',
-        	startPoint: { x: '0%', y: '0%' },
-        	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ]
+       		type: 'linear',
+       		startPoint: { x: '0%', y: '0%' },
+       		endPoint: { x: '0%', y: '100%' },
+       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ]
     	} 
 	});
 	
@@ -30,38 +31,36 @@ ChannelInGuideTableViewRow = function(_program){
 	var programName = Ti.UI.createLabel({
 		text: _program.name,
 		textAlign: 'left',
-		left: 145,
+		left: 155,
 		font:{fontWeight:'bold',fontSize:17},
 		height: 30,
 		width: 142,
-		top: 5
+		top: 7
 	});
 	row.add(programName);
 	
 	var programTime = Ti.UI.createLabel({
 		text: timeStart+' - '+timeEnd,
-		color: '#284c7e',
+		color: '#333',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
-		top: 33,
-		left:145
+		top: 35,
+		left:155
 	});
 	row.add(programTime);
 	
 	var programImage = Ti.UI.createImageView({
 		image: _program.photo,
-		width:125,
+		width:120,
 		height:90
 	});
 	var programImageView = Ti.UI.createView({
-		width: 131,
-		height: 96,
-		borderColor: '#D1CBCD',
-		borderWidth: 1,
-		backgroundColor: '#fff',
-		top: 5,
-		left:5,
-		bottom:5
+		width: 133,
+		height: 104,
+		backgroundImage: 'images/ProgramImageBorder.png',
+		top: 10,
+		left:10,
+		bottom:10
 	});
 	programImageView.add(programImage);
 	row.add(programImageView);

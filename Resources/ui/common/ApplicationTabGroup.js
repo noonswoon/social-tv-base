@@ -8,7 +8,7 @@ function ApplicationTabGroup() {
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
-    	
+
 	var programDummy = {
 		programId: '4fb3618c0020442a2b0186c0', 
 		programTitle:'Khun Suuk', 
@@ -19,30 +19,32 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new SettingWindow(); //ChatMainWindow(programDummy);
-	var messageboardwin = new SettingWindow(); //MessageboardMainWindow(1);		
-	var productwin = new SettingWindow(); //ProductMainWindow();
-	var profilewin =  new ProfileMainWindow();
+	var chatwin = new ChatMainWindow(programDummy);
+	var messageboardwin = new MessageboardMainWindow(1);		
+	var productwin = new ProductMainWindow();
+	var profilewin = new ProfileMainWindow();
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
-		title: 'Selection',
-		icon: '/images/tv.png',
+		title: 'Discover',
+		icon: '/images/discover.png',
 		window: selectionwin
 	});
 	selectionwin.containingTab = selectionTab;
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+		productwin._closeProductPopupWindow();
 	});
 	
     var chatTab = Titanium.UI.createTab({  
-        icon: '/images/fugitives.png',
+        icon: '/images/chat-2.png',
 		title: 'Chat',
 		//window: NO WINDOW FOR CHAT
     });
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
-    	 chatwin.containingTab.open(chatwin);
+    	chatwin.containingTab.open(chatwin);
+		productwin._closeProductPopupWindow();
     });
    
     chatwin.addEventListener('close', function() {
@@ -50,17 +52,18 @@ function ApplicationTabGroup() {
     });
     
     var messageboardTab = Titanium.UI.createTab({  
-        icon:'/images/captured.png',
+        icon:'/images/messageboard.png',
         title:'Board',
         window: messageboardwin
     });
     messageboardwin.containingTab = messageboardTab;
     messageboardTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 2;
+		productwin._closeProductPopupWindow();
 	});
 	
 	var productTab = Ti.UI.createTab({
-		icon: '/images/captured.png',
+		icon: '/images/product.png',
 		title: 'Product',
 		window: productwin
 	});
@@ -70,13 +73,14 @@ function ApplicationTabGroup() {
 	});
 	
 	var profileTab = Ti.UI.createTab({
-		icon: '/images/fugitives.png',
-		title: 'Profile',
+		icon: '/images/me.png',
+		title: 'Me',
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
-		tabIndexToComeBack = 4;	
+		tabIndexToComeBack = 4;
+		productwin._closeProductPopupWindow();
 	});
 	
 	self.addTab(selectionTab);
@@ -87,7 +91,7 @@ function ApplicationTabGroup() {
 
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
-
+   	
     return self;
 };
 

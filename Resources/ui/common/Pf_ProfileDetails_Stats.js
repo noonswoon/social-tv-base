@@ -103,8 +103,7 @@ var ProfileStatsView = function(){
 				break;
 			}
 		};	
-		Ti.API.info('myIndex: ' + myIndex);
-
+		
 		for(var i=0; i<leaderBoardData.length; i++){
 			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
 			

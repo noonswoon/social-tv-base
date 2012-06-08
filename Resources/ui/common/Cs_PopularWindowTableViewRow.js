@@ -1,12 +1,12 @@
 Cs_PopularWindowTableViewRow = function(_curTVProgram){	
 	var TVProgram = require('model/tvprogram');
 	var row = Ti.UI.createTableViewRow({
-		//height: 100,
+		height: 121,
 		backgroundGradient: {
        		type: 'linear',
        		startPoint: { x: '0%', y: '0%' },
        		endPoint: { x: '0%', y: '100%' },
-       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 } ]
+       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ]
     	} 
 	});
 	
@@ -25,11 +25,11 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		text: _curTVProgram.name,
 		textAlign: 'left',
 		color: '#333',
-		left: 145,
+		left: 155,
 		height: 30,
 		width: 142,
 		font:{fontWeight:'bold',fontSize:17},
-		top: 5
+		top: 7
 	});
 	row.add(programLabelName);
 		
@@ -38,24 +38,22 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		color: '#333',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
-		top: 33,
-		left:145
+		top: 35,
+		left:155
 	});
 	row.add(programLabelSubname);
 
 	var programImage = Ti.UI.createImageView({
 		image: _curTVProgram.photo,
-		width:125,
+		width:120,
 		height:90
 	});
 	var programImageView = Ti.UI.createView({
-		width: 131,
-		height: 96,
-		borderColor: '#D1CBCD',
-		borderWidth: 1,
-		backgroundColor: '#fff',
+		width: 133,
+		height: 104,
+		backgroundImage: 'images/ProgramImageBorder.png',
 		top: 10,
-		left:5,
+		left:10,
 		bottom:10
 	});
 	programImageView.add(programImage);
@@ -108,7 +106,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 	var channelView = Ti.UI.createView({
 		width: 52,
 		bottom:5,
-		right: 10,
+		right: 13,
 		height: 47,
 	});
 	var programChannelImage = Ti.UI.createImageView({

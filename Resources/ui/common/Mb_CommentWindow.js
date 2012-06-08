@@ -9,6 +9,8 @@ function CommentWindow(_topicId) {
 	
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
+	var usingPull2Refresh = false;
+	var topicOwnerDeviceTokenId = "";
 	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
@@ -61,6 +63,13 @@ function CommentWindow(_topicId) {
 		//add to db
 		//Ti.API.info(e.fetchedComments);
 		Comment.commentModel_updateCommentsOnTopicFromACS(e.fetchedComments,_topicId); 
+		
+		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
+		if(usingPull2Refresh) {
+			commentsTable.refreshFinished();
+			usingPull2Refresh = false;
+			CacheHelper.resetCacheTime('commentsOfTopic'+_topicId);
+		}
 	}
 	
 	function commentsDbUpdatedCallback(e) {
@@ -70,6 +79,8 @@ function CommentWindow(_topicId) {
 		//getting topicInfo from the db
 		
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
+		topicOwnerDeviceTokenId = curTopic.deviceTokenId;
+				
 		commentHeader._setTitle(curTopic.title);
 		
 		//use momentjs for helping on converting dateObject from string
@@ -94,8 +105,8 @@ function CommentWindow(_topicId) {
 				votesOfComments.push(curComment);
 			}
 		}
-		Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
-		Ti.API.info('num votesOfComments: '+votesOfComments.length);
+		//Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
+		//Ti.API.info('num votesOfComments: '+votesOfComments.length);
 		
 		var commentRowsData = [commentHeader];
 		
@@ -203,6 +214,15 @@ function CommentWindow(_topicId) {
 		commentsTable.insertRowAfter(0,commentRow);
 		
 		CommentACS.commentACS_createCommentOfTopic(commentHeader._getReplyTextAreaContent(),newId,_topicId);
+		
+		//getting username of the topic's owner
+		var curTopic = Topic.topicModel_getTopicById(_topicId);
+		var topicOwnerUsername = curTopic.username;
+		if(topicOwnerUsername !== acs.getUserLoggedIn().username) { //only send if someone else (not You!) comments on the post
+			UrbanAirship.sendPushNotification(topicOwnerDeviceTokenId,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
+			Ti.API.info('sending notification..coz someone else comments on your topic');
+		}
+		
 		commentHeader._setReplyTextArea("");
 		commentHeader._blurReplyTextArea();
 	}
@@ -245,16 +265,20 @@ function CommentWindow(_topicId) {
 	showPreloader(self,'Loading...');
 
 	//pull2refresh module
-	pullToRefreshModule.addASyncPullRefreshToTableView(commentsTable, function() {
-		setTimeout(function() {
-			//tableData.push({ title: 'Row ' + (tableData.length+1) });
-			//tableView.setData(tableData);
-			
-			//indicate the refresh is finished, since this is a async refresh
-			alert('done loading acs');
-			commentsTable.refreshFinished();
-		}, 2000);
+	var lastUpdatedDateObj = CacheHelper.getCacheTime('commentsOfTopic'+_topicId);
+	var lastUpdatedStr = "No updated";
+	if(lastUpdatedDateObj != null) {
+		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
+	}
+	PullToRefresh.addASyncPullRefreshToTableView(commentsTable, function() {
+		usingPull2Refresh = true;
+		CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
+	}, { //settings
+		updateLabel: {
+			text: 'Last Updated: '+lastUpdatedStr,
+		}
 	});	
+
 
 	//*** ON-THE-PLANE STUFF 
 	//Comment.contentsDuringOffline();

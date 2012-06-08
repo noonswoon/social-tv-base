@@ -1,5 +1,5 @@
 function facebookAuthenCallback(e) {
-	//alert("in fbAuthenCallback");
+	Debug.debug_print("in fbAuthenCallback");
 	if (e.success) {
 		//alert('in cb login success');
 			
@@ -15,6 +15,7 @@ function facebookAuthenCallback(e) {
 		
 		//step 1. getting email from facebook graph path
 		Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function(e) {
+		    Debug.debug_print("using FbGraphAPI to query email");
 		    if (e.success) {
 		    	var fbGraphObj = JSON.parse(e.result)
 		        var email = fbGraphObj.email;
@@ -24,30 +25,35 @@ function facebookAuthenCallback(e) {
 		        
 		        //step 2. using the email to query if the user is already registered
 		        //Ti.API.info('querying email: '+email);
+		        Debug.debug_print("pass graphAPI, querying email: "+email);
 		        Cloud.Users.query({
 				   where: {
 				        email: email
 				    }
 				}, function (e) {
 				    if (e.success) {
+				    	Debug.debug_print("pass querying email..try to logging in");
 				    	if(e.users.length > 0) {
 							Cloud.Users.login({
 							    login: email,
 							    password: Ti.Utils.md5HexDigest(email+"ch@tterb0x").substr(0,10)
 							}, function (e) {
 							    if (e.success) {
+							    	Debug.debug_print("Done login..redirect to maintabgroup");
 									acs.setUserLoggedIn(e.users[0]);
 									acs.setLoggedInStatus(true);
 									
 									var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+									Debug.debug_print("fbAuthenListener.js - creating new appTabGroup [watchout!]");
 									var maintabgroup = new ApplicationTabGroup();
 									maintabgroup.open();
 							    } else {
-							      	alert("login failed: "+e.error);
+							      	alert("Login failed: "+JSON.stringify(e));
 							    }
 							});
 				    	} else {
 				    		//go to another page to ask user for the username
+				    		Debug.debug_print("No email: new user registration");
 				    		var EnterUsernameWindow = require('ui/common/Am_EnterUsernameWindow');
 				    		var enterusernamewin = new EnterUsernameWindow(email,firstName,lastName);
 							enterusernamewin.open();
@@ -57,7 +63,9 @@ function facebookAuthenCallback(e) {
 				    }
 				});
 			} else if (e.error) {
-				alert('cannot request GraphPath: '+e.error);		
+				alert('cannot request GraphPath: '+ JSON.stringify(e));		
+			} else {
+				alert("what the hell is going on_2? " + JSON.stringify(e));
 			}
 		});
 	} else if (e.error) {

@@ -165,6 +165,7 @@ var ProfileStatsView = function(){
 			userRank.add(userRankScore);
 			userRankInfo.push(userRank);
 		}
+
 		leaderTable.height = (userRankInfo.length)*45;
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;

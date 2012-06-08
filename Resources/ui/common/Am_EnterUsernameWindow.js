@@ -32,16 +32,22 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	//EVENTS REGISTERING
 	enterUsername.addEventListener('click', function() {
 		var providedUsername = usernameTextField.value;
+		Debug.debug_print("Creating new user");
 		Cloud.Users.create({
 		    email: _email,
 		    username: providedUsername,
 		    first_name: _firstName,
 		    last_name: _lastName,
 		    password: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10),
-		    password_confirmation: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10)
+		    password_confirmation: Ti.Utils.md5HexDigest(_email+"ch@tterb0x").substr(0,10),
+			custom_fields: {
+				"device_token_id": UrbanAirship.getDeviceToken(),
+				"mac_address": Ti.Platform.macaddress,
+				"banned": false
+			}
 		}, function (e) {
 		    if (e.success) {
-		        //Ti.API.info('user created: '+JSON.stringify(e));
+		       	Debug.debug_print("succesfully created user"+JSON.stringify(e));
 				
 				//link with third party account
 				var leaderBoardACS = require('acs/leaderBoardACS');
@@ -58,11 +64,13 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 				    token: Ti.Facebook.accessToken
 				}, function (e) {
 				    if (e.success) {
+				    	Debug.debug_print("successfully linked with fb acct");
 				    	//Ti.API.info('link external acct successful');
 				    	acs.setUserLoggedIn(e.users[0]);
 						acs.setLoggedInStatus(true);
 						
 						var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+						Debug.debug_print("EnterUsernameWindow.js - creating new appTabGroup [watchout!]");				
 						var maintabgroup = new ApplicationTabGroup();
 						maintabgroup.open();
 				    } else {
@@ -80,5 +88,4 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	});		
 	return lWin;
 };
-
 module.exports = EnterUsernameWindow;

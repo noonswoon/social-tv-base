@@ -8,7 +8,8 @@ function ApplicationTabGroup() {
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
-
+    var BlankWindow = require('ui/common/BlankWindow');
+    
 	var programDummy = {
 		programId: '4fb3618c0020442a2b0186c0', 
 		programTitle:'Khun Suuk', 
@@ -20,9 +21,10 @@ function ApplicationTabGroup() {
 	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programDummy);
-	var messageboardwin = new MessageboardMainWindow(1);		
+	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();
+	var blankwin = new BlankWindow();
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
@@ -39,7 +41,7 @@ function ApplicationTabGroup() {
     var chatTab = Titanium.UI.createTab({  
         icon: '/images/chat-2.png',
 		title: 'Chat',
-		//window: NO WINDOW FOR CHAT
+		window: blankwin
     });
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {

@@ -29,7 +29,7 @@ function MessageboardAddWindow(_programId) {
 		}
 		
 		//1. insert to the db topic table
-		var newId = Topic.topicModel_add(_programId, 0,topicTextarea.value,acs.getUserLoggedIn().username);
+		var newId = Topic.topicModel_add(_programId, 0,topicTextarea.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 		
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
@@ -38,6 +38,7 @@ function MessageboardAddWindow(_programId) {
 			acsObjectId:0,
 			hasChild:true,
 			color: '#fff',
+			commentsCount: 0,
 			username: acs.getUserLoggedIn().username,
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
 		};

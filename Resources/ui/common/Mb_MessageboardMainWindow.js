@@ -72,6 +72,7 @@ function MessageboardMainWindow(_programId) {
 		
 		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
 		if(usingPull2Refresh) {
+			Ti.API.info('using pull to refresh..finish up');
 			allTopicTable.refreshFinished();
 			usingPull2Refresh = false;
 			CacheHelper.resetCacheTime('topicsOfProgram'+_programId);
@@ -159,7 +160,9 @@ function MessageboardMainWindow(_programId) {
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
 	}
+	
 	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
+		Ti.API.info('using pull to refresh');
 		usingPull2Refresh = true;
 		TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
 	}, { //settings

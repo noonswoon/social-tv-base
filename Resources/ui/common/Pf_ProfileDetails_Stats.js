@@ -95,7 +95,6 @@ var ProfileStatsView = function(){
 	});
 
 	var createLeaderBoardView = function(){
-		//alert('createLeaderBoardView');
 		var myIndex = 0;
 		userRankInfo =[];
 		for(i=0; i<leaderBoardData.length; i++){
@@ -107,7 +106,7 @@ var ProfileStatsView = function(){
 		Ti.API.info('myIndex: ' + myIndex);
 
 		for(var i=0; i<leaderBoardData.length; i++){
-			//if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
+			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
 			
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
@@ -122,16 +121,18 @@ var ProfileStatsView = function(){
 				height:30,
 				font: { fontWeight: 'bold', fontSize: 14},
 				color: '#666'
-				});
+			});
 			var userRankPicture = Ti.UI.createImageView({
-//*****************CHECK PHOTO!!
- 				//image: "https://graph.facebook.com/"+leaderBoardData[i].fb_id+"/picture?type=normal",			
-				image: acs.getUserImageNormal(),
 				height: 36,
 				width: 36,
 				borderRadius: 5,
 				left: 40
-				});
+			});
+						
+			if(leaderBoardData[i].fb_id){
+				userRankPicture.image = acs.getUserImageNormal_parameter(leaderBoardData[i].fb_id);
+			}
+			else userRankPicture.image = "images/kuma100x100.png";
 			
 			var userRankName = Ti.UI.createLabel({
 				text: leaderBoardData[i].name,
@@ -140,7 +141,7 @@ var ProfileStatsView = function(){
 				height: 30,
 				font: { fontWeight: 'bold', fontSize: 14},
 				color: '#666'
-				});
+			});
 
 			var userRankScore = Ti.UI.createLabel({
 				text: leaderBoardData[i].totalPoint, 
@@ -157,7 +158,6 @@ var ProfileStatsView = function(){
 				userRankNo.color = '#000';
 				userRankName.color = '#000';
 				userRankScore.color = '#000';
-			//	userRankPicture.image= acs.getUserImageNormal();
 			};			
 			
 			userRank.add(userRankNo);
@@ -187,16 +187,15 @@ var ProfileStatsView = function(){
 	var leaderSec = Ti.UI.createView({
 			top:50
 	});
-		
-		expSec.add(expLabel);
-		expSec.add(myLevelLabel);
-		expSec.add(expBar_light);
-		expSec.add(expBar);
-		profileStats.add(expSec);
-		leaderSec.add(leaderLabel);
-		leaderSec.add(leaderTable);
-		profileStats.add(leaderSec);
-
+	
+	expSec.add(expLabel);
+	expSec.add(myLevelLabel);
+	expSec.add(expBar_light);
+	expSec.add(expBar);
+	profileStats.add(expSec);
+	leaderSec.add(leaderLabel);
+	leaderSec.add(leaderTable);
+	profileStats.add(leaderSec);
 
 	return profileStats;
 }

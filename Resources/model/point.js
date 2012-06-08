@@ -1,5 +1,5 @@
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS leaderboard(id INTEGER PRIMARY KEY, leader_acs_id TEXT, user_id TEXT,name TEXT, totalPoint INTEGER);');
+db.execute('CREATE TABLE IF NOT EXISTS leaderboard(id INTEGER PRIMARY KEY, leader_acs_id TEXT, user_id TEXT, fb_id TEXT, name TEXT, totalPoint INTEGER);');
 db.close();
 
 //LEADERBOARD
@@ -11,7 +11,7 @@ exports.pointModel_updateLeadersFromACS = function(_leadersCollection) {
 	for(var i=0;i < _leadersCollection.length; i++) {
 		var curRank = _leadersCollection[i];
 		var name =  curRank.user.first_name +' '+ curRank.user.last_name;
-		db.execute("INSERT INTO leaderboard(id, leader_acs_id, user_id, name, totalPoint) VALUES(NULL,?,?,?,?)", curRank.id, curRank.user.id, name, curRank.totalPoint);
+		db.execute("INSERT INTO leaderboard(id, leader_acs_id, user_id, fb_id, name, totalPoint) VALUES(NULL,?,?,?,?,?)", curRank.id, curRank.user.id, curRank.user.external_accounts[0].external_id, name, curRank.totalPoint);
 	}
 	Ti.API.info('pointModel_updateLeadersFromACS / LeaderBoard database length: '+ i);
 	db.close();
@@ -38,6 +38,7 @@ exports.pointModel_fetchRank = function() {
 		fetchedRank.push({
 		user_id: result.fieldByName('user_id'),
 		name: result.fieldByName('name'),
+		fb_id: result.fieldByName('fb_id'),
 		totalPoint: Number(result.fieldByName('totalPoint'))
 		});
 		result.next();

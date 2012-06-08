@@ -6,7 +6,7 @@ exports.searchFriend = function(_userID){
 				'&user_id='+_userID;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
-	    	alert(this.responseText);
+	    	//alert(this.responseText);
 	    	responseJSON = JSON.parse(this.responseText);
 		      	for (var i = 0; i < responseJSON.response.users.length; i++) {
 	            var friend = responseJSON.response.users[i];     
@@ -14,8 +14,8 @@ exports.searchFriend = function(_userID){
 	            var fbId = 0;
 				var numExternalAccounts = friend.external_accounts.length;
 				
-				for(var i=0;i < numExternalAccounts; i++) {
-					var curExternalAccount = friend.external_accounts[i];
+				for(var j=0;j < numExternalAccounts; j++) {
+					var curExternalAccount = friend.external_accounts[j];
 					if(curExternalAccount.external_type === "facebook") {
 						fbId = curExternalAccount.external_id;
 						break;
@@ -35,7 +35,7 @@ exports.searchFriend = function(_userID){
 			if(friends.length===0) {
 				emptyFriend = [];
 				Ti.App.fireEvent("friendsLoaded",{fetchedFriends:emptyFriend});
-				}
+			}
 	        else Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 	    },
 	    onerror: function(e) {

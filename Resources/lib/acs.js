@@ -68,6 +68,11 @@ exports.getUserImageNormal = function() {
 	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
 }
 
+exports.getUserImageNormal_parameter = function(fbId) {
+	if(!fbId) return "";
+	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
+}
+
 exports.getUserImageLarge = function() {
 	var fbId = getUserFbId(); 
 	if(fbId == 0 || fbId == -1) return "";

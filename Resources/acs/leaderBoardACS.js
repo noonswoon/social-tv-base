@@ -1,10 +1,10 @@
 //fetch user + friends' info
-exports.leaderACS_fetchedRank = function(_id){
+exports.leaderACS_fetchedRank = function(_ids){
 	Cloud.Objects.query({
 	classname: 'LeaderBoard',	
     page: 1,
     per_page: 100,
-    where: {"user_id":{"$in":_id}},
+    where: {"user_id":{"$in":_ids}},
  //   order: '-totalPoint'
 }, function (e) {
     if (e.success) {
@@ -24,12 +24,13 @@ exports.leaderACS_fetchedRank = function(_id){
 };
 
 //create only when create user for the first time entering into this application: totalPoint starts at 0 
-exports.leaderACS_createUserInfo = function(_id){
+exports.leaderACS_createUserInfo = function(_user){
 	Cloud.Objects.create({
 	    classname: 'LeaderBoard',
 		fields: {
-        	user: _id,
+        	user: _user.id,
         	totalPoint: 0,
+        	fb_id: _user.external_accounts.external_id
     	}
 	}, function (e) {
 	    if (e.success) {
@@ -37,7 +38,8 @@ exports.leaderACS_createUserInfo = function(_id){
 	       Ti.API.info('Success:\\n' +
 	            'username: ' + LeaderBoard.user.username + '\\n' +
 	            'totalPoint: ' + LeaderBoard.totalPoint + '\\n' +
-	            'created_at: ' + LeaderBoard.created_at);
+	            'created_at: ' + LeaderBoard.created_at + '\\n' +
+	            'facebookid: ' + LeaderBoard.user.external_accounts.external_id);
 			Ti.App.fireEvent("createLeaderBoardUser",{fetchedUser: user});
 	    } else {
 	        alert('Error:\\n' +

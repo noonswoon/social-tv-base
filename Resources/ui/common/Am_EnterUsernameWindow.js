@@ -44,9 +44,8 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		        //Ti.API.info('user created: '+JSON.stringify(e));
 				
 				//link with third party account
-				//TODO: create leaderBoard
 				var leaderBoardACS = require('acs/leaderBoardACS');
-				leaderBoardACS.leaderACS_createUserInfo(e.users[0].id);
+				leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
 				var pointModel = require('model/point');
 				var leaderboardCallBack = function(e){
 					pointModel.pointModel_updateLeadersFromACS(e.fetchedUser);

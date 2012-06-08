@@ -94,6 +94,10 @@ CommentHeaderTableViewRow = function() {
 		return replyButton;
 	};
 	
+	headerMainRow._getTitle = function() {
+		return topicLabel.text;
+	};
+	
 	headerMainRow._setTitle = function(_title) {
 		topicLabel.text = _title;
 		var topicWidth = topicRow.toImage().width; 

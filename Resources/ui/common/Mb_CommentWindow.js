@@ -214,7 +214,15 @@ function CommentWindow(_topicId) {
 		commentsTable.insertRowAfter(0,commentRow);
 		
 		CommentACS.commentACS_createCommentOfTopic(commentHeader._getReplyTextAreaContent(),newId,_topicId);
-		Ti.API.info('sending notification to deviceTokenId: '+topicOwnerDeviceTokenId);
+		
+		//getting username of the topic's owner
+		var curTopic = Topic.topicModel_getTopicById(_topicId);
+		var topicOwnerUsername = curTopic.username;
+		if(topicOwnerUsername !== acs.getUserLoggedIn().username) { //only send if someone else (not You!) comments on the post
+			UrbanAirship.sendPushNotification(topicOwnerDeviceTokenId,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
+			Ti.API.info('sending notification..coz someone else comments on your topic');
+		}
+		
 		commentHeader._setReplyTextArea("");
 		commentHeader._blurReplyTextArea();
 	}

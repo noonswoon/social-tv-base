@@ -78,6 +78,7 @@ function CommentWindow(_topicId) {
 		//getting topicInfo from the db
 		
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
+		Ti.API.info('topicData: '+JSON.stringify(curTopic));
 		commentHeader._setTitle(curTopic.title);
 		
 		//use momentjs for helping on converting dateObject from string

@@ -95,7 +95,11 @@ function MessageboardMainWindow(_programId) {
 	function addNewTopicTableViewRowCallback(e) {
 		var tableViewRowDetail = e.topicDetailForNewTableViewRow;
 		var topicRow = new MessageboardTableViewRow(tableViewRowDetail);
-		allTopicTable.insertRowBefore(0,topicRow);
+		
+		if(allTopicTable.data[0] === undefined) {
+			var firstDataArray = [topicRow];
+			allTopicTable.setData(firstDataArray);	
+		} else allTopicTable.insertRowBefore(0,topicRow);
 	}
 
 	function topicCreatedACSCallback(e) {	
@@ -106,6 +110,7 @@ function MessageboardMainWindow(_programId) {
 			acsObjectId:newTopic.id,
 			hasChild:true,
 			color: '#fff',
+			commentsCount: 0,
 			username: acs.getUserLoggedIn().username,
 			updatedAt: convertACSTimeToLocalTime(newTopic.updated_at)
 		};

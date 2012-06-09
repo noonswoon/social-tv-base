@@ -22,9 +22,19 @@ function LoginTabGroup() {
    	self.setActiveTab(self.tabs[0]);
    	
    	//closing loginTabGroup
-   	Ti.App.addEventListener('closeLoginTabGroup', function() {
+   	function closeLoginTabGroupCallback() {
    		Ti.API.info('closing loginTabGroup');
+   		Ti.App.removeEventListener('closeLoginTabGroup', closeLoginTabGroupCallback);
    		self.close();
+   	}
+   	
+   	Ti.App.addEventListener('closeLoginTabGroup',closeLoginTabGroupCallback);
+   	
+   	self.addEventListener('close', function() {
+   		//remove event listener of facebook login
+   		//alert('Am_LoginTabGroup.js -> removeEventListener: Fb login');
+   		//Ti.include('helpers/facebookAuthenListeners.js'); //fb authen functionality	
+   		Ti.Facebook.removeEventListener("login",facebookAuthenCallback);
    	});
     return self;
 };

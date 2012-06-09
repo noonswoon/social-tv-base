@@ -120,10 +120,7 @@ var LoginFbOnlyWindow = function() {
 			
 	Ti.include('helpers/facebookAuthenListeners.js'); //fb authen functionality		
 	Ti.Facebook.addEventListener('login', facebookAuthenCallback); //facebookAuthenCallback def is in helpers/facebookAuthenListeners.js
-	
-	self.addEventListener('blur', function() {
-		Ti.Facebook.removeEventListener('login',facebookAuthenCallback);
-	});
+	//do Ti.Facebook.removeEventListener('login', xxx) in Am_LoginTabGroup file (when the tab is about to close)
 	
 	registerPushNotifBtn.addEventListener('click', function() {
 		// register for push notifications

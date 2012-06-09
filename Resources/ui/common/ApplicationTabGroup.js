@@ -21,7 +21,7 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ChatMainWindow(programDummy);
+	var chatwin = new SettingWindow();//ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow();
 	var profilewin = new SettingWindow();//ProfileMainWindow();
@@ -95,10 +95,14 @@ function ApplicationTabGroup() {
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
    	
-   	Ti.App.addEventListener('closeApplicationTabGroup', function() {
+   	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');
+   		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
-   	});
+   	}
+   	
+   	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
+   	
     return self;
 };
 

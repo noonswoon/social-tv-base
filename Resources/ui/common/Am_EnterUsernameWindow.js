@@ -3,26 +3,29 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	//UI STUFF
 	var lWin = Ti.UI.createWindow({
 		title: "Login",
-		backgroundColor: 'gray',
+		//backgroundColor: 'gray',
+		backgroundImage: '/images/admin/cb_back.png',
 		barColor: '#6d0a0c',
 		layout: 'vertical'
 	});
 		
 	var usernameTextField = Ti.UI.createTextField({
 		hintText: 'Choose your username',
-		width: 200,
-		height: 40,
-		top: 5,
+		width: 220,
+		height: 35,
+		top: 30,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
+		color: '#666',
 		borderRadius: 5,
-		backgroundColor: 'white'
+		backgroundColor: '#d0d0d0'
 	})
 	
 	var enterUsername = Ti.UI.createButton({
-		title:'Register',
-		top:5,
-		width:200,
-		height:40,
+		//title:'Register',
+		backgroundImage: '/images/admin/button/buttons_register.png',
+		top: 10,
+		width: 149,
+		height: 34,
 	});
 	
 	//ADDING UI COMPONENTS TO WINDOW

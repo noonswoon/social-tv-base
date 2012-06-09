@@ -23,7 +23,7 @@ function ApplicationTabGroup() {
 	var chatwin = new ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow();
-	var profilewin = new ProfileMainWindow();
+	var profilewin = new SettingWindow();//ProfileMainWindow();
 	var blankwin = new BlankWindow();
 
 	var tabIndexToComeBack = 0;

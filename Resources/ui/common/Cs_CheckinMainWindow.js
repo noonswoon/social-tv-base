@@ -10,7 +10,7 @@ CheckinMainWindow = function (_datafromrow){
 	
 	var userID = acs.getUserId();
 	
-	var btnBack = Ti.UI.createButton({
+	var backButton = Ti.UI.createButton({
         backgroundImage:'images/Backbutton.png',
         width:57,height:34
 	});
@@ -18,10 +18,10 @@ CheckinMainWindow = function (_datafromrow){
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
 		barImage: 'images/NavBG.png',
-	 	leftNavButton:btnBack
+	 	leftNavButton:backButton
 	});
 	
-	btnBack.addEventListener('click', function(){
+	backButton.addEventListener('click', function(){
    		self.close();
 	});
 	

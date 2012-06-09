@@ -2,18 +2,19 @@ var SettingWindow = function() {
 		
 	//UI STUFF
 	var win = Ti.UI.createWindow({
-		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
+		backgroundColor:'#ccc',
+		backgroundImage: '/images/admin/cb_back.png',
+		//backgroundImage: '/images/admin/splashscreen_logOut.png',
 		title: "Setting",
-		barColor: '#6d0a0c',
+		barColor: '#398bb0',
 		layout: 'vertical'
 	});
 		
 	var fbLogoutButton = Ti.UI.createButton({
-		title:'Logout',
+		backgroundImage: '/images/admin/button/button_logout.png',
 		top:5,
 		width:200,
-		height:40,
+		height:35,
 		visible:true
 	});
 	

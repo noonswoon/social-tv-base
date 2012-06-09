@@ -3,38 +3,46 @@ var LoginFbOnlyWindow = function() {
 	//UI STUFF
 	var lWin = Ti.UI.createWindow({
 		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
+		backgroundImage: '/images/admin/cb_back.png',
 		title: "Login",
-		barColor: '#6d0a0c',
+		barColor: '#398bb0',
 		layout: 'vertical'
 	});
-		
+	var cbLogo = Ti.UI.createImageView({
+		image: '/images/admin/chatterbox_logo_2@.png',
+		top: 100,
+		height: 57,
+		width: 174
+	});	
+	
 	var fbLoginButton = Ti.UI.createButton({
-		title:'fb_login',
-		top:5,
-		width:200,
-		height:40,
-		visible:true
-	});
+		top: 15,
+		width: 200,
+		height: 35,
+		backgroundImage: '/images/admin/button/fb_button_login.png',
+		visible: true
+	});	
 	
 	var fbLoginStatuslbl = Ti.UI.createLabel({
-		text:'We will not auto-post to your account. ',
-		font:{fontSize:14},
+		text:'We will not auto-post to your account.',
+		color: '#fff',
+		font:{fontSize:13, },//fontWeight: 'bold'},
 		height:'auto',
-		top:10,
+		top: 180,
 		textAlign:'center'
 	});
 	
 	var whyFbBtn = Ti.UI.createButton({
-		title:'Why Facebook?',
-		top:5,
-		width:200,
-		height:40,
+		backgroundImage: '/images/admin/button/button_whyfb.png',
+		top:10,
+		width:145,
+		height:25,
 		visible:true
 	});
 	
 	
 	//ADDING UI COMPONENTS TO WINDOW
+	lWin.add(cbLogo);
 	lWin.add(fbLoginButton);
 	lWin.add(fbLoginStatuslbl);
 	lWin.add(whyFbBtn);

@@ -3,7 +3,8 @@ Pf_FriendsDetail = function(){
 ///MENU//////////////////////////////////////////////////////////
 		var profileMenu = Ti.UI.createView({
 			height: 50,
-		 backgroundGradient: {
+			//backgroundColor: '#fff',
+			backgroundGradient: {
         	type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
         	endPoint: { x: '0%', y: '100%' },

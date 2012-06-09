@@ -1,12 +1,14 @@
 var LoginFbOnlyWindow = function() {
 		
 	//UI STUFF
-	var lWin = Ti.UI.createWindow({
+	var self = Ti.UI.createWindow({
 		backgroundColor:'transparent',
 		backgroundImage: '/images/admin/cb_back.png',
 		title: "Login",
 		barColor: '#398bb0',
-		layout: 'vertical'
+		layout: 'vertical',
+		tabBarHidden: true,
+		navBarHidden: true
 	});
 	var cbLogo = Ti.UI.createImageView({
 		image: '/images/admin/chatterbox_logo_2@.png',
@@ -61,14 +63,14 @@ var LoginFbOnlyWindow = function() {
 	});
 	
 	//ADDING UI COMPONENTS TO WINDOW
-	lWin.add(cbLogo);
-	lWin.add(fbLoginButton);
-	lWin.add(fbLoginStatuslbl);
-	lWin.add(whyFbBtn);
+	self.add(cbLogo);
+	self.add(fbLoginButton);
+	self.add(fbLoginStatuslbl);
+	self.add(whyFbBtn);
 	
-	lWin.add(label);
-	lWin.add(registerPushNotifBtn);
-	lWin.add(urbanAirshipUnregisterDeviceBtn);
+	self.add(label);
+	self.add(registerPushNotifBtn);
+	self.add(urbanAirshipUnregisterDeviceBtn);
 	
 	//FUNCTIONS CALLBACK
 	function successNotifCallback(e) {
@@ -111,15 +113,15 @@ var LoginFbOnlyWindow = function() {
 	});
 	
 	whyFbBtn.addEventListener('click', function() {
-		var PlaceholderWindow = require('ui/common/PlaceholderWindow');
-		var placeholderwin = new PlaceholderWindow();
-		placeholderwin.open({modal:true});
+		var WhyFbWindow = require('ui/common/Am_WhyFbWindow');
+		var whyfbwin = new WhyFbWindow();
+		self.containingTab.open(whyfbwin);
 	});
 			
 	Ti.include('helpers/facebookAuthenListeners.js'); //fb authen functionality		
 	Ti.Facebook.addEventListener('login', facebookAuthenCallback); //facebookAuthenCallback def is in helpers/facebookAuthenListeners.js
 	
-	lWin.addEventListener('blur', function() {
+	self.addEventListener('blur', function() {
 		Ti.Facebook.removeEventListener('login',facebookAuthenCallback);
 	});
 	
@@ -141,7 +143,7 @@ var LoginFbOnlyWindow = function() {
 		UrbanAirship.unRegisterDeviceToken();
 	});
 	
-	return lWin;
+	return self;
 };
 
 module.exports = LoginFbOnlyWindow;

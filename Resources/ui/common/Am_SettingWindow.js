@@ -27,10 +27,11 @@ var SettingWindow = function() {
 			Ti.API.info("successfully logged out");
 			//TODO: future-->close the tabgroup before openning login window
 			
+			Ti.App.fireEvent('closeApplicationTabGroup'); //done with login, close the tabgroup
 			//go to login page
-			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
-			var loginwin = new LoginFbOnlyWindow();
-			loginwin.open();   
+			var LoginTabGroup = require('ui/common/Am_LoginTabGroup');
+			var logintabgroup = new LoginTabGroup();
+			logintabgroup.open(); 
 		} else {
 			Ti.API.info("something wrong with logout mechanism");
 		}

@@ -2,10 +2,12 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		
 	//UI STUFF
 	var lWin = Ti.UI.createWindow({
-		title: "Login",
+		title: "Signup",
 		backgroundColor: 'gray',
 		barColor: '#6d0a0c',
-		layout: 'vertical'
+		layout: 'vertical',
+		tabBarHidden: false,
+		navBarHidden: false
 	});
 		
 	var usernameTextField = Ti.UI.createTextField({
@@ -71,6 +73,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 						
 						var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 						Debug.debug_print("EnterUsernameWindow.js - creating new appTabGroup [watchout!]");				
+						Ti.App.fireEvent('closeLoginTabGroup'); //done with login, close the tabgroup
 						var maintabgroup = new ApplicationTabGroup();
 						maintabgroup.open();
 				    } else {

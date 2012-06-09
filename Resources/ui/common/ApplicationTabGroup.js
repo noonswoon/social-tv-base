@@ -7,6 +7,7 @@ function ApplicationTabGroup() {
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
+	
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
@@ -94,6 +95,10 @@ function ApplicationTabGroup() {
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
    	
+   	Ti.App.addEventListener('closeApplicationTabGroup', function() {
+   		Ti.API.info('closing applicationTabGroup');
+   		self.close();
+   	});
     return self;
 };
 

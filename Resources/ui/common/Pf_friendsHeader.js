@@ -18,10 +18,7 @@ FriendsHeaderView = function(_friend){
 		Ti.App.addEventListener('checkinsDbUpdated', function(){
 			columnCheckInCount.text = CheckinModel.checkins_count(_friend.friend_id);
 		});
-	//	Ti.App.a ddEventListener('updateHeaderCheckin',function(){ ///confuse ????????
-	//		columnCheckInCount.text=CheckinModel.checkins_count(_friend.friend_id);
-	//	});
-		
+
 		// Using cache		
 		CacheHelper.fetchACSDataOrCache('userCheckin'+_friend.friend_id, CheckinACS.checkinACS_fetchedCheckIn, _friend.friend_id, 'checkinsDbUpdated');
 		
@@ -30,15 +27,16 @@ FriendsHeaderView = function(_friend){
 
 ///////////////////////////////////////////////////////////////////
 	var headerView = Ti.UI.createView({
-			backgroundGradient: {
+		backgroundColor: '#fff'
+/*			backgroundGradient: {
         	type: 'linear',
         	startPoint: { x: '0%', y: '0%' },
         	endPoint: { x: '0%', y: '100%' },
         	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]}
-	});
+*/	});
 	
 		var totalCheckins=0;
-		var	profileDataImg = 'images/kuma100x100.png';
+		//var	profileDataImg = 'images/kuma100x100.png';
 	
 		var columnCheckInCount = Ti.UI.createLabel({
 			text: '',

@@ -26,14 +26,14 @@ var ProfileStatsView = function(){
 	});
 		
 	var myLevelLabel = Ti.UI.createLabel({
-		text: 'First Login? Nice to meet you:)',
+		text: '',
 		font: {fontSize: 16, fontWeight: 'bold'},
 		color: '#53b4df',
 		textAlign: 'left',
 		height:30,
 		top: 0,
 		left: 10,
-		shadowColor: '#333'		
+		//shadowColor: '#333'		
 	});
 		
     var expBar = Ti.UI.createSlider({

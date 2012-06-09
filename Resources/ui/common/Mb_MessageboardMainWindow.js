@@ -33,7 +33,7 @@ function MessageboardMainWindow(_programId) {
 	var searchTextField = Titanium.UI.createSearchBar({
 		top: 1, 
 		left: 7,
-		width: 260,
+		width: 265,
 		backgroundImage: 'images/messageboard/test2.png',
         backgroundRepeat:true,
 		showCancel:false,
@@ -43,10 +43,10 @@ function MessageboardMainWindow(_programId) {
 	var addButton = Ti.UI.createButton({
 		right: 10,
 		top: 9,
-		width: 45,
-		height: 29,
-		backgroundImage: 'images/messageboard/addnewtopic.png',
-		backgroundSelectedImage: 'images/messageboard/addnewtopic_onclick.png'
+		width: 32,
+		height: 32,
+		backgroundImage: 'images/messageboard/add.png',
+		backgroundSelectedImage: 'images/messageboard/add_onclick.png'
 	});
 	searchView.add(searchTextField);
 	searchView.add(addButton);

@@ -2,14 +2,14 @@ MessageboardHeader = function(_showName,_showSubName) {
 	//UI stuff
 	var header = Ti.UI.createView({
 		top: 0,
-		height: 121,
-		backgroundGradient: {
+		height: 121
+	});
+	header.backgroundGradient = {
        		type: 'linear',
        		startPoint: { x: '0%', y: '0%' },
        		endPoint: { x: '0%', y: '100%' },
        		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ]
-    	} 
-	});
+    };
 
 	header.programImage = Ti.UI.createImageView({
 		image: '_curTVProgram.photo',
@@ -120,7 +120,6 @@ MessageboardHeader = function(_showName,_showSubName) {
 	header.friendView.add(header.programNumFriend);
 	header.friendView.add(header.programNumFriendImage);	
 	header.add(header.friendView);
-
 	
 	return header;
 }

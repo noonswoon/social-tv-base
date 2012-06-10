@@ -15,7 +15,6 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 		_allPrograms[i].id,_allPrograms[i].name,_allPrograms[i].photo,_allPrograms[i].start_time,_allPrograms[i].recurring_until,_allPrograms[i].channel_id,_allPrograms[i].program_id);
 	}
 	db.close();
-	Ti.App.fireEvent("tvprogramsTitlesLoaded");
 };
 
 

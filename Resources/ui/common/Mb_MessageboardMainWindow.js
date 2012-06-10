@@ -69,6 +69,7 @@ function MessageboardMainWindow(_programId) {
 	self.add(searchView);
 	self.add(allTopicTable);
 
+
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db
@@ -159,6 +160,7 @@ function MessageboardMainWindow(_programId) {
 
 	//pull2refresh
 	//pull2refresh module
+
 	var lastUpdatedDateObj = CacheHelper.getCacheTime('topicsOfProgram'+_programId);
 	var lastUpdatedStr = "No updated";
 	if(lastUpdatedDateObj != null) {
@@ -174,7 +176,7 @@ function MessageboardMainWindow(_programId) {
 			text: 'Last Updated: '+lastUpdatedStr,
 		}
 	});	
-	
+
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
 	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+_programId, TopicACS.topicACS_fetchAllTopicsOfProgramId, _programId, 'topicsDbUpdated');
 

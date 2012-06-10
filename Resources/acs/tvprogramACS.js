@@ -15,10 +15,12 @@ exports.tvprogramACS_fetchAllProgramShowingNow = function() {
 	      	for (var i = 0; i < responseJSON.response.events.length; i++) {
 	            var program = responseJSON.response.events[i];  
 
+				var photoUrl = 'defaultProgramPic.png';
+				if(program.photo !== undefined) photoUrl = program.photo.urls.original;
 	            var curProgram = {
 	            	id: program.id,
 	            	name: program.name,
-	            	photo: program.photo.urls.original,
+	            	photo: photoUrl,
 	            	start_time: program.start_time,
 	            	recurring_until: program.recurring_until,
 	            	channel_id: program.custom_fields.channel_id,
@@ -26,7 +28,7 @@ exports.tvprogramACS_fetchAllProgramShowingNow = function() {
 	            }
 				programs.push(curProgram);
 			}
-	        Ti.App.fireEvent("tvprogramsLoaded",{fetchedPrograms:programs});
+			Ti.App.fireEvent("tvprogramsLoaded",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        alert('tvprogramACS_fetchAllProgramShowingNow error: '+e.error);

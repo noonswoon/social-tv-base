@@ -15,17 +15,25 @@ function MessageboardMainWindow(_programId) {
 	var usingPull2Refresh = false;
 	
 	//UI STUFF
+
+	var callPicker = Ti.UI.createButton({
+		width: 39,
+		height: 32,
+		backgroundImage: 'images/messageboard/optionbutton.png'
+	});
+
 	var self = Titanium.UI.createWindow({
 		backgroundImage: 'images/messageboard/appBG.png',
 		barImage: 'images/NavBG.png',
 		title: "Message Board",
+		rightNavButton: callPicker
 	});
-
+	
 	var searchView = Ti.UI.createView({
 		top: 120,
 		width:'auto',
 		height:50,
-		zIndex: 2,
+		zIndex: 1,
 		// backgroundColor: 'green'
 		backgroundImage: 'images/messageboard/testBG.png'
 	});
@@ -34,7 +42,7 @@ function MessageboardMainWindow(_programId) {
 	var searchTextField = Titanium.UI.createSearchBar({
 		top: 1, 
 		left: 7,
-		width: 260,
+		width: 265,
 		backgroundImage: 'images/messageboard/test2.png',
         backgroundRepeat:true,
 		showCancel:false,
@@ -44,13 +52,88 @@ function MessageboardMainWindow(_programId) {
 	var addButton = Ti.UI.createButton({
 		right: 10,
 		top: 9,
-		width: 45,
-		height: 29,
-		backgroundImage: 'images/messageboard/addnewtopic.png',
-		backgroundSelectedImage: 'images/messageboard/addnewtopic_onclick.png'
+		width: 32,
+		height: 32,
+		backgroundImage: 'images/messageboard/add.png',
+		backgroundSelectedImage: 'images/messageboard/add_onclick.png'
 	});
 	searchView.add(searchTextField);
 	searchView.add(addButton);
+
+//Opacity window when picker is shown
+	opacityView = Ti.UI.createView({
+		opacity : 0.6,
+		top : 0,
+		height : 120,
+		zIndex : 7777,
+		backgroundColor: '#000'
+	});
+
+//Picker
+	var picker_view = Titanium.UI.createView({
+		height:251,
+		bottom:-251,
+		zIndex: 2
+	});
+
+	var cancel =  Titanium.UI.createButton({
+		title:'Cancel',
+		style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+	});
+
+	var done =  Titanium.UI.createButton({
+		title:'Done',
+		style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+	});
+
+	var spacer =  Titanium.UI.createButton({
+		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	});
+
+
+	var toolbar =  Titanium.UI.createToolbar({
+		top:0,
+		zIndex: 3,
+		items:[cancel,spacer,done]
+	});
+
+	var picker = Titanium.UI.createPicker({
+		top:43
+	});
+	picker.selectionIndicator=true;
+
+	var picker_data = [
+		Titanium.UI.createPickerRow({title:'John'}),
+		Titanium.UI.createPickerRow({title:'Alex'}),
+		Titanium.UI.createPickerRow({title:'Marie'}),
+		Titanium.UI.createPickerRow({title:'Eva'}),
+		Titanium.UI.createPickerRow({title:'James'})
+	];
+
+	picker.add(picker_data);
+
+	picker_view.add(toolbar);
+	picker_view.add(picker);
+
+	var slide_in =  Titanium.UI.createAnimation({bottom:0});
+	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+
+	callPicker.addEventListener('click',function() {
+		picker_view.animate(slide_in);
+		self.add(opacityView);
+	});
+
+	cancel.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		self.remove(opacityView);
+	});
+
+	done.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		self.remove(opacityView);
+	});
+
+	self.add(picker_view);
 
 	var allTopicTable = Ti.UI.createTableView({
 		top: 170,
@@ -68,6 +151,7 @@ function MessageboardMainWindow(_programId) {
 	self.add(messageboardHeader);
 	self.add(searchView);
 	self.add(allTopicTable);
+
 
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {

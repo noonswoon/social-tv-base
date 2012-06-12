@@ -4,26 +4,65 @@ function MessageboardAddWindow(_programId) {
 	var TopicACS = require('acs/topicACS');
 
 	//UI STUFF
-	var self = Titanium.UI.createWindow({
-		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
-		title: "Add",
-		barColor: '#6d0a0c'
+	
+	var backButton = Ti.UI.createButton({
+        backgroundImage:'images/Backbutton.png',
+        width:57,height:34
 	});
 	
-	var topicTextarea = Titanium.UI.createTextArea({
-		top: 5,
-		left: 5,
-		right: 5,
-		height: 167,
-		editable: true
+	var self = Titanium.UI.createWindow({
+		barImage: 'images/NavBG.png',
+		title: "Message Board",
+	 	leftNavButton:backButton
 	});
+
+	backButton.addEventListener('click', function(){
+   		self.close();
+	});
+	
+	var addTopicToolbar = Ti.UI.createImageView({
+		image: 'images/messageboard/add/addtopictoolbar.png',
+		top: 0
+	});
+	
+	var textAndButtonView = Ti.UI.createView({
+		top: 49,
+		heigth: 'auto',
+		backgroundImage: 'images/messageboard/add/textandbuttonviewBG.png'
+	});
+
+	var topicTextarea = Ti.UI.createTextArea({
+		top: 20,
+		left: 10,
+		right: 10,
+		width: 227,
+		height: 54,
+		editable: true,
+		borderRadius: 5,
+		font: {fontSize:14},
+		textAlign: 'left',
+    	backgroundColor: 'transparent',
+    	backgroundImage: 'images/messageboard/add/textareaBG.png'
+	});
+	textAndButtonView.add(topicTextarea);
+	
+	var addButton = Ti.UI.createButton({
+		top: 20,
+		right: 10,
+		width: 58,
+		height: 56,
+		backgroundImage: 'images/messageboard/add/addbutton.png',
+		backgroundSelectedImage: 'images/messageboard/add/addbutton_onclick.png'
+	});
+	textAndButtonView.add(addButton);
 	
 	//ADDING UI COMPONENTS TO THE WINDOW
 	self.add(topicTextarea);
+	self.add(addTopicToolbar);
+	self.add(textAndButtonView);
 		
 	//ADDING EVENT LISTENERS
-	self.addEventListener('return', function(e) {
+	addButton.addEventListener('click', function(e) {
 		if(topicTextarea.value === '') {
 			return;
 		}

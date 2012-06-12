@@ -24,7 +24,6 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 
 //this function give only total results for checkins
 exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
-	var checkin = [];
 	var id = _id;
 	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"user_id":"'+id+'"}';	
 	Ti.API.info(url)

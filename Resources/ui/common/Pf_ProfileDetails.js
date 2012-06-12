@@ -1,4 +1,4 @@
-var ProfileDetailView = function(_parent){
+var ProfileDetailView = function(_parent,_userProfile,_status){
 	
 ///MENU//////////////////////////////////////////////////////////
 	var profileMenu = Ti.UI.createView({
@@ -18,10 +18,11 @@ var ProfileDetailView = function(_parent){
 		width:300,
 		index:0
 	});	
-	profileMenu.add(profileTab);
 		
 ///DETAIL//////////////////////////////////////////////////////////
-	var detail = Ti.UI.createTableViewSection();
+	var detail = Ti.UI.createTableViewSection({
+		backgroundColor:'#d2d1d0'
+	});
 	var profileDetail = Ti.UI.createTableViewRow({
 		backgroundColor: '#212b3d',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
@@ -36,7 +37,7 @@ var ProfileDetailView = function(_parent){
 		showHorizontalScrollIndicator:false,
 		width: 312,
 		height: 220,
-		disableBounce: true
+	//	disableBounce: true
 	});	
 	
 ///////////////////////////////////////////////////////////////////
@@ -66,13 +67,15 @@ var ProfileDetailView = function(_parent){
 		else{
 			profileDetailScroll.add(profileRewardView);}
 	});		
+
 		
-	profileDetailScroll.add(profileStatsView);
-	//profileDetailScroll.add(profileBadgeView);
-	profileDetail.add(profileDetailScroll);
-	
-	detail.headerView = profileMenu;
-	detail.add(profileDetail);
+	if(_status==="me" || _status==="friend"){
+		profileMenu.add(profileTab);
+		profileDetailScroll.add(profileStatsView);
+		profileDetail.add(profileDetailScroll);
+		detail.headerView = profileMenu;
+		detail.add(profileDetail);
+	};		
 
 	return detail;
 }

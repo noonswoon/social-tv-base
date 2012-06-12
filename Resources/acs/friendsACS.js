@@ -47,7 +47,27 @@ exports.searchFriend = function(_userID){
 	xhr.open("GET", url);
 	xhr.send();
 };
+//return total friends ///////////////////////////////////////////////////////////////////////////////////////
+//this function give only total results
+exports.friendACS_fetchedUserTotalFriends = function(_id) {
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' + '&user_id='+ _id;
+	
+	var xhr = Ti.Network.createHTTPClient({
+	    onload: function() {
+	      	responseJSON = JSON.parse(this.responseText);
+	      	var total_results = Number(responseJSON.meta.total_results);
+	       Ti.App.fireEvent('UserTotalFriendsFromACS', {result: total_results});
+	    },onerror: function(e) {
+			// this function is called when an error occurs, including a timeout
+	        Ti.API.debug(e.error);
+	        Ti.API.info('friendACS_fetchedUserTotalFriends error');
+	    },
+	    timeout:10000  /* in milliseconds */
+	});
+	xhr.open("GET", url);
+	xhr.send();
 
+};
 //add friend /////////////////////////////////////////////////////////////////////////////////////////////////
 exports.addFriend = function(_userID,_callbackFn){
 	alert('user to be friended with: '+_userID);
@@ -100,13 +120,9 @@ exports.showFriendsRequest = function(){
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
-	    	//alert("success loading friend request");
 	    	responseJSON = JSON.parse(this.responseText);
-	    	//alert("friends request: "+responseJSON.response.friend_requests.length);
 		      	for (var i = 0; i < responseJSON.response.friend_requests.length; i++) {
 	            var request = responseJSON.response.friend_requests[i];  
-	         //   alert('REQUEST//friend ID :' + request.id + 'Name: ' + request.user.first_name +' ' + request.user.last_name+
-	        //    'username: ' + request.user.username);
 				var curRequest = {
 					req_id: request.id,
 					friend_id: request.user.id,

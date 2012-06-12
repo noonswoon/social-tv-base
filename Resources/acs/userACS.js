@@ -1,21 +1,15 @@
 
-exports.userACS_fetchAllUser = function(_myusername){
-	Cloud.Users.query({
-    page: 1,
-    per_page: 20,
-	where: {username: {"$ne": _myusername}
-  }
-}, function (e) {
+exports.userACS_fetchCurrentUser = function(_id){
+	Cloud.Users.show({
+    	user_id: _id
+	}, function (e) {
     if (e.success) {
-    	var userCollection=[];
-    	Ti.API.info('userACS_fetchAllUser Success: Count: ' + e.users.length);
-        for (var i = 0; i < e.users.length; i++) {
-        	var user = e.users[i];
-        	userCollection.push(user);
-        }
-        Ti.App.fireEvent('userLoaded',{fetchedUsers:userCollection});
+    	var user = e.users[0];
+    	Ti.API.info('current profile user: ' + user.first_name + ' ' + user.last_name);
+    	//return user;
+       Ti.App.fireEvent('userLoaded',{fetchedUser: user});
     } else {
-        alert('userACS_fetchAllUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+        alert('userACS_fetchCurrentUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
     }
 });
 };

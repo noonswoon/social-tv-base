@@ -11,7 +11,7 @@ db.close();
 // create data for local database
 exports.friendModel_updateFriendsFromACS = function(_friendsCollection) {
 	var db = Ti.Database.open('Chatterbox');
-	db.execute('DELETE FROM friends');
+	db.execute('DELETE FROM friends'); //**** hmm?
 	for(var i=0;i < _friendsCollection.length; i++) {
 		var curFriend = _friendsCollection[i];
 		db.execute("INSERT INTO friends(number,my_id,friend_id,username,first_name,last_name,email) VALUES(null,?,?,?,?,?,?)", curFriend.my_id,curFriend.friend_id,curFriend.username,curFriend.first_name,curFriend.last_name,curFriend.email);
@@ -40,6 +40,20 @@ exports.friendModel_fetchFriend = function(_myID) {
 	return fetchedFriend;
 };
 
+exports.friendModel_findMyFriend = function(_myId,_friendId) {
+	isFriend = false;
+	var db = Ti.Database.open('Chatterbox');
+	var result = db.excute('SELECT * FROM friends where my_id = ? and friend_id = ?', _myID, _friendId);
+	while(result.isValidRow()) {	
+		isFriend = true;
+		break;
+	}	
+	result.close();
+	db.close();
+	//return only true or false
+	return isFriend;	
+};
+
 //update one friend from approving
 exports.friend_create = function(_friendsCollection){
 	var db = Ti.Database.open('Chatterbox'); 
@@ -56,11 +70,11 @@ exports.friendModel_removeFriend = function(_friendID){
 	Ti.App.fireEvent('removedFriend');
 };	
 
-exports.friendModel_count = function(_myID){
-	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT COUNT(*) as friends_count from friends where my_id = ?', _myID);
-	var friends = Number(result.fieldByName('friends_count'));
-	result.close();
-	db.close();
-	return friends;
-};
+// exports.friendModel_count = function(_myID){
+	// var db = Ti.Database.open('Chatterbox'); 
+	// var result = db.execute('SELECT COUNT(*) as friends_count from friends where my_id = ?', _myID);
+	// var friends = Number(result.fieldByName('friends_count'));
+	// result.close();
+	// db.close();
+	// return friends;
+// };

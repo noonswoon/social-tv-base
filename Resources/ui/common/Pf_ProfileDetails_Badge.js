@@ -95,9 +95,10 @@ var ProfileBadgeView = function(_parent){
 	});
 	
 	Ti.App.addEventListener('updatedmyUnlockedBadges',function(){
-		for (var i in badgeView.children){
-			if (badgeView.children.hasOwnProperty(i)) {
-				badgeView.remove(badgeView.children[i]);
+		//TODO: some problem here
+		for (var x in badgeView.children){
+			if (badgeView.children.hasOwnProperty(x)) {
+				badgeView.remove(badgeView.children[x]);
 		  };
 		}	
 			
@@ -143,7 +144,6 @@ var ProfileBadgeView = function(_parent){
 		badgeView.badgedetailwin.animate(animateNegativeLeft);
 	});	
 	
-	//TODO:check this too	
 	Ti.App.addEventListener('checkinCountUpdate',function(_id){
 		var checkBadge = _id.badgeID;
 		if(myUnlockBadgesReady){

@@ -16,7 +16,8 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	}
 	Ti.API.info('countCheckinsFromDb = ' + countCheckinsFromDb);
 	db.close();
-	Ti.App.fireEvent("checkinsDbUpdated");
+	Ti.API.info('DONE: updating CHECKIN database');
+
 };
 
 //haven't use this yet:9

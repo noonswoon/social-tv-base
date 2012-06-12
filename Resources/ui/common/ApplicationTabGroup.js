@@ -18,11 +18,20 @@ function ApplicationTabGroup() {
 		programNumCheckin: 25345
 	};
 	
-	var selectionwin = new ChannelSelectionMainWindow();
+	var myUserId = acs.getUserId();
+	
+	var checkStatus = function(myUserId,profileId){
+		var status = "stranger";
+		if(myUserId===profileId) status = "me"
+			else if(FriendModel.friendModel_findMyFriend(myUserId,profileId)) status = "friend"
+			return status;
+	};
+	
+	var selectionwin = new ChannelSelectionMainWindow();//SettingWindow(); //ChannelSelectionMainWindow();
 	var chatwin = new SettingWindow(); //ChatMainWindow(programDummy);
 	var messageboardwin = new SettingWindow(); //MessageboardMainWindow(1);		
 	var productwin = new SettingWindow(); //ProductMainWindow();
-	var profilewin =  new ProfileMainWindow();
+	//var profilewin =  new ProfileMainWindow(myUserId,status);
 
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
@@ -72,18 +81,80 @@ function ApplicationTabGroup() {
 	var profileTab = Ti.UI.createTab({
 		icon: '/images/fugitives.png',
 		title: 'Profile',
-		window: profilewin
  	});
-	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 4;	
 	});
 	
+	//PROFILE: CALLING ACS
+	var LevelACS = require('acs/levelACS');	
+	var BadgesACS = require('acs/badgesACS');
+	var FriendACS = require('acs/friendsACS');
+	var CheckinACS = require('acs/checkinACS');	
+	var LeaderACS = require('acs/leaderBoardACS');	
+	var LevelModel = require('model/level');
+	var FriendModel = require('model/friend');
+	var CheckinModel = require('model/checkin');
+	var PointModel = require('model/point');	
+	
+	//not frequently update
+	LevelACS.levelACS_fetchedLevel();
+	
+	//my user ACS
+	FriendACS.showFriendsRequest();	
+	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
+	FriendACS.searchFriend(myUserId);
+	
+	function levelLoadedCallBack(e){					
+		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
+	};
+	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
+	function checkinDbLoadedCallBack(e){			
+		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+	};
+	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+	Ti.App.addEventListener('updateHeaderCheckin',function(){
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
+	});
+	function friendDbLoadedCallBack(e){
+		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
+	};
+	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
+	Ti.App.addEventListener('friendsDbUpdated',function(){
+		Ti.API.info('Friends Database Updated');
+
+		var status = checkStatus(myUserId,myUserId);
+		var profilewin =  new ProfileMainWindow(myUserId,status);
+		profileTab.window = profilewin;
+		profilewin.containingTab = profileTab;
+    	self.addTab(profileTab);
+		
+		//load badge image data	
+		BadgesACS.fetchedBadges();
+		
+		//CREATE LEADERBOARD//	
+		var rankList = [];
+		rankList[0] = myUserId;
+		var myFriends = FriendModel.friendModel_fetchFriend(myUserId);
+		for(var i = 0; i< myFriends.length;i++){
+			var curUser = myFriends[i].friend_id;
+			Ti.API.info(curUser);
+			rankList.push(curUser);
+		};
+		Ti.API.info('total user in rank: '+rankList.length);
+		LeaderACS.leaderACS_fetchedRank(rankList);
+	});
+	function leaderDBLoadedCallBack(e){
+		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
+	};
+	Ti.App.addEventListener('leaderDBLoaded',leaderDBLoadedCallBack);
+	
+	//////////////////////
 	self.addTab(selectionTab);
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  
     self.addTab(productTab);
-    self.addTab(profileTab);
+    //self.addTab(profileTab);
 
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);

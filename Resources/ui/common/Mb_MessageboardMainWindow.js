@@ -243,13 +243,11 @@ function MessageboardMainWindow(_programId) {
 
 	//pull2refresh
 	//pull2refresh module
-
 	var lastUpdatedDateObj = CacheHelper.getCacheTime('topicsOfProgram'+_programId);
 	var lastUpdatedStr = "No updated";
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
 	}
-	
 	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
 		Ti.API.info('using pull to refresh');
 		usingPull2Refresh = true;

@@ -8,6 +8,7 @@ function PopularWindow(_parent) {
 
 	var areAllProgramsTitlesLoaded = false; 
 	var numProgramsToLoadCheckins = 0;
+	var usingPull2Refresh = false;
 	
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
@@ -20,8 +21,7 @@ function PopularWindow(_parent) {
 		isEverythingReady();
 	});
 	
-	var self = Ti.UI.createWindow({
-	});
+	var self = Ti.UI.createWindow();
 	
 	var TimeSelection = require('ui/common/Cs_PopularWindowScrollviewTimeSelection');	
 	var timeSelection = new TimeSelection();
@@ -31,7 +31,6 @@ function PopularWindow(_parent) {
 		backgroundColor: 'transparent'
 	});	
 	timeSelectionView.add(timeSelection);
-
 	
 	var programListTable = Ti.UI.createTableView({
 		top: 35
@@ -91,6 +90,13 @@ function PopularWindow(_parent) {
 		}
 		programListTable.setData(viewRowsData);
 		
+		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
+		if(usingPull2Refresh) {
+			Ti.API.info('using pull to refresh..finish up');
+			programListTable.refreshFinished();
+			usingPull2Refresh = false;
+			//CacheHelper.resetCacheTime('cachesomething here'+_programId);
+		}
 	});
 
 	programListTable.addEventListener('click',function(e){
@@ -108,13 +114,19 @@ function PopularWindow(_parent) {
 		_parent.containingTab.open(checkinmainwin);
 	});
 	
-	
 	self.add(timeSelectionView);
 	self.add(programListTable);
 	self.hideNavBar();
 	
 	showPreloader(self,'Loading...');
+	
+	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
+		usingPull2Refresh = true;
+		TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+	});	
+	
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+	
 	return self;
 }
 

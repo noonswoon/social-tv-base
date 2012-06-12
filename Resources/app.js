@@ -49,7 +49,7 @@ var myCurrentCheckinPrograms = ['CH9_CSINY','CH7_0LOST']; //should be reset ever
 			var userEmail = e.users[0].email;
 			Cloud.Users.logout(function (e) {
 			    if (e.success) {
-			    	Debug.debug_print("logging out to login again");
+			    	Ti.API.info("logging out to login again: password: "+Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10));
 			    	Cloud.Users.login({
 						login: userEmail,
 					    password: Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10),
@@ -75,10 +75,9 @@ var myCurrentCheckinPrograms = ['CH9_CSINY','CH7_0LOST']; //should be reset ever
 	    } else {
 	    	Debug.debug_print("should go to login screen");
 			Ti.Facebook.logout(); //just to be save
-			var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
-			var loginwin = new LoginFbOnlyWindow();
-			
-			loginwin.open();   			
+			var LoginTabGroup = require('ui/common/Am_LoginTabGroup');
+			var logintabgroup = new LoginTabGroup();
+			logintabgroup.open();
    		}
     });
 })();

@@ -45,6 +45,8 @@ function facebookAuthenCallback(e) {
 									
 									var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
 									Debug.debug_print("fbAuthenListener.js - creating new appTabGroup [watchout!]");
+									
+									Ti.App.fireEvent('closeLoginTabGroup'); //done with login, close the tabgroup
 									var maintabgroup = new ApplicationTabGroup();
 									maintabgroup.open();
 							    } else {
@@ -56,7 +58,7 @@ function facebookAuthenCallback(e) {
 				    		Debug.debug_print("No email: new user registration");
 				    		var EnterUsernameWindow = require('ui/common/Am_EnterUsernameWindow');
 				    		var enterusernamewin = new EnterUsernameWindow(email,firstName,lastName);
-							enterusernamewin.open();
+				    		enterusernamewin.open();
 				    	}
 				    } else {
 				        alert('Users.query Error: ' +((e.error && e.message) || JSON.stringify(e)));

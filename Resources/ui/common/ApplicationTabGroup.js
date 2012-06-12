@@ -7,6 +7,7 @@ function ApplicationTabGroup() {
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
+	
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
@@ -20,10 +21,10 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ChatMainWindow(programDummy);
+	var chatwin = new SettingWindow();//ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow();
-	var profilewin = new ProfileMainWindow();
+	var profilewin = new SettingWindow();//ProfileMainWindow();
 	var blankwin = new BlankWindow();
 
 	var tabIndexToComeBack = 0;
@@ -93,6 +94,14 @@ function ApplicationTabGroup() {
 
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
+   	
+   	function closeApplicationTabGroupCallback() {
+   		Ti.API.info('closing applicationTabGroup');
+   		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
+   		self.close();
+   	}
+   	
+   	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
    	
     return self;
 };

@@ -71,28 +71,14 @@ function PopularWindow(_parent) {
 	
 	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var timeIndex = e.timeIndex;
-		
-		if(timeIndex === 12){
-			var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex); 
-			var viewRowsData = [];
-				for (var i=0;i<selectedShowtime.length;i++) {
-			 		var curTVProgram = selectedShowtime[i];
-					var row = new PopularWindowTableViewRow(curTVProgram);
-					viewRowsData.push(row);
-				}
-			programListTable.setData(viewRowsData);
+		var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex); 
+		var viewRowsData = [];
+		for (var i=0;i<selectedShowtime.length;i++) {
+			var curTVProgram = selectedShowtime[i];
+			var row = new PopularWindowTableViewRow(curTVProgram);
+			viewRowsData.push(row);
 		}
-		if(timeIndex === 17){
-			var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex,18); 
-			var viewRowsData = [];
-				for (var i=0;i<selectedShowtime.length;i++) {
-			 		var curTVProgram = selectedShowtime[i];
-					var row = new PopularWindowTableViewRow(curTVProgram);
-					viewRowsData.push(row);
-				}
-			programListTable.setData(viewRowsData);
-		}
-		
+		programListTable.setData(viewRowsData);		
 	});
 	
 	Ti.App.addEventListener('showDiscoveryPage', function(){

@@ -13,9 +13,10 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		height: 'auto',
 		allowsSelection: false,
 		className: "CommentRow",
+		backgroundColor: 'transparent',
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
-	
+
 	row.index = -1;
 	
 	var nestedOffset = _level * 10 + 5;
@@ -26,24 +27,36 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	} else if(rating < 0) {
 		ratingStr = rating;
 	}
+	
 	var ratingLabel = Ti.UI.createLabel({
 		text: ratingStr,
 		color: '#420404',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:12},
-		top: 15,
-		left:nestedOffset,
+		top: 5,
+		// left:nestedOffset,
+		right:15,
 		height: 15,
-		width: 50
+		// width: 50,
+		zIndex: 2
+	});
+	
+	var borderUserImage = Ti.UI.createImageView({
+		image: 'images/messageboard/comment/displayprofile.png',
+		left: nestedOffset + 15,
+		top: 5,
+		bottom: 5,
+		width:51,
+		height:52,
+		zIndex: 2
 	});
 	
 	var userImage = Ti.UI.createImageView({
 		image: "userImage.png",
-		top: 5,
-		left: nestedOffset + 15,
-		width:55,
-		height:40
+		width:37,
+		height:50
 	});
+	borderUserImage.add(userImage);
 	
 	var dm = moment(_comment.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 	var submitDateStr = since(dm);
@@ -53,13 +66,12 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	
 	var commentDetail = Ti.UI.createLabel({
 		text: 'by '+usernameStr+', '+submitDateStr,
-		color: '#420404',
-		textAlign:'right',
+		color: '#999999',
 		font:{fontWeight:'bold',fontSize:12},
-		top: 0,
-		left:nestedOffset+15,
+		top: 5,
+		left: nestedOffset+75,
 		height: 15,
-		width: 150
+		zIndex: 2
 	});
 		
 	var lineHelper = "";
@@ -68,85 +80,94 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	}
 	var contentLabel = Ti.UI.createLabel({
 		text:  _comment.content,
-		top: 15,
-		left: nestedOffset+ 75,
+		top: 20,
+		left: nestedOffset+75,
+		right: 10,
 		height: 'auto',
-		font: { fontSize: 15, fontFamily: 'Helvetica Neue' },
-		width: 250
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
+		textAlign: 'left',
+		zIndex: 2
 	});
+
+	var heightOfContent = contentLabel.toImage().height;
 
 	var replyToolbar = Ti.UI.createView({
 		left: 0,
-		top: 55,
+		top: (heightOfContent*4)-5,
 		width: '100%',
 		height: 60,
-		visible: true
+		visible: true,
 	});
 
 	var replyTextField = Ti.UI.createTextField({
-		left: 5,
 		top: 0,
-		width: 310,
-		height: 20,
+		height: 28,
 		hintText: "Reply here...",
+		left: nestedOffset + 15,
+		right: 10,
     	borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
+    	backgroundColor: 'transparent',
+		backgroundImage: 'images/messageboard/comment/replyothertextareaBG.png',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	});
 
 	var upButton = Ti.UI.createButton({
-		left:5,
-		top: 25,
-		width: 35,
-		height: 20,
-		title: 'Up',
-		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
+		left: nestedOffset + 15,
+		top: 35,
+		width: 40,
+		height: 18,
+		backgroundImage: 'images/messageboard/comment/up.png'
 	});
 
 	var downButton = Ti.UI.createButton({
-		left:45,
-		top: 25,
-		width: 35,
-		height: 20,
-		title: 'Down',
-		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
+		left: nestedOffset + 60,
+		top: 35,
+		width: 55,
+		height: 18,
+		backgroundImage: 'images/messageboard/comment/down.png'
 	});
 	
 	var reportButton = Ti.UI.createButton({
-		left:85,
-		top: 25,
-		width: 45,
-		height: 20,
-		title: 'Report',
-		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
+		left: nestedOffset + 120,
+		top: 35,
+		width: 46,
+		height: 18,
+		backgroundImage: 'images/messageboard/comment/flag.png'
 	});
 	
 	var deleteButton = Ti.UI.createButton({
-		left:85,
-		top: 25,
-		width: 45,
-		height: 20,
-		title: 'Delete',
-		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
+		left: nestedOffset + 120,
+		top: 35,
+		width: 46,
+		height: 18,
+		backgroundImage: 'images/messageboard/comment/flag.png'
 	});
 
 	var replyButton = Ti.UI.createButton({
-		right: 5,
-		top: 25,
-		width: 50,
-		height: 20,
-		title: 'Reply',
-		font: { fontSize: 12, fontFamily: 'Helvetica Neue' }
+		right: 10,
+		top: 35,
+		width: 40,
+		height: 18,
+		backgroundImage: 'images/messageboard/comment/reply.png'
+	});
+	
+	var commentView = Ti.UI.createView({
+		top:0,
+		left: nestedOffset + 10,
+		right: 10,
+		height: (heightOfContent*4)-10,
+		// backgroundColor: 'orange',
+		backgroundImage: 'images/messageboard/comment/reply_onclick.png',
+		zIndex: 1
 	});
 		
 	//ADDING UI COMPONENTS	
 
 	row.add(ratingLabel);
-	row.add(userImage);
+	row.add(borderUserImage);
 	row.add(commentDetail);		
 	row.add(contentLabel);
-	
-	//row.add(replyToolbar);
-	
+
 	replyToolbar.add(replyTextField);
 	replyToolbar.add(upButton);
 	replyToolbar.add(downButton);
@@ -162,11 +183,21 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	row._hideToolbar = function(rowIndex) {
 		row.index = rowIndex;
 		row.remove(replyToolbar);
+		row.remove(commentView);
+		
+		//change text color
+		contentLabel.color = 'black';
+		commentDetail.color = '#999999'
 	};
 	
 	row._showToolbar = function(rowIndex) {
 		row.index = rowIndex;		
 		row.add(replyToolbar);
+		row.add(commentView);
+		
+		//change text color
+		contentLabel.color = 'white';
+		commentDetail.color = '#cccccc';
 	};
 		
 	replyButton.addEventListener('click',function(e) {

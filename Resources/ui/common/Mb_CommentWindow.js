@@ -10,25 +10,41 @@ function CommentWindow(_topicId) {
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow();
 	
+	var backButton = Ti.UI.createButton({
+        backgroundImage:'images/Backbutton.png',
+        width:57,height:34
+	});
+	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
-		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
-		title: "Webboard",
-		barColor: '#6d0a0c'
+		title: "Message Board",
+		barImage: 'images/NavBG.png',
+	 	leftNavButton:backButton
+	});
+	
+	backButton.addEventListener('click', function(){
+   		self.close();
 	});
 
 	var commentsTable = Titanium.UI.createTableView({
 		top: 0,
-		left: 0,
 		scrollable: true,
 		height:'auto',
 		selectedToCommentRow: null,
+		separatorColor: 'transparent',
+		backgroundColor: 'transparent',
 	});
+	
+	commentsTable.backgroundGradient = {
+      	type: 'linear',
+       	startPoint: { x: '0%', y: '100%' },
+       	endPoint: { x: '0%', y: '0%' },
+       	colors: [ { color: '#d1d1d1', offset: 0.0}, { color: '#ffffff', offset: 1.0 } ]
+ 	};
 	
 	//ADDING UI COMPONENTS
 	self.add(commentsTable);
-	
+
 	//HELPER FUNCTIONS
 	function assignRankingScores(_commentsArray) {
 		for(var i=0;i<_commentsArray.length;i++) {

@@ -13,7 +13,6 @@ function MessageboardAddWindow(_programId) {
 	var self = Titanium.UI.createWindow({
 		barImage: 'images/NavBG.png',
 		title: "Message Board",
-		backgroundColor: 'orange',
 	 	leftNavButton:backButton
 	});
 

@@ -3,45 +3,50 @@ CommentHeaderTableViewRow = function() {
 	
 	var headerMainRow = Ti.UI.createTableViewRow({
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		backgroundColor: 'pink'
-	})
+		backgroundColor: 'transparent'
+	});
 
 	//tableview inside tableviewrow	
 	var headerTable = Ti.UI.createTableView({
-		top: 5,
-		height: 'auto',
-	})
+		top: 0,
+		height: 125,
+		backgroundColor: 'transparent'
+	});
 	
 //	COMMENT TOPIC SECTION
+// DATE SUBMISSION SECTION
 	var topicRow = Ti.UI.createTableViewRow({
-		height: 'auto',
+		height: 52,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		className: "DetailedTopicTableViewRow",
-		backgroundColor: 'orange'
+		backgroundImage: 'images/messageboard/comment/topictitletoolbar.png',
 	});
 		
 	var topicLabel = Ti.UI.createLabel({
 		text: '-',
-		width: 'auto',
-		height: 'auto',
-		font: { fontSize: 20, fontFamily: 'Helvetica Neue' },
-	})
-		
-// DATE SUBMISSION SECTION
-	var dateRow = Ti.UI.createTableViewRow({
+		textAlign: 'left',
+		left: 50,
+		top: 7,
+		width: 260,
 		height: 20,
-		backgroundColor: 'green'
-	});
+		font: { fontSize: 16, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
+	})
 	
 	var dateLabel = Ti.UI.createLabel({
 		text: '--',
+		top: 23,
+		left: 50,
 		height: 20,
 		width: 'auto',
 		font: { fontSize: 10, fontFamily: 'Helvetica Neue' },
 	});
 	
 // ADD NEW COMMENT SECTION
-	var textAreaRow = Ti.UI.createTableViewRow();
+	var textAreaRow = Ti.UI.createTableViewRow({
+		top:52,
+		height: 73,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
+	});
 	
 	var replyButton = Titanium.UI.createButton({
 	    title : 'Reply',
@@ -53,12 +58,16 @@ CommentHeaderTableViewRow = function() {
 	});
 	
 	var replyTextArea = Ti.UI.createTextArea({
-		width: '100%',
-		height: 50,
+		top:8,
+		left: 10,
+		right: 10,
+		width: 300,
+		height: 53,
 		value: "Write your comment here...",
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		keyboardToolbar : [cancelButton, replyButton], //this is iOS only
-	    backgroundColor: 'gray'
+    	backgroundColor: 'transparent',
+    	backgroundImage: 'images/messageboard/comment/replytopictextareaBG.png'
 	});
 	
 		
@@ -71,12 +80,11 @@ CommentHeaderTableViewRow = function() {
 	
 	//set up label in the 3 rows
 	topicRow.add(topicLabel);
-	dateRow.add(dateLabel);
+	topicRow.add(dateLabel);
 	textAreaRow.add(replyTextArea);
 	
 	//setup data for the headerTable
 	headerTableData.push(topicRow);
-	headerTableData.push(dateRow);
 	headerTableData.push(textAreaRow);
 	
 	headerTable.setData(headerTableData);
@@ -100,7 +108,7 @@ CommentHeaderTableViewRow = function() {
 		var topicHeight = topicRow.toImage().height; 
 		
 		var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
-		headerMainRow.height = numLines * topicHeight + dateRow.toImage().height + textAreaRow.toImage().height + 5;
+		headerMainRow.height = numLines * topicHeight + textAreaRow.toImage().height + 5;
 	};
 	
 	headerMainRow._setSubmissionTime = function(_submissionTime) {

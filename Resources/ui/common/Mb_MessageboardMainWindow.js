@@ -133,6 +133,7 @@ function MessageboardMainWindow(_programId) {
 	});
 
 	self.add(picker_view);
+//////////////////
 
 	var allTopicTable = Ti.UI.createTableView({
 		top: 170,

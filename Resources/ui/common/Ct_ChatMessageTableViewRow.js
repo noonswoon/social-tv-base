@@ -3,47 +3,49 @@ ChatMessageTableViewRow = function(_chatMessage, _chatOwner, _isASender) {
 		className: 'ChatMessageRow',
 		height: 'auto',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		bottom: 10
 	});
 	
 	var userPic = Ti.UI.createImageView({
-		top:5,
-		width: 30,
-		height: 30,
-		borderRadius: 15,
+		width: 40,
+		height: 40,
+		borderColor: 'white',
+		borderWidth: 2,
+		borderRadius: 20,
 		image: _chatOwner.imageUrl
 	});
 	
 	var chatMessageLabel = Ti.UI.createLabel({
 		top:5,
-		left: 5,
-		right: 5,
-		bottom: 5,
+		left: 15,
+		right: 10,
+		bottom: 15,
+		textAlign: 'left',
 		height: Ti.UI.SIZE,
 		width: Ti.UI.SIZE, //but cap at length x-->check with the content
 		text: _chatMessage,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	});
 	
 	var backgroundViewForMessage = Ti.UI.createLabel({
 		height: Ti.UI.SIZE,
-		backgroundColor: 'green',
-		top: 5,
-		borderRadius: 3,
-		borderWidth: 1,
-		borderColor: 'gray'	
+		top: 5
 	});
 	
 	backgroundViewForMessage.add(chatMessageLabel);
 	
 	if(_isASender) {
-		userPic.right = 5;
-		backgroundViewForMessage.right = 45;
-		backgroundViewForMessage.backgroundColor = 'green';
+		userPic.right = 10;
+		backgroundViewForMessage.right = 60;
+		backgroundViewForMessage.left = 10;
+		backgroundViewForMessage.backgroundImage = 'images/chat/left_quote.png';
 	}
 	else {
-		userPic.left = 5;
-		backgroundViewForMessage.left = 45;
-		backgroundViewForMessage.backgroundColor = 'orange';
+		userPic.left = 10;
+		chatMessageLabel.color = 'white',
+		backgroundViewForMessage.left = 60;
+		backgroundViewForMessage.right = 10;
+		backgroundViewForMessage.backgroundImage = 'images/chat/right_quote.png';
 	}
 	
 	self.add(userPic);

@@ -48,7 +48,7 @@ Ti.App.Chat = function(setup) {
            	}
         },
         error : function() {
-       		Ti.API.info("Lost connection...");
+       		// Ti.API.info("Lost connection...");
         }
     });
 
@@ -69,49 +69,195 @@ Ti.App.Chat = function(setup) {
         });
     }
 
-	var chat_window = Ti.UI.createWindow({
-		backgroundColor:'transparent',
-		backgroundImage: '/images/grain.png',
-		title: "Group Chat",
-		barColor: '#6d0a0c',
-		tabBarHidden: true
+	var backButton = Ti.UI.createButton({
+        backgroundImage:'images/Backbutton.png',
+        width:57,height:34
 	});
 
-	var headerView = Ti.UI.createView({
-		top: 0,
-		left:0,
-		height: 90,
-		backgroundColor: 'pink'
+	var chat_window = Ti.UI.createWindow({
+		title: "Group Chat",
+		barImage: 'images/NavBG.png',
+		backgroundImage: 'images/bg.png',
+		tabBarHidden: true,
+		leftNavButton:backButton
 	});
 	
-	var headerLabel = Ti.UI.createLabel({
+	backButton.addEventListener('click', function(){
+   		chat_window.close();
+	});
+	
+	var selectProgramToolbar = Ti.UI.createView({
+		top: 0,
+		height: 40,
+		backgroundImage: 'images/chat/selectprogramtoolbarBG.png'
+	});
+
+	
+	var selectProgramLabel = Ti.UI.createLabel({
 		text: 'Lost the Finale',
-		top: 5,
-		left: 5,
+		left: 10,
 		width: 'auto',
-		height: 25, 
-		font: { fontSize: 20, fontFamily: 'Helvetica Neue' }
+		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
 	});	
 	
-	var scrollView = Ti.UI.createScrollView({
-		backgroundColor: 'white',
-		contentWidth:600,
-		contentHeight:35,
-		top:40,
-		height:50,
-		width:320,
+	var watchLabel = Ti.UI.createLabel({
+		color: '#8c8c8c',
+		width: 70,
+		height: 50,
+		right: 45,
+		textAlign: 'right',
+		text: 'WATCH',
+		font:{fontSize: 11}
+	});
+
+	var selectProgramButton = Ti.UI.createButton({
+		width: 30,
+		height: 30,
+		right: 10,
+		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		image: 'images/icon/dropdownButton.png',
+  		borderRadius: 10,
+  		borderColor: '#a4a4a4',
+  		borderWidth: 1
 	});
 	
+	//Opacity window when picker is shown
+	opacityView = Ti.UI.createView({
+		opacity : 0.6,
+		top : 0,
+		height : 180,
+		zIndex : 7777,
+		backgroundColor: '#000'
+	});
+
+	
+	//Picker
+	var picker_view = Titanium.UI.createView({
+		height:251,
+		bottom:-251,
+		zIndex: 2
+	});
+
+	var cancel =  Titanium.UI.createButton({
+		title:'Cancel',
+		style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+	});
+
+	var done =  Titanium.UI.createButton({
+		title:'Done',
+		style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+	});
+
+	var spacer =  Titanium.UI.createButton({
+		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	});
+
+
+	var toolbar =  Titanium.UI.createToolbar({
+		top:0,
+		zIndex: 3,
+		items:[cancel,spacer,done]
+	});
+
+	var picker = Titanium.UI.createPicker({
+		top:43
+	});
+	picker.selectionIndicator=true;
+
+	var picker_data = [
+		Titanium.UI.createPickerRow({title:'John'}),
+		Titanium.UI.createPickerRow({title:'Alex'}),
+		Titanium.UI.createPickerRow({title:'Marie'}),
+		Titanium.UI.createPickerRow({title:'Eva'}),
+		Titanium.UI.createPickerRow({title:'James'})
+	];
+
+	picker.add(picker_data);
+
+	picker_view.add(toolbar);
+	picker_view.add(picker);
+
+	var slide_in =  Titanium.UI.createAnimation({bottom:0});
+	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+
+	selectProgramButton.addEventListener('click',function() {
+		picker_view.animate(slide_in);
+		chat_window.add(opacityView);
+	});
+
+	cancel.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		chat_window.remove(opacityView);
+	});
+
+	done.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		chat_window.remove(opacityView);
+	});
+	//////
+
+	var userView = Ti.UI.createView({
+		top: 40,
+		left:0,
+		height: 47,
+	});
+	
+	var scrollView = Ti.UI.createScrollView({
+		backgroundImage: 'images/chat/users_onlineBG.png',
+		contentWidth:500,
+		contentHeight:35,
+		top:0,
+		height:47,
+		width:320
+	});
+	
+	
 	for(var i=0;i<10;i++){
-		var dummyImage = Ti.UI.createImageView({
-			image:'dummy.png',
-			height:50,
-			width:50,
-			left:i*55+5,
+		var userDisplayBorder = Ti.UI.createView({
+			backgroundImage: 'images/chat/users_display.png',
+			width: 36,
+			height: 37,
+			top:3,
+			left:i*40+10
 		});
-		scrollView.add(dummyImage);	
+		
+		var starTag = Ti.UI.createImageView({
+			width: 13,
+			height: 11,
+			image: 'images/chat/star_tag.png',
+			top: 0,
+			right: 0,
+			zIndex: 2
+		});
+					
+		var dummyImage = Ti.UI.createImageView({
+			image:'images/chat/dummy.png',
+			top: 2,
+			left: 2,
+			height:30,
+			width:30
+		});
+		userDisplayBorder.add(dummyImage);	
+		userDisplayBorder.add(starTag);
+		scrollView.add(userDisplayBorder);
 	}
 	
+	var addFriendView = Ti.UI.createView({
+		top: 0,
+		width: 65,
+		height: 43,
+		right: 0,
+		backgroundImage: 'images/chat/addfriendBG.png'
+	});
+	
+	var addFriend = Ti.UI.createButton({
+		width: 32,
+		height: 32,
+		right: 8,
+		backgroundImage: 'images/chat/addfriend.png'
+	});
+	addFriendView.add(addFriend);
+
 	var chatMessagesTableView = Ti.UI.createTableView({
 		top:90,
 		height: 290,
@@ -120,72 +266,59 @@ Ti.App.Chat = function(setup) {
 	});
 	
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
-		height: 30
+		top: 120,
+		height: 30,
 	});
 	var loadHistoryButton = Ti.UI.createButton({
-		width: '90%',
-		height: 25,
-		title: 'Load Earlier Messages',
+		width: 150,
+		height: 26,
+		backgroundImage: 'images/chat/loadearliermessage.png'
 	});
 	loadHistoryMessagesRow.add(loadHistoryButton);
 	
 	
 	var chatInputView = Ti.UI.createView({
-		left: 0,
 		bottom: 0,
-		height: 40,
+		height: 51,
 		width: '100%',
 		zIndex: 2,
-		backgroundImage: '/images/grain.png',
+		backgroundImage: 'images/chat/footerBG.png'
 	});
 	var chatInputTextField   = Ti.UI.createTextArea({
-        width       : 247,
-        height      : 30,
-        left        : 4,
-        top	        : 5,
-        color       : "#111",
-        value       : "",
-        border      : 1,
-        borderRadius: 3,
-        font        : {
-            fontSize   : 14,
-            fontWeight : 'bold'
-        },
-        suppressReturn: false
+        width: 237,
+        height: 30,
+        left: 10,
+        color: "#111",
+        value: "",
+        font: {fontSize:14},
+        textAlign: 'left',
+        backgroundColor: 'transparent',
+        backgroundImage: 'images/chat/chattextfieldBG.png',
+        // suppressReturn: false
     });
 	
     // Send Button
     var sendButton = Ti.UI.createButton({
-        title         : 'Send',
-        top        : 5,
-        right         : 4,
-        width         : 60,
-        height        : 30,
-        borderRadius  : 6,
-        shadowColor   : "#001",
-        shadowOffset  : { x : 1, y : 1 },
-        style         : Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-        font          : {
-            fontSize   : 16,
-            fontWeight : 'bold'
-        },
-        backgroundGradient : {
-            type          : 'linear',
-            colors        : [ '#058cf5', '#015fe6' ],
-            startPoint    : { x : 0, y : 0 },
-            endPoint      : { x : 2, y : 50 },
-            backFillStart : false
-        }
+		width: 60,
+		height: 31,
+		right: 10,
+		backgroundImage: 'images/chat/send.png'
     });
+
     
 	chatInputView.add(chatInputTextField);
 	chatInputView.add(sendButton);
 	
-	headerView.add(headerLabel);
-	headerView.add(scrollView);
-	chat_window.add(headerView);
+	selectProgramToolbar.add(selectProgramLabel);
+	selectProgramToolbar.add(watchLabel);
+	selectProgramToolbar.add(selectProgramButton);
+	userView.add(scrollView);
+	userView.add(addFriendView);
+	chat_window.add(selectProgramToolbar);
+	chat_window.add(userView);
 	chat_window.add(chatMessagesTableView);
 	chat_window.add(chatInputView);
+	chat_window.add(picker_view);
 	///////////////////////////////////////////////////////////////////////////////////////////			
 	
 	var chatData = [loadHistoryMessagesRow]; 	
@@ -259,7 +392,7 @@ Ti.App.Chat = function(setup) {
 	chatInputTextField.addEventListener('focus', function() {
 		chatInputView.top = 140;
 		chatInputView.height = 60;
-		chatInputTextField.height = 50;
+		chatInputTextField.height = 40;
 	});
 	
 	chatInputTextField.addEventListener('blur', function() {

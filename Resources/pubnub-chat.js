@@ -122,10 +122,10 @@ Ti.App.Chat = function(setup) {
 	});
 	
 	//Opacity window when picker is shown
-	opacityView = Ti.UI.createView({
+	var opacityView = Ti.UI.createView({
 		opacity : 0.6,
 		top : 0,
-		height : 180,
+		height : 165,
 		zIndex : 7777,
 		backgroundColor: '#000'
 	});
@@ -304,7 +304,6 @@ Ti.App.Chat = function(setup) {
 		right: 10,
 		backgroundImage: 'images/chat/send.png'
     });
-
     
 	chatInputView.add(chatInputTextField);
 	chatInputView.add(sendButton);

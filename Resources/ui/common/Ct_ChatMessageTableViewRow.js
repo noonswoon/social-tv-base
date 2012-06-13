@@ -29,6 +29,7 @@ ChatMessageTableViewRow = function(_chatMessage, _chatOwner, _isASender) {
 	
 	var backgroundViewForMessage = Ti.UI.createLabel({
 		height: Ti.UI.SIZE,
+		width: Ti.UI.SIZE,
 		top: 5
 	});
 	

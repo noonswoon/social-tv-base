@@ -60,7 +60,7 @@ function MessageboardMainWindow(_programId) {
 	searchView.add(addButton);
 
 //Opacity window when picker is shown
-	opacityView = Ti.UI.createView({
+	var opacityView = Ti.UI.createView({
 		opacity : 0.6,
 		top : 0,
 		height : 120,

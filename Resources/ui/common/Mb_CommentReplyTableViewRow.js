@@ -23,9 +23,9 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var rating = _comment.rating;
 	var ratingStr = '';
 	if(rating > 0) {
-		ratingStr = '+'+rating;
+		ratingStr = ' +'+rating;
 	} else if(rating < 0) {
-		ratingStr = rating;
+		ratingStr = ' '+rating;
 	}
 	
 	var ratingLabel = Ti.UI.createLabel({
@@ -36,14 +36,20 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		top: 5,
 		// left:nestedOffset,
 		right:15,
-		height: 15,
-		// width: 50,
+		height: 20,
+		width: 20,
 		zIndex: 2
 	});
 	
+	if(rating > 0) {
+		ratingLabel.backgroundImage = 'images/messageboard/comment/goodratingBG.png';
+	} else if(rating < 0) {
+		ratingLabel.backgroundImage = 'images/messageboard/comment/badratingBG.png';
+	}
+	
 	var borderUserImage = Ti.UI.createImageView({
 		image: 'images/messageboard/comment/displayprofile.png',
-		left: nestedOffset + 15,
+		left: nestedOffset + 5,
 		top: 5,
 		bottom: 5,
 		width:51,
@@ -52,9 +58,10 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	var userImage = Ti.UI.createImageView({
-		image: "userImage.png",
-		width:37,
-		height:50
+		image: 'images/messageboard/comment/user_dummy.png',
+		top: 6,
+		width:39,
+		height:39
 	});
 	borderUserImage.add(userImage);
 	
@@ -69,7 +76,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		color: '#999999',
 		font:{fontWeight:'bold',fontSize:12},
 		top: 5,
-		left: nestedOffset+75,
+		left: nestedOffset+65,
 		height: 15,
 		zIndex: 2
 	});
@@ -81,7 +88,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var contentLabel = Ti.UI.createLabel({
 		text:  _comment.content,
 		top: 20,
-		left: nestedOffset+75,
+		left: nestedOffset+65,
 		right: 10,
 		height: 'auto',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
@@ -103,7 +110,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		top: 0,
 		height: 28,
 		hintText: "Reply here...",
-		left: nestedOffset + 15,
+		left: nestedOffset,
 		right: 10,
     	borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
     	backgroundColor: 'transparent',
@@ -112,7 +119,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var upButton = Ti.UI.createButton({
-		left: nestedOffset + 15,
+		left: nestedOffset + 5,
 		top: 35,
 		width: 40,
 		height: 18,
@@ -120,7 +127,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var downButton = Ti.UI.createButton({
-		left: nestedOffset + 60,
+		left: nestedOffset + 50,
 		top: 35,
 		width: 55,
 		height: 18,
@@ -128,7 +135,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	var reportButton = Ti.UI.createButton({
-		left: nestedOffset + 120,
+		left: nestedOffset + 110,
 		top: 35,
 		width: 46,
 		height: 18,
@@ -136,7 +143,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	var deleteButton = Ti.UI.createButton({
-		left: nestedOffset + 120,
+		left: nestedOffset + 110,
 		top: 35,
 		width: 46,
 		height: 18,
@@ -153,7 +160,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	
 	var commentView = Ti.UI.createView({
 		top:0,
-		left: nestedOffset + 10,
+		left: nestedOffset,
 		right: 10,
 		height: (heightOfContent*4)-10,
 		// backgroundColor: 'orange',
@@ -246,9 +253,11 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			var ratingStr = '';
 			rating = rating + ratingOffset;
 			if(rating > 0) {
-				ratingStr = '+'+rating;
+				ratingStr = ' +'+rating;
+				ratingLabel.backgroundImage = 'images/messageboard/comment/goodratingBG.png';
 			} else if(rating < 0) {
-				ratingStr = rating;
+				ratingStr = ' '+rating;
+				ratingLabel.backgroundImage = 'images/messageboard/comment/badratingBG.png';
 			}
 			ratingLabel.text = ratingStr;
 			

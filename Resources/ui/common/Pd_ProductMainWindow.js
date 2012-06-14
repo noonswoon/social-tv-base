@@ -76,7 +76,6 @@ function ProductMainWindow() {
 		var programCheckinName = TVProgram.TVProgramModel_getProgramNameWithProgramId(programCheckinId);
 		var checkinProgramRow = new ProductTabTableViewRow(programCheckinId, programCheckinName);
 		dataForTab.push(checkinProgramRow);
-			
 	}
 	tableViewForTab.setData(dataForTab);
 

@@ -304,7 +304,6 @@ function isPointInPoly(poly, pt)
 		}
 	});
 
-//touchend = mouseleave	
 	self.addEventListener('touchend',function(e)
 	{
 		if(checkinButton.enabled===true){

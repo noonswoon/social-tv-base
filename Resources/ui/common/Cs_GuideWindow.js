@@ -49,6 +49,10 @@ function GuideWindow(_parent) {
 	});
 	selectChannelToolbar.add(selectChannelLabel);
 	
+
+	
+	
+	
 	//Popup
 	var channelSelectorPopupWin = Ti.UI.createWindow({
 	backgroundColor: 'black',
@@ -82,23 +86,141 @@ function GuideWindow(_parent) {
 	}
 	tableViewForTab.setData(dataForTab);
 	
+		
+	//Opacity window when picker is shown
+	var opacityView = Ti.UI.createView({
+		opacity : 0.6,
+		top : 0,
+		height : 120,
+		zIndex : 7777,
+		backgroundColor: '#000'
+	});
+
+//Picker
+	var picker_view = Titanium.UI.createView({
+		height:251,
+		bottom:-251,
+		zIndex: 2
+	});
+
+	var cancel =  Titanium.UI.createButton({
+		title:'Cancel',
+		style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+	});
+
+	var done =  Titanium.UI.createButton({
+		title:'Done',
+		style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+	});
+
+	var spacer =  Titanium.UI.createButton({
+		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	});
+
+
+	var toolbar =  Titanium.UI.createToolbar({
+		top:0,
+		zIndex: 3,
+		items:[cancel,spacer,done]
+	});
+
+	var picker = Titanium.UI.createPicker({
+		top:43
+	});
+	picker.selectionIndicator=true;
+	
+	for(var i=0;i<dataForTab.length;i++) {
+		var curChannel = dataForTab[i];
+		var channel = curChannel.programName.text;
+		var row = Ti.UI.createPickerRow();
+		var channelLabel = Ti.UI.createLabel({
+			text: channel,
+			width: 300,
+			left: 20
+		});
+		row.add(channelLabel);
+		picker.add(row);
+	}
+	
+	
+	row.addEventListener('click', function(e) {
+			var index = e.index;
+			if(index === 0){
+				var ch3 = new ChannelInGuideWindow(index);
+				self.add(ch3);				
+				selectChannelLabel.text = 'CH3';
+			}
+			else if(index === 1){
+				var ch5 = new ChannelInGuideWindow(index);
+				self.add(ch5);
+				selectChannelLabel.text = 'CH5';	
+			}
+			else if(index === 2){
+				var ch7 = new ChannelInGuideWindow(index);
+				self.add(ch7);
+				selectChannelLabel.text = 'CH7';	
+			}
+			else if(index === 3){
+				var ch9 = new ChannelInGuideWindow(index);
+				self.add(ch9);	
+				selectChannelLabel.text = 'CH9';
+			}
+			else if(index === 4){
+				var ch11 = new ChannelInGuideWindow(index);
+				self.add(ch11);	
+				selectChannelLabel.text = 'CH11';
+			}
+			else if(index === 5){
+				var thaiPBS = new ChannelInGuideWindow(index);
+				self.add(thaiPBS);
+				selectChannelLabel.text = 'ThaiPBS';
+			}
+	});
+
+
+	picker_view.add(toolbar);
+	picker_view.add(picker);
+
+	var slide_in =  Titanium.UI.createAnimation({bottom:0});
+	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+
+	selectChannelButton.addEventListener('click',function() {
+		picker_view.animate(slide_in);
+		self.add(opacityView);
+	});
+
+	cancel.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		self.remove(opacityView);
+	});
+
+	done.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		self.remove(opacityView);
+	});
+
+	self.add(picker_view);
+	/////////////////////////
+	
+	
+	
 	//EVENT LISTENERS
 	//TODO: bad programming style here
 	//need to change and close the popup window in this file
 	//the current closing popup window logic are at ApplicationTabGroup and Cs_ChannelSelection files
 	//somehow self's blur/close events aren't functional
 	var channelSelectorToggle = true; //true means it closes
-	selectChannelButton.addEventListener('click',function(e){
-		if(channelSelectorToggle) {
-			channelSelectorToggle = false;
-			channelSelectorPopupWin.open();
-			self.add(triangleImage);
-		} else {
-			channelSelectorToggle = true;
-			channelSelectorPopupWin.close();
-			self.remove(triangleImage);
-		}
-	});
+	// selectChannelButton.addEventListener('click',function(e){
+		// if(channelSelectorToggle) {
+			// channelSelectorToggle = false;
+			// channelSelectorPopupWin.open();
+			// self.add(triangleImage);
+		// } else {
+			// channelSelectorToggle = true;
+			// channelSelectorPopupWin.close();
+			// self.remove(triangleImage);
+		// }
+	// });
 	
 	//add event listener for each tableviewrow
 	for(var i=0;i<dataForTab.length;i++) {

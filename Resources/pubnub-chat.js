@@ -403,7 +403,7 @@ Ti.App.Chat = function(setup) {
     sendButton.addEventListener('click', function() {
 		if(chatInputTextField.value === "") return;
 
-		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,false);
+		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
         chatMessagesTableView.appendRow(newChatRow);
         chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
         		

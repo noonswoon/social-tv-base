@@ -13,8 +13,8 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
         for (var i = 0; i < e.BadgeUnlock.length; i++) {
         	 var curBadge = e.BadgeUnlock[i];
               myBadges.push(curBadge);
-         }
-		Ti.App.fireEvent('myBadgesLoaded',{fetchedMyUnlockBadges:myBadges});
+        }
+		Ti.App.fireEvent('myBadgesLoaded'+_id,{fetchedMyUnlockBadges:myBadges});
     } 
     else {
         alert('myBadgeACS-> fetchedBadge Error:\\n' +

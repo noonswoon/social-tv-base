@@ -115,12 +115,10 @@ exports.approveFriend = function(_userID,_callbackFn){
 };
 //show friend request ////////////////////////////////////////////////////////////////////////////////////////
 exports.showFriendsRequest = function(){
-	alert('calling showFriendsRequest');
 	var requests = [];
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
-	    	alert('success onload of showFriendsRequest');
 	    	responseJSON = JSON.parse(this.responseText);
 		      	for (var i = 0; i < responseJSON.response.friend_requests.length; i++) {
 	            var request = responseJSON.response.friend_requests[i];  
@@ -134,7 +132,6 @@ exports.showFriendsRequest = function(){
 				};
 				requests.push(curRequest);
 			} 
-			alert("requestLoaded"); 	
 			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:requests});
 	    },
 	    onerror: function(e) {

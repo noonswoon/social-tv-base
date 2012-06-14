@@ -7,6 +7,7 @@ function cacheRemoteURL(imageURL){
 }
 	
 var ProfileBadgeView = function(_parent, _userProfile, _status){
+
 	var BadgeCondition = require('helpers/badgeCondition'); //checking condition to add badge
 	var BadgeModel = require('model/badge');
 	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
@@ -22,6 +23,12 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	
 	var badgeImagesReady = false;
 	var myUnlockBadgesReady = false;
+	
+	if(_status!=="me"){
+		badgesCollection = BadgeModel.badge_fetchBadges();
+		badgeImagesReady = true;
+		Ti.App.fireEvent('addBadgeDataReady');
+	};
 
 	//ANIMATION
 	var animateNegativeLeft = Ti.UI.createAnimation({
@@ -74,7 +81,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	};	
 	Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);
 	
-	Ti.App.addEventListener('myBadgesLoaded',function(e){
+	Ti.App.addEventListener('myBadgesLoaded'+_userProfile.id,function(e){
 		myUnlockedBadges = [];
 		//set the value of myUnlockedBadges to be 1 if user got badges
 		for(var i=0;i < e.fetchedMyUnlockBadges.length; i++){
@@ -130,13 +137,13 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 
 				badgeIndex[count].addEventListener('click', function(e) {
 		        	var index = e.source.myIndex;
-	    	        Ti.App.fireEvent('openBadgeDetailPopupWindow',{index:index});
+	    	        Ti.App.fireEvent('openBadgeDetailPopupWindow'+_userProfile.id,{index:index});
         		});
 				count++
 			}	
 		}		
 	});		
-	Ti.App.addEventListener('openBadgeDetailPopupWindow', function(e){
+	Ti.App.addEventListener('openBadgeDetailPopupWindow'+_userProfile.id, function(e){
 		var index = e.index;
 		badgeView.badgedetailwin._setBadgeTitle(badgesCollection[index].title,myUnlockedBadges[index]);
 		badgeView.badgedetailwin._setBadgeImage(badgeIndex[index].image,myUnlockedBadges[index]);

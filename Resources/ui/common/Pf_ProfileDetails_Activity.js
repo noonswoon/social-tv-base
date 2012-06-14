@@ -83,7 +83,6 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 		}
 		requestActivity.height = (requestUsers.length*45);
 		requestActivity.data = request;
-		alert('about to check if there is a request: '+requestUsers.length);
 		if(requestUsers.length){
 			userActivityView.top = requestActivity.height+30;
 			userRequestView.add(requestActivity);

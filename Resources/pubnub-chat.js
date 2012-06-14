@@ -48,7 +48,7 @@ Ti.App.Chat = function(setup) {
            	}
         },
         error : function() {
-       		Ti.API.info("Lost connection...");
+       		// Ti.API.info("Lost connection...");
         }
     });
 

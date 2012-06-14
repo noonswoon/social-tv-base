@@ -75,3 +75,16 @@ exports.checkin_create = function(_checkinsCollection){
 	//,{local_id: curCheckin.id}
 	return newId;
 };
+
+//function: IsCheckin
+exports.checkin_isCheckin = function(_eventId){
+	var isCheckin = false
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM checkins WHERE event_id = ?',_eventId);
+	if(result.isValidRow()){
+		isCheckin = true;
+	}
+	result.close();
+	db.close();
+	return isCheckin;
+};

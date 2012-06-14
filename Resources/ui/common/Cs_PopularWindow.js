@@ -4,6 +4,7 @@ function PopularWindow(_parent) {
 	var TVProgramACS = require('acs/tvprogramACS');
 	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
 	var CheckinACS = require('acs/checkinACS');
+	var CheckinModel = require('model/checkin');
 	var CacheHelper = require('helpers/cacheHelper');
 
 	var areAllProgramsTitlesLoaded = false; 

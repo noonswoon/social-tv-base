@@ -69,8 +69,11 @@ FriendsMainView = function(_parentWindow){
 		// _parentWindow.containingTab.open(new friendsAddNew());
 	// });	
 // 	
+//	var profileMainWindow = new ProfileMainWindow();
 	friendsTable.addEventListener('click',function(e){
 		_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user.friend_id,"friend"));
+		//profileMainWindow(e.rowData.user.friend_id,"friend");
+		//_parentWindow.containingTab.open(profileMainWindow);
 	});
 	
 	createFriendTable(myFriends);

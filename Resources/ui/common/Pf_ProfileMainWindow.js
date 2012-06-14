@@ -73,7 +73,14 @@ function ProfileMainWindow(_id,_status) {
 	};
 	
 	Ti.App.addEventListener('userLoaded'+_id, userLoadedCallBack);
-		
+	
+	//remove event listeners for all the children of ProfileMainWindow
+	self.addEventListener('close', function() {
+		Ti.API.info("closing profile main window");
+		Ti.App.fireEvent('profileMainWindowClosing'+_id);
+	});
+	
+	
 	return self;
 }
 

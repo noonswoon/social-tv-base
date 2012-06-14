@@ -142,8 +142,10 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 				count++
 			}	
 		}		
-	});		
-	Ti.App.addEventListener('openBadgeDetailPopupWindow'+_userProfile.id, function(e){
+	});
+	
+	function openBadgeDetailPopupWindowCallback(e) {
+		Ti.API.info('listener: openningBadgeDetail');
 		var index = e.index;
 		badgeView.badgedetailwin._setBadgeTitle(badgesCollection[index].title,myUnlockedBadges[index]);
 		badgeView.badgedetailwin._setBadgeImage(badgeIndex[index].image,myUnlockedBadges[index]);
@@ -151,7 +153,9 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	
 		badgeView.badgedetailwin.open();
 		badgeView.badgedetailwin.animate(animateNegativeLeft);
-	});	
+	}
+	
+	Ti.App.addEventListener('openBadgeDetailPopupWindow'+_userProfile.id,openBadgeDetailPopupWindowCallback);	
 	
 	Ti.App.addEventListener('checkinCountUpdate',function(_id){
 		var checkBadge = _id.badgeID;
@@ -167,6 +171,14 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 		alert('CONGRATS! You have unlock a new badge');
 		Ti.App.fireEvent('updatedmyUnlockedBadges');
 	});
+	
+	function clearListeners() {
+		Ti.API.info('remove Eventlistener...openBadgeDetail event'+_userProfile.id);
+		Ti.App.removeEventListener('openBadgeDetailPopupWindow'+_userProfile.id,openBadgeDetailPopupWindowCallback);
+		Ti.App.removeEventListener('profileMainWindowClosing'+_userProfile.id, clearListeners);
+	}
+	Ti.App.addEventListener('profileMainWindowClosing'+_userProfile.id, clearListeners);
+	
 	return badgeView;
 }
 

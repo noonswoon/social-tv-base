@@ -25,18 +25,9 @@ var ProfileDetailView = function(_parent,_userProfile,_status){
 ///DETAIL//////////////////////////////////////////////////////////
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
-		//backgroundColor: '#212b3d',
 		backgroundImage: '/images/admin/cb_backProfile.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
-	
-	// profileDetail.backgroundGradient = {
-	// type: 'linear',
-	// startPoint: { x: '0%', y: '0%' },
-	// endPoint: { x: '0%', y: '100%' },
-	// colors: [{ color: '#c0c0c0', offset: 0.0},{ color: '#ebebeb', offset: 0.00005 }, { color: '#ebebeb', offset: 1.0 }]
-	// };
-	
 	var profileDetailScroll = Ti.UI.createScrollView({
 		contentWidth:312,
 		contentHeight:'auto',

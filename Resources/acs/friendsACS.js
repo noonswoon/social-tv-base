@@ -121,14 +121,15 @@ exports.showFriendsRequest = function(){
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
 		      	for (var i = 0; i < responseJSON.response.friend_requests.length; i++) {
-	            var request = responseJSON.response.friend_requests[i];  
+	            var request = responseJSON.response.friend_requests[i]; 
 				var curRequest = {
 					req_id: request.id,
 					friend_id: request.user.id,
 					username: request.user.username,
 					first_name: request.user.first_name,
 					last_name: request.user.last_name,
-					email: request.user.email
+					email: request.user.email,
+					fb_id: request.user.external_accounts[0].external_id,
 				};
 				requests.push(curRequest);
 			} 

@@ -104,7 +104,6 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 			leaderLabel.text = 'LEADERBOARD';			
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
-				//width: 290,
 				height: 45,
 				selectedBackgroundColor: '#fff',
 				color: '#666'

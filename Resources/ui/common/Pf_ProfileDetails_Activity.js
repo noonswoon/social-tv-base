@@ -24,6 +24,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 	
 	var createRequestFriends = function(){
 		for(var i=0; i<requestUsers.length; i++){
+			var fb_id = requestUsers[i].fb_id;
 			var requestRow = Ti.UI.createTableViewRow({
 				selectedBackgroundColor: '#fff',
 				height: 45
@@ -35,7 +36,8 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 				width: 35,
 				borderRadius: 5,
 				left: 5
-			});			
+			});
+			requestPicture.image = acs.getUserImageNormalOfFbId(fb_id);
 	
 			var requestInfo = Ti.UI.createLabel({
 					font: {fontSize: 13, fontWeight: 'bold'},

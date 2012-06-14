@@ -22,7 +22,7 @@ FriendsTableViewRow = function(_user,_source){
 	var setFbImageFromACS = function(e){
 		friendPhoto.image = acs.getUserImageNormalOfFbId(e.fb_id);
 	};
-	Ti.App.addEventListener('fbIdReturn', setFbImageFromACS);
+	Ti.App.addEventListener('fbIdReturn'+_id, setFbImageFromACS);
 	
 //create view for each row	
 	var friendPhoto = Ti.UI.createImageView({

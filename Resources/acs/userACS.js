@@ -19,7 +19,7 @@ exports.userACS_fetchUserFbId = function(_id){
 	}, function (e) {
     if (e.success) {
     	var fb_id = e.users[0].external_accounts[0].external_id;
-       Ti.App.fireEvent('fbIdreturn',{fb_id: fb_id});
+       Ti.App.fireEvent('fbIdreturn'+_id,{fb_id: fb_id});
     } else {
         alert('userACS_fetchCurrentUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
     }

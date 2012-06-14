@@ -10,9 +10,7 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 		recentActivity = [];
 		for(var i=0; i<e.Activity.length || i< 10; i++){
 			var curActivity = e.Activity[i];
-			Ti.API.info('before converted time: '+curActivity.updated_at);
 			curActivity.updated_at = convertACSTimeToLocalTime(curActivity.updated_at);
-			Ti.API.info('after converted time: '+curActivity.updated_at);
 			recentActivity.push(curActivity);
 		}	
 		Ti.App.fireEvent('activityLoaded',{fetchedActivity:recentActivity});

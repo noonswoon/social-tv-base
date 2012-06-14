@@ -48,7 +48,7 @@ Ti.App.Chat = function(setup) {
            	}
         },
         error : function() {
-       		// Ti.API.info("Lost connection...");
+       		Ti.API.info("Lost connection...");
         }
     });
 
@@ -403,7 +403,7 @@ Ti.App.Chat = function(setup) {
     sendButton.addEventListener('click', function() {
 		if(chatInputTextField.value === "") return;
 
-		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
+		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,false);
         chatMessagesTableView.appendRow(newChatRow);
         chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
         		

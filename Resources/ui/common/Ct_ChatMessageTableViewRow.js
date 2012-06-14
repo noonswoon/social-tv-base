@@ -27,26 +27,49 @@ ChatMessageTableViewRow = function(_chatMessage, _chatOwner, _isASender) {
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	});
 	
-	var backgroundViewForMessage = Ti.UI.createLabel({
+	var backgroundViewForMessage = Ti.UI.createView({
 		height: Ti.UI.SIZE,
 		width: Ti.UI.SIZE,
 		top: 5
 	});
 	
+	var chatLabelWidth = chatMessageLabel.toImage().width;
+	
 	backgroundViewForMessage.add(chatMessageLabel);
+	
+	//0-30
+	//30-100
+	//>100
 	
 	if(_isASender) {
 		userPic.right = 10;
+		chatMessageLabel.color = 'white',
 		backgroundViewForMessage.right = 60;
-		backgroundViewForMessage.left = 10;
-		backgroundViewForMessage.backgroundImage = 'images/chat/left_quote.png';
+		if(chatLabelWidth <= 30){
+			backgroundViewForMessage.backgroundImage = 'images/chat/blue0_quote.png';
+		}
+		else if(chatLabelWidth <= 100){
+			backgroundViewForMessage.backgroundImage = 'images/chat/blue30_quote.png';
+		}
+		else{
+			backgroundViewForMessage.backgroundImage = 'images/chat/blue_quote.png';
+		}
+
 	}
 	else {
 		userPic.left = 10;
-		chatMessageLabel.color = 'white',
+		chatMessageLabel.color = 'black',
 		backgroundViewForMessage.left = 60;
-		backgroundViewForMessage.right = 10;
-		backgroundViewForMessage.backgroundImage = 'images/chat/right_quote.png';
+		if(chatLabelWidth <= 30){
+			backgroundViewForMessage.backgroundImage = 'images/chat/gray0_quote.png';
+		}
+		else if(chatLabelWidth <= 100){
+			backgroundViewForMessage.backgroundImage = 'images/chat/gray30_quote.png';
+		}
+		else{
+			backgroundViewForMessage.backgroundImage = 'images/chat/gray_quote.png';
+		}
+
 	}
 	
 	self.add(userPic);

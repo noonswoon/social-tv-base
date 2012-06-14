@@ -27,7 +27,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	if(_status!=="me"){
 		badgesCollection = BadgeModel.badge_fetchBadges();
 		badgeImagesReady = true;
-		Ti.App.fireEvent('addBadgeDataReady');
+		Ti.App.fireEvent('addBadgeDataReady'+_userProfile.id);
 	};
 
 	//ANIMATION
@@ -56,7 +56,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 		badgesCollection = BadgeModel.badge_fetchBadges();
 		badgeImagesReady = true;
 		
-		Ti.App.fireEvent('addBadgeDataReady');
+		Ti.App.fireEvent('addBadgeDataReady'+_userProfile.id);
 	});
 	var updateActivity = require('helpers/updateActivity');
 	var ActivityACS = require('acs/activityACS');
@@ -64,7 +64,9 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 		badgeData = BadgeModel.fetchedBadgeSearch(e.badgeID);
 		alert('badgeData');
 		alert('badgeData.title: '+badgeData.title);
+	
 		Ti.App.fireEvent('updatedMyBadge',{badgeID: e.badgeID});
+	
 		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('getbadge',badgeData);
 		var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
 		var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
@@ -81,7 +83,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	};	
 	Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);
 	
-	Ti.App.addEventListener('myBadgesLoaded'+_userProfile.id,function(e){
+	var myBadgesLoadedCallback = function(e){
 		myUnlockedBadges = [];
 		//set the value of myUnlockedBadges to be 1 if user got badges
 		for(var i=0;i < e.fetchedMyUnlockBadges.length; i++){
@@ -95,15 +97,19 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 			}
 		}
 		myUnlockBadgesReady = true;
-		Ti.App.fireEvent('addBadgeDataReady');
-	});
+		Ti.App.fireEvent('addBadgeDataReady'+_userProfile.id);		
+	}
 	
-	Ti.App.addEventListener('addBadgeDataReady', function() {
+	Ti.App.addEventListener('myBadgesLoaded'+_userProfile.id,myBadgesLoadedCallback);
+	
+	function addBadgeDataReadyCallback() {
 		if(badgeImagesReady && myUnlockBadgesReady)
-			Ti.App.fireEvent('updatedmyUnlockedBadges');
-	});
+			Ti.App.fireEvent('updatedmyUnlockedBadges'+_userProfile.id);
+	}
 	
-	Ti.App.addEventListener('updatedmyUnlockedBadges',function(){
+	Ti.App.addEventListener('addBadgeDataReady'+_userProfile.id,addBadgeDataReadyCallback);
+	
+	function updatedmyUnlockedBadgesCallback(){
 		//TODO: some problem here??
 		for (var k in badgeView.children){
 			if (badgeView.children.hasOwnProperty(k)) {
@@ -141,8 +147,9 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
         		});
 				count++
 			}	
-		}		
-	});
+		}				
+	}
+	Ti.App.addEventListener('updatedmyUnlockedBadges'+_userProfile.id,updatedmyUnlockedBadgesCallback);
 	
 	function openBadgeDetailPopupWindowCallback(e) {
 		Ti.API.info('listener: openningBadgeDetail');
@@ -169,11 +176,14 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 		var badgeUpdated = _user.badgeID;
 		myUnlockedBadges[badgeUpdated]=1;
 		alert('CONGRATS! You have unlock a new badge');
-		Ti.App.fireEvent('updatedmyUnlockedBadges');
+		Ti.App.fireEvent('updatedmyUnlockedBadges'+_userProfile.id);
 	});
 	
 	function clearListeners() {
 		Ti.API.info('remove Eventlistener...openBadgeDetail event'+_userProfile.id);
+		Ti.App.removeEventListener('updatedmyUnlockedBadges'+_userProfile.id,updatedmyUnlockedBadgesCallback);
+		Ti.App.removeEventListener('myBadgesLoaded'+_userProfile.id,myBadgesLoadedCallback);
+		Ti.App.removeEventListener('addBadgeDataReady'+_userProfile.id,addBadgeDataReadyCallback);
 		Ti.App.removeEventListener('openBadgeDetailPopupWindow'+_userProfile.id,openBadgeDetailPopupWindowCallback);
 		Ti.App.removeEventListener('profileMainWindowClosing'+_userProfile.id, clearListeners);
 	}

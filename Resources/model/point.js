@@ -15,15 +15,17 @@ exports.pointModel_updateLeadersFromACS = function(_leadersCollection) {
 	}
 	Ti.API.info('pointModel_updateLeadersFromACS / LeaderBoard database length: '+ i);
 	db.close();
-	Ti.App.fireEvent("LeaderDbUpdated");
+	Ti.App.fireEvent("leaderDbUpdated");
 };
 
 //fetch only user's point
 exports.pointModel_fetchMyPoint = function(_user) {
-	var fetchedRank = [];
+	var totalPoint = 0;
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT totalPoint FROM leaderboard WHERE user_id = ?',_user)
-	var totalPoint = Number(result.fieldByName('totalPoint'));
+	var result = db.execute('SELECT totalPoint FROM leaderboard WHERE user_id = ?',_user);
+	 if(result.isValidRow()) {
+		totalPoint = Number(result.fieldByName('totalPoint'));
+	 };
 	result.close();
 	db.close();
 	return totalPoint;

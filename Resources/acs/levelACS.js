@@ -12,7 +12,7 @@ exports.levelACS_fetchedLevel = function() {
         	 var curLevel = e.Level[i];
                level.push(curLevel);
          }
-		Ti.App.fireEvent('levelDbLoaded',{fetchedLevel:level});
+		Ti.App.fireEvent('levelLoaded',{fetchedLevel:level});
 		return level;
     } 
     else {

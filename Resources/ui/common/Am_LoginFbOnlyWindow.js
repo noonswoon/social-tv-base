@@ -16,9 +16,15 @@ var LoginFbOnlyWindow = function() {
 		height: 57,
 		width: 174
 	});	
-	
+	var cbLabel = Ti.UI.createLabel({
+		text: 'Changing the way you watch TV',
+		top: 5,
+		height: 30,
+		font: {fontSize: 14, fontWeight: 'bold'},
+		color: '#8b8b8b'
+	});
 	var fbLoginButton = Ti.UI.createButton({
-		top: 15,
+		top: 5,
 		width: 200,
 		height: 35,
 		backgroundImage: '/images/admin/button/fb_button_login.png',
@@ -30,13 +36,13 @@ var LoginFbOnlyWindow = function() {
 		color: '#fff',
 		font:{fontSize:13, },//fontWeight: 'bold'},
 		height:'auto',
-		top: 180,
+		top: 170,
 		textAlign:'center'
 	});
 	
 	var whyFbBtn = Ti.UI.createButton({
 		backgroundImage: '/images/admin/button/button_whyfb.png',
-		top:10,
+		top:7,
 		width:145,
 		height:25,
 		visible:true
@@ -106,6 +112,7 @@ var LoginFbOnlyWindow = function() {
 		}
 		alert(message);	
 	}	
+
 	
 	//EVENTS REGISTERING		
 	fbLoginButton.addEventListener('click', function() {

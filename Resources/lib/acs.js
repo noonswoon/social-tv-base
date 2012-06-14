@@ -68,7 +68,7 @@ exports.getUserImageNormal = function() {
 	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
 }
 
-exports.getUserImageNormal_parameter = function(fbId) {
+exports.getUserImageNormalOfFbId = function(fbId) {
 	if(!fbId) return "";
 	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
 }

@@ -1,4 +1,5 @@
-var ProfileDetailView = function(_parent){
+var ProfileDetailView = function(_parent,_userProfile,_status){
+	var user_id = _userProfile.id;
 	
 ///MENU//////////////////////////////////////////////////////////
 	var profileMenu = Ti.UI.createView({
@@ -18,15 +19,15 @@ var ProfileDetailView = function(_parent){
 		width:300,
 		index:0
 	});	
-	profileMenu.add(profileTab);
+	
+
 		
 ///DETAIL//////////////////////////////////////////////////////////
 	var detail = Ti.UI.createTableViewSection();
 	var profileDetail = Ti.UI.createTableViewRow({
-		backgroundColor: '#212b3d',
+		backgroundImage: '/images/admin/cb_backProfile.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
-	
 	var profileDetailScroll = Ti.UI.createScrollView({
 		contentWidth:312,
 		contentHeight:'auto',
@@ -36,7 +37,7 @@ var ProfileDetailView = function(_parent){
 		showHorizontalScrollIndicator:false,
 		width: 312,
 		height: 220,
-		disableBounce: true
+	//	disableBounce: true
 	});	
 	
 ///////////////////////////////////////////////////////////////////
@@ -45,9 +46,9 @@ var ProfileDetailView = function(_parent){
 	var ProfileBadge = require('ui/common/Pf_ProfileDetails_Badge');
 	var ProfileReward = require('ui/common/Pf_ProfileDetails_Reward');
 	
-	var profileStatsView = new ProfileStats(_parent);
-	var profileActivityView = new ProfileActivity(_parent);
-	var profileBadgeView = new ProfileBadge(_parent);	
+	var profileStatsView = new ProfileStats(_parent, _userProfile, _status);
+	var profileActivityView = new ProfileActivity(_parent, _userProfile, _status);
+	var profileBadgeView = new ProfileBadge(_parent, _userProfile, _status);	
 	var profileRewardView = new ProfileReward(_parent);
 			
 	profileTab.addEventListener('click',function(e){
@@ -66,13 +67,49 @@ var ProfileDetailView = function(_parent){
 		else{
 			profileDetailScroll.add(profileRewardView);}
 	});		
-		
-	profileDetailScroll.add(profileStatsView);
-	//profileDetailScroll.add(profileBadgeView);
-	profileDetail.add(profileDetailScroll);
+///////////////////////////////////////////////////////////////////////////////////
+	var addFriendView = Ti.UI.createView({
+		height: 352,
+	});
+	addFriendView.backgroundGradient = {
+	type: 'linear',
+	startPoint: { x: '0%', y: '0%' },
+	endPoint: { x: '0%', y: '100%' },
+	colors: [{ color: '#c0c0c0', offset: 0.0},{ color: '#fffefd', offset: 0.00005 }, { color: '#fffefd', offset: 1.0 }]
+	};
 	
-	detail.headerView = profileMenu;
-	detail.add(profileDetail);
+	 var addFriendButton = Ti.UI.createButton({
+		backgroundImage: 'images/button/button_addFriend.png',
+		backgroundSelectedImage: 'images/button/button_addFriend_over.png',
+		width: 202,
+	 	height: 38,
+	 	top: 30
+	 });
+	 
+	 addFriendButton.addEventListener('click', function(user_id){
+	 	var friendACS = require('acs/friendsACS');
+	 	friendACS.addFriend(user_id,sendRequest);
+	 });		
+	var sendRequest = function(_response){
+		alert('Your request has been sent.');
+		Ti.API.info(_response);
+	};
+///////////////////////////////////////////////////////////////////////////////////	
+		
+	if(_status==="me" || _status==="friend"){
+//	if(_status==="me"){
+		profileMenu.add(profileTab);
+		profileDetailScroll.add(profileStatsView);
+		profileDetail.add(profileDetailScroll);
+		detail.headerView = profileMenu;
+		detail.add(profileDetail);
+	 };		
+	
+	if(_status==="stranger"){
+//	if(_status==="friend"){
+		addFriendView.add(addFriendButton);
+		detail.headerView = addFriendView;
+	};
 
 	return detail;
 }

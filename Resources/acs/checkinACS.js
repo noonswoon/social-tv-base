@@ -24,7 +24,6 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 
 //this function give only total results for checkins
 exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
-	var checkin = [];
 	var id = _id;
 	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"user_id":"'+id+'"}';	
 	//Ti.API.info(url)
@@ -33,11 +32,11 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
 	      	var total_results = Number(responseJSON.meta.total_results);
-	       Ti.App.fireEvent('UserTotalCheckInsFromACS', {result: total_results});
+	       Ti.App.fireEvent('UserTotalCheckInsFromACS'+_id, {result: total_results});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
-	        Ti.API.info('checkinACS_fetchedUserTotalCheckIns error');
+	        Ti.API.info('checkinACS_fetchedUserTotalCheckIns error: '+JSON.stringify(e));
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

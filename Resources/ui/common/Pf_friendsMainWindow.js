@@ -1,50 +1,41 @@
 FriendsMainView = function(_parentWindow){
-//CALL ACS
+
 	var friendsAddNew = require('ui/common/Pf_friendsAddNew');
 	var friendsRequest = require('ui/common/Pf_friendsRequest');
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
 	var friendsProfile = require('ui/common/Pf_friendsProfile');
 	var friendModel = require('model/friend');
-	var userID = acs.getUserId();
-//	var friendsACS = require('acs/friendsACS');
-//	friendsACS.searchFriend(userID);
+	var userId = acs.getUserId();
+	var friendsACS = require('acs/friendsACS');
+	var userACS = require('acs/userACS');
+	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 
 	var self = Ti.UI.createWindow({
 		backgroundColor:'#fff',
 		title: "My Friends",
-	});
-
-	var noFriendRequest = 5;
-	var showRequestView = Ti.UI.createView({
-		top: 0,
-		height: 20,
-		backgroundColor: '#666',
-		opacity: 0.6
+		barColor:'#398bb0'
 	});
 	
-	var requestLabel = Ti.UI.createLabel({
-		color: '#333',
-		text: 'Show Friends Request (' + noFriendRequest +')',
-		right: '5',
-		font: {fontSize: 13},
-		height: 20
-	});
-
-	var addFriendsView = Ti.UI.createView({
-		top: 20,
-		height:30,
-		backgroundColor: '#999',
-	});
+	var myFriends = friendModel.friendModel_fetchFriend(userId);
 	
-	var addFriendsLabel = Ti.UI.createLabel({
-		color: '#fff',
-		shadowColor: '#999',
-		text: 'Add Friends +',
-		right: '5',
-		height: 30,
-		font: {fontSize: 14, fontWeight: 'bold'},		
-	});
-	
+	for(i=0; i<myFriends.length; i++){
+		
+	};
+	// var addFriendsView = Ti.UI.createView({
+		// top: 0,
+		// height:30,
+		// backgroundColor: '#999',
+	// });
+// 	
+	// var addFriendsLabel = Ti.UI.createLabel({
+		// color: '#fff',
+		// shadowColor: '#999',
+		// text: 'Add Friends +',
+		// right: '5',
+		// height: 30,
+		// font: {fontSize: 14, fontWeight: 'bold'},		
+	// });
+// 	
 	var nav = Ti.UI.iPhone.createNavigationGroup({
 		window: self
 	});
@@ -59,44 +50,37 @@ FriendsMainView = function(_parentWindow){
 	
 	//table row for friends
 	var friendsTable = Ti.UI.createTableView({
-		top: 50,
-		backgroundColor: '#eee'
+		top: 0,
+		backgroundColor: '#fff'
 	});
 
-/*	function friendDbLoadedCallBack(e){
-		friendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
-	};
-	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
-*/
-	Ti.App.addEventListener('friendsDbUpdated',function(e){
+	var createFriendTable = function(myFriends){
 		var myFriendsList = [];
-		myFriends = friendModel.friendModel_fetchFriend(userID);
+		// myFriends = friendModel.friendModel_fetchFriend(userId);
 		for(var i = 0; i<myFriends.length;i++){
 			var curUser = myFriends[i];
 			var userRow = new tableViewRow(curUser,'myFriend');
 			 myFriendsList.push(userRow);
 		};
 		friendsTable.setData(myFriendsList);
-	});
+	};
 	
-	addFriendsLabel.addEventListener('click',function(){
-		_parentWindow.containingTab.open(new friendsAddNew());
-	});	
-	
-	requestLabel.addEventListener('click',function(){
-		_parentWindow.containingTab.open(new friendsRequest());
-	});
-	
+	// addFriendsLabel.addEventListener('click',function(){
+		// _parentWindow.containingTab.open(new friendsAddNew());
+	// });	
+// 	
+//	var profileMainWindow = new ProfileMainWindow();
 	friendsTable.addEventListener('click',function(e){
-		_parentWindow.containingTab.open(new friendsProfile(e.rowData.user));
+		_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user.friend_id,"friend"));
+		//profileMainWindow(e.rowData.user.friend_id,"friend");
+		//_parentWindow.containingTab.open(profileMainWindow);
 	});
 	
+	createFriendTable(myFriends);
 	
-	showRequestView.add(requestLabel);
-	addFriendsView.add(addFriendsLabel);
-	self.add(addFriendsView);
+//	addFriendsView.add(addFriendsLabel);
+//	self.add(addFriendsView);
 	self.add(friendsTable);
-	self.add(showRequestView);
 	
 	return self;
 }

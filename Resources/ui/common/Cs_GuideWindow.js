@@ -141,42 +141,6 @@ function GuideWindow(_parent) {
 		row.add(channelLabel);
 		picker.add(row);
 	}
-	
-	
-	row.addEventListener('click', function(e) {
-			var index = e.index;
-			if(index === 0){
-				var ch3 = new ChannelInGuideWindow(index);
-				self.add(ch3);				
-				selectChannelLabel.text = 'CH3';
-			}
-			else if(index === 1){
-				var ch5 = new ChannelInGuideWindow(index);
-				self.add(ch5);
-				selectChannelLabel.text = 'CH5';	
-			}
-			else if(index === 2){
-				var ch7 = new ChannelInGuideWindow(index);
-				self.add(ch7);
-				selectChannelLabel.text = 'CH7';	
-			}
-			else if(index === 3){
-				var ch9 = new ChannelInGuideWindow(index);
-				self.add(ch9);	
-				selectChannelLabel.text = 'CH9';
-			}
-			else if(index === 4){
-				var ch11 = new ChannelInGuideWindow(index);
-				self.add(ch11);	
-				selectChannelLabel.text = 'CH11';
-			}
-			else if(index === 5){
-				var thaiPBS = new ChannelInGuideWindow(index);
-				self.add(thaiPBS);
-				selectChannelLabel.text = 'ThaiPBS';
-			}
-	});
-
 
 	picker_view.add(toolbar);
 	picker_view.add(picker);
@@ -198,83 +162,49 @@ function GuideWindow(_parent) {
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
 	});
+	
+	picker.addEventListener('change',function(e){
+		var index = e.rowIndex;
+		if(index === 0){
+			var ch3 = new ChannelInGuideWindow(index);
+			self.add(ch3);				
+			selectChannelLabel.text = 'CH3';
+		}
+		else if(index === 1){
+			var ch5 = new ChannelInGuideWindow(index);
+			self.add(ch5);
+			selectChannelLabel.text = 'CH5';	
+		}
+		else if(index === 2){
+			var ch7 = new ChannelInGuideWindow(index);
+			self.add(ch7);
+			selectChannelLabel.text = 'CH7';	
+		}
+		else if(index === 3){
+			var ch9 = new ChannelInGuideWindow(index);
+			self.add(ch9);	
+			selectChannelLabel.text = 'CH9';
+		}
+		else if(index === 4){
+			var ch11 = new ChannelInGuideWindow(index);
+			self.add(ch11);	
+			selectChannelLabel.text = 'CH11';
+		}
+		else if(index === 5){
+			var thaiPBS = new ChannelInGuideWindow(index);
+			self.add(thaiPBS);
+			selectChannelLabel.text = 'ThaiPBS';
+		}	
+
+	})
 
 	self.add(picker_view);
 	/////////////////////////
-	
-	
-	
-	//EVENT LISTENERS
-	//TODO: bad programming style here
-	//need to change and close the popup window in this file
-	//the current closing popup window logic are at ApplicationTabGroup and Cs_ChannelSelection files
-	//somehow self's blur/close events aren't functional
-	var channelSelectorToggle = true; //true means it closes
-	// selectChannelButton.addEventListener('click',function(e){
-		// if(channelSelectorToggle) {
-			// channelSelectorToggle = false;
-			// channelSelectorPopupWin.open();
-			// self.add(triangleImage);
-		// } else {
-			// channelSelectorToggle = true;
-			// channelSelectorPopupWin.close();
-			// self.remove(triangleImage);
-		// }
-	// });
-	
-	//add event listener for each tableviewrow
-	for(var i=0;i<dataForTab.length;i++) {
-		var curChannel = dataForTab[i];
-		curChannel.addEventListener('click', function(e) {
-			var index = e.index;
-			if(index === 0){
-				var ch3 = new ChannelInGuideWindow(index);
-				self.add(ch3);				
-				selectChannelLabel.text = 'CH3';
-			}
-			else if(index === 1){
-				var ch5 = new ChannelInGuideWindow(index);
-				self.add(ch5);
-				selectChannelLabel.text = 'CH5';	
-			}
-			else if(index === 2){
-				var ch7 = new ChannelInGuideWindow(index);
-				self.add(ch7);
-				selectChannelLabel.text = 'CH7';	
-			}
-			else if(index === 3){
-				var ch9 = new ChannelInGuideWindow(index);
-				self.add(ch9);	
-				selectChannelLabel.text = 'CH9';
-			}
-			else if(index === 4){
-				var ch11 = new ChannelInGuideWindow(index);
-				self.add(ch11);	
-				selectChannelLabel.text = 'CH11';
-			}
-			else if(index === 5){
-				var thaiPBS = new ChannelInGuideWindow(index);
-				self.add(thaiPBS);
-				selectChannelLabel.text = 'ThaiPBS';
-			}
-			channelSelectorToggle = true;
-			channelSelectorPopupWin.close();
-			self.remove(triangleImage);
-		});
-	}
 	
 	// Default Channel(Ch3)
 	var defaultChannel = new ChannelInGuideWindow(0);
  	self.add(defaultChannel);	
 
-	self._closePopupWindow = function() {
-		if(!channelSelectorToggle) { //only close if it is still open
-			channelSelectorToggle = true;
-			channelSelectorPopupWin.close();
-			self.remove(triangleImage);
-		}
-	};
-	
 	return self;
 }
 module.exports = GuideWindow;

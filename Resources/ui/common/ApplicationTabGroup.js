@@ -34,7 +34,6 @@ function ApplicationTabGroup() {
 	selectionTab.tabGroup = self; 
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
-		productwin._closeProductPopupWindow();
 	});
 	
     var chatTab = Titanium.UI.createTab({  
@@ -45,7 +44,6 @@ function ApplicationTabGroup() {
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
     	chatwin.containingTab.open(chatwin);
-		productwin._closeProductPopupWindow();
     });
    
     chatwin.addEventListener('close', function() {
@@ -60,7 +58,6 @@ function ApplicationTabGroup() {
     messageboardwin.containingTab = messageboardTab;
     messageboardTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 2;
-		productwin._closeProductPopupWindow();
 	});
 	
 	var productTab = Ti.UI.createTab({
@@ -81,7 +78,6 @@ function ApplicationTabGroup() {
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 4;
-		productwin._closeProductPopupWindow();
 	});
 	
 	self.addTab(selectionTab);

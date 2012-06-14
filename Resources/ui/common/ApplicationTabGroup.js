@@ -19,7 +19,7 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ProductMainWindow();//ChatMainWindow(programDummy);
+	var chatwin = new ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(1);		
 	var productwin = new ProductMainWindow();
 	var profilewin = new ProfileMainWindow();
@@ -31,6 +31,7 @@ function ApplicationTabGroup() {
 		window: selectionwin
 	});
 	selectionwin.containingTab = selectionTab;
+	selectionTab.tabGroup = self; 
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
 		productwin._closeProductPopupWindow();

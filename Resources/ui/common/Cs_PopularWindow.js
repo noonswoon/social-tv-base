@@ -118,7 +118,7 @@ function PopularWindow(_parent) {
 			programStarttime: e.row.tvprogram.start_time,
 			programEndtime: e.row.tvprogram.recurring_until,
 			programNumCheckin: e.row.tvprogram.number_checkins
-		});
+		}, _parent.containingTab);
 		_parent.containingTab.open(checkinmainwin);
 	});
 	

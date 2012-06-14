@@ -43,10 +43,7 @@ function ProfileMainWindow(_id,_status) {
 		var header = Ti.UI.createTableViewSection();
 		
 		var profileHeader = new ProfileHeader(self, userProfile, _status);
-	//	var profileHeader = new ProfileHeader(self, userProfile, "friend");
-	//	var profileHeader = new ProfileHeader(self, userProfile, "stranger");
 		var profileDetail = new ProfileDetail(self, userProfile, _status);
-	//	var profileDetail = new ProfileDetail(self, userProfile, "stranger");
 		var userProfileData=[];
 		
 		headerView.add(profileHeader);
@@ -64,7 +61,7 @@ function ProfileMainWindow(_id,_status) {
 	}
 	else createProfileView(userProfile);		//user data from database
 	
-	Ti.App.addEventListener('userProfileLoaded', function(e) {
+	Ti.App.addEventListener('userProfileLoaded'+_id, function(e) {
 		userProfile = e.userProfile;
 		createProfileView(userProfile);
 	});
@@ -72,10 +69,10 @@ function ProfileMainWindow(_id,_status) {
 	var userLoadedCallBack = function(e){
 		UserModel.userModel_updateUserFromACS(e.fetchedUser); //insert to db
 		userProfile = UserModel.userModel_fetchUserProfile(_id); //select from db
-		Ti.App.fireEvent('userProfileLoaded',{userProfile:userProfile});
+		Ti.App.fireEvent('userProfileLoaded'+_id,{userProfile:userProfile});
 	};
 	
-	Ti.App.addEventListener('userLoaded', userLoadedCallBack);
+	Ti.App.addEventListener('userLoaded'+_id, userLoadedCallBack);
 		
 	return self;
 }

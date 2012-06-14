@@ -93,11 +93,8 @@ function ApplicationTabGroup() {
 	var BadgesACS = require('acs/badgesACS');
 	var FriendACS = require('acs/friendsACS');
 	var CheckinACS = require('acs/checkinACS');	
-//	var LeaderACS = require('acs/leaderBoardACS');	
 	var LevelModel = require('model/level');
-//	var FriendModel = require('model/friend');
 	var CheckinModel = require('model/checkin');
-//	var PointModel = require('model/point');	
 	
 	//not frequently update
 	LevelACS.levelACS_fetchedLevel();

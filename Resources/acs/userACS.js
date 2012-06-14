@@ -6,7 +6,7 @@ exports.userACS_fetchCurrentUser = function(_id){
     if (e.success) {
     	var user = e.users[0];
     	Ti.API.info('fetch profile user: ' + user.first_name + ' ' + user.last_name);
-       Ti.App.fireEvent('userLoaded',{fetchedUser: user});
+       Ti.App.fireEvent('userLoaded'+_id,{fetchedUser: user});
     } else {
         alert('userACS_fetchCurrentUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
     }

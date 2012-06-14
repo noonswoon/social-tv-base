@@ -59,7 +59,9 @@ function ProfileMainWindow(_id,_status) {
 	};
 	
 	var userProfile = UserModel.userModel_fetchUserProfile(_id);
-	if(userProfile === undefined) UserACS.userACS_fetchCurrentUser(_id);
+	if(userProfile === undefined) {
+		UserACS.userACS_fetchCurrentUser(_id);
+	}
 	else createProfileView(userProfile);		//user data from database
 	
 	Ti.App.addEventListener('userProfileLoaded', function(e) {
@@ -70,7 +72,7 @@ function ProfileMainWindow(_id,_status) {
 	var userLoadedCallBack = function(e){
 		UserModel.userModel_updateUserFromACS(e.fetchedUser); //insert to db
 		userProfile = UserModel.userModel_fetchUserProfile(_id); //select from db
-		Ti.fireEvent('userProfileLoaded',{userProfile:userProfile});
+		Ti.App.fireEvent('userProfileLoaded',{userProfile:userProfile});
 	};
 	
 	Ti.App.addEventListener('userLoaded', userLoadedCallBack);

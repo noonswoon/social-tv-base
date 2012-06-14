@@ -103,7 +103,7 @@ function ApplicationTabGroup() {
 	LevelACS.levelACS_fetchedLevel();
 	//TODO: think about where to put this statement; 
 	//load badge image data	
-		BadgesACS.fetchedBadges();
+	BadgesACS.fetchedBadges();
 		
 	//my user ACS
 	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);

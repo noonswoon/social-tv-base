@@ -11,7 +11,7 @@ FriendsAddNewView = function(){
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
 	var userACS = require('acs/userACS');
 	
-	userACS.userACS_fetchAllUser(userName);
+//	userACS.userACS_fetchAllUser(userName);
 	
 	Ti.App.addEventListener('userLoaded',function(e){
 		var tempUsers = []; //data to show in the table view

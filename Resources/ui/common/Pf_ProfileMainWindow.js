@@ -45,8 +45,8 @@ function ProfileMainWindow(_id,_status) {
 		var profileHeader = new ProfileHeader(self, userProfile, _status);
 	//	var profileHeader = new ProfileHeader(self, userProfile, "friend");
 	//	var profileHeader = new ProfileHeader(self, userProfile, "stranger");
-	//	var profileDetail = new ProfileDetail(self, userProfile, _status);
-		var profileDetail = new ProfileDetail(self, userProfile, "stranger");
+		var profileDetail = new ProfileDetail(self, userProfile, _status);
+	//	var profileDetail = new ProfileDetail(self, userProfile, "stranger");
 		var userProfileData=[];
 		
 		headerView.add(profileHeader);
@@ -55,16 +55,24 @@ function ProfileMainWindow(_id,_status) {
 		userProfileData.push(profileDetail);
 		userProfileTable.setData(userProfileData);
 		self.add(userProfileTable);		
+		
 	};
 	
 	var userProfile = UserModel.userModel_fetchUserProfile(_id);
 	if(userProfile === undefined) UserACS.userACS_fetchCurrentUser(_id);
 	else createProfileView(userProfile);		//user data from database
 	
-	var userLoadedCallBack = function(e){
-		var userProfile = UserModel.userModel_updateUserFromACS(e.fetchedUser);
+	Ti.App.addEventListener('userProfileLoaded', function(e) {
+		userProfile = e.userProfile;
 		createProfileView(userProfile);
+	});
+	
+	var userLoadedCallBack = function(e){
+		UserModel.userModel_updateUserFromACS(e.fetchedUser); //insert to db
+		userProfile = UserModel.userModel_fetchUserProfile(_id); //select from db
+		Ti.fireEvent('userProfileLoaded',{userProfile:userProfile});
 	};
+	
 	Ti.App.addEventListener('userLoaded', userLoadedCallBack);
 		
 	return self;

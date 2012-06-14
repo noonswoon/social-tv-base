@@ -6,7 +6,7 @@ function cacheRemoteURL(imageURL){
 	return path;
 }
 	
-var ProfileBadgeView = function(_parent){
+var ProfileBadgeView = function(_parent, _userProfile, _status){
 	var BadgeCondition = require('helpers/badgeCondition'); //checking condition to add badge
 	var BadgeModel = require('model/badge');
 	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
@@ -75,6 +75,7 @@ var ProfileBadgeView = function(_parent){
 	Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);
 	
 	Ti.App.addEventListener('myBadgesLoaded',function(e){
+		myUnlockedBadges = [];
 		//set the value of myUnlockedBadges to be 1 if user got badges
 		for(var i=0;i < e.fetchedMyUnlockBadges.length; i++){
 			myUnlockedBadges[e.fetchedMyUnlockBadges[i].badge_id] = 1;
@@ -82,7 +83,8 @@ var ProfileBadgeView = function(_parent){
 		//set 0 for locked badges
 		for(i=0;i<9;i++){
 			if(myUnlockedBadges[i]===undefined){
-				myUnlockedBadges[i] = 0;
+			myUnlockedBadges[i] = 0;
+			//myUnlockedBadges[i] = 1;
 			}
 		}
 		myUnlockBadgesReady = true;
@@ -95,10 +97,10 @@ var ProfileBadgeView = function(_parent){
 	});
 	
 	Ti.App.addEventListener('updatedmyUnlockedBadges',function(){
-		//TODO: some problem here
-		for (var x in badgeView.children){
-			if (badgeView.children.hasOwnProperty(x)) {
-				badgeView.remove(badgeView.children[x]);
+		//TODO: some problem here??
+		for (var k in badgeView.children){
+			if (badgeView.children.hasOwnProperty(k)) {
+				badgeView.remove(badgeView.children[k]);
 		  };
 		}	
 			

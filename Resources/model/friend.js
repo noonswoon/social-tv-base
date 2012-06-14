@@ -1,11 +1,11 @@
-/*number INTEGER PRIMARY KEY,
+/*id INTEGER PRIMARY KEY,
  *my_id TEXT,
  *friend_id TEXT,
  *username TEXT,
  *first_name TEXT, last_name TEXT, email TEXT);
 */
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS friends(number INTEGER PRIMARY KEY, my_id TEXT, friend_id TEXT, username TEXT, first_name TEXT, last_name TEXT, email TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS friends(id INTEGER PRIMARY KEY, my_id TEXT, friend_id TEXT, username TEXT, first_name TEXT, last_name TEXT, email TEXT);');
 db.close();
 
 // create data for local database
@@ -14,7 +14,7 @@ exports.friendModel_updateFriendsFromACS = function(_friendsCollection) {
 	db.execute('DELETE FROM friends'); //**** hmm?
 	for(var i=0;i < _friendsCollection.length; i++) {
 		var curFriend = _friendsCollection[i];
-		db.execute("INSERT INTO friends(number,my_id,friend_id,username,first_name,last_name,email) VALUES(null,?,?,?,?,?,?)", curFriend.my_id,curFriend.friend_id,curFriend.username,curFriend.first_name,curFriend.last_name,curFriend.email);
+		db.execute("INSERT INTO friends(id,my_id,friend_id,username,first_name,last_name,email) VALUES(null,?,?,?,?,?,?)", curFriend.my_id,curFriend.friend_id,curFriend.username,curFriend.first_name,curFriend.last_name,curFriend.email);
 	}
 	db.close();
 	Ti.App.fireEvent("friendsDbUpdated");
@@ -58,7 +58,7 @@ exports.friendModel_findMyFriend = function(_myId,_friendId) {
 exports.friend_create = function(_friendsCollection){
 	var db = Ti.Database.open('Chatterbox'); 
 	var curFriend = _friendsCollection;
-	db.execute("INSERT INTO friends(number,my_id,friend_id,username,first_name,last_name,email) VALUES(?,?,?,?,?,?,?)", null,String(acs.getUserLoggedIn().id),curFriend.friend_id,curFriend.username,String(curFriend.first_name),String(curFriend.last_name),curFriend.email);
+	db.execute("INSERT INTO friends(id,my_id,friend_id,username,first_name,last_name,email) VALUES(?,?,?,?,?,?,?)", null,String(acs.getUserLoggedIn().id),curFriend.friend_id,curFriend.username,String(curFriend.first_name),String(curFriend.last_name),curFriend.email);
 	db.close();
 	Ti.App.fireEvent("friendsDbUpdated",curFriend);
 };

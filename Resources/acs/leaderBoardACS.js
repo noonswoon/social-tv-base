@@ -14,7 +14,7 @@ exports.leaderACS_fetchedRank = function(_ids){
         	 var curRank = e.LeaderBoard[i];
         	 leaders.push(curRank);
          }
-		Ti.App.fireEvent('leaderDBLoaded',{fetchedLeader:leaders});
+		Ti.App.fireEvent('leaderBoardLoaded',{fetchedLeader:leaders});
     } 
     else {
         alert('leaderboardACS-> fetchedRank: Error:\\n' +

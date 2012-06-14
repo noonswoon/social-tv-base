@@ -32,11 +32,11 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
 	      	var total_results = Number(responseJSON.meta.total_results);
-	       Ti.App.fireEvent('UserTotalCheckInsFromACS', {result: total_results});
+	       Ti.App.fireEvent('UserTotalCheckInsFromACS'+_id, {result: total_results});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
-	        Ti.API.info('checkinACS_fetchedUserTotalCheckIns error');
+	        Ti.API.info('checkinACS_fetchedUserTotalCheckIns error: '+JSON.stringify(e));
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

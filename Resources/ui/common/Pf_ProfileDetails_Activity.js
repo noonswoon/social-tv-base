@@ -1,87 +1,89 @@
-var ProfileActivityView = function(){
+var ProfileActivityView = function(_parent,_userProfile,_status){
+	var	profileDataImg = 'images/kuma100x100.png';
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
-//test data			
-	var user_id = acs.getUserId();
-	//var	ProfileDataName= 'Jaew Panisa';
-	//var	ProfileDataImg = 'images/kuma100x100.png';
+	var curId = _userProfile.id;
 	var activity = [];
 	var request =[];
 	var requestUsers = []; //data to show in the request table view
+	var name;
+	
+	if(_status==="me") name = "You"
+	else name = _userProfile.first_name + ' ' + _userProfile.last_name;
 	
 	var activityView = Ti.UI.createView({
 		top: 10,
 		height: 'auto',
-		bottom: 10
-		
+		bottom: 10	
 	});
 	
-	var createRequestFriends = function(){
-	for(var i=0; i<requestUsers.length; i++){
-		var requestRow = Ti.UI.createTableViewRow({
-			selectedBackgroundColor: '#fff',
-			height: 45
-		});
-		
-		var requestPicture = Ti.UI.createImageView({
-			image: ProfileDataImg,
-			height: 35,
-			width: 35,
-			borderRadius: 5,
-			left: 5
-		});			
-
-		var requestInfo = Ti.UI.createLabel({
-				font: {fontSize: 13, fontWeight: 'bold'},
-				color: '#42a2ca',
-				left: 45,
-				height:40,
-				width:120,
-				text: requestUsers[i].first_name+' '+ requestUsers[i].last_name
-		});
-		var acceptButton = Ti.UI.createButton({
-			backgroundColor: '#5baad1',
-			borderRadius: 5,
-			width: 50,
-			height: 25,
-			right: 65,
-			title: 'Accept',
-			style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
-			font: {fontSize: 13},
-		});
-		acceptButton.myIndex = i;
-		acceptButton.addEventListener('click',function(e){
-			var index = e.source.myIndex;
-			FriendsModel.friend_create(requestUsers[index].friend_id);
-			FriendACS.approveFriend(requestUsers[index].friend_id,approveRequest);
-		});
-
 	var approveRequest = function(_response){
 		alert('You have approved the request');
 		Ti.API.info(_response);
 	};
+	
+	var createRequestFriends = function(){
+		for(var i=0; i<requestUsers.length; i++){
+			var requestRow = Ti.UI.createTableViewRow({
+				selectedBackgroundColor: '#fff',
+				height: 45
+			});
+			
+			var requestPicture = Ti.UI.createImageView({
+				image: profileDataImg,
+				height: 35,
+				width: 35,
+				borderRadius: 5,
+				left: 5
+			});			
+	
+			var requestInfo = Ti.UI.createLabel({
+					font: {fontSize: 13, fontWeight: 'bold'},
+					color: '#42a2ca',
+					left: 45,
+					height:40,
+					width:120,
+					text: requestUsers[i].first_name+' '+ requestUsers[i].last_name
+			});
+			var acceptButton = Ti.UI.createButton({
+				backgroundColor: '#5baad1',
+				borderRadius: 5,
+				width: 50,
+				height: 25,
+				right: 65,
+				title: 'Accept',
+				style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+				font: {fontSize: 13},
+			});
+			acceptButton.myIndex = i;
+			acceptButton.addEventListener('click',function(e){
+				var index = e.source.myIndex;
+				FriendsModel.friend_create(requestUsers[index].friend_id);
+				FriendACS.approveFriend(requestUsers[index].friend_id,approveRequest);
+			});
 
-		var declineButton = Ti.UI.createButton({
-			backgroundColor: '#d74e55',
-			borderRadius: 5,
-			width: 50,
-			height: 25,
-			right: 10,
-			title: 'Decline',
-			style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
-			font: {fontSize: 13},
-		});
-		declineButton.addEventListener('click',function(){
-			alert('Decline')
-		});
-		requestRow.add(requestPicture);
-		requestRow.add(requestInfo);
-		requestRow.add(acceptButton);
-		requestRow.add(declineButton);
-		request[i] = requestRow;
-	}
+			var declineButton = Ti.UI.createButton({
+				backgroundColor: '#d74e55',
+				borderRadius: 5,
+				width: 50,
+				height: 25,
+				right: 10,
+				title: 'Decline',
+				style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
+				font: {fontSize: 13},
+			});
+			declineButton.addEventListener('click',function(){
+				alert('Decline')
+			});
+			requestRow.add(requestPicture);
+			requestRow.add(requestInfo);
+			requestRow.add(acceptButton);
+			requestRow.add(declineButton);
+			request[i] = requestRow;
+		}
 		requestActivity.height = (requestUsers.length*45);
 		requestActivity.data = request;
+		alert('about to check if there is a request: '+requestUsers.length);
 		if(requestUsers.length){
 			userActivityView.top = requestActivity.height+30;
 			userRequestView.add(requestActivity);
@@ -91,17 +93,19 @@ var ProfileActivityView = function(){
 		activityView.height = 'auto';
 	};
 
-	
-	Ti.App.addEventListener('requestsLoaded',function(e){
-		requestUsers = e.fetchedRequests;
-		createRequestFriends();
-	});
+	var requestsLoadedCallBack = function(e){
+		alert(e.fetchedRequests);
+		requestUsers = e.fetchedRequests; //update global variable - requestUsers
+		createRequestFriends(e.fetchedRequests);
+	};
+
+	Ti.App.addEventListener('requestsLoaded',requestsLoadedCallBack);
 	
 //FRIEND REQUEST//////////////////////////////////////////////
 	var requestLabel = Ti.UI.createLabel({
 		text: 'FRIEND REQUEST',
 		font: {fontSize: 14, fontWeight: 'bold'},
-		color: '#fff',
+		color: '#fff',//'#9f9f9f',//'#fff',
 		height:30,
 		textAlign: 'left',
 		left: 10,
@@ -137,7 +141,7 @@ var ProfileActivityView = function(){
 	var ActivityLabel = Ti.UI.createLabel({
 		text: 'ACTIVITY',
 		font: {fontSize: 14, fontWeight: 'bold'},
-		color: '#fff',
+		color: '#fff',//'#9f9f9f',//'#fff',
 		height:30,
 		textAlign: 'left',
 		left: 10, top: 0,
@@ -149,7 +153,7 @@ var ProfileActivityView = function(){
 	};
 	Ti.App.addEventListener('activityLoaded',activityLoadedCallBack);
 	Ti.App.addEventListener('activityDbUpdated',function(){
-		myActivity = activityModel.activityModel_fetchActivity(user_id);
+		myActivity = activityModel.activityModel_fetchActivity(curId);
 		createActivityTable(myActivity);
 	});
 	
@@ -190,11 +194,11 @@ var ProfileActivityView = function(){
 			else if(myActivity[i].category==='post'){activityType.image= 'images/icon/act_chat_color.png'}
 			else if(myActivity[i].category==='getbadge'){
 				activityType.image= 'images/icon/act_badge_color.png';
-				activityInfo.text = 'You have got a new badge: ' + myActivity[i].additionalData;
+				activityInfo.text = name + ' have got a new badge: ' + myActivity[i].additionalData;
 			}
 			else if(myActivity[i].category==='checkin'){
 				activityType.image= 'images/icon/act_checkin_color.png';
-				activityInfo.text = 'You have checked in to ' + myActivity[i].additionalData;
+				activityInfo.text = name + ' have checked in to ' + myActivity[i].additionalData;
 			}
 			var dm = moment(myActivity[i].updated_at, "YYYY-MM-DDTHH:mm:ss");
 			var activityDateStr = since(dm);
@@ -204,9 +208,7 @@ var ProfileActivityView = function(){
 			userActivityRow.add(activityInfo);
 			userActivityRow.add(activityTime);
 			activity[i] = userActivityRow;
-		Ti.API.info('activity table: ' + i);
 		}
-		Ti.API.info('activity table okay');
 		userActivity.data = activity;
 		
 	};
@@ -227,6 +229,7 @@ var ProfileActivityView = function(){
 	var userRequestView = Ti.UI.createView({
 		height: 'auto',
 		top: 0, bottom:0,
+		zIndex: 10
 	});
 		
 	var userActivityView = Ti.UI.createView({
@@ -240,13 +243,7 @@ var ProfileActivityView = function(){
 	userRequestView.add(requestActivity);
 	userRequestView.add(requestLabel);
 	
-	if(requestUsers.length!==0){
-		activityView.add(userRequestView);
-	};
-	//if(myActivity.length!==0){
-		activityView.add(userActivityView);
-	//};
-	//activityView.add(userActivityView);
+	activityView.add(userActivityView);
 
 	return activityView;
 }

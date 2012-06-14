@@ -1,14 +1,14 @@
-var ProfileStatsView = function(){
+var ProfileStatsView = function(parentWindow, _userProfile, _status){
+	var LeaderACS = require('acs/leaderBoardACS');
 	var PointModel = require('model/point');
 	var LevelModel = require('model/level');
-	var friendModel = require('model/friend');
+	var FriendModel = require('model/friend');
 	var createtime = 0;
-	var leaderBoardData = [];
 	var userRankInfo = [];
 	var	ProfileDataLevelUp;
 	
-	var user_id = acs.getUserId();
-
+	var curId = _userProfile.id;
+		
 	var profileStats = Ti.UI.createView({
 		backgroundColor: 'transparent',
 		bottom: 10,
@@ -63,9 +63,8 @@ var ProfileStatsView = function(){
 		return b.totalPoint - a.totalPoint;
 	}
 
-
-	Ti.App.addEventListener('LeaderDbUpdated',function(){
-		totalPoints = PointModel.pointModel_fetchMyPoint(user_id);
+	var updateExpBar = function(){
+		var totalPoints = PointModel.pointModel_fetchMyPoint(curId);
 		ProfileDataLevelUp = LevelModel.level_nextLevel(totalPoints);
 		expLabel.text= totalPoints + '/' + ProfileDataLevelUp;
 		expBar.max = ProfileDataLevelUp;
@@ -79,13 +78,10 @@ var ProfileStatsView = function(){
 		
 		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
 		expBar_light.value = (totalPoints+5);
-		leaderBoardData = PointModel.pointModel_fetchRank();
-    	leaderBoardData.sort(totalPointSort);
-    	createLeaderBoardView();
-	});
+	};
 
 	var leaderLabel = Ti.UI.createLabel({
-		text: 'LEADERBOARD',
+		text:'',
 		font: {fontSize: 14, fontWeight: 'bold'},
 		color: '#fff',
 		height:30,
@@ -93,23 +89,21 @@ var ProfileStatsView = function(){
 		left: 10,
 		top:0
 	});
-
-	var createLeaderBoardView = function(){
+	var createLeaderBoardView = function(leaderBoardData){
 		var myIndex = 0;
 		userRankInfo =[];
 		for(i=0; i<leaderBoardData.length; i++){
-			if(leaderBoardData[i].user_id===user_id){
+			if(leaderBoardData[i].user_id===curId){
 				myIndex=i;
 				break;
 			}
 		};	
-		
+
 		for(var i=0; i<leaderBoardData.length; i++){
 			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
-			
+			leaderLabel.text = 'LEADERBOARD';			
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
-				//width: 290,
 				height: 45,
 				selectedBackgroundColor: '#fff',
 				color: '#666'
@@ -129,7 +123,7 @@ var ProfileStatsView = function(){
 			});
 						
 			if(leaderBoardData[i].fb_id){
-				userRankPicture.image = acs.getUserImageNormal_parameter(leaderBoardData[i].fb_id);
+				userRankPicture.image = acs.getUserImageNormalOfFbId(leaderBoardData[i].fb_id);
 			}
 			else userRankPicture.image = "images/kuma100x100.png";
 			
@@ -170,7 +164,7 @@ var ProfileStatsView = function(){
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;
 		profileStats.height = expSec.height + leaderSec.height;
-	};
+	} //end of function: createLeaderBoardView
 	
 	var leaderTable = Ti.UI.createTableView({
 		top: 30,
@@ -193,9 +187,46 @@ var ProfileStatsView = function(){
 	expSec.add(expBar_light);
 	expSec.add(expBar);
 	profileStats.add(expSec);
-	leaderSec.add(leaderLabel);
-	leaderSec.add(leaderTable);
-	profileStats.add(leaderSec);
+	if(_status==="me"){	
+		leaderSec.add(leaderLabel);
+		leaderSec.add(leaderTable);
+		profileStats.add(leaderSec);
+    }
+//////////////////////////////////////////////////
+	function friendDbLoadedCallBack(e){
+		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
+	}
+	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
+	
+	Ti.App.addEventListener('friendsDbUpdated',function(){
+		Ti.API.info('Friends Database Updated');
+		
+		//CREATE LEADERBOARD//	
+		var rankList = [];
+		rankList[0] = _userProfile.id;
+		var myFriends = FriendModel.friendModel_fetchFriend(rankList[0]);
+		for(var i = 0; i< myFriends.length;i++){
+			var curUser = myFriends[i].friend_id;
+			Ti.API.info(curUser);
+			rankList.push(curUser);
+		};
+		Ti.API.info('total user in rank: '+rankList.length);
+		LeaderACS.leaderACS_fetchedRank(rankList);
+	});
+	function leaderBoardLoadedCallBack(e){
+		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
+	};
+	Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);
+	
+	Ti.App.addEventListener('leaderDbUpdated',function(){
+		var leaderBoardData = PointModel.pointModel_fetchRank();
+    	leaderBoardData.sort(totalPointSort);
+    	createLeaderBoardView(leaderBoardData);
+    	updateExpBar(); 
+	});
+	updateExpBar();
+//////////////////////////////////////////////////////////////////////////	
+
 
 	return profileStats;
 }

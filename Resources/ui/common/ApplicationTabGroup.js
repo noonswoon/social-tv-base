@@ -20,13 +20,17 @@ function ApplicationTabGroup() {
 		programNumCheckin: 25345
 	};
 	
+	var myUserId = acs.getUserId();
+	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new SettingWindow();//ChatMainWindow(programDummy);
+	var chatwin = new ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow();
-	var profilewin = new SettingWindow();//ProfileMainWindow();
+	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
-
+	
+	
+	
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
 		title: 'Discover',
@@ -86,6 +90,40 @@ function ApplicationTabGroup() {
 		productwin._closeProductPopupWindow();
 	});
 	
+	//PROFILE: CALLING ACS
+	var LevelACS = require('acs/levelACS');	
+	var BadgesACS = require('acs/badgesACS');
+	var FriendACS = require('acs/friendsACS');
+	var CheckinACS = require('acs/checkinACS');	
+	var LevelModel = require('model/level');
+	var CheckinModel = require('model/checkin');
+	
+	//not frequently update
+	LevelACS.levelACS_fetchedLevel();
+	//TODO: think about where to put this statement; 
+	//load badge image data	
+	BadgesACS.fetchedBadges();
+		
+	//my user ACS
+	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
+	FriendACS.showFriendsRequest();	
+	FriendACS.searchFriend(myUserId);
+	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
+
+	
+	function levelLoadedCallBack(e){					
+		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
+	};
+	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
+	function checkinDbLoadedCallBack(e){			
+		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+	};
+	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+	Ti.App.addEventListener('updateHeaderCheckin',function(){
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
+	});
+
+	//////////////////////
 	self.addTab(selectionTab);
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  

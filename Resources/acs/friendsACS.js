@@ -1,19 +1,19 @@
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
 
 exports.searchFriend = function(_userID){
-	var friends = [];
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' +
 				'&user_id='+_userID;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	//alert(this.responseText);
 	    	responseJSON = JSON.parse(this.responseText);
-		      	for (var i = 0; i < responseJSON.response.users.length; i++) {
-	            var friend = responseJSON.response.users[i];     
-	            //get fbId out from friend user object
-	            var fbId = 0;
+		    var friends = [];
+		    for (var i = 0; i < responseJSON.response.users.length; i++) {
+				var friend = responseJSON.response.users[i];     
+		        //get fbId out from friend user object
+		        var fbId = 0;
 				var numExternalAccounts = friend.external_accounts.length;
-				
+					
 				for(var j=0;j < numExternalAccounts; j++) {
 					var curExternalAccount = friend.external_accounts[j];
 					if(curExternalAccount.external_type === "facebook") {
@@ -21,7 +21,7 @@ exports.searchFriend = function(_userID){
 						break;
 					}
 				}
-	            //end getFbId
+		        //end getFbId
 				var curFriend = {
 					my_id: _userID,
 					friend_id: friend.id,
@@ -32,12 +32,12 @@ exports.searchFriend = function(_userID){
 				};
 				friends.push(curFriend);
 			}  	
-			if(friends.length===0) {
-				emptyFriend = [];
-				Ti.App.fireEvent("friendsLoaded",{fetchedFriends:emptyFriend});
-			}
-	        else Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
-	    },
+			// if(friends.length===0) {
+				// emptyFriend = [];
+				// Ti.App.fireEvent("friendsLoaded",{fetchedFriends:emptyFriend});
+			// }else 
+			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
+		},
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        alert('friendsACS->searchFriend: Error= '+e.error);
@@ -47,10 +47,29 @@ exports.searchFriend = function(_userID){
 	xhr.open("GET", url);
 	xhr.send();
 };
+//return total friends ///////////////////////////////////////////////////////////////////////////////////////
+//this function give only total results
+exports.friendACS_fetchedUserTotalFriends = function(_id) {
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' + '&user_id='+ _id;
+	
+	var xhr = Ti.Network.createHTTPClient({
+	    onload: function() {
+	      	responseJSON = JSON.parse(this.responseText);
+	      	var total_results = Number(responseJSON.meta.total_results);
+	       Ti.App.fireEvent('UserTotalFriendsFromACS', {result: total_results});
+	    },onerror: function(e) {
+			// this function is called when an error occurs, including a timeout
+	        Ti.API.debug(e.error);
+	        Ti.API.info('friendACS_fetchedUserTotalFriends error');
+	    },
+	    timeout:10000  /* in milliseconds */
+	});
+	xhr.open("GET", url);
+	xhr.send();
 
+};
 //add friend /////////////////////////////////////////////////////////////////////////////////////////////////
 exports.addFriend = function(_userID,_callbackFn){
-	alert('user to be friended with: '+_userID);
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
@@ -59,7 +78,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('friendsACS->addFriend: Error: '+e.error);
+	        alert('friendsACS->addFriend: Error: '+ e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -100,23 +119,20 @@ exports.showFriendsRequest = function(){
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
-	    	//alert("success loading friend request");
 	    	responseJSON = JSON.parse(this.responseText);
-	    	//alert("friends request: "+responseJSON.response.friend_requests.length);
 		      	for (var i = 0; i < responseJSON.response.friend_requests.length; i++) {
-	            var request = responseJSON.response.friend_requests[i];  
-	         //   alert('REQUEST//friend ID :' + request.id + 'Name: ' + request.user.first_name +' ' + request.user.last_name+
-	        //    'username: ' + request.user.username);
+	            var request = responseJSON.response.friend_requests[i]; 
 				var curRequest = {
 					req_id: request.id,
 					friend_id: request.user.id,
 					username: request.user.username,
 					first_name: request.user.first_name,
 					last_name: request.user.last_name,
-					email: request.user.email
+					email: request.user.email,
+					fb_id: request.user.external_accounts[0].external_id,
 				};
 				requests.push(curRequest);
-			}  	
+			} 
 			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:requests});
 	    },
 	    onerror: function(e) {

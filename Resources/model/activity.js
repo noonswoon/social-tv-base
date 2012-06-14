@@ -25,7 +25,7 @@ exports.activityModel_fetchedActivityFromACS = function(_activityCollection) {
 		var name = curActivity.user.first_name + ' ' + curActivity.user.last_name; 
 		//curActivity.updated_at = xxcurActivity.updated_at;//
 		db.execute("INSERT INTO activity(id,activity_acs_id,user_id,user_name,targetedUserID,category,targetedObjectID,additionalData,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?)", curActivity.id,curActivity.user.id,name,curActivity.targetedUserID,curActivity.category,curActivity.targetedObjectID,curActivity.additionalData,curActivity.updated_at);
-		Ti.API.info(db.lastInsertRowId);	
+		//Ti.API.info(db.lastInsertRowId);	
 	}
 	db.close();
 	Ti.App.fireEvent("activityDbUpdated");

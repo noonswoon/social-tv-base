@@ -41,7 +41,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		alert('refresh');
 		// FriendACS.searchFriend(curId);
 		 FriendACS.showFriendsRequest();
-		// ActivityACS.activityACS_fetchedMyActivity(curId);
 		// CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);
 		myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	});
@@ -84,15 +83,22 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		left: 120,
 		width: 60,
 		height: 70,
-		backgroundColor: '#d74e55',//'#ff6666',//'#d74e55',
+		backgroundColor: '#a7c63d',//'#99cc33',//'#a7c63d',
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: '#bc3e44'
+		borderColor: '#8ba82f'
+		// backgroundColor: '#d74e55',//'#ff6666',//'#d74e55',
+		// borderRadius: 10,
+		// borderWidth: 1,
+		// borderColor: '#bc3e44'
+
 	});
 	//img
 	var columnCheckInImage = Ti.UI.createImageView({
-		image: 'images/icon/checkin.png',
-		top: 10
+		image: 'images/icon/tv.png',
+		width: 22, height: 22, top: 10,
+		// image: 'images/icon/checkin.png',
+		// top: 10
 	});
 	//count
 	var columnCheckInCount = Ti.UI.createLabel({
@@ -110,10 +116,10 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		left: 185,
 		width: 60,
 		height: 70,
-		backgroundColor: '#a7c63d',//'#99cc33',//'#a7c63d',
+		backgroundColor: '#9969a8',
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: '#8ba82f'
+		borderColor: '#80538e'
 	});
 	//img
 	var columnFriendImage = Ti.UI.createImageView({
@@ -130,7 +136,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		bottom: 10
 	});
 	
-	columnFriendCount.addEventListener('click',function(){
+	columnFriend.addEventListener('click',function(){
 		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow));
 	});	
 		
@@ -145,8 +151,9 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		borderColor: '#3283a6'
 	 });
 	 var columnIsFriendImage = Ti.UI.createImageView({
-		 image: 'images/icon/isFriend.png',
-		 width: 22, height: 22, top: 10,
+	 	image: 'images/icon/checkin.png',
+		// image: 'images/icon/isFriend.png',
+		top: 10,
 	 });
 	var columnIsFriendLabel = Ti.UI.createLabel({
 		text: "Friend",

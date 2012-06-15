@@ -3,7 +3,7 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 	var PointModel = require('model/point');
 	var LevelModel = require('model/level');
 	var FriendModel = require('model/friend');
-	var createtime = 0;
+	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var userRankInfo = [];
 	var	ProfileDataLevelUp;
 	
@@ -164,6 +164,13 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;
 		profileStats.height = expSec.height + leaderSec.height;
+		
+		// leaderTable.addEventListener('click',function(e){
+			// alert('e.rowData.user.friend_id :'+e.rowData.user.friend_id);
+		// _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user.friend_id,"friend"));
+		//});
+		
+		
 	} //end of function: createLeaderBoardView
 	
 	var leaderTable = Ti.UI.createTableView({
@@ -172,7 +179,7 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 		scrollable:false,
 		disableBounce: true,
 		width: 290,
-		height: 'auto',
+		height: 'auto'
 	});		
 
 	var expSec = Ti.UI.createView({

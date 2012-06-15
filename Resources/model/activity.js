@@ -15,19 +15,18 @@ db.close();
  */
 
 // create data for local database
-exports.activityModel_fetchedActivityFromACS = function(_activityCollection) {
-//	Ti.API.info('checkinModel_updateCheckinsFromACS');
-	var db = Ti.Database.open('Chatterbox'); 
-	db.execute('DELETE FROM activity');
+exports.activityModel_fetchedActivityFromACS = function(_activityCollection,_id) {
+	var db = Ti.Database.open('Chatterbox');
+	db.execute('DELETE FROM activity WHERE targetedUserID = ?', _id);
 	Ti.API.info('_activityCollection.length: '+ _activityCollection.length);
 	for(var i=0;i < _activityCollection.length; i++) {
 		var curActivity = _activityCollection[i];
 		var name = curActivity.user.first_name + ' ' + curActivity.user.last_name; 
-		//curActivity.updated_at = xxcurActivity.updated_at;//
 		db.execute("INSERT INTO activity(id,activity_acs_id,user_id,user_name,targetedUserID,category,targetedObjectID,additionalData,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?)", curActivity.id,curActivity.user.id,name,curActivity.targetedUserID,curActivity.category,curActivity.targetedObjectID,curActivity.additionalData,curActivity.updated_at);
-		//Ti.API.info(db.lastInsertRowId);	
-	}
+		}
+	Ti.API.info("LAST ROW IN activity final:"+db.lastInsertRowId);	
 	db.close();
+	
 	Ti.App.fireEvent("activityDbUpdated");
 };
 //fetch

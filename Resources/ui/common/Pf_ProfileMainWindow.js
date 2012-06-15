@@ -7,7 +7,8 @@ function ProfileMainWindow(_id,_status) {
 //	var userProfile;
 	
 	var self = Titanium.UI.createWindow({
-		barColor:'#398bb0'
+		barColor:'#489ec3',
+		barImage: 'images/NavBG.png',
 	});			
 	var nav = Ti.UI.iPhone.createNavigationGroup({
 		window: self

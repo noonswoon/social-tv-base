@@ -2,6 +2,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 	var	profileDataImg = 'images/kuma100x100.png';
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
+	var activityModel = require('model/activity');
 	var curId = _userProfile.id;
 	var activity = [];
 	var request =[];
@@ -60,7 +61,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 			acceptButton.myIndex = i;
 			acceptButton.addEventListener('click',function(e){
 				var index = e.source.myIndex;
-				FriendsModel.friend_create(requestUsers[index].friend_id);
+				FriendsModel.friend_create(requestUsers[index].friend_id,requestUsers[index].fb_id);
 				FriendACS.approveFriend(requestUsers[index].friend_id,approveRequest);
 			});
 
@@ -123,7 +124,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 	});
 	
 	requestActivity.addEventListener('click',function(e){
-		if(e.source.title==="Accept")
+		if(e.source.titl ==="Accept")
 		requestActivity.deleteRow(e.index);
 		request.splice(e.index,1);
 		requestUsers.splice(e.index,1);
@@ -148,16 +149,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 		left: 10, top: 0,
 		visible: false
 	});
-	var activityModel = require('model/activity');
-	var activityLoadedCallBack = function(e){
-		activityModel.activityModel_fetchedActivityFromACS(e.fetchedActivity);
-	};
-	Ti.App.addEventListener('activityLoaded',activityLoadedCallBack);
-	Ti.App.addEventListener('activityDbUpdated',function(){
-		myActivity = activityModel.activityModel_fetchActivity(curId);
-		createActivityTable(myActivity);
-	});
-	
+
 	var createActivityTable = function(myActivity){
 		var numLoops = 5;
 		if(myActivity.length < numLoops) numLoops = myActivity.length;
@@ -169,7 +161,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 			var userActivityRow = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
 				width: 290,
-				height: 50,
+				height: 55,
 				selectedBackgroundColor: '#fff'
 			});
 			var activityType = Ti.UI.createImageView({
@@ -178,17 +170,17 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 			var activityInfo = Ti.UI.createLabel({
 					font: {fontSize: 12},
 					color: '#666',
-					top: 5,
+					top: 2,
 					left: 50,
-					height:20,
+					height:30,
 					width: 220,
 			});
 			var activityTime = Ti.UI.createLabel({
 					font: {fontSize: 12},
 					color: '#999',
-					top: 20,
 					left: 50,
 					height:20,
+					bottom: 5
 				});	
 			//randomly set activity image
 			if(myActivity[i].category==='addfriend'){activityType.image= 'images/icon/act_add_color.png'}
@@ -210,6 +202,8 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 			userActivityRow.add(activityTime);
 			activity[i] = userActivityRow;
 		}
+		
+		userActivity.height = numLoops*55;
 		userActivity.data = activity;
 		
 	};
@@ -218,7 +212,6 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 		
 	var userActivity = Ti.UI.createTableView({
 		width: 290,
-		height: 200,
 		backgroundColor: '#fff',
 		borderRadius: 10,
 		scrollable: false,
@@ -245,7 +238,24 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 	userRequestView.add(requestLabel);
 	
 	activityView.add(userActivityView);
-
+	
+	var activityLoadedCallBack = function(e){
+		activityModel.activityModel_fetchedActivityFromACS(e.fetchedActivity,curId);
+	};
+	Ti.App.addEventListener('activityLoaded'+curId,activityLoadedCallBack);
+	
+	Ti.App.addEventListener('activityDbUpdated',function(){
+		myActivity = activityModel.activityModel_fetchActivity(curId);
+		createActivityTable(myActivity);
+	});
+	
+	
+	// function clearListeners() {
+		// Ti.API.info('remove Eventlistener...openActivityDetail event'+_userProfile.id);
+		// Ti.App.removeEventListener('profileMainWindowClosing'+_userProfile.id, clearListeners);
+	// }
+	// Ti.App.addEventListener('profileMainWindowClosing'+_userProfile.id, clearListeners);
+// 	
 	return activityView;
 }
 

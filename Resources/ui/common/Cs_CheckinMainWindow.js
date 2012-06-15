@@ -332,7 +332,6 @@ function isPointInPoly(poly, pt)
 /////////////////////////////////////////////////////////////
 	
 	checkinButton.addEventListener('click',function(){
-		alert('you have check in');		
 		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_datafromrow);
 		
 		var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray

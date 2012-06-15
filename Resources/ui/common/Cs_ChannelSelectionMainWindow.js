@@ -22,13 +22,7 @@ function ChannelSelectionMainWindow(){
 		index:0,
 		backgroundColor: '#429fc8'
 	});
-	
-	// tabBar.addEventListener('click',function(e){
-		// if(e.index === 0){
-// 
-		// }
-	// });
-	
+
 	var mainView = Ti.UI.createView({
 		top: 0,
 		height: 'auto'
@@ -43,13 +37,9 @@ function ChannelSelectionMainWindow(){
 				mainView.remove(mainView.children[i]);
 			}
 		}		
-		//TODO: revisit this logic
+
 		if(e.index==0){
 			mainView.add(popularwin);
-			if(guidewin != null)
-				guidewin._closePopupWindow();
-			// if(friendswin != null)
-				// friendswin._closePopupWindow();
 		}
 		else if (e.index==1){
 			if(guidewin == null)

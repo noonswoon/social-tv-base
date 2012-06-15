@@ -23,7 +23,7 @@ function ApplicationTabGroup() {
 	var myUserId = acs.getUserId();
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ChatMainWindow(programDummy);
+	var chatwin = new BlankWindow();//ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow();
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
@@ -38,9 +38,9 @@ function ApplicationTabGroup() {
 		window: selectionwin
 	});
 	selectionwin.containingTab = selectionTab;
+	selectionTab.tabGroup = self; 
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
-		productwin._closeProductPopupWindow();
 	});
 	
     var chatTab = Titanium.UI.createTab({  
@@ -51,7 +51,6 @@ function ApplicationTabGroup() {
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
     	chatwin.containingTab.open(chatwin);
-		productwin._closeProductPopupWindow();
     });
    
     chatwin.addEventListener('close', function() {
@@ -66,7 +65,6 @@ function ApplicationTabGroup() {
     messageboardwin.containingTab = messageboardTab;
     messageboardTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 2;
-		productwin._closeProductPopupWindow();
 	});
 	
 	var productTab = Ti.UI.createTab({
@@ -87,7 +85,6 @@ function ApplicationTabGroup() {
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 4;
-		productwin._closeProductPopupWindow();
 	});
 	
 	//PROFILE: CALLING ACS

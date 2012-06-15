@@ -21,15 +21,11 @@ function ProductMainWindow() {
 	self.add(productSelectProgramToolbar);
 	
 	var productSelectProgramButton = Ti.UI.createButton({
-		width: 30,
-		height: 30,
+		width: 41,
+		height: 34,
 		right: 10,
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		color: 'green',
-		image: 'images/icon/dropdownButton.png',
-  		borderRadius: 10,
-  		borderColor: '#a4a4a4',
-  		borderWidth: 1
+		image: 'images/toolbarbutton.png'
 	});
 	productSelectProgramToolbar.add(productSelectProgramButton);
 	
@@ -37,7 +33,7 @@ function ProductMainWindow() {
 		color: '#8c8c8c',
 		width: 70,
 		height: 50,
-		right: 45,
+		right: 55,
 		textAlign: 'right',
 		text: 'WATCH',
 		font:{fontSize: 11}
@@ -76,7 +72,6 @@ function ProductMainWindow() {
 		var programCheckinName = TVProgram.TVProgramModel_getProgramNameWithProgramId(programCheckinId);
 		var checkinProgramRow = new ProductTabTableViewRow(programCheckinId, programCheckinName);
 		dataForTab.push(checkinProgramRow);
-			
 	}
 	tableViewForTab.setData(dataForTab);
 

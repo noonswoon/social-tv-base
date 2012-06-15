@@ -95,8 +95,10 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 	
 	for(var i=0;i < _topicsCollection.length; i++) {
 		var curTopic = _topicsCollection[i];
+		var deviceToken = "UNDEFINED";
+		if(curTopic.user.custom_fields.device_token_id !== undefined) deviceToken = curTopic.user.custom_fields.device_token_id;
 		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,comments_count, username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?)", 
-					curTopic.id,_programId,curTopic.title,curTopic.commentsCount, curTopic.user.username,curTopic.user.custom_fields.device_token_id,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
+					curTopic.id,_programId,curTopic.title,curTopic.commentsCount, curTopic.user.username,deviceToken,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
 	}
 	db.close();
 	Ti.App.fireEvent("topicsDbUpdated");

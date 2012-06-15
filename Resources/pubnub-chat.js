@@ -3,6 +3,8 @@
 // ----------------------------------
 Ti.include('./pubnub.js');
 
+var TVProgram = require('model/TVProgram');
+
 // ----------------------------------
 // INIT PUBNUB
 // ----------------------------------
@@ -104,21 +106,18 @@ Ti.App.Chat = function(setup) {
 		color: '#8c8c8c',
 		width: 70,
 		height: 50,
-		right: 45,
+		right: 55,
 		textAlign: 'right',
 		text: 'WATCH',
 		font:{fontSize: 11}
 	});
 
 	var selectProgramButton = Ti.UI.createButton({
-		width: 30,
-		height: 30,
+		width: 41,
+		height: 34,
 		right: 10,
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/icon/dropdownButton.png',
-  		borderRadius: 10,
-  		borderColor: '#a4a4a4',
-  		borderWidth: 1
+		image: 'images/toolbarbutton.png'
 	});
 	
 	//Opacity window when picker is shown
@@ -164,15 +163,17 @@ Ti.App.Chat = function(setup) {
 	});
 	picker.selectionIndicator=true;
 
-	var picker_data = [
-		Titanium.UI.createPickerRow({title:'John'}),
-		Titanium.UI.createPickerRow({title:'Alex'}),
-		Titanium.UI.createPickerRow({title:'Marie'}),
-		Titanium.UI.createPickerRow({title:'Eva'}),
-		Titanium.UI.createPickerRow({title:'James'})
-	];
-
-	picker.add(picker_data);
+	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+		var programId = myCurrentCheckinPrograms[i];
+		var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+		var programName = programInfo[0].name;
+		var row = Ti.UI.createPickerRow();
+		var programNameInRow = Ti.UI.createLabel({
+			text: programName
+		});
+		row.add(programNameInRow);
+		picker.add(row);
+	}
 
 	picker_view.add(toolbar);
 	picker_view.add(picker);

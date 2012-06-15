@@ -1,7 +1,6 @@
 function GuideWindow(_parent) {
 	
 	var ChannelInGuideWindow = require('ui/common/Cs_ChannelInGuideWindow');
-	var GuideTabTableViewRow = require('ui/common/Cs_GuideTabTableViewRow');
 
 	var channelsList = ['3','5','7','9','11','ThaiPBS'];
 	var dataForTab = []; 
@@ -18,15 +17,11 @@ function GuideWindow(_parent) {
 	self.add(selectChannelToolbar);
 	
 	var selectChannelButton = Ti.UI.createButton({
-		width: 30,
-		height: 30,
+		width: 41,
+		height: 34,
 		right: 10,
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		color: 'green',
-		image: 'images/icon/dropdownButton.png',
-  		borderRadius: 10,
-  		borderColor: '#a4a4a4',
-  		borderWidth: 1
+		image: 'images/toolbarbutton.png'
 	});
 	selectChannelToolbar.add(selectChannelButton);
 	
@@ -34,7 +29,7 @@ function GuideWindow(_parent) {
 		color: '#8c8c8c',
 		width: 70,
 		height: 50,
-		right: 45,
+		right: 55,
 		textAlign: 'right',
 		text: 'PICK A CHANNEL',
 		font:{fontSize: 11}
@@ -49,44 +44,12 @@ function GuideWindow(_parent) {
 	});
 	selectChannelToolbar.add(selectChannelLabel);
 	
-
-	
-	
-	
-	//Popup
-	var channelSelectorPopupWin = Ti.UI.createWindow({
-	backgroundColor: 'black',
-	left: 10, 
-	top: 90, 
-	width: 300,
-	height: 300,
-	borderWidth: 5,
-	borderColor: 'black',
-	borderRadius: 15,
-	zIndex: 3
-	});
-	
-	var triangleImage = Ti.UI.createImageView({
-	image: 'images/triangle.png',
-	height: 20,
-	top: 30,
-	left: 260
-	});
-
-	//Tab's table
-	var tableViewForTab	= Ti.UI.createTableView({backgroundColor:'white' });
-	
-	//Add UI
-	channelSelectorPopupWin.add(tableViewForTab);
-	
 	//LOGIC STUFF
-	for(var i=0;i<channelsList.length;i++) {
-		var curChannel = new GuideTabTableViewRow(channelsList[i]);
-		dataForTab.push(curChannel);
-	}
-	tableViewForTab.setData(dataForTab);
-	
-		
+	// for(var i=0;i<channelsList.length;i++) {
+		// var curChannel = channelsList[i];
+		// dataForTab.push(curChannel);
+	// }
+
 	//Opacity window when picker is shown
 	var opacityView = Ti.UI.createView({
 		opacity : 0.6,
@@ -129,16 +92,35 @@ function GuideWindow(_parent) {
 	});
 	picker.selectionIndicator=true;
 	
-	for(var i=0;i<dataForTab.length;i++) {
-		var curChannel = dataForTab[i];
-		var channel = curChannel.programName.text;
-		var row = Ti.UI.createPickerRow();
+	for(var i=0;i<channelsList.length;i++) {
+		var curChannel = channelsList[i];
+		// var channel = curChannel.programName.text;
+		var row = Ti.UI.createPickerRow({
+			width:100,
+			heigth:100
+		});
+		// var img = Ti.UI.createImageView(
+			// {image: 'images/channel/ch3.jpg',width:40,height:40},
+			// {image: 'images/channel/ch5.jpg',width:40,height:40},
+			// {image: 'images/channel/ch7.jpg',width:40,height:40},
+			// {image: 'images/channel/ch9.jpg',width:40,height:40},
+			// {image: 'images/channel/ch11.jpg',width:40,height:40},
+			// {image: 'images/channel/thaipbs.jpg',width:40,height:40});
+		
+		var img = Ti.UI.createImageView({
+			image:'images/channel/'+i+'.png',
+			width:100,
+			heigth:100,
+			left: 10
+		});
+		
 		var channelLabel = Ti.UI.createLabel({
-			text: channel,
+			text: curChannel,
 			width: 300,
-			left: 20
+			left: 100
 		});
 		row.add(channelLabel);
+		row.add(img);
 		picker.add(row);
 	}
 
@@ -196,7 +178,7 @@ function GuideWindow(_parent) {
 			selectChannelLabel.text = 'ThaiPBS';
 		}	
 
-	})
+	});
 
 	self.add(picker_view);
 	/////////////////////////

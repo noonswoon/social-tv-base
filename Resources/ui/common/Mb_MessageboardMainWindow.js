@@ -102,24 +102,18 @@ function MessageboardMainWindow(_programId) {
 	});
 	picker.selectionIndicator=true;
 	
-	Ti.API.info('myCurrentCheckinPrograms.length: '+myCurrentCheckinPrograms.length);
-	
 	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 		var programId = myCurrentCheckinPrograms[i];
 		var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 		var programName = programInfo[0].name;
 		var row = Ti.UI.createPickerRow();
-		Ti.API.info('Nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee '+programName);
 		var programNameInRow = Ti.UI.createLabel({
-			text: programName,
-			width: 'auto',
-			left: 20
+			text: programName
 		});
 		row.add(programNameInRow);
 		picker.add(row);
 	}
-
-
+	
 	picker_view.add(toolbar);
 	picker_view.add(picker);
 
@@ -137,6 +131,8 @@ function MessageboardMainWindow(_programId) {
 	});
 
 	done.addEventListener('click',function() {
+		var test = picker.getSelectedRow(0);
+		alert(test);
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
 	});

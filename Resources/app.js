@@ -24,7 +24,7 @@ var acs = require('lib/acs');
 var Cloud = require('ti.cloud');
 var pullToRefreshModule = require('nl.icept.pull2refresh');
 
-var myCurrentCheckinPrograms = ['CH5_0TRUE','CH7_SHOYU']; //should be reset every hour to empty array
+var myCurrentCheckinPrograms = ['CH9_000CF','CH3_0MIB3']; //should be reset every hour to empty array
 
 //bootstrap and check dependencies
 if (Ti.version < 1.8 ) {

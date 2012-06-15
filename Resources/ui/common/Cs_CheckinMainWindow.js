@@ -314,8 +314,7 @@ function isPointInPoly(poly, pt)
 			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
 				meButton.image = 'images/checkin/checkin_me_enable.png';
 			}
-		}
-		if(checkinButton.enabled===false){		
+		} else {		
 			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
 				boardButton.image = 'images/checkin/checkin_board_enable.png';
 			}
@@ -329,7 +328,6 @@ function isPointInPoly(poly, pt)
 				chatButton.image = 'images/checkin/checkin_chat_enable.png';
 			}				
 		}
-		else {};
 	});	
 /////////////////////////////////////////////////////////////
 	

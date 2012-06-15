@@ -10,7 +10,7 @@ function ProductMainWindow() {
 	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
-		barImage: 'images/NavBG.png',
+		barImage: 'images/NavBG.png'
 	});
 
 	var productSelectProgramToolbar = Ti.UI.createView({

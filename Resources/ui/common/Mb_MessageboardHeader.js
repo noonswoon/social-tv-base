@@ -104,6 +104,14 @@ MessageboardHeader = function(_showName,_showSubName) {
 	});
 
 
+	header._setHeader = function(_headerTitle, _headerSubTitle, _headerPhoto, _headerNumCheckins, _headerChannel) {
+		header.programTitle.text = _headerTitle;
+		header.subNameTitle.text = _headerSubTitle;
+		header.programImage.image = _headerPhoto;
+		header.programNumCheckin.text = _headerNumCheckins;
+		header.programChannel.text = _headerChannel;
+		
+	};
 
 	
 	//ADDING UI COMPONENTS

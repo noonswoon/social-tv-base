@@ -10,7 +10,8 @@ function ProductMainWindow() {
 	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
-		barImage: 'images/NavBG.png'
+		barImage: 'images/NavBG.png',
+		backgroundImage: 'images/bg.png'
 	});
 
 	var productSelectProgramToolbar = Ti.UI.createView({
@@ -75,9 +76,9 @@ function ProductMainWindow() {
 	}
 	tableViewForTab.setData(dataForTab);
 
-	
 	var productTableView = Ti.UI.createTableView({
-		top: 40
+		top: 100
+		// backgroundColor: 'transparent'
 	});
 	self.add(productTableView);
 

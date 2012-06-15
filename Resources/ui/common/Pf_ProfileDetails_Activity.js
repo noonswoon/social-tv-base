@@ -95,7 +95,6 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 	};
 
 	var requestsLoadedCallBack = function(e){
-		alert(e.fetchedRequests);
 		requestUsers = e.fetchedRequests; //update global variable - requestUsers
 		createRequestFriends(e.fetchedRequests);
 	};

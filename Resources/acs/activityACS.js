@@ -8,7 +8,7 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 }, function (e) {
     if (e.success) {
 		recentActivity = [];
-		for(var i=0; i<e.Activity.length || i< 10; i++){
+		for(var i=0; i<e.Activity.length && i< 10; i++){
 			var curActivity = e.Activity[i];
 			curActivity.updated_at = convertACSTimeToLocalTime(curActivity.updated_at);
 			recentActivity.push(curActivity);

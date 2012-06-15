@@ -102,17 +102,21 @@ function MessageboardMainWindow(_programId) {
 		top:43
 	});
 	picker.selectionIndicator=true;
+	var dataForPicker = [];
 	
 	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 		var programId = myCurrentCheckinPrograms[i];
 		var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 		var programName = programInfo[0].name;
-		var row = Ti.UI.createPickerRow();
-		var programNameInRow = Ti.UI.createLabel({
-			text: programName
-		});
-		row.add(programNameInRow);
-		picker.add(row);
+		var program_id = programInfo[0].program_id;
+		// var row = Ti.UI.createPickerRow();
+		// var programNameInRow = Ti.UI.createLabel({
+			// text: programName
+		// });
+		dataForPicker = [{title:programName, progId: program_id}];
+		// row.add(programNameInRow);
+		// picker.add(row);
+		picker.add(dataForPicker);
 	}
 	
 	picker_view.add(toolbar);
@@ -132,10 +136,12 @@ function MessageboardMainWindow(_programId) {
 	});
 
 	done.addEventListener('click',function() {
-		var test = picker.getSelectedRow(0);
-		alert(test);
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
+		
+		var idOfProgram = picker.getSelectedRow(0).progId;
+		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(idOfProgram);
+		messageboardHeader._setHeader(program[0].name,'NewSubTitle',program[0].photo,program[0].number_checkins,program[0].channel_id);
 	});
 
 	self.add(picker_view);
@@ -176,7 +182,7 @@ function MessageboardMainWindow(_programId) {
 	function topicsDbUpdatedCallback(e) {
 		//clear current data in the table
 		allTopicTable.data = [];
-		var viewRowsData = [];//[searchbarTableViewRow];
+		var viewRowsData = [];
 
 		//retrieve from db
 		var allTopics = Topic.topicModel_fetchFromProgramId(_programId);

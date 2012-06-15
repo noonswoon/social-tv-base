@@ -59,6 +59,30 @@ exports.TVProgramModel_fetchPrograms = function() {
 	return fetchedPrograms;
 };
 
+exports.TVProgramModel_fetchProgramsWithProgramId = function(_programId) {
+	//select some stuff from the local db..based on the future filtering
+	var fetchedPrograms = [];
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ? ORDER BY start_time ASC',_programId);
+	while(result.isValidRow()) {
+		fetchedPrograms.push({
+			id: result.fieldByName('id'),
+			name: result.fieldByName('name'),
+			photo: result.fieldByName('photo'),
+			start_time: result.fieldByName('start_time'),
+			recurring_until: result.fieldByName('recurring_until'),
+			number_checkins: result.fieldByName('number_checkins'),
+			channel_id: result.fieldByName('channel_id'),
+			program_id: result.fieldByName('program_id'),
+			hasChild:true
+		});
+		result.next();
+	}	
+	result.close();
+	db.close();
+	return fetchedPrograms;
+};
+
 
 exports.TVProgramModel_getProgramNameWithProgramId = function(_programId) {
 	//select some stuff from the local db..based on the future filtering

@@ -14,10 +14,7 @@ function ChatMainWindow(_program) {
 	var pubnub_chat_window = Ti.App.Chat({
 	    "chat-room" : 'my-random-conversation',//_program.programTitle,
 	    "window"    : {
-	        title           : 'My Chat Room',        
-			barColor: '#6d0a0c',
-			backgroundColor:'transparent',
-			backgroundImage: '/images/grain.png',
+			backgroundColor:'transparent'
 	    }
 	});
 		

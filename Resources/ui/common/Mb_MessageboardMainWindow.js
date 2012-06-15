@@ -2,6 +2,7 @@ function MessageboardMainWindow(_programId) {
 	//HEADERS
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
+	var TVProgram = require('model/tvprogram');
 
 	var MessageboardHeader = require('ui/common/Mb_MessageboardHeader');
 	var MessageboardTableViewRow = require('ui/common/Mb_MessageboardTableViewRow');
@@ -61,7 +62,7 @@ function MessageboardMainWindow(_programId) {
 	searchView.add(addButton);
 
 //Opacity window when picker is shown
-	opacityView = Ti.UI.createView({
+	var opacityView = Ti.UI.createView({
 		opacity : 0.6,
 		top : 0,
 		height : 120,
@@ -101,17 +102,19 @@ function MessageboardMainWindow(_programId) {
 		top:43
 	});
 	picker.selectionIndicator=true;
-
-	var picker_data = [
-		Titanium.UI.createPickerRow({title:'John'}),
-		Titanium.UI.createPickerRow({title:'Alex'}),
-		Titanium.UI.createPickerRow({title:'Marie'}),
-		Titanium.UI.createPickerRow({title:'Eva'}),
-		Titanium.UI.createPickerRow({title:'James'})
-	];
-
-	picker.add(picker_data);
-
+	
+	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+		var programId = myCurrentCheckinPrograms[i];
+		var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+		var programName = programInfo[0].name;
+		var row = Ti.UI.createPickerRow();
+		var programNameInRow = Ti.UI.createLabel({
+			text: programName
+		});
+		row.add(programNameInRow);
+		picker.add(row);
+	}
+	
 	picker_view.add(toolbar);
 	picker_view.add(picker);
 
@@ -129,11 +132,14 @@ function MessageboardMainWindow(_programId) {
 	});
 
 	done.addEventListener('click',function() {
+		var test = picker.getSelectedRow(0);
+		alert(test);
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
 	});
 
 	self.add(picker_view);
+//////////////////
 
 	var allTopicTable = Ti.UI.createTableView({
 		top: 170,

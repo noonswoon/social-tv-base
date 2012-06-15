@@ -4,6 +4,7 @@ function PopularWindow(_parent) {
 	var TVProgramACS = require('acs/tvprogramACS');
 	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
 	var CheckinACS = require('acs/checkinACS');
+	var CheckinModel = require('model/checkin');
 	var CacheHelper = require('helpers/cacheHelper');
 
 	var areAllProgramsTitlesLoaded = false; 
@@ -110,7 +111,7 @@ function PopularWindow(_parent) {
 			programStarttime: e.row.tvprogram.start_time,
 			programEndtime: e.row.tvprogram.recurring_until,
 			programNumCheckin: e.row.tvprogram.number_checkins
-		});
+		}, _parent.containingTab);
 		_parent.containingTab.open(checkinmainwin);
 	});
 	

@@ -1,4 +1,4 @@
-CheckinMainWindow = function (_datafromrow){
+CheckinMainWindow = function (_datafromrow, _containingTab){
 	
 	var CheckinACS = require('acs/checkinACS');
 	var CheckinModel = require('model/checkin');
@@ -29,6 +29,8 @@ CheckinMainWindow = function (_datafromrow){
 	backButton.addEventListener('click', function(){
    		self.close();
 	});
+	
+	var curTabGroup = _containingTab.tabGroup;
 	
 	var headerView = Ti.UI.createView({
 		top: 0,
@@ -171,7 +173,7 @@ CheckinMainWindow = function (_datafromrow){
 		width:320,
 		backgroundImage: 'images/checkin/checkin_bg.png'
 	});
-	self.add(checkinView);
+
 	
 //add button as image
 	var meButton = Ti.UI.createImageView({
@@ -179,9 +181,9 @@ CheckinMainWindow = function (_datafromrow){
 		right: 43,
 		width:89,
 		height: 167,
-		touchEnabled: false,
+		touchEnabled: true,
 	});
-	checkinView.add(meButton);	
+
 	var chatButton = Ti.UI.createImageView({
 		image: '/images/checkin/checkin_chat.png',
 		left: 43,
@@ -189,7 +191,7 @@ CheckinMainWindow = function (_datafromrow){
 		height: 167,
 		touchEnabled: false		
 	});
-	checkinView.add(chatButton);	
+	
 	var boardButton = Ti.UI.createImageView({
 		image: '/images/checkin/checkin_board.png',
 		top: 16,
@@ -197,7 +199,7 @@ CheckinMainWindow = function (_datafromrow){
 		height: 89,
 		touchEnabled: false
 	});
-	checkinView.add(boardButton);
+
 	var productButton = Ti.UI.createImageView({
 		image: '/images/checkin/checkin_products.png',
 		bottom: 16,
@@ -205,7 +207,7 @@ CheckinMainWindow = function (_datafromrow){
 		height: 89,
 		touchEnabled: false
 	});
-	checkinView.add(productButton);
+
 	var checkinButton = Ti.UI.createButton({
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
 		image: '/images/checkin/checkin_check.png',
@@ -213,7 +215,32 @@ CheckinMainWindow = function (_datafromrow){
 		width:85,
 		height:85,
 	});
+
+	
+	//Add UI
+	self.add(checkinView);
+	checkinView.add(meButton);
+	checkinView.add(chatButton);
+	checkinView.add(boardButton);
+	checkinView.add(productButton);
 	checkinView.add(checkinButton);
+	
+	var programId = _datafromrow.programId;
+	var checkin = CheckinModel.checkin_isCheckin(programId);
+	
+	//This program is check-in or not
+	if(checkin === true){
+		checkinButton.enabled = false;
+		chatButton.touchEnabled = true;
+		productButton.touchEnabled =true;
+		boardButton.touchEnabled = true;
+		
+		checkinButton.image = 'images/checkin/checkin_check_checked.png';
+		chatButton.image = 'images/checkin/checkin_chat_enable.png';
+		productButton.image = 'images/checkin/checkin_products_enable.png';
+		boardButton.image = 'images/checkin/checkin_board_enable.png';	
+	}
+	
 //////////////////////////////////////////////////////////////	
 function isPointInPoly(poly, pt)
 {
@@ -253,44 +280,16 @@ function isPointInPoly(poly, pt)
 		{x: 132, y:162},
 		{x:120, y:134}
 	];		
-
-	self.addEventListener('click',function(e)
-	{
+	
+	self.addEventListener('touchstart',function(e){
 		if(checkinButton.enabled===true){
 			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
 				alert('Check in to activate the control');
 			}
 			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				meButton.image = 'images/checkin/checkin_me_enable.png';
-			}
-		}
-		if(checkinButton.enabled===false){			
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
-				boardButton.image = 'images/checkin/checkin_board_enable.png';
-			}
-			if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				meButton.image = 'images/checkin/checkin_me_enable.png';
-			}
-			if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
-				productButton.image = 'images/checkin/checkin_products_enable.png';
-			}
-			if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
-				chatButton.image = 'images/checkin/checkin_chat_enable.png';
-			}		
-		}
-	});
-
-	function highlightButton(e)
-	{
-		if(checkinButton.enabled===true){
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
-			//	alert('Check in to activate the control');
-			}
-			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
 				meButton.image = 'images/checkin/checkin_me_mouseover.png';
 			}
-		}
-		if(checkinButton.enabled===false){
+		} else {
 			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
 				boardButton.image = 'images/checkin/checkin_board_mouseover.png';
 			}
@@ -304,12 +303,8 @@ function isPointInPoly(poly, pt)
 				chatButton.image = 'images/checkin/checkin_chat_mouseover.png';
 			}				
 		}
-	}
-	
-//touch start = mouseover	
-	self.addEventListener('touchstart',highlightButton);
+	});
 
-//touchend = mouseleave	
 	self.addEventListener('touchend',function(e)
 	{
 		if(checkinButton.enabled===true){
@@ -367,6 +362,22 @@ function isPointInPoly(poly, pt)
 		chatButton.image = 'images/checkin/checkin_chat_enable.png';
 		productButton.image = 'images/checkin/checkin_products_enable.png';
 		boardButton.image = 'images/checkin/checkin_board_enable.png';		
+	});
+	
+	chatButton.addEventListener('touchstart',function(){
+		curTabGroup.setActiveTab(1)
+	});
+	
+	boardButton.addEventListener('touchstart',function(){
+		curTabGroup.setActiveTab(2);
+	});
+
+	productButton.addEventListener('touchstart',function(){
+		curTabGroup.setActiveTab(3)
+	});
+
+	meButton.addEventListener('touchstart',function(){
+		curTabGroup.setActiveTab(4)
 	});
 
 //TODO: make this update to leaderboard and else!!

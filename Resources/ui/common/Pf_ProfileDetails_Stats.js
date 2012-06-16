@@ -199,8 +199,6 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
 	
 	Ti.App.addEventListener('friendsDbUpdated',function(){
-		Ti.API.info('Friends Database Updated');
-		
 		//CREATE LEADERBOARD//	
 		var rankList = [];
 		rankList[0] = _userProfile.id;

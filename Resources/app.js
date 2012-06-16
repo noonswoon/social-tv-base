@@ -27,7 +27,7 @@ var Debug = require('lib/debug');
 var Cloud = require('ti.cloud');
 var PullToRefresh = require('nl.icept.pull2refresh');
 
-var myCurrentCheckinPrograms = ['CH9_000CF','CH3_0MIB3']; //should be reset every hour to empty array
+var myCurrentCheckinPrograms = []; //should be reset every hour to empty array
 
 // This is a single context application with mutliple windows in a stack
 (function() {

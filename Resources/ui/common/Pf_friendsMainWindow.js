@@ -3,7 +3,6 @@ FriendsMainView = function(_parentWindow){
 	var friendsAddNew = require('ui/common/Pf_friendsAddNew');
 	var friendsRequest = require('ui/common/Pf_friendsRequest');
 	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
-	var friendsProfile = require('ui/common/Pf_friendsProfile');
 	var friendModel = require('model/friend');
 	var userId = acs.getUserId();
 	var friendsACS = require('acs/friendsACS');

@@ -72,7 +72,8 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 		width:120,
 		height:90
 	});
-		var programImageView = Ti.UI.createView({
+	
+	var programImageView = Ti.UI.createView({
 		width: 133,
 		height: 104,
 		backgroundImage: 'images/ProgramImageBorder.png',
@@ -82,7 +83,6 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 	});
 	programImageView.add(programImage);
 	headerView.add(programImageView);
-	
 	
 	var channelView = Ti.UI.createView({
 		width: 52,

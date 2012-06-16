@@ -23,7 +23,7 @@ function ApplicationTabGroup() {
 	var myUserId = acs.getUserId();
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new BlankWindow();//ChatMainWindow(programDummy);
+	var chatwin = new ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow();
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
@@ -94,11 +94,10 @@ function ApplicationTabGroup() {
 	var CheckinACS = require('acs/checkinACS');	
 	var LevelModel = require('model/level');
 	var CheckinModel = require('model/checkin');
+	var TVProgramModel = require('model/tvprogram');
 	
 	//not frequently update
 	LevelACS.levelACS_fetchedLevel();
-	//TODO: think about where to put this statement; 
-	//load badge image data	
 	BadgesACS.fetchedBadges();
 		
 	//my user ACS
@@ -112,9 +111,19 @@ function ApplicationTabGroup() {
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
 	};
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
+	
 	function checkinDbLoadedCallBack(e){			
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+		//populate the current checkins of user
+		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
+		for(var i=0 ;i<eventsCheckedIn.length;i++) {
+			var eventId = eventsCheckedIn[i].event_id; 
+			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
+			myCurrentCheckinPrograms.push(programId);
+		}
+		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	};
+	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	Ti.App.addEventListener('updateHeaderCheckin',function(){
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);

@@ -57,7 +57,6 @@ exports.checkinACS_fetchedUserCheckIn = function(_id) {
 }, function (e) {
     if (e.success) {
         var checkin =[];
-        Ti.API.info("checkinACS_fetchedUserCheckIn/You have check in today: " + e.checkins.length);
         for (var i = 0; i < e.checkins.length; i++) {
         	 var curCheckin = e.checkins[i]; 
                checkin.push(curCheckin);

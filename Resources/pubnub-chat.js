@@ -3,7 +3,7 @@
 // ----------------------------------
 Ti.include('./pubnub.js');
 
-var TVProgram = require('model/TVProgram');
+var TVProgram = require('model/tvprogram');
 
 // ----------------------------------
 // INIT PUBNUB
@@ -28,6 +28,14 @@ var totalHistoryMessages = 0;
 Ti.App.Chat = function(setup) {
     
     var curUserInput = "";
+   
+   	var chatMessagesTableView = Ti.UI.createTableView({
+		top:90,
+		height: 290,
+		backgroundColor: 'transparent',
+		separatorColor: 'transparent',
+	});
+	
     // ----------------------------------
     // LISTEN FOR MESSAGES
     // ----------------------------------
@@ -152,7 +160,7 @@ Ti.App.Chat = function(setup) {
 	});
 
 
-	var toolbar =  Titanium.UI.createToolbar({
+	var toolbar =  Titanium.UI.iOS.createToolbar({
 		top:0,
 		zIndex: 3,
 		items:[cancel,spacer,done]
@@ -259,12 +267,7 @@ Ti.App.Chat = function(setup) {
 	});
 	addFriendView.add(addFriend);
 
-	var chatMessagesTableView = Ti.UI.createTableView({
-		top:90,
-		height: 290,
-		backgroundColor: 'transparent',
-		separatorColor: 'transparent',
-	});
+
 	
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
 		top: 120,

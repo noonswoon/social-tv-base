@@ -5,10 +5,10 @@ FriendsTableViewRow = function(_user,_source){
 	var friendsModel = require('model/friend');
 	var tableRow = Ti.UI.createTableViewRow({
 		height: 50,
+		selectedBackgroundColor: '#d2eaff',
 	});
 	
 	Ti.API.info("FriendsTableViewRow fbId: " + _user.fb_id)
-//create view for each row	
 	var friendPhoto = Ti.UI.createImageView({
 		image: acs.getUserImageNormalOfFbId(_user.fb_id),
 		left: 10,

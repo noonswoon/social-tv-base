@@ -1,8 +1,9 @@
-var ProfileActivityView = function(_parent,_userProfile,_status){
+var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	var	profileDataImg = 'images/kuma100x100.png';
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
 	var activityModel = require('model/activity');
+	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var curId = _userProfile.id;
 	var activity = [];
 	var request =[];
@@ -21,7 +22,25 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 	var approveRequest = function(_response){
 		alert('You have approved the request');
 		Ti.API.info(_response);
+		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
 	};
+		
+	var deleteRequestData = function(e){
+		requestActivity.deleteRow(e.index);
+		request.splice(e.index,1);
+		requestUsers.splice(e.index,1);
+		friendRequests.splice(e.index,1);
+		if(requestUsers.length!==0){
+			requestActivity.height = (requestUsers.length)*45;
+			userActivityView.top = requestActivity.height+ 30;
+		} else {
+			userActivityView.top = 0;
+			userRequestView.remove(requestActivity);
+			userRequestView.remove(requestLabel);
+			activityView.remove(userRequestView);
+		}; 
+		
+	}
 	
 	var createRequestFriends = function(){
 		for(var i=0; i<requestUsers.length; i++){
@@ -30,6 +49,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 				selectedBackgroundColor: '#fff',
 				height: 45
 			});
+			requestRow.user_id = requestUsers[i].friend_id;
 			
 			var requestPicture = Ti.UI.createImageView({
 				image: profileDataImg,
@@ -49,39 +69,22 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 					text: requestUsers[i].first_name+' '+ requestUsers[i].last_name
 			});
 			var acceptButton = Ti.UI.createButton({
-				backgroundColor: '#5baad1',
-				borderRadius: 5,
-				width: 50,
-				height: 25,
-				right: 65,
-				title: 'Accept',
-				style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
-				font: {fontSize: 13},
+				width: 66,
+				height: 30,
+				right: 10,
+				backgroundImage: 'images/button/button_accept.png',
 			});
 			acceptButton.myIndex = i;
 			acceptButton.addEventListener('click',function(e){
 				var index = e.source.myIndex;
-				FriendsModel.friend_create(requestUsers[index].friend_id,requestUsers[index].fb_id);
+				alert("Accept "+requestUsers[index].first_name+' '+ requestUsers[index].last_name + ' as your friend.');
+				FriendsModel.friend_create(requestUsers[index],requestUsers[index].fb_id);
 				FriendACS.approveFriend(requestUsers[index].friend_id,approveRequest);
 			});
 
-			var declineButton = Ti.UI.createButton({
-				backgroundColor: '#d74e55',
-				borderRadius: 5,
-				width: 50,
-				height: 25,
-				right: 10,
-				title: 'Decline',
-				style: Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
-				font: {fontSize: 13},
-			});
-			declineButton.addEventListener('click',function(){
-				alert('Decline')
-			});
 			requestRow.add(requestPicture);
 			requestRow.add(requestInfo);
 			requestRow.add(acceptButton);
-			requestRow.add(declineButton);
 			request[i] = requestRow;
 		}
 		requestActivity.height = (requestUsers.length*45);
@@ -93,12 +96,24 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 			activityView.add(userRequestView);			
 		};
 		activityView.height = 'auto';
+		
+		requestActivity.addEventListener('click',function(e){
+			if(e.source.title ==="Accept"){
+				deleteRequestData(e);
+			} else if(e.source.title !=="Accept") {
+				Ti.API.info('open new profile main : ' + e.rowData.user_id);
+				_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"stranger"));
+			}
+	
+		});
 	};
 
 	var requestsLoadedCallBack = function(e){
-		alert(e.fetchedRequests);
 		requestUsers = e.fetchedRequests; //update global variable - requestUsers
-		createRequestFriends(e.fetchedRequests);
+		for(var i=0;i<requestUsers.length;i++) {
+			friendRequests.push(requestUsers[i]);
+		}
+		createRequestFriends();
 	};
 
 	Ti.App.addEventListener('requestsLoaded',requestsLoadedCallBack);
@@ -107,7 +122,7 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 	var requestLabel = Ti.UI.createLabel({
 		text: 'FRIEND REQUEST',
 		font: {fontSize: 14, fontWeight: 'bold'},
-		color: '#fff',//'#9f9f9f',//'#fff',
+		color: '#fff',
 		height:30,
 		textAlign: 'left',
 		left: 10,
@@ -123,27 +138,12 @@ var ProfileActivityView = function(_parent,_userProfile,_status){
 		scrollable: false,
 	});
 	
-	requestActivity.addEventListener('click',function(e){
-		if(e.source.titl ==="Accept")
-		requestActivity.deleteRow(e.index);
-		request.splice(e.index,1);
-		requestUsers.splice(e.index,1);
-		requestActivity.height = (requestUsers.length)*45;
-		userActivityView.top = requestActivity.height+ 30;
-		if(requestUsers.length===0){
-			userActivityView.top = 0;
-			userRequestView.remove(requestActivity);
-			userRequestView.remove(requestLabel);
-			activityView.remove(userRequestView);
-		}; 
-	});
-	
 	
 //ACTIVITY////////////////////////////////////////////////////
 	var ActivityLabel = Ti.UI.createLabel({
 		text: 'ACTIVITY',
 		font: {fontSize: 14, fontWeight: 'bold'},
-		color: '#fff',//'#9f9f9f',//'#fff',
+		color: '#fff',
 		height:30,
 		textAlign: 'left',
 		left: 10, top: 0,

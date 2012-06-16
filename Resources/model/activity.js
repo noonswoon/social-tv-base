@@ -17,6 +17,7 @@ db.close();
 // create data for local database
 exports.activityModel_fetchedActivityFromACS = function(_activityCollection,_id) {
 	var db = Ti.Database.open('Chatterbox');
+	if(_id === acs.getUserId()) db.execute('DELETE FROM activity');
 	db.execute('DELETE FROM activity WHERE targetedUserID = ?', _id);
 	Ti.API.info('_activityCollection.length: '+ _activityCollection.length);
 	for(var i=0;i < _activityCollection.length; i++) {

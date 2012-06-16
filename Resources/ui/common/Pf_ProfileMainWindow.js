@@ -4,7 +4,6 @@ function ProfileMainWindow(_id,_status) {
 	var ProfileDetail = require('ui/common/Pf_ProfileDetails');
 	var UserACS = require('acs/userACS');
 	var UserModel = require('model/user');
-//	var userProfile;
 	
 	var self = Titanium.UI.createWindow({
 		barColor:'#489ec3',
@@ -75,13 +74,13 @@ function ProfileMainWindow(_id,_status) {
 	
 	Ti.App.addEventListener('userLoaded'+_id, userLoadedCallBack);
 	
+	
 	//remove event listeners for all the children of ProfileMainWindow
 	self.addEventListener('close', function() {
 		Ti.API.info("closing profile main window");
 		Ti.App.fireEvent('profileMainWindowClosing'+_id);
 	});
-	
-	
+
 	return self;
 }
 

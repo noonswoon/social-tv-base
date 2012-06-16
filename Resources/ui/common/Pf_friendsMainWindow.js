@@ -1,14 +1,8 @@
 FriendsMainView = function(_parentWindow){
-
-	var friendsAddNew = require('ui/common/Pf_friendsAddNew');
-	var friendsRequest = require('ui/common/Pf_friendsRequest');
-	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
-	var friendsProfile = require('ui/common/Pf_friendsProfile');
-	var friendModel = require('model/friend');
-	var userModel = require('model/user');
 	var userId = acs.getUserId();
 	var friendsACS = require('acs/friendsACS');
-	var userACS = require('acs/userACS');
+	var tableViewRow = require('ui/common/Pf_friendsTableViewRow');
+	var friendModel = require('model/friend');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 
 	var self = Ti.UI.createWindow({
@@ -42,8 +36,6 @@ FriendsMainView = function(_parentWindow){
 		var myFriendsList = [];
 		for(var i = 0; i<myFriends.length;i++){
 			var curUser = myFriends[i];
-	//		var curId = myFriends[i].friend_id;
-	//		userACS.userACS_fetchUserFbId(curId);
 			var userRow = new tableViewRow(curUser,'myFriend');
 			 myFriendsList.push(userRow);
 		};
@@ -52,7 +44,7 @@ FriendsMainView = function(_parentWindow){
 
 	friendsTable.addEventListener('click',function(e){
 		_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user.friend_id,"friend"));
-		});
+	});
 	
 	createFriendTable(myFriends);
 	

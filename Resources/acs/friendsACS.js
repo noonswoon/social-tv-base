@@ -141,7 +141,6 @@ exports.showFriendsRequest = function(){
 	xhr.send();
 };
 
-
 //remove friend ////////////////////////////////////////////
 exports.removedFriendFromACS = function(user_id){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/remove.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';

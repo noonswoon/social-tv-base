@@ -225,8 +225,8 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 	checkinView.add(productButton);
 	checkinView.add(checkinButton);
 	
-	var programId = _datafromrow.programId;
-	var checkin = CheckinModel.checkin_isCheckin(programId);
+	var eventId = _datafromrow.eventId;
+	var checkin = CheckinModel.checkin_isCheckin(eventId);
 	
 	//This program is check-in or not
 	if(checkin === true){

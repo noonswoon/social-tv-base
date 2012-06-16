@@ -40,7 +40,7 @@ exports.activityACS_createMyActivity = function(_activity,local_id){
 	        Ti.App.fireEvent('update1activity',{fetchedAnActivity:activity}); //fetched back with local id:)
 
 	    } else {
-	        alert('Error:\\n' +
+	        alert('activityACS - Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

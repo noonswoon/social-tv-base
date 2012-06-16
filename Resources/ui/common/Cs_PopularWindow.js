@@ -97,7 +97,7 @@ function PopularWindow(_parent) {
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');	
 		checkinmainwin = new CheckinMainWindow({
-			programId: e.row.tvprogram.id,
+			eventId: e.row.tvprogram.id,
 			programTitle: e.row.tvprogram.name,
 			programSubname: 'subname',
 			programImage: e.row.tvprogram.photo,

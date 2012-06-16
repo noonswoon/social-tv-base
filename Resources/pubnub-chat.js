@@ -3,7 +3,7 @@
 // ----------------------------------
 Ti.include('./pubnub.js');
 
-var TVProgram = require('model/TVProgram');
+var TVProgram = require('model/tvprogram');
 
 // ----------------------------------
 // INIT PUBNUB
@@ -24,6 +24,13 @@ var adminUserObject = {id: '', imageUrl: 'http://a0.twimg.com/profile_images/220
 var historyMessages = [];
 var lastHistoryLoadedIndex = 0;
 var totalHistoryMessages = 0;
+
+	var chatMessagesTableView = Ti.UI.createTableView({
+		top:90,
+		height: 290,
+		backgroundColor: 'transparent',
+		separatorColor: 'transparent',
+	});
 
 Ti.App.Chat = function(setup) {
     
@@ -258,13 +265,6 @@ Ti.App.Chat = function(setup) {
 		backgroundImage: 'images/chat/addfriend.png'
 	});
 	addFriendView.add(addFriend);
-
-	var chatMessagesTableView = Ti.UI.createTableView({
-		top:90,
-		height: 290,
-		backgroundColor: 'transparent',
-		separatorColor: 'transparent',
-	});
 	
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
 		top: 120,

@@ -42,7 +42,7 @@ exports.leaderACS_createUserInfo = function(_user){
 	            'facebookid: ' + LeaderBoard.user.external_accounts.external_id);
 			Ti.App.fireEvent("createLeaderBoardUser",{fetchedUser: user});
 	    } else {
-	        alert('Error:\\n' +
+	        alert('leaderboardACS 45 Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
@@ -62,7 +62,7 @@ Cloud.Objects.update({
         Ti.API.info('Success:\\n' + 'totalPoint: ' + leaderBoard.totalPoint);
             //fireevent update database
     } else {
-        alert('Error:\\n' +
+        alert('leaderboardACS 65 Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     }
 });

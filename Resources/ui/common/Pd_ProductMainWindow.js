@@ -77,8 +77,9 @@ function ProductMainWindow() {
 	tableViewForTab.setData(dataForTab);
 
 	var productTableView = Ti.UI.createTableView({
-		top: 100
-		// backgroundColor: 'transparent'
+		top: 44,
+		backgroundColor: 'transparent', 
+		separatorColor: 'transparent'
 	});
 	self.add(productTableView);
 
@@ -109,28 +110,32 @@ function ProductMainWindow() {
 	
 	Ti.App.addEventListener('fetchedAllProduct', function(e){
 		var viewRowData = [];
-		for(var i=0;i<e.fetchedAllProduct.length;i++){
-			var productOfProgram = e.fetchedAllProduct[i];
-			var row = new ProductMainWindowTableViewRow(productOfProgram);
+		var totalProducts = e.fetchedAllProduct.length;
+		var numRows = Math.ceil(totalProducts/2);
+		
+		for(var i=0;i<numRows;i++){
+			var row = new ProductMainWindowTableViewRow();
+			for(var j=0;j<=1;j++){
+				var productIndex = i*2 + j;
+				if(productIndex >= totalProducts)
+					break;
+				var curProduct = e.fetchedAllProduct[productIndex];
+				if(j % 2==0) { //left column
+					row._setProductOnLeftColumn(curProduct);
+				} else { //right column
+					row._setProductOnRightColumn(curProduct);
+				}
+			}
 			viewRowData.push(row);
 		}
+
 		productTableView.setData(viewRowData);
 		shopSelectorToggle = true;
 		shopSelectorPopupWin.close();
 		self.remove(triangleImage);	
 		hidePreloader(self);
 	});	
-	
-	self._closeProductPopupWindow = function() {
-		if(!shopSelectorToggle) { //only close if it is still open
-			shopSelectorToggle = true;
-			shopSelectorPopupWin.close();
-			self.remove(triangleImage);
-		}
-	};
-	
-	
-	
+
 	return self;
 }
 

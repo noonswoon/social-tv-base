@@ -1,59 +1,56 @@
-ProductMainWindowTableViewRow = function(_product){
+ProductMainWindowTableViewRow = function(){
 	
-	var row = Ti.UI.createTableViewRow();
 	
-	var productName = Ti.UI.createLabel({
-		text: _product.product_name,
-		textAlign: 'left',
-		color: '#333',
-		left: 145,
-		height: 30,
-		width: 142,
-		font:{fontWeight:'bold',fontSize:17},
-		top: 5
+	var row = Ti.UI.createTableViewRow({
+		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
-	row.add(productName);
 	
-	var productDescription = Ti.UI.createLabel({
-		text: _product.description,
-		color: 'gray',
-		textAlign:'left',
-		font:{fontWeight:'bold',fontSize:13},
-		top: 33,
-		left:145
+	var barOfProduct = Ti.UI.createImageView({
+		image: 'images/product/barofproduct.png',
+		bottom: 0
 	});
-	row.add(productDescription);
 	
-	var productPrice = Ti.UI.createLabel({
-		text: 'Price: '+_product.price,
-		color: 'gray',
-		textAlign:'left',
-		font:{fontWeight:'bold',fontSize:13},
-		top: 70,
-		left:145
+	var productLeftImage = Ti.UI.createImageView({
+		left: 30,
+		width: 115,
+		height: 151,
+		bottom: 23,
+		top: 10,
+		borderColor: 'white',
+		borderWidth: 5
 	});
-	row.add(productPrice);
-	
-	var productContact = Ti.UI.createLabel({
-		text: 'Tel: '+_product.contact,
-		color: 'gray',
-		textAlign:'left',
-		font:{fontWeight:'bold',fontSize:13},
-		top: 87,
-		left:145
-	});
-	row.add(productContact);
-	
-	var productImage = Ti.UI.createImageView({
-		image: _product.product_image,
-		left: 5,
-		width: 150,
-		height: 100,
-		bottom: 10,
+
+	var productRightImage = Ti.UI.createImageView({
+		right: 30,
+		width: 115,
+		height: 152,
+		bottom: 23,
 		top: 10
 	});
-	row.add(productImage);
 
+	
+	row._setProductOnLeftColumn = function(_leftProduct){
+		productLeftImage.image = _leftProduct.product_image;
+		productLeftImage.addEventListener('click',function(){
+			alert('This is '+_leftProduct.product_name);
+		});
+	}
+	
+	row._setProductOnRightColumn = function(_rightProduct){
+		productRightImage.image = _rightProduct.product_image;
+		productRightImage.borderColor = 'white';
+		productRightImage.borderWidth = 5;
+		
+		productRightImage.addEventListener('click',function(){
+			alert('This is '+_rightProduct.product_name);
+		});
+	}
+
+		
+	row.add(barOfProduct);
+	row.add(productLeftImage);
+	row.add(productRightImage);
+	
 	return row;
 }
 module.exports = ProductMainWindowTableViewRow;

@@ -1,5 +1,6 @@
-ProductMainWindowTableViewRow = function(){
+ProductMainWindowTableViewRow = function(_parent){
 	
+	var ProductBuyWindow = require('ui/common/Pd_ProductBuyWindow');
 	
 	var row = Ti.UI.createTableViewRow({
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
@@ -33,6 +34,8 @@ ProductMainWindowTableViewRow = function(){
 		productLeftImage.image = _leftProduct.product_image;
 		productLeftImage.addEventListener('click',function(){
 			alert('This is '+_leftProduct.product_name);
+			var productBuyWindow = new ProductBuyWindow(_leftProduct);
+			_parent.containingTab.open(productBuyWindow);	
 		});
 	}
 	

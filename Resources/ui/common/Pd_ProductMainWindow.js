@@ -114,7 +114,8 @@ function ProductMainWindow() {
 		var numRows = Math.ceil(totalProducts/2);
 		
 		for(var i=0;i<numRows;i++){
-			var row = new ProductMainWindowTableViewRow();
+			var row = new ProductMainWindowTableViewRow(self);
+			
 			for(var j=0;j<=1;j++){
 				var productIndex = i*2 + j;
 				if(productIndex >= totalProducts)

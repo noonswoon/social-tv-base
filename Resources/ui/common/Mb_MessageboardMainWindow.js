@@ -14,15 +14,15 @@ function MessageboardMainWindow(_programId) {
 	var messageboardHeader = new MessageboardHeader('Reya','Famous Lakorn');	
 	var addWindow = new MessageboardAddWindow(_programId);	
 	var usingPull2Refresh = false;
+	var hasLoadedPicker = false;
 	
 	//UI STUFF
-
 	var callPicker = Ti.UI.createButton({
 		width: 39,
 		height: 32,
 		backgroundImage: 'images/messageboard/optionbutton.png'
 	});
-
+	
 	var self = Titanium.UI.createWindow({
 		backgroundImage: 'images/messageboard/appBG.png',
 		barImage: 'images/NavBG.png',
@@ -39,7 +39,6 @@ function MessageboardMainWindow(_programId) {
 		backgroundImage: 'images/messageboard/testBG.png'
 	});
 	
-
 	var searchTextField = Titanium.UI.createSearchBar({
 		top: 1, 
 		left: 7,
@@ -61,7 +60,7 @@ function MessageboardMainWindow(_programId) {
 	searchView.add(searchTextField);
 	searchView.add(addButton);
 
-//Opacity window when picker is shown
+	//Opacity window when picker is shown
 	var opacityView = Ti.UI.createView({
 		opacity : 0.6,
 		top : 0,
@@ -70,7 +69,7 @@ function MessageboardMainWindow(_programId) {
 		backgroundColor: '#000'
 	});
 
-//Picker
+	//Picker
 	var picker_view = Titanium.UI.createView({
 		height:251,
 		bottom:-251,
@@ -91,8 +90,7 @@ function MessageboardMainWindow(_programId) {
 		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
 	});
 
-
-	var toolbar =  Titanium.UI.createToolbar({
+	var toolbar =  Ti.UI.iOS.createToolbar({
 		top:0,
 		zIndex: 3,
 		items:[cancel,spacer,done]
@@ -101,31 +99,30 @@ function MessageboardMainWindow(_programId) {
 	var picker = Titanium.UI.createPicker({
 		top:43
 	});
-	picker.selectionIndicator=true;
-	var dataForPicker = [];
-	
-	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-		var programId = myCurrentCheckinPrograms[i];
-		var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-		var programName = programInfo[0].name;
-		var program_id = programInfo[0].program_id;
-		// var row = Ti.UI.createPickerRow();
-		// var programNameInRow = Ti.UI.createLabel({
-			// text: programName
-		// });
-		dataForPicker = [{title:programName, progId: program_id}];
-		// row.add(programNameInRow);
-		// picker.add(row);
-		picker.add(dataForPicker);
-	}
-	
+		
+	picker.selectionIndicator=true;	
 	picker_view.add(toolbar);
-	picker_view.add(picker);
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 
 	callPicker.addEventListener('click',function() {
+		if(!hasLoadedPicker) {
+			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+				var programId = myCurrentCheckinPrograms[i];
+				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+				Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
+				var programName = programInfo[0].name;
+				var row = Ti.UI.createPickerRow();
+				var programNameInRow = Ti.UI.createLabel({
+					text: programName
+				});
+				row.add(programNameInRow);
+				picker.add(row);
+			}
+			picker_view.add(picker);
+			hasLoadedPicker = true;
+		}
 		picker_view.animate(slide_in);
 		self.add(opacityView);
 	});
@@ -255,13 +252,11 @@ function MessageboardMainWindow(_programId) {
 
 	//pull2refresh
 	//pull2refresh module
-
 	var lastUpdatedDateObj = CacheHelper.getCacheTime('topicsOfProgram'+_programId);
 	var lastUpdatedStr = "No updated";
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
 	}
-	
 	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
 		Ti.API.info('using pull to refresh');
 		usingPull2Refresh = true;

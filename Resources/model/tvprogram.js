@@ -83,6 +83,19 @@ exports.TVProgramModel_fetchProgramsWithProgramId = function(_programId) {
 	return fetchedPrograms;
 };
 
+exports.TVProgramModel_fetchProgramIdOfEventId = function(_eventId) {
+	//select some stuff from the local db..based on the future filtering
+	var programId = "";
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT program_id FROM tvprograms WHERE id = ?',_eventId);
+	if(result.isValidRow()) {
+		programId = result.fieldByName('program_id');
+	}	
+	result.close();
+	db.close();
+	return programId;
+};
+
 
 exports.TVProgramModel_getProgramNameWithProgramId = function(_programId) {
 	//select some stuff from the local db..based on the future filtering
@@ -118,10 +131,10 @@ exports.TVProgramModel_fetchPopularPrograms = function() {
 			program_id: result.fieldByName('program_id'),
 			hasChild:true
 		});
-		Ti.API.info('Name: '+result.fieldByName('name'));
-		Ti.API.info('Start: '+result.fieldByName('start_time'));
-		Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
-		Ti.API.info('Now: '+now);
+		// Ti.API.info('Name: '+result.fieldByName('name'));
+		// Ti.API.info('Start: '+result.fieldByName('start_time'));
+		// Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
+		// Ti.API.info('Now: '+now);
 			
 		result.next();
 	}	

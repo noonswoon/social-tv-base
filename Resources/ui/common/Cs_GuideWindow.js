@@ -81,7 +81,7 @@ function GuideWindow(_parent) {
 	});
 
 
-	var toolbar =  Titanium.UI.createToolbar({
+	var toolbar =  Titanium.UI.iOS.createToolbar({
 		top:0,
 		zIndex: 3,
 		items:[cancel,spacer,done]

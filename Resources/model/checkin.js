@@ -1,5 +1,5 @@
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS checkins(id INTEGER PRIMARY KEY,checkin_acs_id TEXT, event_id TEXT, score INTEGER, user_id TEXT, updated_at TEXT, program_id TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS checkins(id INTEGER PRIMARY KEY,checkin_acs_id TEXT, event_id TEXT, score INTEGER, user_id TEXT, updated_at TEXT);');
 db.close();
 
 // create data for local database
@@ -8,24 +8,20 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
 	//need to clear records with the given programId
 	db.execute('DELETE FROM checkins');
-	var countCheckinsFromDb = 0;
 	for(var i=0;i < _checkinsCollection.length; i++) {
 		var curCheckin = _checkinsCollection[i];
-		db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at,program_id) VALUES(NULL,?,?,?,?,?,?)",curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at,curCheckin.program_id);
-		countCheckinsFromDb++;
+		curCheckin.updated_at = convertACSTimeToLocalTime(curCheckin.updated_at);
+		db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at) VALUES(NULL,?,?,?,?,?)",curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
 	}
-	Ti.API.info('countCheckinsFromDb = ' + countCheckinsFromDb);
 	db.close();
-	Ti.API.info('DONE: updating CHECKIN database');
-
 };
 
-//haven't use this yet:9
-//select data from local database
-exports.checkin_fetchCheckin = function() {
+
+exports.checkin_fetchCheckinToday = function() {
 	var fetchedCheckin = [];
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM checkins');
+	var startOfDay = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
+	var result = db.execute('SELECT * FROM checkins where updated_at >= ?',startOfDay);
 	while(result.isValidRow()) {
 		fetchedCheckin.push({
 			id: result.fieldByName('id'),
@@ -33,8 +29,7 @@ exports.checkin_fetchCheckin = function() {
 			event_id: result.fieldByName('event_id'),
 			score: Number(result.fieldByName('score')),
 			user_id: result.fieldByName('user_id'),
-			updated_at: result.fieldByName('updated_at'),
-			program_id: result.fieldByName('program_id')
+			updated_at: result.fieldByName('updated_at')
 		});
 		result.next();
 	}
@@ -42,17 +37,6 @@ exports.checkin_fetchCheckin = function() {
 	db.close();
 	return fetchedCheckin;
 };
-
-//don't use this?
-//function: count checkins
-// exports.checkins_count = function(_user){
-	// var db = Ti.Database.open('Chatterbox'); 
-	// var result = db.execute('SELECT COUNT(?) as checkins_count from checkins',_user);
-	// var checkins = Number(result.fieldByName('checkins_count'));
-	// result.close();
-	// db.close();
-	// return checkins;
-// };
 
 //create checkin into database:)
 exports.checkin_create = function(_checkinsCollection){

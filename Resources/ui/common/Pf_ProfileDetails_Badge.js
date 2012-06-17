@@ -62,7 +62,6 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	var ActivityACS = require('acs/activityACS');
 	var newBadgeUnlockCallback = function(e){
 		badgeData = BadgeModel.fetchedBadgeSearch(e.badgeID);
-		alert('badgeData');
 		alert('badgeData.title: '+badgeData.title);
 	
 		Ti.App.fireEvent('updatedMyBadge',{badgeID: e.badgeID});

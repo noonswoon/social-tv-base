@@ -25,7 +25,7 @@ function ApplicationTabGroup() {
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
-	var productwin = new ProductMainWindow();
+	var productwin = new BlankWindow();//ProductMainWindow();
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
 	

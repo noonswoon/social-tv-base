@@ -1,5 +1,6 @@
 var ProfileDetailView = function(_parent,_userProfile,_status){
 	var user_id = _userProfile.id;
+	var friendACS = require('acs/friendsACS');
 	
 ///MENU//////////////////////////////////////////////////////////
 	var profileMenu = Ti.UI.createView({
@@ -87,29 +88,27 @@ var ProfileDetailView = function(_parent,_userProfile,_status){
 	 });
 	 
 	 addFriendButton.addEventListener('click', function(user_id){
-	 	var friendACS = require('acs/friendsACS');
 	 	friendACS.addFriend(user_id,sendRequest);
-	 });		
+	 });
+
 	var sendRequest = function(_response){
 		alert('Your request has been sent.');
 		Ti.API.info(_response);
 	};
 ///////////////////////////////////////////////////////////////////////////////////	
 		
-	if(_status==="me" || _status==="friend"){
-//	if(_status==="me"){
+//	if(_status==="me" || _status==="friend"){
 		profileMenu.add(profileTab);
 		profileDetailScroll.add(profileStatsView);
 		profileDetail.add(profileDetailScroll);
 		detail.headerView = profileMenu;
 		detail.add(profileDetail);
-	 };		
+//	 };		
 	
-	if(_status==="stranger"){
-//	if(_status==="friend"){
-		addFriendView.add(addFriendButton);
-		detail.headerView = addFriendView;
-	};
+//	if(_status==="stranger"){
+//		addFriendView.add(addFriendButton);
+//		detail.headerView = addFriendView;
+//	};
 
 	return detail;
 }

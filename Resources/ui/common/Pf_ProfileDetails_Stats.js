@@ -1,9 +1,9 @@
-var ProfileStatsView = function(parentWindow, _userProfile, _status){
+var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	var LeaderACS = require('acs/leaderBoardACS');
 	var PointModel = require('model/point');
 	var LevelModel = require('model/level');
 	var FriendModel = require('model/friend');
-	var createtime = 0;
+	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var userRankInfo = [];
 	var	ProfileDataLevelUp;
 	
@@ -33,7 +33,6 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 		height:30,
 		top: 0,
 		left: 10,
-		//shadowColor: '#333'		
 	});
 		
     var expBar = Ti.UI.createSlider({
@@ -105,9 +104,10 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
 				height: 45,
-				selectedBackgroundColor: '#fff',
+				selectedBackgroundColor: '#d2eaff',
 				color: '#666'
 			});
+			userRank.user_id = leaderBoardData[i].user_id;
 			var userRankNo = Ti.UI.createLabel({
 				text: '#' + (i+1),
 				left: 15,
@@ -148,6 +148,7 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 			});
 		
 			if(i===myIndex){
+				userRank.selectedBackgroundColor = '#fff';
 				userRankNo.color = '#000';
 				userRankName.color = '#000';
 				userRankScore.color = '#000';
@@ -164,6 +165,13 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;
 		profileStats.height = expSec.height + leaderSec.height;
+		
+		leaderTable.addEventListener('click',function(e){
+			Ti.API.info('e.rowData.user.friend_id :'+e.rowData.user_id);
+			if(e.rowData.user_id!==curId){
+				_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
+			}
+		});
 	} //end of function: createLeaderBoardView
 	
 	var leaderTable = Ti.UI.createTableView({
@@ -205,12 +213,11 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
 		var myFriends = FriendModel.friendModel_fetchFriend(rankList[0]);
 		for(var i = 0; i< myFriends.length;i++){
 			var curUser = myFriends[i].friend_id;
-			Ti.API.info(curUser);
 			rankList.push(curUser);
 		};
-		Ti.API.info('total user in rank: '+rankList.length);
 		LeaderACS.leaderACS_fetchedRank(rankList);
 	});
+	
 	function leaderBoardLoadedCallBack(e){
 		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
 	};
@@ -222,6 +229,7 @@ var ProfileStatsView = function(parentWindow, _userProfile, _status){
     	createLeaderBoardView(leaderBoardData);
     	updateExpBar(); 
 	});
+	
 	updateExpBar();
 //////////////////////////////////////////////////////////////////////////	
 

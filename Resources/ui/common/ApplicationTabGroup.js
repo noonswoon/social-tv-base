@@ -11,6 +11,8 @@ function ApplicationTabGroup() {
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
+    var areTabsDiabled = true;
+    
 	var programDummy = {
 		programId: '4fb3618c0020442a2b0186c0', 
 		programTitle:'Khun Suuk', 
@@ -25,11 +27,9 @@ function ApplicationTabGroup() {
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
-	var productwin = new BlankWindow();//ProductMainWindow();
+	var productwin = new ProductMainWindow();
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
-	
-	
 	
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
@@ -46,7 +46,8 @@ function ApplicationTabGroup() {
     var chatTab = Titanium.UI.createTab({  
         icon: '/images/chat-2.png',
 		title: 'Chat',
-		window: blankwin
+		window: blankwin,
+		touchEnabled: false
     });
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
@@ -60,7 +61,8 @@ function ApplicationTabGroup() {
     var messageboardTab = Titanium.UI.createTab({  
         icon:'/images/messageboard.png',
         title:'Board',
-        window: messageboardwin
+        window: messageboardwin,
+		touchEnabled: false
     });
     messageboardwin.containingTab = messageboardTab;
     messageboardTab.addEventListener('focus', function() {
@@ -70,7 +72,7 @@ function ApplicationTabGroup() {
 	var productTab = Ti.UI.createTab({
 		icon: '/images/product.png',
 		title: 'Product',
-		window: productwin
+		window: productwin,
 	});
 	productwin.containingTab = productTab;
 	productTab.addEventListener('focus', function() {
@@ -87,6 +89,35 @@ function ApplicationTabGroup() {
 		tabIndexToComeBack = 4;
 	});
 	
+	var disableTabsView = Titanium.UI.createView({
+	    backgroundColor: '#ffff',
+	    opacity: 0.2,
+	    height: 49,
+	    width:'60%',
+	    bottom:0,
+	    left:'20%'
+	});
+	
+	var checkinAlert = Titanium.UI.createAlertDialog({
+	    title:'Please checkin',
+	    message:'Please checkin to a program first.'
+	});
+
+	disableTabsView.addEventListener('click', function(e){
+   		checkinAlert.show();
+	});
+	
+	//////////////////////
+	self.add(disableTabsView);
+	self.addTab(selectionTab);
+    self.addTab(chatTab);  
+    self.addTab(messageboardTab);  
+    self.addTab(productTab);
+    self.addTab(profileTab);
+
+    //save 1-clcik, direct to message board functionality
+   	self.setActiveTab(self.tabs[0]);
+   	
 	//PROFILE: CALLING ACS
 	var LevelACS = require('acs/levelACS');	
 	var BadgesACS = require('acs/badgesACS');
@@ -114,8 +145,16 @@ function ApplicationTabGroup() {
 	
 	function checkinDbLoadedCallBack(e){			
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+		
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
+		
+		//if checkin to at least 1 program, enable the chat/board/product bar
+		if(eventsCheckedIn.length > 0)  {
+			self.remove(disableTabsView);
+			areTabsDiabled = false;
+		}
+		
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id; 
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
@@ -123,28 +162,31 @@ function ApplicationTabGroup() {
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	};
-	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
-	Ti.App.addEventListener('updateHeaderCheckin',function(){
+	
+	function updateHeaderCheckinCallback() {
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
-	});
-
-	//////////////////////
-	self.addTab(selectionTab);
-    self.addTab(chatTab);  
-    self.addTab(messageboardTab);  
-    self.addTab(productTab);
-    self.addTab(profileTab);
-
-    //save 1-clcik, direct to message board functionality
-   	self.setActiveTab(self.tabs[0]);
+	}
+	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
+	
+	//checkinToProgram event fires from Cs_CheckinMainWindow
+	function checkinToProgramCallback() {
+		if(areTabsDiabled) {
+   			self.remove(disableTabsView);
+			areTabsDiabled = false;
+   		}
+	}
+   	Ti.App.addEventListener('checkinToProgram', checkinToProgramCallback);
    	
    	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');
+   		Ti.App.removeEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+   		Ti.App.removeEventListener('levelLoaded',levelLoadedCallBack);
+   		Ti.App.removeEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
+   		Ti.App.removeEventListener('checkinToProgram', checkinToProgramCallback);
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}
-   	
    	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
    	
     return self;

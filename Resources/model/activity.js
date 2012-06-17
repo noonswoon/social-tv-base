@@ -19,15 +19,12 @@ exports.activityModel_fetchedActivityFromACS = function(_activityCollection,_id)
 	var db = Ti.Database.open('Chatterbox');
 	if(_id === acs.getUserId()) db.execute('DELETE FROM activity');
 	db.execute('DELETE FROM activity WHERE targetedUserID = ?', _id);
-	Ti.API.info('_activityCollection.length: '+ _activityCollection.length);
 	for(var i=0;i < _activityCollection.length; i++) {
 		var curActivity = _activityCollection[i];
 		var name = curActivity.user.first_name + ' ' + curActivity.user.last_name; 
 		db.execute("INSERT INTO activity(id,activity_acs_id,user_id,user_name,targetedUserID,category,targetedObjectID,additionalData,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?)", curActivity.id,curActivity.user.id,name,curActivity.targetedUserID,curActivity.category,curActivity.targetedObjectID,curActivity.additionalData,curActivity.updated_at);
-		}
-	Ti.API.info("LAST ROW IN activity final:"+db.lastInsertRowId);	
+	}
 	db.close();
-	
 	Ti.App.fireEvent("activityDbUpdated");
 };
 //fetch

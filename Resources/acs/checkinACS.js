@@ -73,17 +73,16 @@ exports.checkinACS_fetchedUserCheckIn = function(_id) {
 
 exports.checkinACS_createCheckin = function(checkinData,local_id){
 	Cloud.Checkins.create({
-    event_id: checkinData.event_id,
-    user_id: checkinData.user_id,
-    custom_fields: {score: checkinData.score, local_id: local_id},
-	}, function (e) {
-	    if (e.success) {
-	        var checkin = e.checkins[0];
-	        Ti.App.fireEvent('update1checkin',{fetchedACheckin:checkin}); //fetched back with local id:)
-	    } else {
-	        Ti.API.info('checkinACS_createCheckin Error: ' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	    }
+	    event_id: checkinData.event_id,
+	    user_id: checkinData.user_id,
+	    custom_fields: {score: checkinData.score, local_id: local_id},
+		}, function (e) {
+		if (e.success) {
+			var checkin = e.checkins[0];
+			Ti.App.fireEvent('update1checkin',{fetchedACheckin:checkin}); //fetched back with local id:)
+		} else {
+			Ti.API.info('checkinACS_createCheckin Error: ' + JSON.stringify(e));
+		}
 	});
 };
 

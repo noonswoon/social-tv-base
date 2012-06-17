@@ -1,4 +1,4 @@
-CheckinMainWindow = function (_datafromrow, _containingTab){
+CheckinMainWindow = function (_tvprogramData, _containingTab){
 	
 	var CheckinACS = require('acs/checkinACS');
 	var CheckinModel = require('model/checkin');
@@ -46,7 +46,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 
 ////////////////////////////////Header detail
 	var programTitle = Ti.UI.createLabel({
-		text: _datafromrow.programTitle,
+		text: _tvprogramData.programTitle,
 		textAlign: 'left',
 		color: '#333',
 		left: 155,
@@ -58,7 +58,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 	headerView.add(programTitle);
 	
 	var programSubname = Ti.UI.createLabel({
-		text: _datafromrow.programSubname,
+		text: _tvprogramData.programSubname,
 		color: '#333',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
@@ -68,7 +68,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 	headerView.add(programSubname);
 	
 	var programImage = Ti.UI.createImageView({
-		image: _datafromrow.programImage,
+		image: _tvprogramData.programImage,
 		width:120,
 		height:90
 	});
@@ -96,7 +96,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 		top: 3
 	});
 	var programChannel = Ti.UI.createLabel({
-		text: _datafromrow.programChannel,
+		text: _tvprogramData.programChannel,
 		textAlign: 'left',
 		color: '#898687',
 		height: 20,
@@ -119,7 +119,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 		top: 0
 	});
 	var programNumCheckin = Ti.UI.createLabel({
-		text: _datafromrow.programNumCheckin,
+		text: _tvprogramData.programNumCheckin,
 		textAlign: 'left',
 		color: '#898687',
 		font: {fontSize: 14},
@@ -141,7 +141,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 		top: 0
 	});
 	var programNumFriend = Ti.UI.createLabel({
-		text: _datafromrow.programNumCheckin,
+		text: _tvprogramData.programNumCheckin,
 		textAlign: 'left',
 		color: '#898687',
 		bottom: 0,
@@ -150,20 +150,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 	friendView.add(programNumFriend);
 	friendView.add(programNumFriendImage);	
 	headerView.add(friendView);		
-			//check point
-	/*		var label1 = Ti.UI.createLabel({
-				backgroundColor: '#fff',
-				color: '#000',
-				height: 50, width: 300,
-				top:10, left: 10,
-				text:''
-			});
-			checkinView.addEventListener('click',function(e)
-			{
-			label1.text = "localPoint: " + e.x + " " + e.y;
-			}); 
-			self.add(label1);
-	*/			
+		
 ///////////////////////////////////////////////////Checkin Section
 
 	var checkinView = Ti.UI.createView({
@@ -174,8 +161,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 		backgroundImage: 'images/checkin/checkin_bg.png'
 	});
 
-	
-//add button as image
+	//add button as image
 	var meButton = Ti.UI.createImageView({
 		image: '/images/checkin/checkin_me_enable.png',
 		right: 43,
@@ -225,7 +211,7 @@ CheckinMainWindow = function (_datafromrow, _containingTab){
 	checkinView.add(productButton);
 	checkinView.add(checkinButton);
 	
-	var eventId = _datafromrow.eventId;
+	var eventId = _tvprogramData.eventId;
 	var checkin = CheckinModel.checkin_isCheckin(eventId);
 	
 	//This program is check-in or not
@@ -332,14 +318,15 @@ function isPointInPoly(poly, pt)
 /////////////////////////////////////////////////////////////
 	
 	checkinButton.addEventListener('click',function(){
-		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_datafromrow);
+		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_tvprogramData);
 		
 		var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
-		var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
 		//checkinData / leaderboardData / activityData	
 		var checkinData = allActivityDataForACS[0];
 		var leaderboardData = allActivityDataForACS[1];
 		var activityData = allActivityDataForACS[2];
+		
+		var allIdDataForACS = ActivityDataIdForACS[1];	//idArray
 		// checkinId / leaderboardId / activityId
 		var checkinId = allIdDataForACS[0]; 			//local id
 		var leaderboardId = allIdDataForACS[1]; 		//acs id
@@ -350,15 +337,17 @@ function isPointInPoly(poly, pt)
 		ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 		
 		//done after adding to acs
-		PointACS.pointACS_createPoint(leaderboardData,_datafromrow.programId,'checkin');
+		PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
 		LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 		
-		myCurrentCheckinPrograms.push(_datafromrow.programId);
+		myCurrentCheckinPrograms.push(_tvprogramData.programId);
 		checkinButton.enabled = false;
 		checkinButton.image = 'images/checkin/checkin_check_checked.png';
 		chatButton.image = 'images/checkin/checkin_chat_enable.png';
 		productButton.image = 'images/checkin/checkin_products_enable.png';
-		boardButton.image = 'images/checkin/checkin_board_enable.png';		
+		boardButton.image = 'images/checkin/checkin_board_enable.png';	
+		
+		Ti.App.fireEvent('checkinToProgram');	
 	});
 	
 	chatButton.addEventListener('touchstart',function(){
@@ -377,13 +366,15 @@ function isPointInPoly(poly, pt)
 		curTabGroup.setActiveTab(4)
 	});
 
-//TODO: make this update to leaderboard and else!!
+	//TODO: make this update to leaderboard and else!!
 	function update1checkinCallBack(e) {
+		var num = TVProgram.TVProgramModel_countCheckins(_tvprogramData.eventId);
+		
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
-		var num = TVProgram.TVProgramModel_countCheckins(_datafromrow.programId);
-		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_datafromrow.programId,{numCheckin:num});
 		BadgeCondition.badgeCondition_check();
+		
+		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');
 		Ti.App.fireEvent('LeaderDbUpdated');
 	};
@@ -398,11 +389,11 @@ function isPointInPoly(poly, pt)
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener('update1checkin', update1checkinCallBack);
 		Ti.App.removeEventListener('update1activity',update1activityCallBack);
+		Ti.App.removeEventListener('checkinToProgram');
 	});
 
 	self.showNavBar();
 
 	return self;
-	
 }
 module.exports = CheckinMainWindow;

@@ -4,9 +4,13 @@
  * 		3. get badge	(+5)
  */
 exports.updateActivity_myDatabase = function(_type,_act){
+	var BadgeCondition = require('helpers/badgeCondition'); //checking condition to add badge
+	var CheckinModel = require('model/checkin');
+	var PointModel = require('model/point');
+	var ActivityModel = require('model/activity');  		
+	
 	var id = acs.getUserId();
 	var name = acs.getUserLoggedIn().first_name + ' '+ acs.getUserLoggedIn().last_name;
-	var BadgeCondition = require('helpers/badgeCondition'); //checking condition to add badge
 	var _point;
 	var	resultArray = [];
 	var idArray = [];
@@ -16,9 +20,8 @@ exports.updateActivity_myDatabase = function(_type,_act){
 	  		Ti.API.info("update type:"+_type);
 	  		_point = 5;
 // 1. update checkin / activity data	
-	  		var CheckinModel = require('model/checkin');
 	  		var checkinData = {
-	  			event_id: _act.programId,
+	  			event_id: _act.eventId,
 	  			user_id: id,
 				score: _point
 			};
@@ -32,7 +35,7 @@ exports.updateActivity_myDatabase = function(_type,_act){
 				user_id: id,
 				targetedUserID: id,
 				category: _type,
-				targetedObjectID: _act.programId,
+				targetedObjectID: _act.eventId,
 				additionalData: _act.programTitle,
 			};
 
@@ -62,9 +65,7 @@ exports.updateActivity_myDatabase = function(_type,_act){
 		};
 	};
 
-	var PointModel = require('model/point');
-	var ActivityModel = require('model/activity');
-// 2. update leaderboard
+	// 2. update leaderboard
 	var leaderboardData = {
 		user_id: id,
 		name: name,
@@ -76,12 +77,12 @@ exports.updateActivity_myDatabase = function(_type,_act){
 	leaderboardData.point = Number(leaderboard[1]);
 	idArray.push(leaderboardACSid);
 	resultArray.push(leaderboardData);
-// 3. update activity
+	
+	// 3. update activity
 	activityId = ActivityModel.activityModel_create(activityData);
 	idArray.push(activityId);
 	resultArray.push(activityData);
 
-	//alert('update activity: create local database');
 	var returnArray = [];
 	returnArray.push(resultArray);
 	returnArray.push(idArray);

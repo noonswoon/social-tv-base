@@ -1,14 +1,12 @@
 Cs_PopularWindowTableViewRow = function(_curTVProgram){	
 	var TVProgram = require('model/tvprogram');
 	var row = Ti.UI.createTableViewRow({
-		height: 121,
-		backgroundGradient: {
-       		type: 'linear',
+		height: 121
+	});
+	row.backgroundGradient = { type: 'linear',
        		startPoint: { x: '0%', y: '0%' },
        		endPoint: { x: '0%', y: '100%' },
-       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ]
-    	} 
-	});
+       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ] };
 	
 	var detailButton = Ti.UI.createButton({
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,

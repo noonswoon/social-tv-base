@@ -12,7 +12,7 @@ function ChatMainWindow(_program) {
 	// Returns an Object with Titanium Window Inside
 	//
 	var pubnub_chat_window = Ti.App.Chat({
-	    "chat-room" : 'my-random-conversation',//_program.programTitle,
+	    "chat-room" : _program.programTitle,
 	    "window"    : {
 			backgroundColor:'transparent'
 	    }

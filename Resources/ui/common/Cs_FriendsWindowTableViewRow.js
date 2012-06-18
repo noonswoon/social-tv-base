@@ -6,9 +6,10 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 	}	
 
 	var row = Ti.UI.createTableViewRow({
-		backgroundGradient: {type: 'linear',startPoint: { x: '0%', y: '0%' },endPoint: { x: '0%', y: '100%' },colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 }]},
-    	height: 150
+		height: 150
 	});
+	row.backgroundGradient = {type: 'linear',startPoint: { x: '0%', y: '0%' },endPoint: { x: '0%', y: '100%' },colors: [ { color: '#fff', offset: 0.0}, { color: '#D1CBCD', offset: 1.0 }]};
+    	
 
 //Program
 	var programCheckin = Ti.UI.createLabel({

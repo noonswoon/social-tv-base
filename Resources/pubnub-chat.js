@@ -50,7 +50,7 @@ Ti.App.Chat = function(setup) {
         channel  : setup['chat-room'],
         connect  : function() {
             Ti.API.info("connecting...");
-            var newChatRow = new ChatMessageTableViewRow("Welcome to Chatterbox "+setup['chat-room']+" Chat Room. Please help keep our place clean.",adminUserObject,false);
+            var newChatRow = new ChatMessageTableViewRow("Welcome to Chatterbox "+setup['chat-room']+" Chat Room. Please keep our place clean.",adminUserObject,false);
            	chatMessagesTableView.appendRow(newChatRow);
             //textArea.recieveMessage("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
         },

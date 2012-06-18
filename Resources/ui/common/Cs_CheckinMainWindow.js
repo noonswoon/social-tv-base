@@ -35,13 +35,12 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var headerView = Ti.UI.createView({
 		top: 0,
 		height: 121,
-		backgroundGradient: {
-       		type: 'linear',
+	});
+	headerView.backgroundGradient = { type: 'linear',
        		startPoint: { x: '0%', y: '0%' },
        		endPoint: { x: '0%', y: '100%' },
-       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ]
-    	} 
-	});
+       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ] };
+       		 
 	self.add(headerView);
 
 ////////////////////////////////Header detail

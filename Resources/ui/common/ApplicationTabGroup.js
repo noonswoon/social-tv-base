@@ -11,22 +11,22 @@ function ApplicationTabGroup() {
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
-    var areTabsDiabled = true;
+    var areTabsDiabled = false;
     
-	var programDummy = {
-		programId: '4fb3618c0020442a2b0186c0', 
-		programTitle:'Khun Suuk', 
-		programSubname:'Fighting!',
-		programImage: 'dummy.png',
-		programChannel: 'C3',
+	var programPublic = {
+		programId: 'CTB_PUBLIC', 
+		programTitle:'Public', 
+		programSubname:'',
+		programImage: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',
+		programChannel: 'CTB',
 		programNumCheckin: 25345
 	};
 	
 	var myUserId = acs.getUserId();
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ChatMainWindow(programDummy);
-	var messageboardwin = new MessageboardMainWindow(7);		
+	var chatwin = new ChatMainWindow(programPublic);
+	var messageboardwin = new MessageboardMainWindow("CTB_PUBLIC");		
 	var productwin = new ProductMainWindow();
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
@@ -108,7 +108,8 @@ function ApplicationTabGroup() {
 	});
 	
 	//////////////////////
-	self.add(disableTabsView);
+	//self.add(disableTabsView);
+	
 	self.addTab(selectionTab);
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  

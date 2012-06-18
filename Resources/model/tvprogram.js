@@ -1,7 +1,7 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, photo TEXT, start_time TEXT, recurring_until TEXT, number_checkins INTEGER, channel_id TEXT, program_id TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, subname TEXT, photo TEXT, start_time TEXT, recurring_until TEXT, number_checkins INTEGER, channel_id TEXT, program_id TEXT, program_type TEXT);');
 db.close();
 
 exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
@@ -11,8 +11,11 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 	db.execute('DELETE FROM tvprograms');
 	
 	for(var i =0;i<_allPrograms.length;i++) {
-		db.execute('INSERT INTO tvprograms(id,name,photo,start_time,recurring_until,channel_id,program_id) VALUES(?,?,?,?,?,?,?)',
-		_allPrograms[i].id,_allPrograms[i].name,_allPrograms[i].photo,_allPrograms[i].start_time,_allPrograms[i].recurring_until,_allPrograms[i].channel_id,_allPrograms[i].program_id);
+		Ti.API.info('subname: '+_allPrograms[i].subname+', cn id: '+_allPrograms[i].channel_id+', pgId: '+_allPrograms[i].program_id+', programType: '+_allPrograms[i].program_type);
+		db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type) VALUES(?,?,?,?,?,?,?,?,?)',
+			_allPrograms[i].id, _allPrograms[i].name, _allPrograms[i].subname, _allPrograms[i].photo,
+			_allPrograms[i].start_time, _allPrograms[i].recurring_until, _allPrograms[i].channel_id,
+			_allPrograms[i].program_id, _allPrograms[i].program_type);
 	}
 	db.close();
 };
@@ -44,12 +47,14 @@ exports.TVProgramModel_fetchPrograms = function() {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
 			name: result.fieldByName('name'),
+			subname: result.fieldByName('subname'),
 			photo: result.fieldByName('photo'),
 			start_time: result.fieldByName('start_time'),
 			recurring_until: result.fieldByName('recurring_until'),
 			number_checkins: result.fieldByName('number_checkins'),
 			channel_id: result.fieldByName('channel_id'),
 			program_id: result.fieldByName('program_id'),
+			program_type: result.fieldByName('program_type'),
 			hasChild:true
 		});
 		result.next();
@@ -68,12 +73,14 @@ exports.TVProgramModel_fetchProgramsWithProgramId = function(_programId) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
 			name: result.fieldByName('name'),
+			subname: result.fieldByName('subname'),
 			photo: result.fieldByName('photo'),
 			start_time: result.fieldByName('start_time'),
 			recurring_until: result.fieldByName('recurring_until'),
 			number_checkins: result.fieldByName('number_checkins'),
 			channel_id: result.fieldByName('channel_id'),
 			program_id: result.fieldByName('program_id'),
+			program_type: result.fieldByName('program_type'),
 			hasChild:true
 		});
 		result.next();
@@ -123,12 +130,14 @@ exports.TVProgramModel_fetchPopularPrograms = function() {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
 			name: result.fieldByName('name'),
+			subname: result.fieldByName('subname'),
 			photo: result.fieldByName('photo'),
 			start_time: result.fieldByName('start_time'),
 			recurring_until: result.fieldByName('recurring_until'),
 			number_checkins: result.fieldByName('number_checkins'),
 			channel_id: result.fieldByName('channel_id'),
 			program_id: result.fieldByName('program_id'),
+			program_type: result.fieldByName('program_type'),
 			hasChild:true
 		});
 		// Ti.API.info('Name: '+result.fieldByName('name'));
@@ -163,12 +172,14 @@ exports.TVProgramModel_fetchShowtimeSelection = function(_start){
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
 			name: result.fieldByName('name'),
+			subname: result.fieldByName('subname'),
 			photo: result.fieldByName('photo'),
 			start_time: result.fieldByName('start_time'),
 			recurring_until: result.fieldByName('recurring_until'),
 			number_checkins: result.fieldByName('number_checkins'),
 			channel_id: result.fieldByName('channel_id'),
 			program_id: result.fieldByName('program_id'),
+			program_type: result.fieldByName('program_type'),
 			hasChild:true
 		});
 		Ti.API.info('Name: '+result.fieldByName('name'));

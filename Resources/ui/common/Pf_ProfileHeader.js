@@ -42,12 +42,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 
 	var headerView = Ti.UI.createView({
 	});
-	headerView.backgroundGradient = {
-	type: 'linear',
-	startPoint: { x: '0%', y: '0%' },
-	endPoint: { x: '0%', y: '100%' },
-	colors: [{ color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 }]
-	};
+	headerView.backgroundGradient = { type: 'linear', startPoint: { x: '0%', y: '0%' }, endPoint: { x: '0%', y: '100%' },
+									  colors: [{ color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 }] };
 
 	var profilePicture = Ti.UI.createImageView({
 		image: acs.getUserImageNormalOfFbId(_userProfile.fb_id),

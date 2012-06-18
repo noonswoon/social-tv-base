@@ -4,13 +4,12 @@ var ProfileDetailView = function(_parent,_userProfile,_status){
 	
 ///MENU//////////////////////////////////////////////////////////
 	var profileMenu = Ti.UI.createView({
-		height: 40,
-		backgroundGradient: {
-			type: 'linear',
-        	startPoint: { x: '0%', y: '0%' },
-        	endPoint: { x: '0%', y: '100%' },
-        	colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]},
-		});
+		height: 40
+	});
+	profileMenu.backgroundGradient = { 	type: 'linear',
+        								startPoint: { x: '0%', y: '0%' },
+        								endPoint: { x: '0%', y: '100%' },
+        								colors: [ { color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 } ]};
 		
 	var profileTab = Titanium.UI.iOS.createTabbedBar({
 		labels:['Stats', 'Activity', 'Badges', 'Rewards'],
@@ -72,12 +71,8 @@ var ProfileDetailView = function(_parent,_userProfile,_status){
 	var addFriendView = Ti.UI.createView({
 		height: 352,
 	});
-	addFriendView.backgroundGradient = {
-	type: 'linear',
-	startPoint: { x: '0%', y: '0%' },
-	endPoint: { x: '0%', y: '100%' },
-	colors: [{ color: '#c0c0c0', offset: 0.0},{ color: '#fffefd', offset: 0.00005 }, { color: '#fffefd', offset: 1.0 }]
-	};
+	addFriendView.backgroundGradient = { type: 'linear', startPoint: { x: '0%', y: '0%' }, endPoint: { x: '0%', y: '100%' },
+										 colors: [{ color: '#c0c0c0', offset: 0.0},{ color: '#fffefd', offset: 0.00005 }, { color: '#fffefd', offset: 1.0 }]};
 	
 	 var addFriendButton = Ti.UI.createButton({
 		backgroundImage: 'images/button/button_addFriend.png',

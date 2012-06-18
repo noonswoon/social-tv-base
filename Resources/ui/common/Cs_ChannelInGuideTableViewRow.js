@@ -2,13 +2,11 @@ ChannelInGuideTableViewRow = function(_program){
 	
 	var row = Ti.UI.createTableViewRow({
 		height: 121,
-		backgroundGradient: {
-       		type: 'linear',
+	});
+	row.backgroundGradient = { type: 'linear',
        		startPoint: { x: '0%', y: '0%' },
        		endPoint: { x: '0%', y: '100%' },
-       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ]
-    	} 
-	});
+       		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ] }; 
 	
 	var timeStartFormat = moment(_program.start_time, "YYYY-MM-DDTHH:mm:ss z");
 	var timeEndFormat = moment(_program.recurring_until, "YYYY-MM-DDTHH:mm:ss z");

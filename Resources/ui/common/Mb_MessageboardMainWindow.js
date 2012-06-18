@@ -11,7 +11,7 @@ function MessageboardMainWindow(_programId) {
 	var CacheHelper = require('helpers/cacheHelper');
 
 	//OBJECTS INSTANTIATION
-	var messageboardHeader = new MessageboardHeader('Reya','Famous Lakorn');	
+	var messageboardHeader = new MessageboardHeader('Public Board','Chatterbox Public Board');	
 	var addWindow = new MessageboardAddWindow(_programId);	
 	var usingPull2Refresh = false;
 	var hasLoadedPicker = false;

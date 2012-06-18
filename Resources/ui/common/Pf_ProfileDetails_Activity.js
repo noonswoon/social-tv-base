@@ -3,112 +3,21 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
 	var activityModel = require('model/activity');
-	//var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	var FriendsMainWindow = require('ui/common/pf_friendsMainWindow');
+	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');	
+	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
+	//var FriendsMainWindow = require('ui/common/pf_friendsMainWindow');
 	var curId = _userProfile.id;
 	var activity = [];
-//	var request =[];
-//	var requestUsers = []; //data to show in the request table view
 	var name;
 	
-	if(_status==="me") name = "You"
-	else name = _userProfile.first_name + ' ' + _userProfile.last_name;
+	if(_status==="me") name = "You";
+	else name = _userProfile.first_name; //+ ' ' + _userProfile.last_name;
 	
 	var activityView = Ti.UI.createView({
 		top: 10,
 		height: 'auto',
 		bottom: 10	
 	});
-	
-	// var approveRequest = function(_response){
-		// alert('You have approved the request');
-		// Ti.API.info(_response);
-		// FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
-	// };
-// 		
-	// var deleteRequestData = function(e){
-		// requestActivity.deleteRow(e.index);
-		// request.splice(e.index,1);
-		// requestUsers.splice(e.index,1);
-		// friendRequests.splice(e.index,1);
-		// if(requestUsers.length!==0){
-			// requestActivity.height = (requestUsers.length)*45;
-			// userActivityView.top = requestActivity.height+ 30;
-		// } else {
-			// userActivityView.top = 0;
-			// userRequestView.remove(requestActivity);
-			// userRequestView.remove(requestLabel);
-			// activityView.remove(userRequestView);
-		// }; 
-// 		
-	// }
-// 	
-	// var createRequestFriends = function(){
-		// for(var i=0; i<requestUsers.length; i++){
-			// var fb_id = requestUsers[i].fb_id;
-			// var requestRow = Ti.UI.createTableViewRow({
-				// selectedBackgroundColor: '#fff',
-				// height: 45
-			// });
-			// requestRow.user_id = requestUsers[i].friend_id;
-// 			
-			// var requestPicture = Ti.UI.createImageView({
-				// image: profileDataImg,
-				// height: 35,
-				// width: 35,
-				// borderRadius: 5,
-				// left: 5
-			// });
-			// requestPicture.image = acs.getUserImageNormalOfFbId(fb_id);
-// 	
-			// var requestInfo = Ti.UI.createLabel({
-					// font: {fontSize: 13, fontWeight: 'bold'},
-					// color: '#42a2ca',
-					// left: 45,
-					// height:40,
-					// width:120,
-					// text: requestUsers[i].first_name+' '+ requestUsers[i].last_name
-			// });
-			// var acceptButton = Ti.UI.createButton({
-				// width: 66,
-				// height: 30,
-				// right: 10,
-				// backgroundImage: 'images/button/button_accept.png',
-			// });
-			// acceptButton.myIndex = i;
-			// acceptButton.addEventListener('click',function(e){
-				// var index = e.source.myIndex;
-				// alert("Accept "+requestUsers[index].first_name+' '+ requestUsers[index].last_name + ' as your friend.');
-				// FriendsModel.friend_create(requestUsers[index],requestUsers[index].fb_id);
-				// FriendACS.approveFriend(requestUsers[index].friend_id,approveRequest);
-			// });
-// 
-			// requestRow.add(requestPicture);
-			// requestRow.add(requestInfo);
-			// requestRow.add(acceptButton);
-			// request[i] = requestRow;
-		// }
-		// requestActivity.height = (requestUsers.length*45);
-		// requestActivity.data = request;
-		// if(requestUsers.length){
-			// userActivityView.top = requestActivity.height+30;
-			// userRequestView.add(requestActivity);
-			// userRequestView.add(requestLabel);
-			// activityView.add(userRequestView);			
-		// };
-		// activityView.height = 'auto';
-// 		
-		// requestActivity.addEventListener('click',function(e){
-			// if(e.source.title ==="Accept"){
-				// deleteRequestData(e);
-			// } else if(e.source.title !=="Accept") {
-				// Ti.API.info('open new profile main : ' + e.rowData.user_id);
-				// _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"stranger"));
-			// }
-// 	
-		// });
-	// };
-// 
 
 //FRIEND REQUEST//////////////////////////////////////////////
 	var requestNoticeView = Ti.UI.createView({
@@ -136,9 +45,7 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 		font: {fontSize: 13, fontWeight: 'bold'}
 	});
 	
-	
 	var createNotice = function(){
-		//alert('create friend request notice: '+friendRequests.length);
 		if (friendRequests.length !== 0){
 			requestLabel.text = 'You have got '+friendRequests.length+' friend request(s).',
 			requestNoticeView.add(requestLabel);
@@ -161,7 +68,6 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 		 }
 		 createNotice();
 	 };
-// 
 	 Ti.App.addEventListener('requestsLoaded',requestsLoadedCallBack);
 
 //ACTIVITY////////////////////////////////////////////////////
@@ -179,8 +85,8 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 		var numLoops = 5;
 		if(myActivity.length < numLoops) numLoops = myActivity.length;
 		if(myActivity.length!==0){
-		ActivityLabel.visible = true;
-		userActivity.visible = true;
+			ActivityLabel.visible = true;
+			userActivity.visible = true;
 		}
 		for(var i =0;i< numLoops;i++){
 			var userActivityRow = Ti.UI.createTableViewRow({
@@ -189,6 +95,9 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 				height: 55,
 				selectedBackgroundColor: '#fff'
 			});
+			userActivityRow.target_id = myActivity[i].targetedObjectID;
+			userActivityRow.category = myActivity[i].category;
+			
 			var activityType = Ti.UI.createImageView({
 				left: 10,
 			});
@@ -209,17 +118,25 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 				});	
 
 			if(myActivity[i].category==='addfriend'){
+				if(name ==="You") _name = "you";
+				else _name = name;
 				activityType.image= 'images/icon/act_add_color.png'
-				activityInfo.text = myActivity[i].additionalData + ' sent you a friend request';
-			} else 
+				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' you a friend request';
+			} else
+			if(myActivity[i].category==='approvefriend'){
+				if(name ==="You") _name = "you";
+				else _name = name;
+				activityType.image= 'images/icon/act_add_color.png';
+				activityInfo.text = myActivity[i].additionalData + ' approved '+_name+' as a friend';
+			} else
 			if(myActivity[i].category==='post'){
 				activityType.image= 'images/icon/act_chat_color.png'
 			} else
 			if(myActivity[i].category==='getbadge'){
 				activityType.image= 'images/icon/act_badge_color.png';
 				activityInfo.text = name + ' have got a new badge: ' + myActivity[i].additionalData;
-			}
-			else if(myActivity[i].category==='checkin'){
+			} else
+			if(myActivity[i].category==='checkin'){
 				activityType.image= 'images/icon/act_tv_color.png';
 				activityInfo.text = name + ' have checked in to ' + myActivity[i].additionalData;
 			}
@@ -249,6 +166,25 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 		top: 30,
 		visible: false
 	});
+
+	userActivity.addEventListener('click',function(e){
+		var userStatus = checkFriend();
+		//add friend / approve friend
+		if(e.rowData.target_id !== acs.getUserId() &&(e.rowData.category ==='addfriend' || e.rowData.category ==='approvefriend')) {
+			_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.target_id,userStatus));
+		}	
+	});
+	
+	var checkFriend = function(){
+		var isFriend = "friend";
+ 		for(i=0;i<friendRequests.length;i++){
+ 			if (friendRequests[i].friend_id) {
+ 				isFriend = "stranger";
+ 				break;
+ 			}
+ 		}
+ 		return isFriend;
+	}
 	
 	var userRequestView = Ti.UI.createView({
 		height: 60,

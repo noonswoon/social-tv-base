@@ -31,7 +31,6 @@ FriendsMainView = function(_parentWindow,_window){
 	});
 
 	friendsTable.addEventListener('click',function(e){
-		alert(e);
 		if(String(e.source) ==="[object TiUIButton]") {
 			Ti.API.info('approve friend from friendsMainwindow');
 			friendsTable.deleteRow(e.index);

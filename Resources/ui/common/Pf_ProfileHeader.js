@@ -197,30 +197,31 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		bottom: 10
 	}); 
  
-  	var createAddFriendActivity = function(){
- 		var addFriendActivityData = {
+  	var createFriendActivity = function(_category){
+ 		var friendActivityData = {
  			user: acs.getUserId(),
  			targetedUserID: _userProfile.id,
-			category: "addfriend",
+			category: _category,
 			targetedObjectID: acs.getUserId(),
 			additionalData: currentUser.first_name + ' '+ currentUser.last_name,
  		};
- 		alert('activity data');
- 		return  addFriendActivityData;
+ 		return  friendActivityData;
  	}		
+
  	var addFriend = function(isRequest,i) {
   		Ti.API.info('addFriend: isRequest = '+ isRequest);
  		//condition 1: no request from this user
  		if(!isRequest) {
- 			//TODO: create activity here!
-		 	var addFriendActivityData = createAddFriendActivity();
+		 	var addFriendActivityData = createFriendActivity("addfriend");
 		 	FriendACS.addFriend(curId,sendRequest);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
  			} 			
  		//condition 2: there's a request from this guy	
  		else {
  			alert(_userProfile.first_name+' '+ _userProfile.last_name +' has request you as a friend. Accept him/her?');
+			var approveFriendActivityData = createFriendActivity("approvefriend");
 			friendRequests.splice(i,1);
+ 			ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
 			FriendACS.approveFriend(curId,approveRequest);
 			Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
 		}	
@@ -250,7 +251,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
 		reloadView();
 	}
-	
 	
 	//MANAGE VIEW FOR HEADER
 	//POSSIBLE STATUS = me / friend / stranger
@@ -290,25 +290,3 @@ return headerView;
 }
 
 module.exports = ProfileHeaderView;
-
-/*		var socialNet = Ti.UI.createView({
-			top: 40,
-			left: 120,
-			width: 60,
-			height: 70,
-		});
-		fbButton = Ti.UI.createImageView({
-			image: 'images/icon/facebook-icon_24x24.png',
-			borderRadius: 7,
-			bottom:0,
-			left: 4
-		});			
-		twButton = Ti.UI.createImageView({
-			image: 'images/icon/twitter-icon_24x24.png',
-			borderRadius: 7,
-			bottom: 0,
-			right: 4			
-		});*/		
-	//socialNet.add(fbButton);
-	//socialNet.add(twButton);
-	//headerView.add(socialNet);

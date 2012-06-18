@@ -33,7 +33,6 @@ ProductMainWindowTableViewRow = function(_parent){
 	row._setProductOnLeftColumn = function(_leftProduct){
 		productLeftImage.image = _leftProduct.product_image;
 		productLeftImage.addEventListener('click',function(){
-			alert('This is '+_leftProduct.product_name);
 			var productBuyWindow = new ProductBuyWindow(_leftProduct);
 			_parent.containingTab.open(productBuyWindow);	
 		});

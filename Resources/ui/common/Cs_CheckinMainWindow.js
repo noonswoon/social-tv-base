@@ -158,7 +158,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		left:0,
 		height: 265,
 		width:320,
-		backgroundImage: 'images/checkin/checkin_bg.png'
+		backgroundImage: 'images/checkinBG.png'
 	});
 
 	//add button as image
@@ -201,15 +201,23 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		width:85,
 		height:85,
 	});
+	
+	var remoteDefault = Ti.UI.createImageView({
+		image: 'images/checkin/uncheckin_remote.png',
+		width: 203,
+		height: 205,
+		top: 20
+	});
 
 	
 	//Add UI
 	self.add(checkinView);
-	checkinView.add(meButton);
-	checkinView.add(chatButton);
-	checkinView.add(boardButton);
-	checkinView.add(productButton);
-	checkinView.add(checkinButton);
+	// checkinView.add(meButton);
+	// checkinView.add(chatButton);
+	// checkinView.add(boardButton);
+	// checkinView.add(productButton);
+	// checkinView.add(checkinButton);
+	checkinView.add(remoteDefault);
 	
 	var eventId = _tvprogramData.eventId;
 	var checkin = CheckinModel.checkin_isCheckin(eventId);
@@ -228,93 +236,97 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	}
 	
 //////////////////////////////////////////////////////////////	
+	// remoteDefault.addEventListener('click',function(ev){
+		// var localPoint = {x:ev.x, y:ev.y};
+		// alert("localPoint: " + localPoint.x + " " + localPoint.y);
+	// });
+
+//////////////////////////////////////////////////////////////
 function isPointInPoly(poly, pt)
 {
     for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i) 
         ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y)) && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x) && (c = !c);
     return c;
 }
-	var boardPoint = [
-		{x: 81, y:53},
-		{x: 161, y:18},
-		{x: 242, y:53},
-		{x: 191, y:105},
-		{x: 158, y:95},
-		{x: 131, y:105}
-	];			
-	var mePoint = [
-		{x: 192, y:108},
-		{x: 243, y:55},
-		{x: 277, y:136},
-		{x: 246, y:214},
-		{x: 192, y:162},
-		{x: 203, y:134}
-	];
-	var productPoint = [
-		{x: 189, y:163},
-		{x: 243, y:216},
-		{x: 161, y:243},
-		{x: 81, y:218},
-		{x: 130, y:165},
-		{x: 162, y:175}
-	];
-	var chatPoint = [
-		{x: 129, y:108},
-		{x:	77, y:54},
-		{x: 43, y:136},
-		{x: 76, y:217},
-		{x: 132, y:162},
-		{x:120, y:134}
-	];		
-	
-	self.addEventListener('touchstart',function(e){
-		if(checkinButton.enabled===true){
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
-				alert('Check in to activate the control');
-			}
-			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				meButton.image = 'images/checkin/checkin_me_mouseover.png';
-			}
-		} else {
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
-				boardButton.image = 'images/checkin/checkin_board_mouseover.png';
-			}
-			if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				meButton.image = 'images/checkin/checkin_me_mouseover.png';
-			}
-			if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
-				productButton.image = 'images/checkin/checkin_products_mouseover.png';
-			}
-			if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
-				chatButton.image = 'images/checkin/checkin_chat_mouseover.png';
-			}				
-		}
-	});
 
-	self.addEventListener('touchend',function(e)
-	{
-		if(checkinButton.enabled===true){
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
-				//alert('Check in to activate the control');
-			}
-			else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				meButton.image = 'images/checkin/checkin_me_enable.png';
-			}
-		} else {		
-			if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
-				boardButton.image = 'images/checkin/checkin_board_enable.png';
-			}
-			if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				meButton.image = 'images/checkin/checkin_me_enable.png';
-			}
-			if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
-				productButton.image = 'images/checkin/checkin_products_enable.png';
-			}
-			if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
-				chatButton.image = 'images/checkin/checkin_chat_enable.png';
-			}				
+	var checkinPoint = [
+		{x: 77.5, y: 80},
+		{x: 68.5, y: 102},
+		{x: 77.5, y: 127},
+		{x: 100.5, y: 138},
+		{x: 127, y: 129},
+		{x: 136, y: 103},
+		{x: 127, y:80},
+		{x: 100.5, y:69}
+	]; 
+	
+	var mePoint = [
+		{X: 172.5, y:35},
+		{x: 139.5, y:71},
+		{x: 139.5, y:135},
+		{x: 172, y:171},	
+		{x: 200, y:103},
+	];
+
+
+	self.addEventListener('click',function(e){
+		if(isPointInPoly(checkinPoint, {x: e.x, y: e.y})){
+			remoteDefault.image = 'images/checkin/checkin_remote.png';
+		}
+		else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
+			remoteDefault.image = 'images/checkin/me-hi_remote.png';
 		}
 	});	
+		
+	
+	// self.addEventListener('touchstart',function(e){
+		// if(checkinButton.enabled===true){
+			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
+				// alert('Check in to activate the control');
+			// }
+			// else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
+				// meButton.image = 'images/checkin/me-hi_remote.png';
+			// }
+		// } else {
+			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
+				// boardButton.image = 'images/checkin/checkin_board_mouseover.png';
+			// }
+			// if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
+				// meButton.image = 'images/checkin/checkin_me_mouseover.png';
+			// }
+			// if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
+				// productButton.image = 'images/checkin/checkin_products_mouseover.png';
+			// }
+			// if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
+				// chatButton.image = 'images/checkin/checkin_chat_mouseover.png';
+			// }				
+		// }
+	// });
+// 
+	// self.addEventListener('touchend',function(e)
+	// {
+		// if(checkinButton.enabled===true){
+			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
+				// //alert('Check in to activate the control');
+			// }
+			// else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
+				// meButton.image = 'images/checkin/checkin_me_enable.png';
+			// }
+		// } else {		
+			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
+				// boardButton.image = 'images/checkin/checkin_board_enable.png';
+			// }
+			// if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
+				// meButton.image = 'images/checkin/checkin_me_enable.png';
+			// }
+			// if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
+				// productButton.image = 'images/checkin/checkin_products_enable.png';
+			// }
+			// if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
+				// chatButton.image = 'images/checkin/checkin_chat_enable.png';
+			// }				
+		// }
+	// });	
 /////////////////////////////////////////////////////////////
 	
 	checkinButton.addEventListener('click',function(){

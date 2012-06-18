@@ -34,7 +34,7 @@ function PopularWindow(_parent) {
 	timeSelectionView.add(timeSelection);
 	
 	var programListTable = Ti.UI.createTableView({
-		top: 35
+		top: 44
 	});
 
 	
@@ -124,6 +124,14 @@ function PopularWindow(_parent) {
 	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
 		usingPull2Refresh = true;
 		TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+	}, {
+		backgroundColor: '#959595', 
+		statusLabel: {
+			color: 'white'
+		},
+		updateLabel: {
+			color: 'white'
+		}
 	});	
 	
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();

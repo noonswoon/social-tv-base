@@ -4,6 +4,7 @@
 Ti.include('./pubnub.js');
 
 var TVProgram = require('model/tvprogram');
+var hasLoadedPicker = false;
 
 // ----------------------------------
 // INIT PUBNUB
@@ -177,26 +178,27 @@ Ti.App.Chat = function(setup) {
 		top:43
 	});
 	picker.selectionIndicator=true;
-
-	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-		var programId = myCurrentCheckinPrograms[i];
-		var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-		var programName = programInfo[0].name;
-		var row = Ti.UI.createPickerRow();
-		var programNameInRow = Ti.UI.createLabel({
-			text: programName
-		});
-		row.add(programNameInRow);
-		picker.add(row);
-	}
-
 	picker_view.add(toolbar);
-	picker_view.add(picker);
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 
 	selectProgramButton.addEventListener('click',function() {
+		if(!hasLoadedPicker) {
+			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+				var programId = myCurrentCheckinPrograms[i];
+				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+				var programName = programInfo[0].name;
+				var row = Ti.UI.createPickerRow();
+				var programNameInRow = Ti.UI.createLabel({
+					text: programName
+				});
+				row.add(programNameInRow);
+				picker.add(row);
+			}
+			picker_view.add(picker);
+			hasLoadedPicker = true;
+		}
 		picker_view.animate(slide_in);
 		chat_window.add(opacityView);
 	});

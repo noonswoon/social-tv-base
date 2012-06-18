@@ -23,27 +23,47 @@ ProductBuyWindow = function(_product){
    		self.close();
 	});
 	
+	var productImageView = Ti.UI.createView({
+		top: 20,
+		width: 241,
+		height: 237
+	});
+	
 	var productImage = Ti.UI.createImageView({
 		image: _product.product_image,
-		top: 20,
+		top: 0,
 		width: 181,
 		height: 237,
 		borderColor: 'white',
 		borderWidth: 5
 	});
+	productImageView.add(productImage);
+	
+	var priceView = Ti.UI.createView({
+		top: 10,
+		right: 0,
+		width: 62,
+		height: 62,
+		backgroundImage: 'images/product/price.png'
+	});
+	productImageView.add(priceView);
+	
+	var price = Ti.UI.createLabel({
+		top: 20,
+		right: 5,
+		text: _product.price,
+		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' },
+		shadowColor:'#666666',
+		shadowOffset:{x:1,y:1},
+		color: 'white'
+	});
+	priceView.add(price);
 	
 	var barOfProduct = Ti.UI.createImageView({
 		image: 'images/product/barofproduct.png',
 		top: 254
 	});
-	
-	var buyButton = Ti.UI.createButton({
-		top: 300,
-		backgroundImage: 'images/product/buynow.png',
-		width: 149,
-		height: 35
-	});
-	
+
 	var productDetailView = Ti.UI.createView({
 		top:300,
 		bottom: 10,
@@ -88,8 +108,9 @@ ProductBuyWindow = function(_product){
 	productDetailView.add(productContact);
 	
 	self.add(scrollView);
-	scrollView.add(barOfProduct);
-	scrollView.add(productImage);
+	scrollView.add(productImageView);
+	// scrollView.add(barOfProduct);
+	// scrollView.add(productImage);
 	scrollView.add(productDetailView);
 	
 	return self;

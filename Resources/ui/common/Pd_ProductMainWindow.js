@@ -1,4 +1,4 @@
-function ProductMainWindow() {
+function ProductMainWindow(_programId) {
 	
 	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
 	var ProductACS = require('acs/productACS');
@@ -8,6 +8,9 @@ function ProductMainWindow() {
 	
 	var dataForTab = [];
 	var hasLoadedPicker = false;
+	
+	var infoForName = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
+	
 	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
@@ -41,6 +44,14 @@ function ProductMainWindow() {
 		image: 'images/toolbarbutton.png'
 	});
 	productSelectProgramToolbar.add(callPicker);
+	
+	var selectProgramLabel = Ti.UI.createLabel({
+		text: infoForName[0].name,
+		left: 10,
+		width: 'auto',
+		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
+	});	
+	productSelectProgramToolbar.add(selectProgramLabel);
 
 	var productTableView = Ti.UI.createTableView({
 		top: 44,
@@ -123,15 +134,19 @@ function ProductMainWindow() {
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
 		
+		selectProgramLabel.text = picker.getSelectedRow(0).title;
 		var idOfProgram = picker.getSelectedRow(0).progId;
-		var productOfProgram = ProductACS.productACS_fetchedAllProducts(idOfProgram);
-		showPreloader(self,'Loading...');
+		ProductACS.productACS_fetchedAllProducts(idOfProgram);
 	});
 
 	self.add(picker_view);
 ///////////////////////////////////////////////////////////////
 
+	ProductACS.productACS_fetchedAllProducts(_programId);
+
 	Ti.App.addEventListener('fetchedAllProduct', function(e){
+		
+		
 		var viewRowData = [];
 		var totalProducts = e.fetchedAllProduct.length;
 		var numRows = Math.ceil(totalProducts/2);
@@ -154,7 +169,6 @@ function ProductMainWindow() {
 		}
 
 		productTableView.setData(viewRowData);
-		hidePreloader(self);
 	});	
 
 	return self;

@@ -44,7 +44,8 @@ ProductMainWindowTableViewRow = function(_parent){
 		productRightImage.borderWidth = 5;
 		
 		productRightImage.addEventListener('click',function(){
-			alert('This is '+_rightProduct.product_name);
+			productBuyWindow = new ProductBuyWindow(_rightProduct);
+			_parent.containingTab.open(productBuyWindow);	
 		});
 	}
 

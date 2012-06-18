@@ -8,7 +8,9 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 	var ActivityACS = require('acs/activityACS');
 	var FriendsModel = require('model/friend');
 	var CacheHelper = require('helpers/cacheHelper');
+	var updateActivity = require('helpers/updateActivity');
 	var FriendsMainWindow = require('ui/common/pf_friendsMainWindow');
+	var currentUser = acs.getUserLoggedIn();
 	
 	//POSSIBLE STATUS = me / friend / stranger
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
@@ -34,9 +36,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 	});
 	refreshButton.addEventListener('click',function(){
 		alert('refresh');
-		// FriendACS.searchFriend(curId);
+		FriendACS.searchFriend(curId);
 		 FriendACS.showFriendsRequest();
-		// CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);
 		myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	});
 
@@ -124,7 +125,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 	});
 	
 	columnFriend.addEventListener('click',function(){
-		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow));
+		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"friend"));
 	});	
 		
 	 var columnIsFriend = Ti.UI.createView({
@@ -139,7 +140,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 	 });
 	 var columnIsFriendImage = Ti.UI.createImageView({
 	 	image: 'images/icon/checkin.png',
-		// image: 'images/icon/isFriend.png',
 		top: 10,
 	 });
 	var columnIsFriendLabel = Ti.UI.createLabel({
@@ -197,12 +197,32 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		bottom: 10
 	}); 
  
- 	var addFriend = function(isRequest) {
+  	var createAddFriendActivity = function(){
+ 		var addFriendActivityData = {
+ 			user: acs.getUserId(),
+ 			targetedUserID: _userProfile.id,
+			category: "addfriend",
+			targetedObjectID: acs.getUserId(),
+			additionalData: currentUser.first_name + ' '+ currentUser.last_name,
+ 		};
+ 		alert('activity data');
+ 		return  addFriendActivityData;
+ 	}		
+ 	var addFriend = function(isRequest,i) {
   		Ti.API.info('addFriend: isRequest = '+ isRequest);
- 		if(!isRequest) FriendACS.addFriend(curId,sendRequest);
+ 		//condition 1: no request from this user
+ 		if(!isRequest) {
+ 			//TODO: create activity here!
+		 	var addFriendActivityData = createAddFriendActivity();
+		 	FriendACS.addFriend(curId,sendRequest);
+			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
+ 			} 			
+ 		//condition 2: there's a request from this guy	
  		else {
- 			alert("Accept "+_userProfile.first_name+' '+ _userProfile.last_name + ' as your friend.');
+ 			alert(_userProfile.first_name+' '+ _userProfile.last_name +' has request you as a friend. Accept him/her?');
+			friendRequests.splice(i,1);
 			FriendACS.approveFriend(curId,approveRequest);
+			Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
 		}	
 		FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
 		_parentWindow.close();
@@ -210,14 +230,13 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
  	
  	columnAddFriend.addEventListener('click',function(){
  		var isRequest = false;
- 		//friendRequests
  		for(i=0;i<friendRequests.length;i++){
  			if (friendRequests[i].friend_id) {
  				isRequest = true;
  				break;
  			}
  		}
- 		addFriend(isRequest);
+ 		addFriend(isRequest,i);
  	});
 
  	var sendRequest = function(_response){

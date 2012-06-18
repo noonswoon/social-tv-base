@@ -74,7 +74,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('friendsACS->addFriend: Error: '+ e.error);
+	        alert('An error occured: you might already request this person or there is some problem on internet connection.');
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -92,7 +92,6 @@ exports.approveFriend = function(_userID,_callbackFn){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/approve.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
-	    	alert("approved");
 	    	//responseJSON = JSON.parse(this.responseText);
 	    	var response = _callbackFn(this.responseText);
 	    },

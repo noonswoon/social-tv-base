@@ -9,19 +9,19 @@ PopularTimeSelectionView = function(_timeIndex){
 		left:margin
 	});
 	
+	timeView.timeIndex = _timeIndex;
+	
 	if(_timeIndex < 10)
 		time = '0'+_timeIndex;
 	else time = _timeIndex.toString();
 		
 	timeView.timeLabel = Ti.UI.createLabel({
-		top: 8,
 		text: time+'.00',
 		font:{fontSize:14},
 		textAlign:'center',
 		timeIndex: this.timeIndex
 	});	
-	
-	
+
 	timeView.add(timeView.timeLabel);
 	
 	return timeView;

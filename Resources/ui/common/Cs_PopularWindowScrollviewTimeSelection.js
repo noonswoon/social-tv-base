@@ -24,13 +24,12 @@ var PopularWindowSrcollviewTimeSelection = function(){
 	
 	var showNow = Ti.UI.createImageView({
 		image: 'images/shownow8.png',
-		top: 0,
+		top: 6,
 		left: hour*50-22
 	});
 	selectionView.add(showNow);
 	
 	var textOfShowNow = Ti.UI.createLabel({
-		top: 8,
 		text: hour+'.00',
 		left: 12+hour*50,
 		color: 'white',
@@ -49,8 +48,9 @@ var PopularWindowSrcollviewTimeSelection = function(){
 		hoursArray[i] = new PopularTimeSelectionView(i);
 
 		hoursArray[i].addEventListener('click', function(e) {
-			var timeIndex = e.source.timeIndex;
-			
+			var timeIndex = this.timeIndex;
+			Ti.API.info('new timeIndex: '+timeIndex);
+	
 			if(timeIndex === undefined) {	
 				Ti.API.info('timeIndexUndefined..causing undefined text');
 				textOfShowNow.text = 'set to current time.00';

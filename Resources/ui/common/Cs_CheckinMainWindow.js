@@ -231,11 +231,19 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	
 	//Checkin Button
 	if(checkin === false){
+		messageboardView.touchEnabled = false;
+		chatView.touchEnabled = false;
+		productView.touchEnabled = false;
+		
 		checkinView.addEventListener('touchstart',function(){
 			remote.backgroundImage = 'images/checkin/checkin_remote.png';
 		});
 		checkinView.addEventListener('touchend',function(){
 			remote.backgroundImage = 'images/checkin/checkin_remote.png';
+			
+			messageboardView.touchEnabled = true;
+			chatView.touchEnabled = true;
+			productView.touchEnabled = true;
 			
 			var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_tvprogramData);
 		
@@ -340,7 +348,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener('update1checkin', update1checkinCallBack);
 		Ti.App.removeEventListener('update1activity',update1activityCallBack);
-		Ti.App.removeEventListener('checkinToProgram');
 	});
 
 	self.showNavBar();

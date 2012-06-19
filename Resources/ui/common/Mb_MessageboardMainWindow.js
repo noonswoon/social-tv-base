@@ -10,11 +10,21 @@ function MessageboardMainWindow(_programId) {
 	var CommentWindow = require('ui/common/Mb_CommentWindow');
 	var CacheHelper = require('helpers/cacheHelper');
 
-	//OBJECTS INSTANTIATION
-	var messageboardHeader = new MessageboardHeader('Public Board','Chatterbox Public Board');	
-	var addWindow = new MessageboardAddWindow(_programId);	
+	//OBJECTS INSTANTIATION		
+	var currentProgramId = _programId;
+	var messageboardHeader = new MessageboardHeader('General Board','Chatterbox General Board');	
+	if(currentProgramId === 'CTB_PUBLIC') {
+		messageboardHeader._setHeader('General Board','Chatterbox General Board','http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',452,'CTB');
+	} else {
+		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);	
+	}	
+	
+	
+	var addWindow = new MessageboardAddWindow(currentProgramId);	
 	var usingPull2Refresh = false;
 	var hasLoadedPicker = false;
+	var pickerSelectedIndex = 0;
 	
 	//UI STUFF
 	var callPicker = Ti.UI.createButton({
@@ -106,19 +116,22 @@ function MessageboardMainWindow(_programId) {
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 	
-	var dataForPicker = [];
-
 	callPicker.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
+			var dataForPicker = [];
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 				var programId = myCurrentCheckinPrograms[i];
-				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-				Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
-				var programName = programInfo[0].name;
-				var program_id = programInfo[0].program_id;
-				dataForPicker = [{title: programName, progId:program_id}];
-				picker.add(dataForPicker);
+				if(programId === 'CTB_PUBLIC') {
+					dataForPicker.push({title:'Public Board', progId:'CTB_PUBLIC'});
+				} else {
+					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+					Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
+					var programName = programInfo[0].name;
+					var program_id = programInfo[0].program_id;
+					dataForPicker.push({title:programName, progId:program_id});
+				}
 			}
+			picker.add(dataForPicker);
 			picker_view.add(picker);
 			hasLoadedPicker = true;
 		}
@@ -134,12 +147,25 @@ function MessageboardMainWindow(_programId) {
 	done.addEventListener('click',function() {
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
+		if(pickerSelectedIndex === 0) {
+			currentProgramId = 'CTB_PUBLIC';
+			messageboardHeader._setHeader('General Board','Chatterbox General Board','http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',452,'CTB');
+		} else {
+			currentProgramId = picker.getSelectedRow(0).progId;
+			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+			messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
+		}
+		//reset programId for addWindow
+		addWindow._setProgramId(currentProgramId);
 		
-		var idOfProgram = picker.getSelectedRow(0).progId;
-		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(idOfProgram);
-		messageboardHeader._setHeader(program[0].name,'NewSubTitle',program[0].photo,program[0].number_checkins,program[0].channel_id);
+		//reset data in the tableview
+		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
 	});
 
+	picker.addEventListener('change',function(e) {
+		pickerSelectedIndex = e.rowIndex;
+	});
+	
 	self.add(picker_view);
 //////////////////
 
@@ -164,14 +190,14 @@ function MessageboardMainWindow(_programId) {
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db
-		Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,_programId); 
+		Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,currentProgramId); 
 		
 		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
 		if(usingPull2Refresh) {
 			Ti.API.info('using pull to refresh..finish up');
 			allTopicTable.refreshFinished();
 			usingPull2Refresh = false;
-			CacheHelper.resetCacheTime('topicsOfProgram'+_programId);
+			CacheHelper.resetCacheTime('topicsOfProgram'+currentProgramId);
 		}
 	}
 
@@ -181,7 +207,7 @@ function MessageboardMainWindow(_programId) {
 		var viewRowsData = [];
 
 		//retrieve from db
-		var allTopics = Topic.topicModel_fetchFromProgramId(_programId);
+		var allTopics = Topic.topicModel_fetchFromProgramId(currentProgramId);
 		for (var i=0;i<allTopics.length;i++) {
 			var row = new MessageboardTableViewRow(allTopics[i]);
 			viewRowsData.push(row);
@@ -251,7 +277,7 @@ function MessageboardMainWindow(_programId) {
 
 	//pull2refresh
 	//pull2refresh module
-	var lastUpdatedDateObj = CacheHelper.getCacheTime('topicsOfProgram'+_programId);
+	var lastUpdatedDateObj = CacheHelper.getCacheTime('topicsOfProgram'+currentProgramId);
 	var lastUpdatedStr = "No updated";
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
@@ -259,7 +285,7 @@ function MessageboardMainWindow(_programId) {
 	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
 		Ti.API.info('using pull to refresh');
 		usingPull2Refresh = true;
-		TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
+		TopicACS.topicACS_fetchAllTopicsOfProgramId(currentProgramId);
 	}, { //settings
 		updateLabel: {
 			text: 'Last Updated: '+lastUpdatedStr,
@@ -267,7 +293,7 @@ function MessageboardMainWindow(_programId) {
 	});	
 
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
-	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+_programId, TopicACS.topicACS_fetchAllTopicsOfProgramId, _programId, 'topicsDbUpdated');
+	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
 
 	return self;
 }

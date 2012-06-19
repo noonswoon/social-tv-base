@@ -110,7 +110,6 @@ MessageboardHeader = function(_showName,_showSubName) {
 		header.programImage.image = _headerPhoto;
 		header.programNumCheckin.text = _headerNumCheckins;
 		header.programChannel.text = _headerChannel;
-		
 	};
 
 	

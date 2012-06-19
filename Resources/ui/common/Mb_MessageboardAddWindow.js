@@ -2,7 +2,7 @@ function MessageboardAddWindow(_programId) {
 	//HEADERS
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
-
+	var programId = _programId;
 	//UI STUFF
 	
 	var backButton = Ti.UI.createButton({
@@ -32,6 +32,7 @@ function MessageboardAddWindow(_programId) {
 	});
 
 	var topicTextarea = Ti.UI.createTextArea({
+		value: '',
 		top: 20,
 		left: 10,
 		right: 10,
@@ -63,12 +64,13 @@ function MessageboardAddWindow(_programId) {
 		
 	//ADDING EVENT LISTENERS
 	addButton.addEventListener('click', function(e) {
+		
 		if(topicTextarea.value === '') {
 			return;
 		}
 		
 		//1. insert to the db topic table
-		var newId = Topic.topicModel_add(_programId, 0,topicTextarea.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+		var newId = Topic.topicModel_add(programId, 0,topicTextarea.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 		
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
@@ -84,12 +86,12 @@ function MessageboardAddWindow(_programId) {
 		
 		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
-		//3 call TopicACS.topicACS_create(topicTextarea.value,_programId,newId);
-		TopicACS.topicACS_create(topicTextarea.value,_programId,newId);
+		//3 call TopicACS.topicACS_create(topicTextarea.value,programId,newId);
+		TopicACS.topicACS_create(topicTextarea.value,programId,newId);
 		
 		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
 		// in the function callback in Mb_MessageboardMainWindow.js
-		topicTextarea.value = "";		
+		topicTextarea.value = '';		
 		self.close();
 	
 	});
@@ -101,6 +103,10 @@ function MessageboardAddWindow(_programId) {
 	self.addEventListener('close', function(e) {
 		topicTextarea.blur();
 	});	
+	
+	self._setProgramId = function(_newProgramId) {
+		programId = _newProgramId;
+	};
 	
 	return self;
 }

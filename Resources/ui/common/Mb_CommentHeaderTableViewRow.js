@@ -57,6 +57,10 @@ CommentHeaderTableViewRow = function() {
     	systemButton : Titanium.UI.iPhone.SystemButton.CANCEL
 	});
 	
+	var spacer =  Titanium.UI.createButton({
+		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	});
+	
 	var replyTextArea = Ti.UI.createTextArea({
 		top:8,
 		left: 10,
@@ -65,7 +69,7 @@ CommentHeaderTableViewRow = function() {
 		height: 53,
 		value: "Write your comment here...",
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
-		keyboardToolbar : [cancelButton, replyButton], //this is iOS only
+		keyboardToolbar : [cancelButton, spacer, replyButton], //this is iOS only
     	backgroundColor: 'transparent',
     	backgroundImage: 'images/messageboard/comment/replytopictextareaBG.png'
 	});

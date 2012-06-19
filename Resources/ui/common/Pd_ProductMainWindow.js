@@ -1,4 +1,4 @@
-function ProductMainWindow() {
+function ProductMainWindow(_programId) {
 	
 	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
 	var ProductACS = require('acs/productACS');
@@ -7,6 +7,10 @@ function ProductMainWindow() {
 	var TVProgram = require('model/tvprogram');
 	
 	var dataForTab = [];
+	var hasLoadedPicker = false;
+	
+	var infoForName = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
+	
 	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
@@ -21,15 +25,6 @@ function ProductMainWindow() {
 	});
 	self.add(productSelectProgramToolbar);
 	
-	var productSelectProgramButton = Ti.UI.createButton({
-		width: 41,
-		height: 34,
-		right: 10,
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/toolbarbutton.png'
-	});
-	productSelectProgramToolbar.add(productSelectProgramButton);
-	
 	var watchLabel = Ti.UI.createLabel({
 		color: '#8c8c8c',
 		width: 70,
@@ -40,41 +35,23 @@ function ProductMainWindow() {
 		font:{fontSize: 11}
 	});
 	productSelectProgramToolbar.add(watchLabel);
-
-	//Popup
-	var shopSelectorPopupWin = Ti.UI.createWindow({
-	backgroundColor: 'black',
-	left: 10, 
-	top: 90, 
-	width: 300,
-	height: 300,
-	borderWidth: 5,
-	borderColor: 'black',
-	borderRadius: 15,
-	zIndex: 3
-	});
 	
-	var triangleImage = Ti.UI.createImageView({
-	image: 'images/triangle.png',
-	height: 20,
-	top: 30,
-	left: 260
+	var callPicker = Ti.UI.createButton({
+		width: 41,
+		height: 34,
+		right: 10,
+		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		image: 'images/toolbarbutton.png'
 	});
-
-	//Tab's table
-	var tableViewForTab	= Ti.UI.createTableView({backgroundColor:'white' });
+	productSelectProgramToolbar.add(callPicker);
 	
-	//Add UI
-	shopSelectorPopupWin.add(tableViewForTab);
-
-
-	for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-		var programCheckinId = myCurrentCheckinPrograms[i];
-		var programCheckinName = TVProgram.TVProgramModel_getProgramNameWithProgramId(programCheckinId);
-		var checkinProgramRow = new ProductTabTableViewRow(programCheckinId, programCheckinName);
-		dataForTab.push(checkinProgramRow);
-	}
-	tableViewForTab.setData(dataForTab);
+	var selectProgramLabel = Ti.UI.createLabel({
+		text: infoForName[0].name,
+		left: 10,
+		width: 'auto',
+		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
+	});	
+	productSelectProgramToolbar.add(selectProgramLabel);
 
 	var productTableView = Ti.UI.createTableView({
 		top: 44,
@@ -82,39 +59,101 @@ function ProductMainWindow() {
 		separatorColor: 'transparent'
 	});
 	self.add(productTableView);
-
 	
-	//EVENT LISTENERS
-	//TODO: bad programming style here
-	//need to change and close the popup window in this file
-	//the current closing popup window logic are at ApplicationTabGroup files
-	//somehow self's blur/close events aren't functional
-	var shopSelectorToggle = true; //true means it closes
-	productSelectProgramButton.addEventListener('click',function(e){
-		if(shopSelectorToggle) {
-			shopSelectorToggle = false;
-			shopSelectorPopupWin.open();
-			self.add(triangleImage);
-		} else {
-			shopSelectorToggle = true;
-			shopSelectorPopupWin.close();
-			self.remove(triangleImage);
-		}
-	}); 
-		
-	tableViewForTab.addEventListener('click',function(e){
-		ProductACS.productACS_fetchedAllProducts(e.row.programId);	
-		showPreloader(self,'Loading...');
+	
+	//Opacity window when picker is shown
+	var opacityView = Ti.UI.createView({
+		opacity : 0.6,
+		top : 0,
+		height : 120,
+		zIndex : 7777,
+		backgroundColor: '#000'
 	});
-	
-	
+
+	//Picker
+	var picker_view = Titanium.UI.createView({
+		height:251,
+		bottom:-251,
+		zIndex: 2
+	});
+
+	var cancel =  Titanium.UI.createButton({
+		title:'Cancel',
+		style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
+	});
+
+	var done =  Titanium.UI.createButton({
+		title:'Done',
+		style:Titanium.UI.iPhone.SystemButtonStyle.DONE
+	});
+
+	var spacer =  Titanium.UI.createButton({
+		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	});
+
+	var toolbar =  Ti.UI.iOS.createToolbar({
+		top:0,
+		zIndex: 3,
+		items:[cancel,spacer,done]
+	});
+
+	var picker = Titanium.UI.createPicker({
+		top:43
+	});
+		
+	picker.selectionIndicator=true;	
+	picker_view.add(toolbar);
+
+	var slide_in =  Titanium.UI.createAnimation({bottom:0});
+	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+
+	callPicker.addEventListener('click',function() {
+		if(!hasLoadedPicker) {
+			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+				var programCheckinId = myCurrentCheckinPrograms[i];
+				var programCheckinInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programCheckinId);
+				Ti.API.info('programCheckinId: '+programCheckinId+', programCheckinInfo: '+JSON.stringify(programCheckinInfo));
+				var programName = programCheckinInfo[0].name;
+				var program_id = programCheckinInfo[0].program_id;
+				dataForPicker = [{title: programName, progId:program_id}];
+				picker.add(dataForPicker);
+			}
+			picker_view.add(picker);
+			hasLoadedPicker = true;
+		}
+		picker_view.animate(slide_in);
+		self.add(opacityView);
+	});
+
+	cancel.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		self.remove(opacityView);
+	});
+
+	done.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		self.remove(opacityView);
+		
+		selectProgramLabel.text = picker.getSelectedRow(0).title;
+		var idOfProgram = picker.getSelectedRow(0).progId;
+		ProductACS.productACS_fetchedAllProducts(idOfProgram);
+	});
+
+	self.add(picker_view);
+///////////////////////////////////////////////////////////////
+
+	ProductACS.productACS_fetchedAllProducts(_programId);
+
 	Ti.App.addEventListener('fetchedAllProduct', function(e){
+		
+		
 		var viewRowData = [];
 		var totalProducts = e.fetchedAllProduct.length;
 		var numRows = Math.ceil(totalProducts/2);
 		
 		for(var i=0;i<numRows;i++){
-			var row = new ProductMainWindowTableViewRow();
+			var row = new ProductMainWindowTableViewRow(self);
+			
 			for(var j=0;j<=1;j++){
 				var productIndex = i*2 + j;
 				if(productIndex >= totalProducts)
@@ -130,10 +169,6 @@ function ProductMainWindow() {
 		}
 
 		productTableView.setData(viewRowData);
-		shopSelectorToggle = true;
-		shopSelectorPopupWin.close();
-		self.remove(triangleImage);	
-		hidePreloader(self);
 	});	
 
 	return self;

@@ -105,6 +105,8 @@ function MessageboardMainWindow(_programId) {
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+	
+	var dataForPicker = [];
 
 	callPicker.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
@@ -113,12 +115,9 @@ function MessageboardMainWindow(_programId) {
 				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 				Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
 				var programName = programInfo[0].name;
-				var row = Ti.UI.createPickerRow();
-				var programNameInRow = Ti.UI.createLabel({
-					text: programName
-				});
-				row.add(programNameInRow);
-				picker.add(row);
+				var program_id = programInfo[0].program_id;
+				dataForPicker = [{title: programName, progId:program_id}];
+				picker.add(dataForPicker);
 			}
 			picker_view.add(picker);
 			hasLoadedPicker = true;

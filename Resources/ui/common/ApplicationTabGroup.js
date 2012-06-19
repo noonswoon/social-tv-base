@@ -26,8 +26,8 @@ function ApplicationTabGroup() {
 	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programPublic);
-	var messageboardwin = new MessageboardMainWindow("CTB_PUBLIC");		
-	var productwin = new ProductMainWindow();
+	var messageboardwin = new MessageboardMainWindow("CTB_PUBLIC");				
+	var productwin = new ProductMainWindow('CH3_00TGT');
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
 	

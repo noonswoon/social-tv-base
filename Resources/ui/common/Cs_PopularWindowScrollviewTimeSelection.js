@@ -8,10 +8,9 @@ var PopularWindowSrcollviewTimeSelection = function(){
 	contentWidth:1215,
 	contentHeight:34,
 	top:0,
-	height:34,
+	height:44,
 	width:Ti.UI.SIZE,
-	backgroundImage: 'images/popular/ScrollViewBG.png',
-	disableBounce: true
+	backgroundImage: 'images/ToolbarBG.png'
 	});
 	
 

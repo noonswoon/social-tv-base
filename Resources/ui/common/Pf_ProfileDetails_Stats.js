@@ -4,8 +4,10 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	var LevelModel = require('model/level');
 	var FriendModel = require('model/friend');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	var userRankInfo = [];
-	var	ProfileDataLevelUp;
+	//var userRankInfo = [];
+	//var	ProfileDataLevelUp;
+	//var totalPoints;
+	//var leaderBoardData=[];
 	
 	var curId = _userProfile.id;
 		
@@ -63,11 +65,11 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	}
 
 	var updateExpBar = function(){
-		var totalPoints = PointModel.pointModel_fetchMyPoint(curId);
-		ProfileDataLevelUp = LevelModel.level_nextLevel(totalPoints);
-		expLabel.text= totalPoints + '/' + ProfileDataLevelUp;
-		expBar.max = ProfileDataLevelUp;
-		expBar_light.max = ProfileDataLevelUp;
+		totalPoints = PointModel.pointModel_fetchMyPoint(curId);
+		var profileDataLevelUp = LevelModel.level_nextLevel(totalPoints);
+		expLabel.text = totalPoints + '/' + profileDataLevelUp;
+		expBar.max = profileDataLevelUp;
+		expBar_light.max = profileDataLevelUp;
 		expBar.value = totalPoints;
 		
 		if(expBar.value === 0){
@@ -222,12 +224,12 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
 	};
 	Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);
-	
+	 
 	Ti.App.addEventListener('leaderDbUpdated',function(){
-		var leaderBoardData = PointModel.pointModel_fetchRank();
+		leaderBoardData = PointModel.pointModel_fetchRank();
     	leaderBoardData.sort(totalPointSort);
-    	createLeaderBoardView(leaderBoardData);
-    	updateExpBar(); 
+    	createLeaderBoardView(leaderBoardData); //
+    	updateExpBar(); //
 	});
 	
 	updateExpBar();

@@ -19,7 +19,7 @@ exports.updateActivity_myDatabase = function(_type,_act){
 		case 'checkin': {
 	  		Ti.API.info("update type:"+_type);
 	  		_point = 5;
-// 1. update checkin / activity data	
+			// 1. update checkin / activity data	
 	  		var checkinData = {
 	  			event_id: _act.eventId,
 	  			user_id: id,
@@ -51,14 +51,14 @@ exports.updateActivity_myDatabase = function(_type,_act){
 			Ti.API.info("update type:"+_type);	
 			_point = 5;	
 			
-		var activityData = {
-			user_id: id,
-			targetedUserID: id,
-			category: _type,
-			targetedObjectID: _act.badgeID,
-			additionalData: _act.title,
-		};
-			break;
+			var activityData = {
+				user_id: id,
+				targetedUserID: id,
+				category: _type,
+				targetedObjectID: _act.badgeID,
+				additionalData: _act.title,
+			};
+				break;
 		};
 		default: {
 			Ti.API.info("_default");

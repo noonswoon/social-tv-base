@@ -11,6 +11,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	var BadgeCondition = require('helpers/badgeCondition'); //checking condition to add badge
 	var BadgeModel = require('model/badge');
 	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
+	var PointACS = require('acs/pointACS');
 	
 	var badgeView = Ti.UI.createView({
 		width: 320,

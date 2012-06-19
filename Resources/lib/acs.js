@@ -13,6 +13,11 @@ exports.getUserLoggedIn = function() {
 	return currentUser;
 };
 
+// exports.getUserName = function() {
+// //	var name = currentUser.first_name + ' ' + currentUser.last_name;
+	// return currentUser;
+// };
+
 exports.setUserLoggedIn = function(user) {
 	currentUser = user;
 	//Ti.API.info("currentLoggedInUser: "+JSON.stringify(currentUser));

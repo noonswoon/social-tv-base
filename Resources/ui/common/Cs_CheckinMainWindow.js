@@ -377,17 +377,17 @@ function isPointInPoly(poly, pt)
 		curTabGroup.setActiveTab(4)
 	});
 
-	//TODO: make this update to leaderboard and else!!
 	function update1checkinCallBack(e) {
 		var num = TVProgram.TVProgramModel_countCheckins(_tvprogramData.eventId);
 		
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
-		BadgeCondition.badgeCondition_check();
+	
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
 		
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');
-		Ti.App.fireEvent('LeaderDbUpdated');
+		Ti.App.fireEvent('leaderDbUpdated');
 	};
 	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
 

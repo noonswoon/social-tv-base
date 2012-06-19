@@ -1,7 +1,6 @@
 //check if you reach new badge or not!
-exports.badgeCondition_check = function(){
+	var CheckinACS = require('acs/checkinACS');
 	var userID = acs.getUserId();
-	var CheckinACS = require('acs/checkinACS');		
 //CONDITION 1: NUMBER OF CHECK IN////////////////////////////////////
 	var checkCountCondition = function(e){
 		var checkinCount = e.result;
@@ -30,13 +29,9 @@ exports.badgeCondition_check = function(){
 			});	
 		}
 	};
-	Ti.App.addEventListener('UserTotalCheckInsFromACS', checkCountCondition);
-	// function(e){
-	//	checkCountCondition(e.result);
-	//});	
+	Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
 
 /////////////////////////////////////////////////////////////////////
-};
 
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	var myBadgeACS = require('acs/myBadgeACS');

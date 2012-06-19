@@ -24,6 +24,8 @@ function ApplicationTabGroup() {
 	
 	var myUserId = acs.getUserId();
 	
+	//alert(acs.getUserLoggedIn());
+	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programPublic);
 	var messageboardwin = new MessageboardMainWindow("CTB_PUBLIC");				
@@ -146,10 +148,8 @@ function ApplicationTabGroup() {
 	
 	function checkinDbLoadedCallBack(e){			
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
-		
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
-		
 		//if checkin to at least 1 program, enable the chat/board/product bar
 		if(eventsCheckedIn.length > 0)  {
 			self.remove(disableTabsView);
@@ -175,6 +175,7 @@ function ApplicationTabGroup() {
 		if(areTabsDiabled) {
    			self.remove(disableTabsView);
 			areTabsDiabled = false;
+			
    		}
 	}
    	Ti.App.addEventListener('checkinToProgram', checkinToProgramCallback);

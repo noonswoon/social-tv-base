@@ -107,7 +107,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	channelView.add(programChannelImage);	
 	headerView.add(channelView);
 	
-	var checkinView = Ti.UI.createView({
+	var checkinNum = Ti.UI.createView({
 		width: 52,
 		bottom:5,
 		left: 150,
@@ -125,9 +125,9 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		font: {fontSize: 14},
 		bottom: 0
 	});
-	checkinView.add(programNumCheckin);
-	checkinView.add(programNumCheckinImage);	
-	headerView.add(checkinView);
+	checkinNum.add(programNumCheckin);
+	checkinNum.add(programNumCheckinImage);	
+	headerView.add(checkinNum);
 	
 	var friendView = Ti.UI.createView({
 		width: 52,
@@ -153,7 +153,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		
 ///////////////////////////////////////////////////Checkin Section
 
-	var checkinView = Ti.UI.createView({
+	var checkinSection = Ti.UI.createView({
 		top: 121,
 		left:0,
 		height: 265,
@@ -161,175 +161,134 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		backgroundImage: 'images/checkinBG.png'
 	});
 
-	//add button as image
-	var meButton = Ti.UI.createImageView({
-		image: '/images/checkin/checkin_me_enable.png',
-		right: 43,
-		width:89,
-		height: 167,
-		touchEnabled: true,
+	var remote = Ti.UI.createView({
+		backgroundImage: 'images/checkin/uncheckin_remote.png',
+		width: 230,
+		height: 232,
+		top: 8
 	});
 
-	var chatButton = Ti.UI.createImageView({
-		image: '/images/checkin/checkin_chat.png',
-		left: 43,
-		width:89,
-		height: 167,
-		touchEnabled: false		
-	});
+	self.add(checkinSection);
+	checkinSection.add(remote);
 	
-	var boardButton = Ti.UI.createImageView({
-		image: '/images/checkin/checkin_board.png',
-		top: 16,
-		width: 166,
-		height: 89,
-		touchEnabled: false
+	var checkinView = Ti.UI.createView({
+		top: 215,
+		left: 130,
+		width: 60,
+		height: 60,
+		backgroundColor: 'orange',
+		opacity: 0.3,
+		zIndex: 3
 	});
-
-	var productButton = Ti.UI.createImageView({
-		image: '/images/checkin/checkin_products.png',
-		bottom: 16,
-		width: 167,
-		height: 89,
-		touchEnabled: false
-	});
-
-	var checkinButton = Ti.UI.createButton({
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: '/images/checkin/checkin_check.png',
-		borderRadius: 42.5,
-		width:85,
-		height:85,
-	});
-	
-	var remoteDefault = Ti.UI.createImageView({
-		image: 'images/checkin/uncheckin_remote.png',
-		width: 203,
-		height: 205,
-		top: 20
-	});
-
-	
-	//Add UI
 	self.add(checkinView);
-	// checkinView.add(meButton);
-	// checkinView.add(chatButton);
-	// checkinView.add(boardButton);
-	// checkinView.add(productButton);
-	// checkinView.add(checkinButton);
-	checkinView.add(remoteDefault);
+	
+	var meView = Ti.UI.createView({
+		top: 206,
+		right: 53,
+		width: 68,
+		height: 85,
+		backgroundColor: 'orange',
+		opacity: 0.3,
+		zIndex: 3
+	});
+	self.add(meView);
+	
+	var messageboardView = Ti.UI.createView({
+		top: 141,
+		width: 93,
+		height: 59,
+		right: 115,
+		backgroundColor: 'orange',
+		opacity: 0.3,
+		zIndex: 3
+	});
+	self.add(messageboardView);
+	
+	var chatView = Ti.UI.createView({
+		top: 199,
+		left: 55,
+		width: 59,
+		height: 94,
+		backgroundColor: 'orange',
+		opacity: 0.3,
+		zIndex: 3
+	});
+	self.add(chatView);
+	
+	var productView = Ti.UI.createView({
+		top: 290,
+		left: 113,
+		width: 97,
+		height: 57,
+		backgroundColor: 'orange',
+		opacity: 0.3,
+		zIndex: 3
+	});
+	self.add(productView);
 	
 	var eventId = _tvprogramData.eventId;
 	var checkin = CheckinModel.checkin_isCheckin(eventId);
 	
-	//This program is check-in or not
-	if(checkin === true){
-		checkinButton.enabled = false;
-		chatButton.touchEnabled = true;
-		productButton.touchEnabled =true;
-		boardButton.touchEnabled = true;
-		
-		checkinButton.image = 'images/checkin/checkin_check_checked.png';
-		chatButton.image = 'images/checkin/checkin_chat_enable.png';
-		productButton.image = 'images/checkin/checkin_products_enable.png';
-		boardButton.image = 'images/checkin/checkin_board_enable.png';	
+	//Checkin Button
+	if(checkin === false){
+		checkinView.addEventListener('touchstart',function(){
+			remote.backgroundImage = 'images/checkin/checkin_remote.png';
+		});
+		checkinView.addEventListener('touchend',function(){
+			remote.backgroundImage = 'images/checkin/checkin_remote.png';
+		});
 	}
+	else{
+		remote.backgroundImage = 'images/checkin/checkin_remote.png';
+		checkinView.touchEnabled = false;
+		alert('You have checked-in already');
+	}
+
 	
-//////////////////////////////////////////////////////////////	
-	// remoteDefault.addEventListener('click',function(ev){
-		// var localPoint = {x:ev.x, y:ev.y};
-		// alert("localPoint: " + localPoint.x + " " + localPoint.y);
-	// });
-
-//////////////////////////////////////////////////////////////
-function isPointInPoly(poly, pt)
-{
-    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i) 
-        ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y)) && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x) && (c = !c);
-    return c;
-}
-
-	var checkinPoint = [
-		{x: 77.5, y: 80},
-		{x: 68.5, y: 102},
-		{x: 77.5, y: 127},
-		{x: 100.5, y: 138},
-		{x: 127, y: 129},
-		{x: 136, y: 103},
-		{x: 127, y:80},
-		{x: 100.5, y:69}
-	]; 
+	//Me Button
+	meView.addEventListener('touchstart',function(){
+		if(remote.backgroundImage === 'images/checkin/uncheckin_remote.png')
+			remote.backgroundImage = 'images/checkin/me-hilight-uncheckin_remote.png';
+		else
+			remote.backgroundImage = 'images/checkin/me-hilight-checkin_remote.png';
+	});
+	meView.addEventListener('touchend',function(){
+		if(remote.backgroundImage === 'images/checkin/me-hilight-uncheckin_remote.png')
+			remote.backgroundImage = 'images/checkin/uncheckin_remote.png';
+		else
+			remote.backgroundImage = 'images/checkin/checkin_remote.png';
+	});
 	
-	var mePoint = [
-		{X: 172.5, y:35},
-		{x: 139.5, y:71},
-		{x: 139.5, y:135},
-		{x: 172, y:171},	
-		{x: 200, y:103},
-	];
-
-
-	self.addEventListener('click',function(e){
-		if(isPointInPoly(checkinPoint, {x: e.x, y: e.y})){
-			remoteDefault.image = 'images/checkin/checkin_remote.png';
-		}
-		else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-			remoteDefault.image = 'images/checkin/me-hi_remote.png';
-		}
-	});	
+	//Messageboard Button
+	messageboardView.addEventListener('touchstart',function(){
+		remote.backgroundImage = 'images/checkin/messageboard-hilight_remote.png';
+	});
+	messageboardView.addEventListener('touchend',function(){
+		remote.backgroundImage = 'images/checkin/checkin_remote.png';
+	});
+	
+	//Chat Button
+	chatView.addEventListener('touchstart',function(){
+		remote.backgroundImage = 'images/checkin/groupchat-hilight_remote.png';
+	});
+	chatView.addEventListener('touchend',function(){
+		remote.backgroundImage = 'images/checkin/checkin_remote.png';
+	});
+	
+	//Product Button
+	productView.addEventListener('touchstart',function(){
+		remote.backgroundImage = 'images/checkin/product-hilight_remote.png';
+	});
+	productView.addEventListener('touchend',function(){
+		remote.backgroundImage = 'images/checkin/checkin_remote.png';
+	});
+	
 		
+	//Operation LOGIC
 	
-	// self.addEventListener('touchstart',function(e){
-		// if(checkinButton.enabled===true){
-			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
-				// alert('Check in to activate the control');
-			// }
-			// else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				// meButton.image = 'images/checkin/me-hi_remote.png';
-			// }
-		// } else {
-			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
-				// boardButton.image = 'images/checkin/checkin_board_mouseover.png';
-			// }
-			// if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				// meButton.image = 'images/checkin/checkin_me_mouseover.png';
-			// }
-			// if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
-				// productButton.image = 'images/checkin/checkin_products_mouseover.png';
-			// }
-			// if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
-				// chatButton.image = 'images/checkin/checkin_chat_mouseover.png';
-			// }				
-		// }
-	// });
-// 
-	// self.addEventListener('touchend',function(e)
-	// {
-		// if(checkinButton.enabled===true){
-			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})||(isPointInPoly(productPoint, {x: e.x, y: e.y}))||(isPointInPoly(chatPoint, {x: e.x, y: e.y}))){
-				// //alert('Check in to activate the control');
-			// }
-			// else if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				// meButton.image = 'images/checkin/checkin_me_enable.png';
-			// }
-		// } else {		
-			// if(isPointInPoly(boardPoint, {x: e.x, y: e.y})){
-				// boardButton.image = 'images/checkin/checkin_board_enable.png';
-			// }
-			// if(isPointInPoly(mePoint, {x: e.x, y: e.y})){
-				// meButton.image = 'images/checkin/checkin_me_enable.png';
-			// }
-			// if(isPointInPoly(productPoint, {x: e.x, y: e.y})){
-				// productButton.image = 'images/checkin/checkin_products_enable.png';
-			// }
-			// if(isPointInPoly(chatPoint, {x: e.x, y: e.y})){
-				// chatButton.image = 'images/checkin/checkin_chat_enable.png';
-			// }				
-		// }
-	// });	
-/////////////////////////////////////////////////////////////
+
 	
-	checkinButton.addEventListener('click',function(){
+	checkinView.addEventListener('touchend',function(){
 		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_tvprogramData);
 		
 		var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
@@ -353,28 +312,23 @@ function isPointInPoly(poly, pt)
 		LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 		
 		myCurrentCheckinPrograms.push(_tvprogramData.programId);
-		checkinButton.enabled = false;
-		checkinButton.image = 'images/checkin/checkin_check_checked.png';
-		chatButton.image = 'images/checkin/checkin_chat_enable.png';
-		productButton.image = 'images/checkin/checkin_products_enable.png';
-		boardButton.image = 'images/checkin/checkin_board_enable.png';	
 		
 		Ti.App.fireEvent('checkinToProgram');	
 	});
 	
-	chatButton.addEventListener('touchstart',function(){
+	chatView.addEventListener('touchend',function(){
 		curTabGroup.setActiveTab(1)
 	});
 	
-	boardButton.addEventListener('touchstart',function(){
+	messageboardView.addEventListener('touchend',function(){
 		curTabGroup.setActiveTab(2);
 	});
 
-	productButton.addEventListener('touchstart',function(){
+	productView.addEventListener('touchend',function(){
 		curTabGroup.setActiveTab(3)
 	});
 
-	meButton.addEventListener('touchstart',function(){
+	meView.addEventListener('touchend',function(){
 		curTabGroup.setActiveTab(4)
 	});
 

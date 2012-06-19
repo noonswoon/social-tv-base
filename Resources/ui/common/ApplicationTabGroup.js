@@ -15,7 +15,7 @@ function ApplicationTabGroup() {
     
 	var programPublic = {
 		programId: 'CTB_PUBLIC', 
-		programTitle:'Public', 
+		programName:'Public', 
 		programSubname:'',
 		programImage: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',
 		programChannel: 'CTB',

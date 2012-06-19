@@ -12,10 +12,12 @@ function ChatMainWindow(_program) {
 	// Returns an Object with Titanium Window Inside
 	//
 	var pubnub_chat_window = Ti.App.Chat({
-	    "chat-room" : _program.programTitle,
+	    "chat-room" : _program.programId,
 	    "window"    : {
 			backgroundColor:'transparent'
-	    }
+	    },
+	    "programId" : _program.programId,
+	    "programName": _program.programName
 	});
 		
 

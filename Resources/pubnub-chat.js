@@ -2,9 +2,6 @@
 // INCLUDE PUBNUB
 // ----------------------------------
 	Ti.include('./pubnub.js');
-
-	var TVProgram = require('model/tvprogram');
-	var hasLoadedPicker = false;
 	
 	// ----------------------------------
 	// INIT PUBNUB
@@ -16,8 +13,18 @@
 	    origin        : 'pubsub.pubnub.com'
 	});
 	
+Ti.App.Chat = function(setup) {    
+    
+   	var TVProgram = require('model/tvprogram');
 	var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
 	var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
+		
+	var curUserInput = "";
+    var currentChatRoom = setup['programId'];
+   	var currentChatRoomName = setup['programName'];
+   	var currentProgramId = setup['programId'];
+    
+	var hasLoadedPicker = false;
 	
 	//dummy userobject
 	var userObject = {id:acs.getUserId(),fbId: acs.getUserFbId(),imageUrl: acs.getUserImage()};
@@ -25,18 +32,9 @@
 	var historyMessages = [];
 	var lastHistoryLoadedIndex = 0;
 	var totalHistoryMessages = 0;
-
+	var pickerSelectedIndex = 0;
+	
 	var chatMessagesTableView = Ti.UI.createTableView({
-		top:90,
-		height: 290,
-		backgroundColor: 'transparent',
-		separatorColor: 'transparent',
-	});
-
-Ti.App.Chat = function(setup) {    
-    var curUserInput = "";
-   
-   	var chatMessagesTableView = Ti.UI.createTableView({
 		top:90,
 		height: 290,
 		backgroundColor: 'transparent',
@@ -46,37 +44,43 @@ Ti.App.Chat = function(setup) {
     // ----------------------------------
     // LISTEN FOR MESSAGES
     // ----------------------------------
-    pubnub.subscribe({
-        channel  : setup['chat-room'],
-        connect  : function() {
-            Ti.API.info("connecting...");
-            var newChatRow = new ChatMessageTableViewRow("Welcome to Chatterbox "+setup['chat-room']+" Chat Room. Please keep our place clean.",adminUserObject,false);
-           	chatMessagesTableView.appendRow(newChatRow);
-            //textArea.recieveMessage("Entered Chatterbox "+setup['chat-room']+" Chat Room...");
-        },
-        callback : function(message) {
-        	//since pubnub is a broadcaster, sender will receive his own message as well
-        	//prevent from having the user sees his own message when it got broadcasted
-        	if(message.text !== curUserInput) {
-            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
-           		var newChatRow = new ChatMessageTableViewRow(message.text,senderObj,false);
-           		chatMessagesTableView.appendRow(newChatRow);
-           		chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
-           	}
-        },
-        error : function() {
-       		// Ti.API.info("Lost connection...");
-        }
-    });
+    var subscribe_chat_room = function() {
+		//clear data
+    	pubnub.subscribe({
+	        channel  : currentChatRoom,
+	        connect  : function() {
+	            Ti.API.info("connecting...");
+				//reset stuff
+	            lastHistoryLoadedIndex = 0;
+	            historyMessages = [];
+	            loadHistoryButton.enabled = true;
+	            var welcomeChatRow = new ChatMessageTableViewRow("Welcome to "+currentChatRoomName+" Chat Room. Please keep our place clean.",adminUserObject,false);
+    			chatMessagesTableView.setData([loadHistoryMessagesRow,welcomeChatRow]);	            
+	        },
+	        callback : function(message) {
+	        	//since pubnub is a broadcaster, sender will receive his own message as well
+	        	//prevent from having the user sees his own message when it got broadcasted
+	        	if(message.text !== curUserInput) {
+	            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
+	           		var newChatRow = new ChatMessageTableViewRow(message.text,senderObj,false);
+	           		chatMessagesTableView.appendRow(newChatRow);
+	           		chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
+	           	}
+	        },
+	        error : function() {
+	       		Ti.API.info("Lost connection...");
+	        }
+	    });
+    };
 
     // ----------------------------------
     // SEND MESSAGE
     // ----------------------------------
-    function send_a_message(message) {
+    var send_a_message = function(message) {
         if (!message) return;
 
         pubnub.publish({
-            channel  : setup['chat-room'],
+            channel  : currentChatRoom,
             message  : { text : message, senderId: userObject.id, senderFbId: userObject.fbId, time: moment().format('YYYY-MM-DD, HH:mm:ss')},
             callback : function(info) {
                 if (!info[0]) setTimeout(function() {
@@ -84,8 +88,9 @@ Ti.App.Chat = function(setup) {
                 }, 2000 );
             }
         });
-    }
-
+    };
+	subscribe_chat_room();
+	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/Backbutton.png',
         width:57,height:34
@@ -111,7 +116,7 @@ Ti.App.Chat = function(setup) {
 
 	
 	var selectProgramLabel = Ti.UI.createLabel({
-		text: 'Lost the Finale',
+		text: currentChatRoomName,
 		left: 10,
 		width: 'auto',
 		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
@@ -143,7 +148,6 @@ Ti.App.Chat = function(setup) {
 		zIndex : 7777,
 		backgroundColor: '#000'
 	});
-
 	
 	//Picker
 	var picker_view = Titanium.UI.createView({
@@ -188,7 +192,7 @@ Ti.App.Chat = function(setup) {
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 				var programId = myCurrentCheckinPrograms[i];
 				if(programId === 'CTB_PUBLIC') {
-					dataForPicker.push({title:'Public Board', progId:'CTB_PUBLIC'});
+					dataForPicker.push({title:'Public', progId:'CTB_PUBLIC'});
 				} else {
 					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 					var programName = programInfo[0].name;
@@ -209,10 +213,36 @@ Ti.App.Chat = function(setup) {
 		chat_window.remove(opacityView);
 	});
 
+/**
+ * PUBNUB.unsubscribe({ channel : 'my_chat' });
+ * 
+ */
 	done.addEventListener('click',function() {
 		picker_view.animate(slide_out);
 		chat_window.remove(opacityView);
+		
+		//unsubscribe the channel: 
+		pubnub.unsubscribe({channel: currentChatRoom});
+		
+		if(pickerSelectedIndex === 0) {
+			currentProgramId = 'CTB_PUBLIC';
+			currentChatRoom = currentProgramId;
+			currentChatRoomName = 'Public Chat';
+			selectProgramLabel.text = currentChatRoomName;
+		} else {
+			currentProgramId = picker.getSelectedRow(0).progId;
+			currentChatRoom = currentProgramId;
+			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+			currentChatRoomName = selectedProgram[0].name;
+			selectProgramLabel.text = currentChatRoomName;
+		}
+		subscribe_chat_room();
 	});
+
+	picker.addEventListener('change',function(e) {
+		pickerSelectedIndex = e.rowIndex;
+	});
+	
 	//////
 
 	var userView = Ti.UI.createView({
@@ -280,6 +310,7 @@ Ti.App.Chat = function(setup) {
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
 		top: 120,
 		height: 30,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	
 	var loadHistoryButton = Ti.UI.createButton({
@@ -340,27 +371,18 @@ Ti.App.Chat = function(setup) {
     this.chat_window = chat_window;
     this.pubnub      = pubnub;
     
-    loadHistoryMessagesRow.addEventListener('click', function() {
-    	// Request History
+    loadHistoryButton.addEventListener('click', function() {
 		if(historyMessages.length == 0) {
-			//load it to the history array
 			pubnub.history({
-			    // Set channel to 'example'
-			    channel : setup['chat-room'],
-			    // Set limit of returned
+			    channel : currentChatRoom,
 			    limit : 100
-			    // Set Callback Function when History Returns
 			}, function(messages) {
 			    // Show History
-			    Ti.API.info(messages);
+			    Ti.API.info('first loaded history: '+messages);
 				totalHistoryMessages = messages.length;
+				//building historyMessages array
 				for(var i = messages.length -1;i >= 0; i--) {
-					messageObj = {
-						text: messages[i].text,
-						senderId: messages[i].senderId,
-						senderFbId: messages[i].senderFbId,
-						time: messages[i].time
-					}
+					messageObj = {text: messages[i].text, senderId: messages[i].senderId, senderFbId: messages[i].senderFbId, time: messages[i].time };
 					historyMessages.push(messageObj);
 				}
 				// add in the last 10 messages
@@ -368,7 +390,7 @@ Ti.App.Chat = function(setup) {
 				if(messages.length < 10) {
 					numMessagesToLoad = messages.length;
 				}
-				for(var i = 0; i < numMessagesToLoad -1;i++) {
+				for(var i = 0; i < numMessagesToLoad;i++) {
 					var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture'};
 					var isYourMessage = false;
 					if(historyMessages[i].senderFbId === userObject.fbId) isYourMessage = true;
@@ -413,11 +435,12 @@ Ti.App.Chat = function(setup) {
 	});
 	
     sendButton.addEventListener('click', function() {
+		Ti.API.info('totalRowCount: '+chatMessagesTableView.data[0].rowCount);
 		if(chatInputTextField.value === "") return;
-
 		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
         chatMessagesTableView.appendRow(newChatRow);
-        chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
+        Ti.API.info('new totalRowCount: '+chatMessagesTableView.data[0].rowCount);
+        chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
         		
 		curUserInput = chatInputTextField.value;
 		send_a_message(chatInputTextField.value);

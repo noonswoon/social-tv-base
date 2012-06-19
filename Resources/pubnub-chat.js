@@ -51,9 +51,6 @@ Ti.App.Chat = function(setup) {
 	        connect  : function() {
 	            Ti.API.info("connecting...");
 				//reset stuff
-	            lastHistoryLoadedIndex = 0;
-	            historyMessages = [];
-	            loadHistoryButton.enabled = true;
 	            var welcomeChatRow = new ChatMessageTableViewRow("Welcome to "+currentChatRoomName+" Chat Room. Please keep our place clean.",adminUserObject,false);
     			chatMessagesTableView.setData([loadHistoryMessagesRow,welcomeChatRow]);	            
 	        },
@@ -236,6 +233,10 @@ Ti.App.Chat = function(setup) {
 			currentChatRoomName = selectedProgram[0].name;
 			selectProgramLabel.text = currentChatRoomName;
 		}
+		lastHistoryLoadedIndex = 0;
+		historyMessages = [];
+		loadHistoryButton.enabled = true;
+		//subscribe to new channel
 		subscribe_chat_room();
 	});
 
@@ -435,18 +436,16 @@ Ti.App.Chat = function(setup) {
 	});
 	
     sendButton.addEventListener('click', function() {
-		Ti.API.info('totalRowCount: '+chatMessagesTableView.data[0].rowCount);
 		if(chatInputTextField.value === "") return;
 		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
         chatMessagesTableView.appendRow(newChatRow);
-        Ti.API.info('new totalRowCount: '+chatMessagesTableView.data[0].rowCount);
-        chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
         		
 		curUserInput = chatInputTextField.value;
 		send_a_message(chatInputTextField.value);
 	
 		chatInputTextField.value = "";
     	chatInputTextField.blur();
+    	chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
     });
     
     return this;

@@ -236,27 +236,57 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		});
 		checkinView.addEventListener('touchend',function(){
 			remote.backgroundImage = 'images/checkin/checkin_remote.png';
+			
+			var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_tvprogramData);
+		
+			var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
+			//checkinData / leaderboardData / activityData	
+			var checkinData = allActivityDataForACS[0];
+			var leaderboardData = allActivityDataForACS[1];
+			var activityData = allActivityDataForACS[2];
+		
+			var allIdDataForACS = ActivityDataIdForACS[1];	//idArray
+			// checkinId / leaderboardId / activityId
+			var checkinId = allIdDataForACS[0]; 			//local id
+			var leaderboardId = allIdDataForACS[1]; 		//acs id
+			var activityId = allIdDataForACS[2]; 			//local id
+
+			//require callback from acs
+			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+		
+			//done after adding to acs
+			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
+			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+		
+			myCurrentCheckinPrograms.push(_tvprogramData.programId);
+		
+			Ti.App.fireEvent('checkinToProgram');
 		});
 	}
 	else{
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
 		checkinView.touchEnabled = false;
-		alert('You have checked-in already');
 	}
 
 	
 	//Me Button
 	meView.addEventListener('touchstart',function(){
-		if(remote.backgroundImage === 'images/checkin/uncheckin_remote.png')
-			remote.backgroundImage = 'images/checkin/me-hilight-uncheckin_remote.png';
-		else
+		if(remote.backgroundImage === 'images/checkin/uncheckin_remote.png'){
+			remote.backgroundImage = 'images/checkin/me-hilight-uncheckin_remote.png';		
+		}
+		else{
 			remote.backgroundImage = 'images/checkin/me-hilight-checkin_remote.png';
+		}
 	});
 	meView.addEventListener('touchend',function(){
-		if(remote.backgroundImage === 'images/checkin/me-hilight-uncheckin_remote.png')
+		if(remote.backgroundImage === 'images/checkin/me-hilight-uncheckin_remote.png'){
 			remote.backgroundImage = 'images/checkin/uncheckin_remote.png';
-		else
+		}
+		else{
 			remote.backgroundImage = 'images/checkin/checkin_remote.png';
+		}	
+		curTabGroup.setActiveTab(4);
 	});
 	
 	//Messageboard Button
@@ -265,6 +295,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	messageboardView.addEventListener('touchend',function(){
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
+		curTabGroup.setActiveTab(2);
 	});
 	
 	//Chat Button
@@ -273,6 +304,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	chatView.addEventListener('touchend',function(){
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
+		curTabGroup.setActiveTab(1)
 	});
 	
 	//Product Button
@@ -281,56 +313,9 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	productView.addEventListener('touchend',function(){
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
-	});
-	
-		
-	//Operation LOGIC
-	
-
-	
-	checkinView.addEventListener('touchend',function(){
-		var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_tvprogramData);
-		
-		var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
-		//checkinData / leaderboardData / activityData	
-		var checkinData = allActivityDataForACS[0];
-		var leaderboardData = allActivityDataForACS[1];
-		var activityData = allActivityDataForACS[2];
-		
-		var allIdDataForACS = ActivityDataIdForACS[1];	//idArray
-		// checkinId / leaderboardId / activityId
-		var checkinId = allIdDataForACS[0]; 			//local id
-		var leaderboardId = allIdDataForACS[1]; 		//acs id
-		var activityId = allIdDataForACS[2]; 			//local id
-
-		//require callback from acs
-		CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
-		ActivityACS.activityACS_createMyActivity(activityData,activityId);		
-		
-		//done after adding to acs
-		PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
-		LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
-		
-		myCurrentCheckinPrograms.push(_tvprogramData.programId);
-		
-		Ti.App.fireEvent('checkinToProgram');	
-	});
-	
-	chatView.addEventListener('touchend',function(){
-		curTabGroup.setActiveTab(1)
-	});
-	
-	messageboardView.addEventListener('touchend',function(){
-		curTabGroup.setActiveTab(2);
-	});
-
-	productView.addEventListener('touchend',function(){
 		curTabGroup.setActiveTab(3)
 	});
-
-	meView.addEventListener('touchend',function(){
-		curTabGroup.setActiveTab(4)
-	});
+	
 
 	//TODO: make this update to leaderboard and else!!
 	function update1checkinCallBack(e) {

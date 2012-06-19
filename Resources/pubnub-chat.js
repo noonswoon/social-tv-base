@@ -306,7 +306,7 @@ Ti.App.Chat = function(setup) {
 		right: 8,
 		backgroundImage: 'images/chat/addfriend.png'
 	});
-	addFriendView.add(addFriend);
+	// addFriendView.add(addFriend);
 	
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
 		top: 120,
@@ -357,7 +357,7 @@ Ti.App.Chat = function(setup) {
 	selectProgramToolbar.add(watchLabel);
 	selectProgramToolbar.add(selectProgramButton);
 	userView.add(scrollView);
-	userView.add(addFriendView);
+	// userView.add(addFriendView);
 	chat_window.add(selectProgramToolbar);
 	chat_window.add(userView);
 	chat_window.add(chatMessagesTableView);

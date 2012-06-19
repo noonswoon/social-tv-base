@@ -94,19 +94,11 @@ function GuideWindow(_parent) {
 	
 	for(var i=0;i<channelsList.length;i++) {
 		var curChannel = channelsList[i];
-		// var channel = curChannel.programName.text;
 		var row = Ti.UI.createPickerRow({
 			width:100,
 			heigth:100
 		});
-		// var img = Ti.UI.createImageView(
-			// {image: 'images/channel/ch3.jpg',width:40,height:40},
-			// {image: 'images/channel/ch5.jpg',width:40,height:40},
-			// {image: 'images/channel/ch7.jpg',width:40,height:40},
-			// {image: 'images/channel/ch9.jpg',width:40,height:40},
-			// {image: 'images/channel/ch11.jpg',width:40,height:40},
-			// {image: 'images/channel/thaipbs.jpg',width:40,height:40});
-		
+
 		var img = Ti.UI.createImageView({
 			image:'images/channel/'+i+'.png',
 			width:100,

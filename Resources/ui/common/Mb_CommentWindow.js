@@ -319,8 +319,13 @@ function CommentWindow(_topicId) {
 		usingPull2Refresh = true;
 		CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
 	}, { //settings
+		backgroundColor: '#959595', 
+		statusLabel: {
+			color: 'white'
+		},
 		updateLabel: {
 			text: 'Last Updated: '+lastUpdatedStr,
+			color: 'white'
 		}
 	});	
 

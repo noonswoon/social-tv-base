@@ -98,7 +98,7 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 		var deviceToken = "UNDEFINED";
 		if(curTopic.user.custom_fields !== undefined && curTopic.user.custom_fields.device_token_id !== undefined)
 			deviceToken = curTopic.user.custom_fields.device_token_id;
-			
+
 		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,comments_count, username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?)", 
 					curTopic.id,_programId,curTopic.title,curTopic.commentsCount, curTopic.user.username,deviceToken,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
 	}

@@ -6,9 +6,10 @@ PopularTimeSelectionView = function(_timeIndex){
 	
 	var timeView = Ti.UI.createView({
 		width:40,
-		height: 34,
-		left:margin,
+		left:margin
 	});
+	
+	timeView.timeIndex = _timeIndex;
 	
 	if(_timeIndex < 10)
 		time = '0'+_timeIndex;
@@ -20,8 +21,7 @@ PopularTimeSelectionView = function(_timeIndex){
 		textAlign:'center',
 		timeIndex: this.timeIndex
 	});	
-	
-	
+
 	timeView.add(timeView.timeLabel);
 	
 	return timeView;

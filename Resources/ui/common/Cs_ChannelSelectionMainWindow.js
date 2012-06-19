@@ -32,9 +32,12 @@ function ChannelSelectionMainWindow(){
  	self.setTitleControl(tabBar)
 
 	tabBar.addEventListener('click', function(e){
+		if(e.index === undefined) return; //แก้  bug จอดำ..click ไม่โดน tab
+		
 		for (var i in mainView.children){
 			if (mainView.children.hasOwnProperty(i)) {
 				mainView.remove(mainView.children[i]);
+				Ti.API.info('removing window...');
 			}
 		}		
 
@@ -50,7 +53,9 @@ function ChannelSelectionMainWindow(){
 			if(friendswin == null)
 				friendswin = new FriendsWindow();
 			mainView.add(friendswin);
-		}	
+		} else {
+			Ti.API.info('what is going on???: '+JSON.stringify(e));
+		} 	
 	});
 	
 	self.add(mainView);

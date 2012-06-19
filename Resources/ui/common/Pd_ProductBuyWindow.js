@@ -26,7 +26,8 @@ ProductBuyWindow = function(_product){
 	var productImageView = Ti.UI.createView({
 		top: 20,
 		width: 241,
-		height: 237
+		height: 237,
+		zIndex: 3
 	});
 	
 	var productImage = Ti.UI.createImageView({
@@ -61,7 +62,7 @@ ProductBuyWindow = function(_product){
 	
 	var barOfProduct = Ti.UI.createImageView({
 		image: 'images/product/barofproduct.png',
-		top: 254
+		top: 252
 	});
 
 	var productDetailView = Ti.UI.createView({
@@ -109,8 +110,7 @@ ProductBuyWindow = function(_product){
 	
 	self.add(scrollView);
 	scrollView.add(productImageView);
-	// scrollView.add(barOfProduct);
-	// scrollView.add(productImage);
+	scrollView.add(barOfProduct);
 	scrollView.add(productDetailView);
 	
 	return self;

@@ -1,5 +1,4 @@
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
-
 exports.searchFriend = function(_userID){
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' +
 				'&user_id='+_userID;
@@ -18,9 +17,8 @@ exports.searchFriend = function(_userID){
 						fbId = curExternalAccount.external_id;
 						break;
 					}
-				Ti.API.info("fb id from acs = "+ fbId);
 				}
-		        //end getFbId
+				
 				var curFriend = {
 					my_id: _userID,
 					friend_id: friend.id,
@@ -33,8 +31,7 @@ exports.searchFriend = function(_userID){
 				friends.push(curFriend);
 			}  	
 			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
-		},
-	    onerror: function(e) {
+		}, onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        alert('friendsACS->searchFriend: Error= '+e.error);
 	    },
@@ -47,12 +44,11 @@ exports.searchFriend = function(_userID){
 //this function give only total results
 exports.friendACS_fetchedUserTotalFriends = function(_id) {
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' + '&user_id='+ _id;
-	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
-	      	responseJSON = JSON.parse(this.responseText);
+			responseJSON = JSON.parse(this.responseText);
 	      	var total_results = Number(responseJSON.meta.total_results);
-	       Ti.App.fireEvent('UserTotalFriendsFromACS', {result: total_results});
+			Ti.App.fireEvent('UserTotalFriendsFromACS', {result: total_results});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
@@ -69,7 +65,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
-	    	alert("success friend added");
+	    	Ti.API.info("Success: Friend added");
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
@@ -117,6 +113,17 @@ exports.showFriendsRequest = function(){
 	    	responseJSON = JSON.parse(this.responseText);
 		      	for (var i = 0; i < responseJSON.response.friend_requests.length; i++) {
 	            var request = responseJSON.response.friend_requests[i]; 
+	            
+	            var fbId = 0;
+				var numExternalAccounts = request.user.external_accounts.length; //friend.external_accounts.length;
+					
+				for(var j=0;j < numExternalAccounts; j++) {
+					var curExternalAccount = request.user.external_accounts[j];
+					if(curExternalAccount.external_type === "facebook") {
+						fbId = curExternalAccount.external_id;
+						break;
+					}
+				}
 				var curRequest = {
 					req_id: request.id,
 					friend_id: request.user.id,
@@ -124,7 +131,7 @@ exports.showFriendsRequest = function(){
 					first_name: request.user.first_name,
 					last_name: request.user.last_name,
 					email: request.user.email,
-					fb_id: request.user.external_accounts[0].external_id,
+					fb_id: fbId
 				};
 				requests.push(curRequest);
 			} 
@@ -140,27 +147,27 @@ exports.showFriendsRequest = function(){
 	xhr.send();
 };
 
-//remove friend ////////////////////////////////////////////
-exports.removedFriendFromACS = function(user_id){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/remove.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function(e) {
-	    	//responseJSON = JSON.parse(this.responseText);
-	    	var response = _callbackFn(this.responseText);
-	    },
-	    onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-			 alert('friendsACS->removedFriendFromACS: Error= '+e.error);
-	    },
-	    timeout:5000  /* in milliseconds */
-	});
-	xhr.open("DELETE", url);
-	 var parameters = {
-	 	//key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
-		user_ids: user_id
-	 };
-	xhr.send(parameters);  // request is actually sent with this statement
-};
+// //remove friend ////////////////////////////////////////////
+// exports.removedFriendFromACS = function(user_id){
+	// var url = 'https://api.cloud.appcelerator.com/v1/friends/remove.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
+	// var xhr = Ti.Network.createHTTPClient({
+	    // onload: function(e) {
+	    	// //responseJSON = JSON.parse(this.responseText);
+	    	// var response = _callbackFn(this.responseText);
+	    // },
+	    // onerror: function(e) {
+			// // this function is called when an error occurs, including a timeout
+			 // alert('friendsACS->removedFriendFromACS: Error= '+e.error);
+	    // },
+	    // timeout:5000  /* in milliseconds */
+	// });
+	// xhr.open("DELETE", url);
+	 // var parameters = {
+	 	// //key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
+		// user_ids: user_id
+	 // };
+	// xhr.send(parameters);  // request is actually sent with this statement
+// };
 
 exports.friendsCheckins = function(_friendsList,_programsList){
 	var programsCheckins = [];

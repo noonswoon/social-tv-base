@@ -1,16 +1,16 @@
-FriendsTableViewRow = function(_user,_source){
-	var _id = _user.friend_id;
-	var currentUser = acs.getUserLoggedIn();
-	var	profileDataImg = 'images/kuma100x100.png';
+FriendsTableViewRow = function(_user,_source) {
 	var FriendACS = require('acs/friendsACS');
 	var ActivityACS = require('acs/activityACS');
-	var friendsModel = require('model/friend');
+	var FriendModel = require('model/friend');
+	
+	var curId = _user.friend_id;
+	var currentUser = acs.getUserLoggedIn();
+	
 	var tableRow = Ti.UI.createTableViewRow({
 		height: 50,
 		selectedBackgroundColor: '#d2eaff',
 	});
 	
-	//Ti.API.info("FriendsTableViewRow fbId: " + _user.fb_id)
 	var friendPhoto = Ti.UI.createImageView({
 		image: acs.getUserImageNormalOfFbId(_user.fb_id),
 		left: 10,
@@ -18,22 +18,32 @@ FriendsTableViewRow = function(_user,_source){
 		width:40,
 		borderRadius: 10,
 	});
+	
 	var friendName = Ti.UI.createLabel({
 		text: _user.first_name + ' ' + _user.last_name,
 		left: 60,
+		height: 20,
 		font: {fontSize: 14, fontStyle: 'bold'}
 	});
-	  var createFriendActivity = function(_category){
+	
+	var approveRequest = function(_response) {
+		alert('Approve '+_user.first_name + ' ' + _user.last_name+ ' as a friend.');
+		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
+		Ti.API.info(_response);
+	}
+	
+	var createFriendActivity = function(_category) {
  		var friendActivityData = {
  			user: acs.getUserId(),
- 			targetedUserID: _id,
+ 			targetedUserID: curId,
 			category: _category,
 			targetedObjectID: acs.getUserId(),
 			additionalData: currentUser.first_name + ' '+ currentUser.last_name,
  		};
- 		return  friendActivityData;
- 	}		
-	if(_source ==="stranger"){
+ 		return friendActivityData;
+ 	}
+ 	
+	if(_source === "stranger") {
 		var approveButton = Ti.UI.createButton({
 			width: 66,
 			height: 30,
@@ -41,19 +51,14 @@ FriendsTableViewRow = function(_user,_source){
 			backgroundImage: 'images/button/button_accept.png',
 		});
 	
-		approveButton.addEventListener('click',function(){
+		approveButton.addEventListener('click',function() {
 			var approveFriendActivityData = createFriendActivity("approvefriend");
-			friendsModel.friend_create(_user);
+			FriendModel.friend_create(_user,_user.fb_id);
  			ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
 			FriendACS.approveFriend(_user.friend_id,approveRequest);
-			FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
-		});		
-	 	tableRow.add(approveButton);
-	};
-	var approveRequest = function(_response){
-		alert('Approve '+_user.first_name + ' ' + _user.last_name+ ' as a friend.');
-		Ti.API.info(_response);
+		});
 		
+	 	tableRow.add(approveButton);
 	};
 		
 	tableRow.add(friendName);
@@ -61,8 +66,6 @@ FriendsTableViewRow = function(_user,_source){
 
 	tableRow.user = _user;
 	
-	return tableRow;
-	
-	
+	return tableRow;	
 }
 module.exports = FriendsTableViewRow;

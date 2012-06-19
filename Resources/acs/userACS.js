@@ -20,8 +20,16 @@ exports.userACS_fetchUserFbId = function(_id,i){
     	user_id: _id
 	}, function (e) {
     if (e.success) {
-    	var fb_id = e.users[0].external_accounts[0].external_id;
-       Ti.App.fireEvent('fbIdreturn'+_id,{fb_id: fb_id, i: i});
+		var fbId = 0;
+		var numExternalAccounts = e.users[0].external_accounts.length;		
+			for(var j=0;j < numExternalAccounts; j++) {
+				var curExternalAccount = e.users[0].external_accounts[j];
+				if(curExternalAccount.external_type === "facebook") {
+					fbId = curExternalAccount.external_id;
+					break;
+				}
+			}
+       Ti.App.fireEvent('fbIdreturn'+_id,{fb_id: fbId, i: i});
     } else {
         alert('userACS_fetchUserFbId Error: ' + ((e.error && e.message) || JSON.stringify(e)));
     }

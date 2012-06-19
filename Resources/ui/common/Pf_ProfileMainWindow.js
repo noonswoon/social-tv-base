@@ -9,15 +9,19 @@ function ProfileMainWindow(_id,_status) {
 		barColor:'#489ec3',
 		barImage: 'images/NavBG.png',
 	});			
+	
 	var nav = Ti.UI.iPhone.createNavigationGroup({
 		window: self
 	});			
+	
 	var settingButton = Titanium.UI.createButton({
 		image: 'images/icon/19-gear.png'
 	});
+	
 	var headerView = Ti.UI.createView({
 		height: 120
 	});		
+	
 	var userProfileTable = Ti.UI.createTableView({
 		top: 0,
 		left: 0,
@@ -25,12 +29,8 @@ function ProfileMainWindow(_id,_status) {
 		bottom: 0,
 		scrollable: false,
 	});
-
-	settingButton.addEventListener('click',function(){
-		var SettingWindow = require('ui/common/Am_SettingWindow');					
-		var settingwin = new SettingWindow();
-		self.containingTab.open(settingwin);
-	});
+	
+	var userProfile = UserModel.userModel_fetchUserProfile(_id);
 			
 	var createProfileView = function(userProfile){
 		Ti.API.info('createProfileView: ' + userProfile.first_name +' ' + userProfile.last_name);	
@@ -41,7 +41,6 @@ function ProfileMainWindow(_id,_status) {
 		else self.title = userProfile.first_name + ' ' + userProfile.last_name;
 			
 		var header = Ti.UI.createTableViewSection();
-		
 		var profileHeader = new ProfileHeader(self, userProfile, _status);
 		var profileDetail = new ProfileDetail(self, userProfile, _status);
 		var userProfileData=[];
@@ -52,20 +51,13 @@ function ProfileMainWindow(_id,_status) {
 		userProfileData.push(profileDetail);
 		userProfileTable.setData(userProfileData);
 		self.add(userProfileTable);		
-		
-	};
+	}; //end of function: createProfileView
 	
-	var userProfile = UserModel.userModel_fetchUserProfile(_id);
+
 	if(userProfile === undefined) {
 		UserACS.userACS_fetchCurrentUser(_id);
-	}
-	else createProfileView(userProfile);		//user data from database
-	
-	Ti.App.addEventListener('userProfileLoaded'+_id, function(e) {
-		userProfile = e.userProfile;
-		createProfileView(userProfile);
-	});
-	
+	} else createProfileView(userProfile);		//user data from database	
+
 	var userLoadedCallBack = function(e){
 		UserModel.userModel_updateUserFromACS(e.fetchedUser); //insert to db
 		userProfile = UserModel.userModel_fetchUserProfile(_id); //select from db
@@ -74,13 +66,23 @@ function ProfileMainWindow(_id,_status) {
 	
 	Ti.App.addEventListener('userLoaded'+_id, userLoadedCallBack);
 	
+	Ti.App.addEventListener('userProfileLoaded'+_id, function(e) {
+		userProfile = e.userProfile;
+		createProfileView(userProfile);
+	});
+	
+	settingButton.addEventListener('click',function(){
+		var SettingWindow = require('ui/common/Am_SettingWindow');					
+		var settingwin = new SettingWindow();
+		self.containingTab.open(settingwin);
+	});
 	
 	//remove event listeners for all the children of ProfileMainWindow
 	self.addEventListener('close', function() {
 		Ti.API.info("closing profile main window");
 		Ti.App.fireEvent('profileMainWindowClosing'+_id);
 	});
-
+	
 	return self;
 }
 

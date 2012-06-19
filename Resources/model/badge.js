@@ -39,7 +39,6 @@ exports.badge_fetchBadges = function(){
 };
 
 exports.fetchedBadgeSearch = function(_badgeId){
-	//var fetchedABadge = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	
 	var result = db.execute('SELECT * FROM badges');

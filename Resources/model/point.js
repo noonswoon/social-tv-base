@@ -8,6 +8,7 @@ db.close();
 exports.pointModel_updateLeadersFromACS = function(_leadersCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
 	db.execute('DELETE FROM leaderboard');
+	Ti.API.info('_leadersCollection = '+_leadersCollection.length);
 	for(var i=0;i < _leadersCollection.length; i++) {
 		var curRank = _leadersCollection[i];
 		var name =  curRank.user.first_name +' '+ curRank.user.last_name;

@@ -1,26 +1,25 @@
 //fetch user + friends' info
 exports.leaderACS_fetchedRank = function(_ids){
 	Cloud.Objects.query({
-	classname: 'LeaderBoard',	
-    page: 1,
-    per_page: 100,
-    where: {"user_id":{"$in":_ids}},
- //   order: '-totalPoint'
-}, function (e) {
-    if (e.success) {
-    	var leaders = [];
-    	Ti.API.info('success: '+e.LeaderBoard.length);
-        for (var i = 0; i < e.LeaderBoard.length; i++){
-        	 var curRank = e.LeaderBoard[i];
-        	 leaders.push(curRank);
-         }
-		Ti.App.fireEvent('leaderBoardLoaded',{fetchedLeader:leaders});
-    } 
-    else {
-        alert('leaderboardACS-> fetchedRank: Error:\\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
-    	 }
-			});
+		classname: 'LeaderBoard',	
+	    page: 1,
+	    per_page: 100,
+	    where: {"user_id":{"$in":_ids}},
+	    //order: '-totalPoint'
+	}, function (e) {
+	    if (e.success) {
+	    	var leaders = [];
+	    	Ti.API.info('success: '+e.LeaderBoard.length);
+	        for (var i = 0; i < e.LeaderBoard.length; i++){
+	        	 var curRank = e.LeaderBoard[i];
+	        	 leaders.push(curRank);
+	         }
+			Ti.App.fireEvent('leaderBoardLoaded',{fetchedLeader:leaders});
+	    } else {
+			alert('leaderboardACS-> fetchedRank: Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    	 }
+	});
 };
 
 //create only when create user for the first time entering into this application: totalPoint starts at 0 
@@ -50,20 +49,19 @@ exports.leaderACS_createUserInfo = function(_user){
 
 //update totalPoint
 exports.leaderACS_updateUserInfo = function(_id,_point){
-Cloud.Objects.update({
-    classname: 'LeaderBoard',
-    id: _id,
-    fields: {
-        totalPoint: _point,
-    }
-}, function (e) {
-    if (e.success) {
-        var leaderBoard = e.LeaderBoard[0];
-        Ti.API.info('Success:\\n' + 'totalPoint: ' + leaderBoard.totalPoint);
-            //fireevent update database
-    } else {
-        alert('leaderboardACS 65 Error:\\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
-    }
-});
+	Cloud.Objects.update({
+	    classname: 'LeaderBoard',
+	    id: _id,
+	    fields: {
+	        totalPoint: _point,
+	    }
+	}, function (e) {
+	    if (e.success) {
+	        var leaderBoard = e.LeaderBoard[0];
+	        Ti.API.info('Success:\\n' + 'totalPoint: ' + leaderBoard.totalPoint);
+	    } else {
+	        alert('leaderboardACS 65 Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
 };

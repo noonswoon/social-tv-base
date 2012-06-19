@@ -210,7 +210,7 @@ function CommentWindow(_topicId) {
 		commentsTable.deleteRow(e.rowIndexToDelete);
 	}
 	
-	function update1activityCallBack(e) {
+	var updateAnActivityCallBack = function(e) {
 		ActivityModel.activity_updateOne(e.fetchedAnActivity);
 		Ti.App.fireEvent('activityDbUpdated');
 	}
@@ -293,7 +293,7 @@ function CommentWindow(_topicId) {
 	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	Ti.App.addEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
 	Ti.App.addEventListener('deletingCommentTableViewRow', removeTableViewRowCallback);
-	Ti.App.addEventListener('update1activity',update1activityCallBack);
+	Ti.App.addEventListener('updateAnActivity'+acs.getUserId(),updateAnActivityCallBack);	
 	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);
@@ -303,7 +303,7 @@ function CommentWindow(_topicId) {
 		Ti.App.removeEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 		Ti.App.removeEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
 		Ti.App.removeEventListener('deletingCommentTableViewRow', removeTableViewRowCallback);
-		Ti.App.removeEventListener('update1activity',update1activityCallBack);
+		Ti.App.removeEventListener('updateAnActivity'+acs.getUserId(),updateAnActivityCallBack);
 	});
 	
 	//PAGE LOGIC/CONTROLLER

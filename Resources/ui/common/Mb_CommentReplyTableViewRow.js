@@ -1,9 +1,13 @@
 CommentReplyTableViewRow = function(_comment, _level) {
 	//HEADER
+	var Topic = require('model/topic');
+	var ActivityModel = require('model/activity');
 	var Comment = require('model/comment');
 	var CommentACS = require('acs/commentACS');
 	var UserReportACS = require('acs/userReportACS');
+	var ActivityACS = require('acs/activityACS');
 	
+	var userId = acs.getUserId();
 	var username = acs.getUserLoggedIn().username;
 	//var username = 'titaniummick'
 		
@@ -231,12 +235,29 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		//eventlistener of insertingCommentTableViewRow is in Mb_CommentWindow file, it will insert the tableviewrow
 		Ti.App.fireEvent('insertingCommentTableViewRow',{commentDetailForNewTableViewRow: commentDetailForNewTableViewRow});
 		
-		
 		//The fn fires a commentOfCommentCreatedACS event when done,
 		// the listener for the event is in Mb_CommentWindow.js file...add newId param
 		var rowIndexToUpdateACSObjectId = row.index+1; //currently the new inserted row will have acsObjectId = 0
 		var commentLevel = _level+1;
 		CommentACS.commentACS_createCommentOfComment(responseText,newId,_comment.acsObjectId,_comment.topicId,rowIndexToUpdateACSObjectId,commentLevel);
+		
+		//activity stuff
+		//update to activity feed to the thread's owner
+		//1. insert to activity db 
+		var curTopic = Topic.topicModel_getTopicById(_comment.topicId);
+		var commentActivityData = {
+			user_id: userId,
+			targetedUserID: _comment.username, //owner of the thread
+			category: 'comment',
+			targetedObjectID: _comment.topicId, //acsId of the topic
+			additionalData: curTopic.title, //topicStr
+		};
+		
+		//2. send activity object to acs with local_id
+		var newActivityId = ActivityModel.activityModel_create(commentActivityData);
+		
+		//3. come back and update local activity db with acs_object_id
+		ActivityACS.activityACS_createMyActivity(commentActivityData,newActivityId);
 		
 		//clear the UI, clear replyTextField value, hide the toolbar
 		replyTextField.value = "";

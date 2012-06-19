@@ -1,8 +1,11 @@
 function CommentWindow(_topicId) {
 	//HEADERS
 	var Topic = require('model/topic');
+	var ActivityModel = require('model/activity');
 	var Comment = require('model/comment');
 	var CommentACS = require('acs/commentACS');
+	var ActivityACS = require('acs/activityACS');
+	
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
 	var CacheHelper = require('helpers/cacheHelper');
@@ -206,6 +209,11 @@ function CommentWindow(_topicId) {
 	function removeTableViewRowCallback(e) {
 		commentsTable.deleteRow(e.rowIndexToDelete);
 	}
+	
+	function update1activityCallBack(e) {
+		ActivityModel.activity_updateOne(e.fetchedAnActivity);
+		Ti.App.fireEvent('activityDbUpdated');
+	}
 
 	function postCommentAction(e) {
 		if(commentHeader._getReplyTextAreaContent() === '') {
@@ -239,9 +247,28 @@ function CommentWindow(_topicId) {
 			Ti.API.info('sending notification..coz someone else comments on your topic');
 		}
 		
+		//activity on comment
+		//update to activity feed to the thread's owner
+		//1. insert to activity db 
+		var commentActivityData = {
+			user_id: acs.getUserId(),
+			targetedUserID: curTopic.username, //owner of the thread
+			category: 'comment',
+			targetedObjectID: _topicId, //acsId of the topic
+			additionalData: curTopic.title, //topicStr
+		};
+		
+		//2. send activity object to acs with local_id
+		var newActivityId = ActivityModel.activityModel_create(commentActivityData);
+		
+		//3. come back and update local activity db with acs_object_id
+		ActivityACS.activityACS_createMyActivity(commentActivityData,newActivityId);
+		
 		commentHeader._setReplyTextArea("");
 		commentHeader._blurReplyTextArea();
 	}
+	
+	
 	//ADD EVENT LISTENERS  header.replyButton
 	commentHeader._getReplyButton().addEventListener('click',postCommentAction); //can either post by click on the 'reply' keyboard button (only iOS)
 	commentHeader._getReplyTextArea().addEventListener('return',postCommentAction); //or click on the 'return' button (iOS/Android)
@@ -266,6 +293,7 @@ function CommentWindow(_topicId) {
 	Ti.App.addEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 	Ti.App.addEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
 	Ti.App.addEventListener('deletingCommentTableViewRow', removeTableViewRowCallback);
+	Ti.App.addEventListener('update1activity',update1activityCallBack);
 	
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener("commentsLoadedComplete",commentsLoadedCompleteCallback);
@@ -275,6 +303,7 @@ function CommentWindow(_topicId) {
 		Ti.App.removeEventListener('commentsDbUpdated', commentsDbUpdatedCallback);
 		Ti.App.removeEventListener('insertingCommentTableViewRow', addNewCommentTableViewRowCallback);
 		Ti.App.removeEventListener('deletingCommentTableViewRow', removeTableViewRowCallback);
+		Ti.App.removeEventListener('update1activity',update1activityCallBack);
 	});
 	
 	//PAGE LOGIC/CONTROLLER

@@ -44,6 +44,4 @@ exports.activityACS_createMyActivity = function(_activity,local_id){
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
-	
-	
 };

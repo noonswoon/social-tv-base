@@ -52,7 +52,7 @@ exports.activityModel_fetchActivity = function(_id) {
 };
 //create temporary activity into database
 exports.activityModel_create = function(_activity){
-	var now = convertACSTimeToLocalTime(moment().format('YYYY-MM-DDTHH:mm:ss'));
+	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
 	var db = Ti.Database.open('Chatterbox'); 
 	var curActivity = _activity;
 	//curActivity.updated_at = convertACSTimeToLocalTime(curActivity.updated_at);

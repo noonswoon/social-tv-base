@@ -61,6 +61,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status){
 	});
 	var updateActivity = require('helpers/updateActivity');
 	var ActivityACS = require('acs/activityACS');
+	var LeaderBoardACS = require('acs/leaderboardACS')
 	var newBadgeUnlockCallback = function(e){
 		badgeData = BadgeModel.fetchedBadgeSearch(e.badgeID);
 		alert('badgeData.title: '+badgeData.title);

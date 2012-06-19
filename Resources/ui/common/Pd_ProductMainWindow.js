@@ -46,7 +46,7 @@ function ProductMainWindow(_programId) {
 	productSelectProgramToolbar.add(callPicker);
 	
 	var selectProgramLabel = Ti.UI.createLabel({
-		text: infoForName[0].name,
+		text: 'Cool stuff',//infoForName[0].name,
 		left: 10,
 		width: 'auto',
 		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }

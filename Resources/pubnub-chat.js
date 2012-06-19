@@ -1,30 +1,30 @@
 // ----------------------------------
 // INCLUDE PUBNUB
 // ----------------------------------
-Ti.include('./pubnub.js');
+	Ti.include('./pubnub.js');
 
-var TVProgram = require('model/tvprogram');
-var hasLoadedPicker = false;
-
-// ----------------------------------
-// INIT PUBNUB
-// ----------------------------------
-var pubnub = Ti.PubNub.init({
-    publish_key   : 'pub-5d5a8d08-52e1-4011-b632-da2a91d6a2b9',
-    subscribe_key : 'sub-de622063-9eb3-11e1-8dea-0b2d0bf49bb9',
-    ssl           : false,
-    origin        : 'pubsub.pubnub.com'
-});
-
-var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
-var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
-
-//dummy userobject
-var userObject = {id:acs.getUserId(),fbId: acs.getUserFbId(),imageUrl: acs.getUserImage()};
-var adminUserObject = {id: '', imageUrl: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png'}; //for the greet message
-var historyMessages = [];
-var lastHistoryLoadedIndex = 0;
-var totalHistoryMessages = 0;
+	var TVProgram = require('model/tvprogram');
+	var hasLoadedPicker = false;
+	
+	// ----------------------------------
+	// INIT PUBNUB
+	// ----------------------------------
+	var pubnub = Ti.PubNub.init({
+	    publish_key   : 'pub-5d5a8d08-52e1-4011-b632-da2a91d6a2b9',
+	    subscribe_key : 'sub-de622063-9eb3-11e1-8dea-0b2d0bf49bb9',
+	    ssl           : false,
+	    origin        : 'pubsub.pubnub.com'
+	});
+	
+	var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
+	var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
+	
+	//dummy userobject
+	var userObject = {id:acs.getUserId(),fbId: acs.getUserFbId(),imageUrl: acs.getUserImage()};
+	var adminUserObject = {id: '', imageUrl: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png'}; //for the greet message
+	var historyMessages = [];
+	var lastHistoryLoadedIndex = 0;
+	var totalHistoryMessages = 0;
 
 	var chatMessagesTableView = Ti.UI.createTableView({
 		top:90,
@@ -33,8 +33,7 @@ var totalHistoryMessages = 0;
 		separatorColor: 'transparent',
 	});
 
-Ti.App.Chat = function(setup) {
-    
+Ti.App.Chat = function(setup) {    
     var curUserInput = "";
    
    	var chatMessagesTableView = Ti.UI.createTableView({
@@ -185,17 +184,19 @@ Ti.App.Chat = function(setup) {
 
 	selectProgramButton.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
+			var dataForPicker = [];
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 				var programId = myCurrentCheckinPrograms[i];
-				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-				var programName = programInfo[0].name;
-				var row = Ti.UI.createPickerRow();
-				var programNameInRow = Ti.UI.createLabel({
-					text: programName
-				});
-				row.add(programNameInRow);
-				picker.add(row);
+				if(programId === 'CTB_PUBLIC') {
+					dataForPicker.push({title:'Public Board', progId:'CTB_PUBLIC'});
+				} else {
+					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+					var programName = programInfo[0].name;
+					var program_id = programInfo[0].program_id;
+					dataForPicker.push({title:programName, progId:program_id});
+				}
 			}
+			picker.add(dataForPicker);
 			picker_view.add(picker);
 			hasLoadedPicker = true;
 		}
@@ -229,8 +230,8 @@ Ti.App.Chat = function(setup) {
 		width:320
 	});
 	
-	
-	for(var i=0;i<10;i++){
+	//scrollable users -> still dummy values
+	for(var i=0;i<5;i++){
 		var userDisplayBorder = Ti.UI.createView({
 			backgroundImage: 'images/chat/users_display.png',
 			width: 36,
@@ -280,13 +281,13 @@ Ti.App.Chat = function(setup) {
 		top: 120,
 		height: 30,
 	});
+	
 	var loadHistoryButton = Ti.UI.createButton({
 		width: 150,
 		height: 26,
 		backgroundImage: 'images/chat/loadearliermessage.png'
 	});
 	loadHistoryMessagesRow.add(loadHistoryButton);
-	
 	
 	var chatInputView = Ti.UI.createView({
 		bottom: 0,
@@ -295,6 +296,7 @@ Ti.App.Chat = function(setup) {
 		zIndex: 2,
 		backgroundImage: 'images/chat/footerBG.png'
 	});
+	
 	var chatInputTextField   = Ti.UI.createTextArea({
         width: 237,
         height: 30,
@@ -397,7 +399,6 @@ Ti.App.Chat = function(setup) {
 			}				
 		}
     });
-    
 
 	chatInputTextField.addEventListener('focus', function() {
 		chatInputView.top = 140;

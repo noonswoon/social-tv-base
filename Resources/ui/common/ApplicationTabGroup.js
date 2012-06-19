@@ -25,7 +25,7 @@ function ApplicationTabGroup() {
 	var myUserId = acs.getUserId();
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new MessageboardMainWindow(7); //ChatMainWindow(programDummy);
+	var chatwin = new ChatMainWindow(programDummy);
 	var messageboardwin = new MessageboardMainWindow(7);		
 	var productwin = new ProductMainWindow('CH3_000HT');
 	var profilewin =  new ProfileMainWindow(myUserId,"me");

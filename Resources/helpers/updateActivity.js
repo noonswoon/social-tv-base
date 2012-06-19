@@ -3,42 +3,57 @@
  * 		2. comment		(+1)
  * 		3. get badge	(+5)
  */
+
+			//checkin data to insert into checkin database	
+var createCheckinData = function(_act) {
+	point = 5;
+	var checkinData = {
+	  	event_id: _act.eventId,
+	  	user_id: acs.getUserId(),
+		score: point
+	};
+	return checkinData;
+}
+
+var createActivityData = function(_act,_type,_targetObject,_addData,_point) {
+	var activityData = {
+		user_id: acs.getUserId(),
+		targetedUserID: acs.getUserId(),
+		category: _type,
+		targetedObjectID: _targetObject, //_act.eventId,
+		additionalData: _addData //_act.programTitle,
+	};
+	return activityData;
+}
+var createLeaderBoardData = function(_name,_point) {
+	var leaderboardData = {
+		user_id: acs.getUserId(),
+		name: _name,
+		point: _point
+	};
+	return leaderboardData;
+}
+
 exports.updateActivity_myDatabase = function(_type,_act){
-	var BadgeCondition = require('helpers/badgeCondition'); //checking condition to add badge
 	var CheckinModel = require('model/checkin');
 	var PointModel = require('model/point');
 	var ActivityModel = require('model/activity');  		
 	
 	var id = acs.getUserId();
 	var name = acs.getUserLoggedIn().first_name + ' '+ acs.getUserLoggedIn().last_name;
-	var _point;
-	var	resultArray = [];
+	var	dataArray = [];
 	var idArray = [];
+	var point;
 	
 	switch (_type){
 		case 'checkin': {
+			point = 5;
 	  		Ti.API.info("update type:"+_type);
-	  		_point = 5;
-			// 1. update checkin / activity data	
-	  		var checkinData = {
-	  			event_id: _act.eventId,
-	  			user_id: id,
-				score: _point
-			};
-	  		checkinId = CheckinModel.checkin_create(checkinData);
-	  		//return local id from checkin database /temporary -> update everytime when start application (= delete all database + clear local id)
+			var checkinData = createCheckinData(_act);
+			var activityData = createActivityData(_act,_type,_act.eventId,_act.programTitle,point);
+			checkinId = CheckinModel.checkin_create(checkinData);
 	  		idArray.push(checkinId);
-			resultArray.push(checkinData);
-			
-			//prepared activity data to insert into activiy database
-			var activityData = {
-				user_id: id,
-				targetedUserID: id,
-				category: _type,
-				targetedObjectID: _act.eventId,
-				additionalData: _act.programTitle,
-			};
-
+			dataArray.push(checkinData);
 			break;
 		};
 		case 'comment': {
@@ -49,44 +64,31 @@ exports.updateActivity_myDatabase = function(_type,_act){
 		};
 		case 'getbadge': {
 			Ti.API.info("update type:"+_type);	
-			_point = 5;	
-			
-			var activityData = {
-				user_id: id,
-				targetedUserID: id,
-				category: _type,
-				targetedObjectID: _act.badgeID,
-				additionalData: _act.title,
-			};
-				break;
+			point = 5;
+			var activityData = createActivityData(_act,_type,_act.badgeID,_act.title,point);
+			break;
 		};
 		default: {
 			Ti.API.info("_default");
 		};
 	};
-
-	// 2. update leaderboard
-	var leaderboardData = {
-		user_id: id,
-		name: name,
-		point: _point
-	};
-	var leaderboard =[]; //acs id + newPoint
+	
+	var leaderboardData = createLeaderBoardData(name,point);
+	var leaderboard =[]; //[0]=acs id [1]=newPoint to update into leaderboard
 	leaderboard = PointModel.pointModel_updateLeaderToACS(leaderboardData);
 	leaderboardACSid = leaderboard[0];
 	leaderboardData.point = Number(leaderboard[1]);
-	idArray.push(leaderboardACSid);
-	resultArray.push(leaderboardData);
 	
-	// 3. update activity
 	activityId = ActivityModel.activityModel_create(activityData);
+	
+	idArray.push(leaderboardACSid);
+	dataArray.push(leaderboardData);
 	idArray.push(activityId);
-	resultArray.push(activityData);
+	dataArray.push(activityData);
 
 	var returnArray = [];
-	returnArray.push(resultArray);
-	returnArray.push(idArray);
+	returnArray.push(dataArray);	//dataArray = checkinData / leaderboardData / activityData
+	returnArray.push(idArray);		//idArray = checkinId / leaderboardId / activityId
+	
 	return returnArray;
-	//result array = checkinData / leaderboardData / activityData
-	//idArray = checkinId / leaderboardId / activityId
 };

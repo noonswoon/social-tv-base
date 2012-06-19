@@ -1,12 +1,11 @@
 CheckinMainWindow = function (_tvprogramData, _containingTab){
 	
 	var CheckinACS = require('acs/checkinACS');
-	var CheckinModel = require('model/checkin');
 	var PointACS = require('acs/pointACS');
 	var LeaderBoardACS = require('acs/leaderBoardACS');
 	var ActivityACS = require('acs/activityACS');
-	var ActivityModel = require('model/activity');
-	var BadgeCondition = require('helpers/badgeCondition');
+	var CheckinModel = require('model/checkin');
+	
 	var TVProgram = require('model/tvprogram');
 	
 	var updateActivity = require('helpers/updateActivity');
@@ -391,15 +390,8 @@ function isPointInPoly(poly, pt)
 	};
 	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
 
-	function update1activityCallBack(e) {
-		ActivityModel.activity_updateOne(e.fetchedAnActivity);
-		Ti.App.fireEvent('activityDbUpdated');
-	};
-	Ti.App.addEventListener('update1activity',update1activityCallBack);
-
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener('update1checkin', update1checkinCallBack);
-		Ti.App.removeEventListener('update1activity',update1activityCallBack);
 		Ti.App.removeEventListener('checkinToProgram');
 	});
 

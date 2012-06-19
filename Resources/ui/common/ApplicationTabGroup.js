@@ -12,6 +12,7 @@ function ApplicationTabGroup() {
     var BlankWindow = require('ui/common/BlankWindow');
     
     var areTabsDiabled = false;
+    var myUserId = acs.getUserId();
     
 	var programPublic = {
 		programId: 'CTB_PUBLIC', 
@@ -21,10 +22,6 @@ function ApplicationTabGroup() {
 		programChannel: 'CTB',
 		programNumCheckin: 25345
 	};
-	
-	var myUserId = acs.getUserId();
-	
-	//alert(acs.getUserLoggedIn());
 	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programPublic);
@@ -129,21 +126,19 @@ function ApplicationTabGroup() {
 	var LevelModel = require('model/level');
 	var CheckinModel = require('model/checkin');
 	var TVProgramModel = require('model/tvprogram');
-	
 	//not frequently update
 	LevelACS.levelACS_fetchedLevel();
 	BadgesACS.fetchedBadges();
-		
 	//my user ACS
 	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
 	FriendACS.showFriendsRequest();	
 	FriendACS.searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
-
 	
-	function levelLoadedCallBack(e){					
+	function levelLoadedCallBack(e) {					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
-	};
+	}
+	
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
 	
 	function checkinDbLoadedCallBack(e){			
@@ -155,29 +150,31 @@ function ApplicationTabGroup() {
 			self.remove(disableTabsView);
 			areTabsDiabled = false;
 		}
-		
+
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id; 
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
 			myCurrentCheckinPrograms.push(programId);
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
-	};
+	}
+	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	
 	function updateHeaderCheckinCallback() {
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
 	}
+	
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
 	
 	//checkinToProgram event fires from Cs_CheckinMainWindow
 	function checkinToProgramCallback() {
 		if(areTabsDiabled) {
    			self.remove(disableTabsView);
-			areTabsDiabled = false;
-			
+			areTabsDiabled = false;	
    		}
 	}
+	
    	Ti.App.addEventListener('checkinToProgram', checkinToProgramCallback);
    	
    	function closeApplicationTabGroupCallback() {
@@ -189,6 +186,7 @@ function ApplicationTabGroup() {
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}
+   	
    	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
    	
     return self;

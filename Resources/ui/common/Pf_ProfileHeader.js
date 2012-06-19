@@ -1,32 +1,23 @@
 var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
-	Ti.API.info('Profile Status: '+_status);
-	var curId = _userProfile.id;
-	var totalCheckins = 0;
+	//possible value for _status = me / friend / stranger
 	var CheckinACS = require('acs/checkinACS');		
 	var FriendACS = require('acs/friendsACS');
 	var myBadgeACS = require('acs/myBadgeACS');
 	var ActivityACS = require('acs/activityACS');
+
 	var FriendsModel = require('model/friend');
 	var CacheHelper = require('helpers/cacheHelper');
 	var updateActivity = require('helpers/updateActivity');
+
 	var FriendsMainWindow = require('ui/common/pf_friendsMainWindow');
+
 	var currentUser = acs.getUserLoggedIn();
+	var curId = _userProfile.id;
+	var totalCheckins = 0;
 	
-	//POSSIBLE STATUS = me / friend / stranger
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	ActivityACS.activityACS_fetchedMyActivity(curId);
 
-//ACS RESPONDING//////////////////////////////////////////////////////////////	
-	// respond in total result only
-	Ti.App.addEventListener('UserTotalCheckInsFromACS'+curId, function(e){
-		columnCheckInCount.text = e.result;
-	});
-	
-	Ti.App.addEventListener('UserTotalFriendsFromACS', function(e){ //only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
-		columnFriendCount.text = e.result;
-	});
-//////////////////////////////////////////////////////////////////////////////
-	//REFRESH BUTTON TO RELOAD THE ACS//
 	var refreshButton = Ti.UI.createImageView({
 		image: 'images/icon/refresh.png',
 		right: 10,
@@ -34,17 +25,14 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		height:20,
 		width:20
 	});
-	refreshButton.addEventListener('click',function(){
-		alert('refresh');
-		FriendACS.searchFriend(curId);
-		 FriendACS.showFriendsRequest();
-		myBadgeACS.myBadgeACS_fetchedBadge(curId);
-	});
 
-	var headerView = Ti.UI.createView({
-	});
-	headerView.backgroundGradient = { type: 'linear', startPoint: { x: '0%', y: '0%' }, endPoint: { x: '0%', y: '100%' },
-									  colors: [{ color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 }] };
+	var headerView = Ti.UI.createView();
+	headerView.backgroundGradient = {
+		type: 'linear',
+		startPoint: { x: '0%', y: '0%' },
+		endPoint: { x: '0%', y: '100%' },
+		colors: [{ color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 }]
+	};	
 
 	var profilePicture = Ti.UI.createImageView({
 		image: acs.getUserImageNormalOfFbId(_userProfile.fb_id),
@@ -80,12 +68,12 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		borderWidth: 1,
 		borderColor: '#8ba82f'
 	});
-	//img
+	
 	var columnCheckInImage = Ti.UI.createImageView({
 		image: 'images/icon/tv.png',
 		width: 22, height: 22, top: 10,
 	});
-	//count
+	
 	var columnCheckInCount = Ti.UI.createLabel({
 		font: {fontSize: 20, fontStyle: 'bold'},
 		shadowColor: '#999',
@@ -93,8 +81,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		height: 30,
 		bottom:10
 	});
-
-	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);
 	
 	var columnFriend = Ti.UI.createView({
 		top: 40,
@@ -106,12 +92,12 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		borderWidth: 1,
 		borderColor: '#80538e'
 	});
-	//img
+	
 	var columnFriendImage = Ti.UI.createImageView({
 		image: 'images/icon/112-group.png',
 		top: 10
 	});
-	// count
+	
 	var columnFriendCount = Ti.UI.createLabel({
 		font: {fontSize: 20, fontStyle: 'bold'},
 		color: '#fff',
@@ -120,10 +106,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		bottom: 10
 	});
 	
-	columnFriend.addEventListener('click',function(){
-		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"friend"));
-	});	
-		
 	 var columnIsFriend = Ti.UI.createView({
 		top: 40,
 		left: 185,
@@ -134,6 +116,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		borderWidth: 1,
 		borderColor: '#3283a6'
 	 });
+	 
 	 var columnIsFriendImage = Ti.UI.createImageView({
 	 	image: 'images/icon/checkin.png',
 		top: 10,
@@ -157,10 +140,12 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		borderWidth: 1,
 		borderColor: '#8e8e8e'
 	 });
+	 
 	 var columnNotFriendImage = Ti.UI.createImageView({
 	 	image: 'images/icon/checkin_grey.png',
 		top: 10,
 	 });
+	 
 	var columnNotFriendLabel = Ti.UI.createLabel({
 		text: "Friend",
 		font: {fontSize: 15, fontStyle: 'bold'},
@@ -180,10 +165,12 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		borderWidth: 1,
 		borderColor: '#3283a6'
 	 });
+	 
 	 var columnAddFriendImage = Ti.UI.createImageView({
 	 	image: 'images/icon/act_add_white.png',
 		top: 10,
 	 });
+	 
 	var columnAddFriendLabel = Ti.UI.createLabel({
 		text: "Add",
 		font: {fontSize: 15, fontStyle: 'bold'},
@@ -191,9 +178,22 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		shadowColor: '#999',
 		height: 30,
 		bottom: 10
-	}); 
- 
-  	var createFriendActivity = function(_category){
+	});
+	
+	var sendRequest = function(_response){
+		alert('Your request has been sent.');
+		Ti.API.info(_response);
+		reloadView();
+	}
+	
+ 	var approveRequest = function(_response){
+		alert('You have approved the request');
+		Ti.API.info(_response);
+		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
+		reloadView();
+	}
+	
+ 	var createFriendActivity = function(_category){
  		var friendActivityData = {
  			user: acs.getUserId(),
  			targetedUserID: _userProfile.id,
@@ -205,7 +205,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
  	}		
 
  	var addFriend = function(isRequest,i) {
-  		Ti.API.info('addFriend: isRequest = '+ isRequest);
  		//condition 1: no request from this user
  		if(!isRequest) {
 		 	var addFriendActivityData = createFriendActivity("addfriend");
@@ -222,34 +221,11 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 			Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
 		}	
 		FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
+		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		_parentWindow.close();
- 	}
- 	
- 	columnAddFriend.addEventListener('click',function(){
- 		var isRequest = false;
- 		for(i=0;i<friendRequests.length;i++){
- 			if (friendRequests[i].friend_id) {
- 				isRequest = true;
- 				break;
- 			}
- 		}
- 		addFriend(isRequest,i);
- 	});
+ 	}	
 
- 	var sendRequest = function(_response){
-		alert('Your request has been sent.');
-		Ti.API.info(_response);
-		reloadView();
-	}
- 	var approveRequest = function(_response){
-		alert('You have approved the request');
-		Ti.API.info(_response);
-		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
-		reloadView();
-	}
-	
-	//MANAGE VIEW FOR HEADER
-	//POSSIBLE STATUS = me / friend / stranger
+	//Create view for header
 	var createHeaderView = function(status){
 		profilePictureContain.add(profilePicture);
 		columnCheckIn.add(columnCheckInImage);
@@ -262,16 +238,16 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 			columnIsFriend.add(columnIsFriendImage);
 			columnIsFriend.add(columnIsFriendLabel);
 			headerView.add(columnIsFriend);
-		}	
-		else if(status === "stranger") {
+		} else 
+		if(status === "stranger") {
 			columnNotFriend.add(columnNotFriendImage);
 			columnNotFriend.add(columnNotFriendLabel);
 			headerView.add(columnNotFriend);
 			columnAddFriend.add(columnAddFriendImage);
 			columnAddFriend.add(columnAddFriendLabel);
 			headerView.add(columnAddFriend);
-		}
-		else if(status === "me") {
+		} else 
+		if(status === "me") {
 			headerView.add(refreshButton);
 			columnFriend.add(columnFriendImage);
 			columnFriend.add(columnFriendCount);	
@@ -279,10 +255,43 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 		};
 	};
 	
+	// respond in total result only
+	Ti.App.addEventListener('UserTotalCheckInsFromACS'+curId, function(e) {
+		columnCheckInCount.text = e.result;
+	});
+	
+	//only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
+	Ti.App.addEventListener('UserTotalFriendsFromACS', function(e){ 
+		//alert('UserTotalFriendsFromACS: '+e.result);
+		columnFriendCount.text = e.result;
+	});
+
+	refreshButton.addEventListener('click',function(){
+		alert('refresh');
+		// FriendACS.searchFriend(curId);
+		 // FriendACS.showFriendsRequest();
+		// myBadgeACS.myBadgeACS_fetchedBadge(curId);
+	});
+	
+	columnFriend.addEventListener('click',function(){
+		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"friend"));
+	});	
+ 	
+ 	columnAddFriend.addEventListener('click',function(){
+ 		var isRequest = false;
+ 		for(i=0;i<friendRequests.length;i++){
+ 			if (friendRequests[i].friend_id) {
+ 				isRequest = true;
+ 				break;
+ 			}
+ 		}
+ 		addFriend(isRequest,i);
+ 	});
+
+	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);
 
-return headerView;
-
+	return headerView;
 }
 
 module.exports = ProfileHeaderView;

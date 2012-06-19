@@ -1,23 +1,22 @@
 
 exports.levelACS_fetchedLevel = function() {
-	//Ti.API.info('call levelACS_fetchedLevel');
 	Cloud.Objects.query({
-	classname: 'Level',	
-    page: 1,
-    per_page: 20
-}, function (e) {
-    if (e.success) {
-    	var level =[];
-        for (var i = 0; i < e.Level.length; i++) {
-        	 var curLevel = e.Level[i];
-               level.push(curLevel);
-         }
-		Ti.App.fireEvent('levelLoaded',{fetchedLevel:level});
-		return level;
-    } 
-    else {
-        alert('LevelACS-> fetchedLevel Error:\\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
-    	 }
-			});
+		classname: 'Level',	
+	    page: 1,
+	    per_page: 20
+	}, function (e) {
+	    if (e.success) {
+	    	var level =[];
+	        for (var i = 0; i < e.Level.length; i++) {
+	        	 var curLevel = e.Level[i];
+	               level.push(curLevel);
+	         }
+			Ti.App.fireEvent('levelLoaded',{fetchedLevel:level});
+			return level;
+	    } 
+	    else {
+	        alert('LevelACS-> fetchedLevel Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    	 }
+		});
 };

@@ -337,8 +337,15 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	};
 	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
 
+	function update1activityCallBack(e) {
+		ActivityModel.activity_updateOne(e.fetchedAnActivity);
+		Ti.App.fireEvent('activityDbUpdated');
+	};
+	Ti.App.addEventListener('update1activity',update1activityCallBack);
+
 	self.addEventListener("close", function(e) {
 		Ti.App.removeEventListener('update1checkin', update1checkinCallBack);
+		Ti.App.removeEventListener('update1activity',update1activityCallBack);
 	});
 
 	self.showNavBar();

@@ -261,8 +261,13 @@ function MessageboardMainWindow(_programId) {
 		usingPull2Refresh = true;
 		TopicACS.topicACS_fetchAllTopicsOfProgramId(_programId);
 	}, { //settings
+		backgroundColor: '#959595', 
+		statusLabel: {
+			color: 'white'
+		},
 		updateLabel: {
 			text: 'Last Updated: '+lastUpdatedStr,
+			color: 'white'
 		}
 	});	
 

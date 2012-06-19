@@ -22,7 +22,9 @@ function PopularWindow(_parent) {
 		isEverythingReady();
 	});
 	
-	var self = Ti.UI.createWindow();
+	var self = Ti.UI.createWindow({
+		backgroundColor: 'orange'
+	});
 	
 	var TimeSelection = require('ui/common/Cs_PopularWindowScrollviewTimeSelection');	
 	var timeSelection = new TimeSelection();
@@ -34,7 +36,7 @@ function PopularWindow(_parent) {
 	timeSelectionView.add(timeSelection);
 	
 	var programListTable = Ti.UI.createTableView({
-		top: 44
+		top: 35
 	});
 
 	

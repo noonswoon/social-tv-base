@@ -176,7 +176,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		left: 130,
 		width: 60,
 		height: 60,
-		backgroundColor: 'orange',
+		backgroundColor: 'transparent',
 		opacity: 0.3,
 		zIndex: 3
 	});
@@ -187,7 +187,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		right: 53,
 		width: 68,
 		height: 85,
-		backgroundColor: 'orange',
+		backgroundColor: 'transparent',
 		opacity: 0.3,
 		zIndex: 3
 	});
@@ -198,7 +198,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		width: 93,
 		height: 59,
 		right: 115,
-		backgroundColor: 'orange',
+		backgroundColor: 'transparent',
 		opacity: 0.3,
 		zIndex: 3
 	});
@@ -209,7 +209,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		left: 55,
 		width: 59,
 		height: 94,
-		backgroundColor: 'orange',
+		backgroundColor: 'transparent',
 		opacity: 0.3,
 		zIndex: 3
 	});
@@ -220,7 +220,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		left: 113,
 		width: 97,
 		height: 57,
-		backgroundColor: 'orange',
+		backgroundColor: 'transparent',
 		opacity: 0.3,
 		zIndex: 3
 	});

@@ -11,7 +11,6 @@ function ProductMainWindow(_programId) {
 	
 	var infoForName = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
 	
-	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
 		barImage: 'images/NavBG.png',
@@ -59,7 +58,6 @@ function ProductMainWindow(_programId) {
 		separatorColor: 'transparent'
 	});
 	self.add(productTableView);
-	
 	
 	//Opacity window when picker is shown
 	var opacityView = Ti.UI.createView({
@@ -142,33 +140,45 @@ function ProductMainWindow(_programId) {
 	self.add(picker_view);
 ///////////////////////////////////////////////////////////////
 
+	var unavailable = Ti.UI.createLabel({
+		text: 'Sorry, product is not available',
+		color: 'white',
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
+	});
+
 	ProductACS.productACS_fetchedAllProducts(_programId);
 
 	Ti.App.addEventListener('fetchedAllProduct', function(e){
 		
+		self.remove(unavailable);
 		
 		var viewRowData = [];
 		var totalProducts = e.fetchedAllProduct.length;
 		var numRows = Math.ceil(totalProducts/2);
 		
-		for(var i=0;i<numRows;i++){
-			var row = new ProductMainWindowTableViewRow(self);
-			
-			for(var j=0;j<=1;j++){
-				var productIndex = i*2 + j;
-				if(productIndex >= totalProducts)
-					break;
-				var curProduct = e.fetchedAllProduct[productIndex];
-				if(j % 2==0) { //left column
-					row._setProductOnLeftColumn(curProduct);
-				} else { //right column
-					row._setProductOnRightColumn(curProduct);
-				}
-			}
-			viewRowData.push(row);
+		if(totalProducts == 0){
+			self.add(unavailable);
 		}
-
-		productTableView.setData(viewRowData);
+		else{
+			for(var i=0;i<numRows;i++){
+				var row = new ProductMainWindowTableViewRow(self);
+			
+				for(var j=0;j<=1;j++){
+					var productIndex = i*2 + j;
+					if(productIndex >= totalProducts)
+						break;
+					var curProduct = e.fetchedAllProduct[productIndex];
+					if(j % 2==0) { //left column
+						row._setProductOnLeftColumn(curProduct);
+					} else { //right column
+						row._setProductOnRightColumn(curProduct);
+					}
+				}
+				viewRowData.push(row);
+			}
+		}
+			productTableView.setData(viewRowData);	
+		
 	});	
 
 	return self;

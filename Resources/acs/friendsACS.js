@@ -1,3 +1,4 @@
+
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
 exports.searchFriend = function(_userID){
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' +
@@ -29,7 +30,8 @@ exports.searchFriend = function(_userID){
 					email: friend.email
 				};
 				friends.push(curFriend);
-			}  	
+			}
+
 			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 		}, onerror: function(e) {
 			// this function is called when an error occurs, including a timeout

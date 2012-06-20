@@ -11,7 +11,7 @@ db.close();
 // create data for local database
 exports.friendModel_updateFriendsFromACS = function(_friendsCollection) {
 	var db = Ti.Database.open('Chatterbox');
-	db.execute('DELETE FROM friends'); //**** hmm?
+	db.execute('DELETE FROM friends');
 	for(var i=0;i < _friendsCollection.length; i++) {
 		var curFriend = _friendsCollection[i];
 		Ti.API.info("FACSBOOK ID: "+curFriend.fb_id);

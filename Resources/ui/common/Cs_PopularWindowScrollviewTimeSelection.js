@@ -16,30 +16,51 @@ var PopularWindowSrcollviewTimeSelection = function(){
 
 	
 ////////////////////////////////////////SCROLLVIEW ACCORDING WITH TIME
+	var hour;
+
 	var hourIndexStr = moment().format('HH'); //<< change name from hour to hourIndexStr
-	var hour = parseInt(hourIndexStr);
-	var b = ((hour-3)*45)+24;   //<<need to convert to int .. do parseInt(hourIndexStr); change variable name..'b'
-	selectionView.scrollTo(b,0);
-	Ti.API.info(b);
+	if(hourIndexStr <= 09){
+		var hourSubstring = hourIndexStr.substring(1);
+		hour = parseInt(hourSubstring);
+	}
+	else{
+		hour = parseInt(hourIndexStr);
+	}
+	var positionX = ((hour-3)*45)+24;  
+	selectionView.scrollTo(positionX,0);
 	
 	var showNow = Ti.UI.createImageView({
 		image: 'images/shownow8.png',
 		top: 6,
 		left: hour*50-22
 	});
+	
+	if(hour === 23){
+		showNow.left = hour*50-5;
+	}
+	else
+	{
+		showNow.left = hour*50-22;
+	}
 	selectionView.add(showNow);
 	
 	var textOfShowNow = Ti.UI.createLabel({
-		text: hour+'.00',
+		text: '',
 		left: 12+hour*50,
 		color: 'white',
 		font:{fontSize:14,fontWeight:'bold'},
 		textAlign:'center',
 		zIndex: 1
 	});
-	selectionView.add(textOfShowNow);
-		
 
+	if(hour<=9){
+		textOfShowNow.text = '0'+hour+'.00';
+	}
+	else{
+		textOfShowNow.text = hour+'.00';
+	}
+	selectionView.add(textOfShowNow);
+	
 //////////////////////////////////////////////////////////////////////
 	var PopularTimeSelectionView = require('ui/common/Cs_PopularTimeSelectionView');
 	var hoursArray = [];

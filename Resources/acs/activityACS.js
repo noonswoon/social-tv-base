@@ -1,10 +1,14 @@
-exports.activityACS_fetchedMyActivity = function(_id) {
+exports.activityACS_fetchedMyActivity = function(_id,_username) {
+	//TODO: id & user where clause
+	var targetUser = [];
+	targetUser.push(_id);
+	targetUser.push(_username);
 	Cloud.Objects.query({
 		classname: 'Activity',	
 	    page: 1,
 	    per_page: 10,
 	    order: '-created_at',
-	    where: {targetedUserID: _id},
+	    where: {"targetedUserID": {"$in": targetUser}},
 	}, function (e) {
 	    if (e.success) {
 			recentActivity = [];

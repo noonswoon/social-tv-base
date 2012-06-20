@@ -26,6 +26,7 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	});
 
 //FRIEND REQUEST//////////////////////////////////////////////
+if(_status==="me") {
 	var requestNoticeView = Ti.UI.createView({
 		height: 40, width: 290,
 		backgroundColor: '#48a8d0',
@@ -54,8 +55,6 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	
 	var createNotice = function(){
 		if (friendRequests.length !== 0){
-			//TODO: there's some problem here!!OTL
-			alert('createNotice// friendRequests.length = '+friendRequests.length);
 			requestLabel.text = 'You have got '+friendRequests.length+' friend request(s).',
 			userActivityView.top = 40;
 			activityView.height = 350;
@@ -66,7 +65,6 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	}
 	
 	 var requestsLoadedCallBack = function(e){
-	 	//alert("requestsLoadedCallBack");
 		friendRequests = [];
 		var requestUsers = e.fetchedRequests; //update global variable - requestUsers
 		for(var i=0;i<requestUsers.length;i++) {
@@ -80,7 +78,13 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	});
 	
 	Ti.App.addEventListener('requestsLoaded',requestsLoadedCallBack);
-
+	
+	requestNoticeView.add(requestLabel);
+	requestNoticeView.add(requestImage);
+	userRequestView.add(requestNoticeView);
+	activityView.add(userRequestView);	
+	
+}
 //ACTIVITY////////////////////////////////////////////////////
 	var ActivityLabel = Ti.UI.createLabel({
 		text: 'ACTIVITY',
@@ -248,11 +252,6 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 		Ti.App.removeEventListener('profileMainWindowClosing'+curId,clearListeners);
 	}
 	Ti.App.addEventListener('profileMainWindowClosing'+curId, clearListeners);
-	
-	requestNoticeView.add(requestLabel);
-	requestNoticeView.add(requestImage);
-	userRequestView.add(requestNoticeView);
-	activityView.add(userRequestView);	
 	
 	return activityView;
 }

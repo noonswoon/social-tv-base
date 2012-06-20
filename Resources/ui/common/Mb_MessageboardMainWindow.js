@@ -9,6 +9,9 @@ function MessageboardMainWindow(_programId) {
 	var MessageboardAddWindow = require('ui/common/Mb_MessageboardAddWindow');
 	var CommentWindow = require('ui/common/Mb_CommentWindow');
 	var CacheHelper = require('helpers/cacheHelper');
+	
+	//Google Analytics
+	Titanium.App.Analytics.trackPageview('/Messageboard');
 
 	//OBJECTS INSTANTIATION		
 	var currentProgramId = _programId;

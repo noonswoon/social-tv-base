@@ -6,6 +6,9 @@ function ProductMainWindow(_programId) {
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
 	var TVProgram = require('model/tvprogram');
 	
+	//Google Analytics
+	Titanium.App.Analytics.trackPageview('/Product');
+	
 	var dataForTab = [];
 	var hasLoadedPicker = false;
 	

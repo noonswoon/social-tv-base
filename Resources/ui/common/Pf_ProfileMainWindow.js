@@ -5,6 +5,9 @@ function ProfileMainWindow(_id,_status) {
 	var UserACS = require('acs/userACS');
 	var UserModel = require('model/user');
 	
+	//Google Analytics
+	Titanium.App.Analytics.trackPageview('/Profile');
+	
 	var self = Titanium.UI.createWindow({
 		barColor:'#489ec3',
 		barImage: 'images/NavBG.png',

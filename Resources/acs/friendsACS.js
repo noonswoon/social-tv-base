@@ -65,7 +65,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
-	    	Ti.API.info("Success: Friend added");
+	    	Ti.API.info("Your request has been sent.");
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
@@ -84,11 +84,11 @@ exports.addFriend = function(_userID,_callbackFn){
 
 //approve friend /////////////////////////////////////////////////////////////////////////////////////////////
 exports.approveFriend = function(_userID,_callbackFn){
-	alert('approving friend: '+_userID);
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/approve.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
 	    	//responseJSON = JSON.parse(this.responseText);
+	    	Ti.API.info('approved friend: '+_userID);
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {

@@ -102,7 +102,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	});
 		
 	var createLeaderBoardView = function(leaderBoardData) {
-		Ti.API.info('createLeaderBoardView');
 		var myIndex = 0;
 		userRankInfo = [];
 		for(i=0; i<leaderBoardData.length; i++) {
@@ -188,36 +187,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			}
 		});
 	} //end of function: createLeaderBoardView
-	
-	function friendDbLoadedCallBack(e){
-		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
-	}
-	
-	function leaderBoardLoadedCallBack(e) {
-		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
-	}
-	
-	Ti.App.addEventListener('friendsLoaded',friendDbLoadedCallBack);
-	Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);
 
-	Ti.App.addEventListener('friendsDbUpdated',function() {	
-		var rankList = [];
-		rankList[0] = _userProfile.id;
-		var myFriends = FriendModel.friendModel_fetchFriend(rankList[0]);
-		for(var i = 0; i< myFriends.length;i++) {
-			var curUser = myFriends[i].friend_id;
-			rankList.push(curUser);
-		};
-		LeaderACS.leaderACS_fetchedRank(rankList);
-	});
-		 
-	Ti.App.addEventListener('leaderDbUpdated',function() {
-		var leaderBoardData = PointModel.pointModel_fetchRank();
-    	leaderBoardData.sort(totalPointSort);
-    	createLeaderBoardView(leaderBoardData);
-    	updateExpBar();
-	});
-	
 	updateExpBar();
 
 	expSec.add(expLabel);
@@ -227,11 +197,43 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	profileStats.add(expSec);
 	
 	if(_status==="me") {
+		var friendLoadedCallBack = function(e){
+			FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
+		}
+		
+		var leaderBoardLoadedCallBack = function(e) {
+			PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
+		}		
+		
+		var friendsDbUpdatedCallBack = function() {
+			var rankList = [];
+			rankList[0] = _userProfile.id;
+			var myFriends = FriendModel.friendModel_fetchFriend(rankList[0]);
+			for(var i = 0; i< myFriends.length;i++) {
+				var curUser = myFriends[i].friend_id;
+				rankList.push(curUser);
+			};
+			LeaderACS.leaderACS_fetchedRank(rankList);
+		}
+
+		var leaderDbUpdatedCallBack = function() {
+			var leaderBoardData = PointModel.pointModel_fetchRank();
+			Ti.API.info('leaderBoardData.length = '+leaderBoardData.length);
+	    	leaderBoardData.sort(totalPointSort);
+	    	createLeaderBoardView(leaderBoardData);
+	    	updateExpBar();
+		}
+		
+		Ti.App.addEventListener('friendsLoaded',friendLoadedCallBack);
+		Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);	
+		Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);
+		Ti.App.addEventListener('leaderDbUpdated',leaderDbUpdatedCallBack);		
+		
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);
 		profileStats.add(leaderSec);
-    }
-
+    } //end of condition: "me"
+    
 	return profileStats;
 }
 

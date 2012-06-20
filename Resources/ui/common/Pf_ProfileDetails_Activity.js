@@ -48,9 +48,8 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	});
 	
 	var setFriendRequestVisible = function(){
-		//if (friendRequests.length == 0) userRequestView.visible = false;
-		//else 
-		userRequestView.visible = true;
+		if (friendRequests.length == 0) userRequestView.visible = false;
+		else userRequestView.visible = true;
 	}	
 	
 	var createNotice = function(){
@@ -177,8 +176,9 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 				activityType.image= 'images/icon/act_add_color.png';
 				activityInfo.text = myActivity[i].additionalData + ' approved '+_name+' as a friend';
 			} else
-			if (myActivity[i].category==='post') {
+			if (myActivity[i].category==='comment') {
 				activityType.image= 'images/icon/act_chat_color.png'
+				activityInfo.text = name+' has commented on '+myActivity[i].additionalData;
 			} else
 			if (myActivity[i].category==='getbadge') {
 				activityType.image= 'images/icon/act_badge_color.png';
@@ -203,7 +203,7 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 		userActivityView.add(ActivityLabel);
 		activityView.add(userActivityView);
 		
-		if(friendRequests.length) activityView.height = userActivityView.height + userRequestView.height;
+		if(friendRequests.length) activityView.height = 350;
 		else activityView.height = userActivityView.height;
 	}	// end of function: createActivityTable
 		

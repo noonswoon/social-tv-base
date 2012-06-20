@@ -39,6 +39,7 @@ exports.friendModel_fetchFriend = function(_myID) {
 	}
 	result.close();
 	db.close();
+	Ti.API.info('fetchedFriend.length = '+fetchedFriend.length);
 	return fetchedFriend;
 };
 
@@ -60,9 +61,14 @@ exports.friendModel_findMyFriend = function(_myId,_friendId) {
 exports.friend_create = function(_friend,fb_id){
 	var db = Ti.Database.open('Chatterbox'); 
 	var curFriend = _friend;
-	db.execute("INSERT INTO friends(id,my_id,friend_id,fb_id,username,first_name,last_name,email) VALUES(?,?,?,?,?,?,?,?)", null,String(acs.getUserLoggedIn().id),curFriend.friend_id,fb_id,curFriend.username,String(curFriend.first_name),String(curFriend.last_name),curFriend.email);
+	var friend_id = curFriend.friend_id;
+	if(curFriend.friend_id) friendId = curFriend.friend_id;
+	else friend_id = curFriend.id;
+	alert(friend_id);
+	db.execute("INSERT INTO friends(id,my_id,friend_id,fb_id,username,first_name,last_name,email) VALUES(?,?,?,?,?,?,?,?)", null,String(acs.getUserLoggedIn().id),friend_id,fb_id,curFriend.username,String(curFriend.first_name),String(curFriend.last_name),curFriend.email);
 	db.close();
-	Ti.App.fireEvent("friendsDbUpdated",curFriend);
+	Ti.API.info('fireEvent friendsDbUpdated');
+	Ti.App.fireEvent("friendsDbUpdated");
 };
 
 exports.friendModel_removeFriend = function(_friendID){

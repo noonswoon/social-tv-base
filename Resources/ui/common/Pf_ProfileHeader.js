@@ -1,4 +1,4 @@
-var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
+var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	//possible value for _status = me / friend / stranger
 	var CheckinACS = require('acs/checkinACS');		
 	var FriendACS = require('acs/friendsACS');
@@ -181,16 +181,17 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 	});
 	
 	var sendRequest = function(_response){
-		alert('Your request has been sent.');
 		Ti.API.info(_response);
-		reloadView();
 	}
 	
  	var approveRequest = function(_response){
 		alert('You have approved the request');
 		Ti.API.info(_response);
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
-		reloadView();
+		var approveFriendActivityData = createFriendActivity("approvefriend");
+		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
+		ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
+		Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
 	}
 	
  	var createFriendActivity = function(_category){
@@ -214,14 +215,10 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
  		//condition 2: there's a request from this guy	
  		else {
  			alert(_userProfile.first_name+' '+ _userProfile.last_name +' has request you as a friend. Accept him/her?');
-			var approveFriendActivityData = createFriendActivity("approvefriend");
 			friendRequests.splice(i,1);
- 			ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
-			FriendACS.approveFriend(curId,approveRequest);
-			Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
+			FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
+			FriendACS.approveFriend(curId,approveRequest);	
 		}	
-		FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
-		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		_parentWindow.close();
  	}	
 
@@ -262,15 +259,11 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
 	
 	//only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
 	Ti.App.addEventListener('UserTotalFriendsFromACS', function(e){ 
-		//alert('UserTotalFriendsFromACS: '+e.result);
 		columnFriendCount.text = e.result;
 	});
 
 	refreshButton.addEventListener('click',function(){
 		alert('refresh');
-		// FriendACS.searchFriend(curId);
-		 // FriendACS.showFriendsRequest();
-		// myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	});
 	
 	columnFriend.addEventListener('click',function(){
@@ -280,7 +273,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status){
  	columnAddFriend.addEventListener('click',function(){
  		var isRequest = false;
  		for(i=0;i<friendRequests.length;i++){
- 			if (friendRequests[i].friend_id) {
+ 			if (_userProfile.id===friendRequests[i].friend_id) {
  				isRequest = true;
  				break;
  			}

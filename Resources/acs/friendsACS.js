@@ -207,7 +207,8 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 		          }
 		        allFriendsCheckins.push(friendsCheckins);
 			}  	
-			Ti.App.fireEvent("friendsLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
+			Ti.API.info('fireEvent: friendsCheckInLoaded');
+			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout

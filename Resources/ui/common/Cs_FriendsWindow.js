@@ -1,6 +1,6 @@
 FriendsWindow = function(){
 	
-	var friendsACS = require('acs/friendsACS');
+	var FriendsACS = require('acs/friendsACS');
 	var friend = require('model/friend');
 	var tvprogram = require('model/tvprogram');
 	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
@@ -12,14 +12,13 @@ FriendsWindow = function(){
 	
 	var friendsTableView = Ti.UI.createTableView();
 
-	
 	//Get all friends from DB
-	//with mock user_id
-	
+	//with mock user_id	
 	var user_id = acs.getUserId();
 	var friendsList = [];
 
 	allMyFriends = friend.friendModel_fetchFriend(user_id);
+	Ti.API.info('allMyFriends.length = '+allMyFriends);
 	for(var i = 0; i<allMyFriends.length;i++){
 		var friends = allMyFriends[i].friend_id;
 		friendsList.push(friends);
@@ -35,13 +34,13 @@ FriendsWindow = function(){
 	}
 	
 	//Send allTVProgramID and allFriends to data from ACS then pull data
-	friendsACS.friendsCheckins(friendsList,programsList);
+	FriendsACS.friendsCheckins(friendsList,programsList);
 	
 	//EventListener
-	Ti.App.addEventListener('friendsLoaded',function(e){
+	Ti.App.addEventListener('friendsCheckInLoaded',function(e){
 		var checkinsOfFriends;
 		if(e.fetchedAllFriendsCheckins=== undefined) checkinsOfFriends = 0;
-		else checkinsOfFriends =e.fetchedAllFriendsCheckins;
+		else checkinsOfFriends = e.fetchedAllFriendsCheckins;
 		var totalFriendCheckins = e.fetchedTotalFriendCheckins;
 		var results = [];
 		

@@ -1,5 +1,5 @@
 FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){	
- 
+ 	
 	var friendData = [];
 	for(var i=0;i<tabledata.friends.length;i++){
 		friendData.push(tabledata.friends[i].username);
@@ -8,10 +8,12 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 	var row = Ti.UI.createTableViewRow({
 		height: 150,
 	});
-	row.backgroundGradient = {	type: 'linear',startPoint: { x: '0%', y: '0%' },endPoint: { x: '0%', y: '100%' },
-								colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 }]};
+	row.backgroundGradient = { 
+		type: 'linear',
+		startPoint: {x: '0%', y: '0%'},
+		endPoint: {x: '0%', y: '100%'},
+		colors: [{color: '#fff', offset: 0.0}, {color: '#D0D0D0', offset: 1.0}]};
     	
-
 //Program
 	var programLabelName = Ti.UI.createLabel({
 		text: tabledata.programName,
@@ -24,8 +26,17 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 		top: 7
 	});
 	row.add(programLabelName);
-	
 
+	var programLabelSubname = Ti.UI.createLabel({
+		text: tabledata.programChannel,
+		color: '#333',
+		textAlign:'left',
+		font:{fontWeight:'bold',fontSize:13},
+		top: 35,
+		left:155
+	});
+	row.add(programLabelSubname);
+	
 	var programImage = Ti.UI.createImageView({
 		image: tabledata.programImage,
 		width:120,
@@ -44,7 +55,8 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 
 	var checkinView = Ti.UI.createView({
 		width: 52,
-		bottom:5,
+		//bottom:5,
+		top:65,
 		left: 150,
 		height: 47
 	});
@@ -66,10 +78,12 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 	
 	var programFriendCheckinView = Ti.UI.createView({
 		width: 52,
-		bottom:5,
+		//bottom:5,
+		top:65,
 		left: 202,
 		height: 47
 	});
+	
 	var programFriendCheckinImage = Ti.UI.createImageView({
 		image: 'images/icon/friends.png',
 		opacity: 0.5,
@@ -88,7 +102,8 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 
 	var channelView = Ti.UI.createView({
 		width: 52,
-		bottom:5,
+		//bottom:5,
+		top:65,
 		right: 13,
 		height: 47,
 	});
@@ -118,29 +133,39 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 	var friendsScrollView = Ti.UI.createScrollView({
 		contentWidth:400,
 		contentHeight:20,
-		bottom:0,
+		bottom:3,
 		height:30,
 		width:320,
 	});
-	row.add(friendsScrollView);
-	
-	// var friendsLabel = Ti.UI.createLabel({
-		// text: dummyFriendsStr,
-		// textAlign: 'left',
-		// color: '#333',
-		// font:{fontWeight:'bold',fontSize:17},
-		// top: 5
-	// });
-	// friendsScrollView.add(friendsLabel);
-	
-	var friendsProfileImage = Ti.UI.createImageView({
-		image: 'http://www.freestockimages.net/images/author-avatar.jpg',
-		width: 25,
-		height: 25,
-		left: 10
-	});
-	friendsScrollView.add(friendsProfileImage);
 
+	for(var i=0;i<tabledata.friends.length;i++) {
+		var friends = tabledata.friends;
+		var fbId = 0;
+		var numExternalAccounts = friends[i].external_accounts;
+	 					
+		for(var j=0;j < numExternalAccounts.length; j++) {
+			 var curExternalAccount = friends[i].external_accounts[j];
+			 if(curExternalAccount.external_type === "facebook") {
+				 fbId = curExternalAccount.external_id;
+				 break;
+			}
+		 }	
+		var friendsProfileImage = Ti.UI.createImageView({
+			image: 'images/kuma100x100.png',
+			width: 27,
+			height: 27,
+			borderWidth: 2,
+			borderColor: 'white',
+			left: (i*35)+15,
+		});
+		
+		if(fbId!==0) friendsProfileImage.image = acs.getUserImageNormalOfFbId(fbId);
+		
+		friendsScrollView.add(friendsProfileImage);
+	}
+
+/////////////////////////////////////////////////////////////////////////////
+	row.add(friendsScrollView);
 	return row;
 }
 module.exports = FriendsWindowTableViewRow;

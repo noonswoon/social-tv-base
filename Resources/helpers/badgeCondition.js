@@ -1,19 +1,33 @@
 //check if you reach new badge or not!
-//CONDITION 1: NUMBER OF CHECK IN////////////////////////////////////
+
+var getNumCheckinsOfType = function(_programType) {
+	if(!Ti.App.Properties.hasProperty(_programType+'Count')) { //do some caching
+		Ti.App.Properties.setInt(_programType+'Count',1);
+		return 1;
+	} else {
+		var numCheckInsSoFar = Ti.App.Properties.getInt(_programType+'Count');
+		var newNumCheckins = numCheckInsSoFar + 1
+		Ti.App.Properties.setString(_programType+'Count',newNumCheckins);
+		return newNumCheckins;
+	}	
+}
+exports.getNumCheckinsOfType = getNumCheckinsOfType;
+
+////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
 	var checkinCount = e.result;
 	//badge desc: nice to meet you
 	//condition: 1st check in
 	//badge id: 0
-	if(checkinCount >=1) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 0});
+	if(checkinCount = 1) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 0});
 	//badge desc: fall for you	
 	//condition: 10th check in	
 	//badge id: 1
-	if(checkinCount >=10) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
+	if(checkinCount = 10) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
 	//badge desc: i'm loving it		
 	//condition: 20th check in
 	//badge id: 2
-	if(checkinCount >=20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
+	if(checkinCount = 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
 }
 		
 var checkTimeCondition = function() {
@@ -29,6 +43,37 @@ var checkTimeCondition = function() {
 	if(now === '01' || now === '02' || now === '03') Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 8});
 }
 	
+var checkTypeCondition = function(_type) {
+	var checkinCount = getNumCheckinsOfType(_type);
+	Ti.API.info('checkinCount = '+checkinCount);
+
+	if(checkinCount==5) {
+		switch (_type){
+			//badge desc: sports fan		
+			//condition: 5 checkins in sport
+			//badge id: 4
+			case 'sport': {
+				Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 4});
+				break;
+			};
+			//badge desc: drama queen		
+			//condition: 5 checkins in drama
+			//badge id: 5
+			case 'drama': {
+				Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 5});
+				break;
+			};
+			//badge desc: game show addict		
+			//condition: 5 checkins in gameshow
+			//badge id: 6
+			case 'gameshow': {
+				Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 6});
+				break;
+			};			
+		}
+	}
+}	
+
 var newBadgeUnlockCallback = function(e){
 	var ActivityACS = require('acs/activityACS');
 	var PointACS = require('acs/pointACS');
@@ -62,13 +107,9 @@ var newBadgeUnlockCallback = function(e){
 
 exports.checkinEvent = function(_checkinData){
 		checkTimeCondition();
+		Ti.API.info('checkinEvent//_checkinData.program_type: '+_checkinData.program_type);
+		checkTypeCondition(_checkinData.program_type);
 }
-
-
-
-
-
-
 
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	var myBadgeACS = require('acs/myBadgeACS');

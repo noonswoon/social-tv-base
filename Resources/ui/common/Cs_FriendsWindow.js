@@ -69,10 +69,22 @@ FriendsWindow = function(){
 		
 		//loop results array, and each element of result array, create tableviewrow to add to table view
 		var viewRowData = [];
-			for(var i=0;i<results.length;i++){
+			for(var i=0;i<results.length;i++) {
 				var program = results[i];
-					var row = new FriendsWindowTableViewRow(program,totalFriendCheckins);
-					viewRowData.push(row);
+				var number_checkins = 0;
+					for(var j=0;j<allTVPrograms.length;j++){
+						Ti.API.info('program.programId = '+program.programId);
+						Ti.API.info('allTVPrograms[j].id = '+allTVPrograms[j].id);
+						if(program.programId === allTVPrograms[j].id) {
+							number_checkins = allTVPrograms[j].number_checkins;
+							Ti.API.info('allTVPrograms[j].number_checkins = '+allTVPrograms[j].number_checkins);
+							Ti.API.info('number_checkins = '+number_checkins);
+							break;
+						}
+					}
+
+				var row = new FriendsWindowTableViewRow(program,number_checkins);
+				viewRowData.push(row);
 			}
 		friendsTableView.setData(viewRowData);
 	});

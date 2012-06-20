@@ -1,5 +1,5 @@
-FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){	
- 	
+FriendsWindowTableViewRow = function(tabledata,_checkins){	
+	//var CheckinACS = require('acs/checkinACS');
 	var friendData = [];
 	for(var i=0;i<tabledata.friends.length;i++){
 		friendData.push(tabledata.friends[i].username);
@@ -66,7 +66,7 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 		top: 0
 	});
 	var programNumCheckin = Ti.UI.createLabel({
-		text: '10',
+		text: _checkins,
 		textAlign: 'left',
 		color: '#898687',
 		font: {fontSize: 14},
@@ -90,7 +90,8 @@ FriendsWindowTableViewRow = function(tabledata,_totalFriendCheckins){
 		top: 0
 	});
 	var programFriendTotalCheckin = Ti.UI.createLabel({
-		text: _totalFriendCheckins,
+		//text: _totalFriendCheckins,
+		text: tabledata.friends.length,
 		textAlign: 'left',
 		color: '#898687',
 		bottom: 0,

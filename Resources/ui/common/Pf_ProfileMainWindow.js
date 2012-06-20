@@ -8,18 +8,20 @@ function ProfileMainWindow(_id,_status) {
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Profile');
 	
+	var settingButton = Titanium.UI.createButton({
+		backgroundImage: 'images/setting.png',
+		width: 39,
+		height: 32
+	});
+	
 	var self = Titanium.UI.createWindow({
-		barColor:'#489ec3',
 		barImage: 'images/NavBG.png',
+		rightNavButton: settingButton
 	});			
 	
 	var nav = Ti.UI.iPhone.createNavigationGroup({
 		window: self
 	});			
-	
-	var settingButton = Titanium.UI.createButton({
-		image: 'images/icon/19-gear.png'
-	});
 	
 	var headerView = Ti.UI.createView({
 		height: 120
@@ -39,7 +41,6 @@ function ProfileMainWindow(_id,_status) {
 		Ti.API.info('createProfileView: ' + userProfile.first_name +' ' + userProfile.last_name);	
 		if(_status==="me"){
 			self.title = 'My Profile';
-			self.setRightNavButton(settingButton);
 		}
 		else self.title = userProfile.first_name + ' ' + userProfile.last_name;
 			

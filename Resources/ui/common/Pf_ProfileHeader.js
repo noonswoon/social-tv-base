@@ -41,6 +41,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		height: 90,
 		backgroundColor: 'transparent'
 	});
+	
 	var profilePictureContain = Ti.UI.createView({
 		backgroundColor: '#fff',
 		top: 10, left: 10,

@@ -5,6 +5,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var LeaderBoardACS = require('acs/leaderBoardACS');
 	var ActivityACS = require('acs/activityACS');
 	var CheckinModel = require('model/checkin');
+	var BadgeCondition = require('helpers/badgeCondition');
 	
 	var TVProgram = require('model/tvprogram');
 	
@@ -260,10 +261,15 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			//require callback from acs
 			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
 			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
-		
+			
 			//done after adding to acs
 			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
 			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+			
+			//check badge condition from checkin
+			checkinData.program_type = _tvprogramData.program_type;
+			Ti.API.info('calling BadgeCondition.checkinEvent / checkinData.program_type: '+checkinData.program_type);
+			BadgeCondition.checkinEvent(checkinData);
 		
 			myCurrentCheckinPrograms.push(_tvprogramData.programId);
 		

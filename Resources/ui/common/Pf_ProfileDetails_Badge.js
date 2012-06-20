@@ -126,7 +126,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	
 	Ti.App.addEventListener('updatedMyBadge',function(e) {
 		myUnlockedBadges[e.badgeID] = 1;
-		alert('CONGRATS! You have unlock a new badge, check it out!');
+		Ti.API.info('CONGRATS! You have unlock a new badge, check it out!');
 		Ti.App.fireEvent('updatedmyUnlockedBadges'+_userProfile.id);
 	});	
 	

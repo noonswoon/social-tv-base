@@ -1,5 +1,12 @@
 var Am_SettingWindowAccount = function(){
 	
+	var UserACS = require('acs/userACS');
+	var ACS = require('lib/acs');
+	var UserModel = require('model/user');
+	
+	var userInfo = ACS.getUserLoggedIn();
+	var curUserId = userInfo.id;
+	
 	var dataForSetting = [];
 
 	var backButton = Ti.UI.createButton({
@@ -39,6 +46,17 @@ var Am_SettingWindowAccount = function(){
 	});
 	firstName.add(firstNameLabel);
 	
+	var firstNameTextfield = Ti.UI.createTextField({
+		color:'#336699',
+		height:35,
+		right:10,
+		width:180,
+		value: userInfo.first_name,
+		editable: true,
+		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
+	});
+	firstName.add(firstNameTextfield);
+	
 	//LastName
 	var lastName = Ti.UI.createTableViewRow({
 		selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
@@ -51,6 +69,17 @@ var Am_SettingWindowAccount = function(){
 		left: 10
 	});
 	lastName.add(lastNameLabel);
+	
+	var lastNameTextfield = Ti.UI.createTextField({
+		color:'#336699',
+		height:35,
+		right:10,
+		width:180,
+		value: userInfo.last_name,
+		editable: true,
+		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
+	});
+	lastName.add(lastNameTextfield);
 	
 	//Button
 	var text = [];
@@ -73,15 +102,30 @@ var Am_SettingWindowAccount = function(){
 		top: 160,
 		separatorColor: 'white'
 	});
-	
 	text.push(saveButtonTableViewRow);
 	saveButton.setData(text);
-	self.add(saveButton);
+
+	//Data in textfield is changed or not
+	saveButton.addEventListener('click',function(){
+		var newFirstName = firstNameTextfield.value;
+		var newLastName = lastNameTextfield.value;
+		UserACS.userACS_updatedUser(newFirstName,newLastName);
+		UserModel.userModel_updateFirstNameLastName(newFirstName,newLastName,curUserId);
+	});
+	
+	Ti.App.addEventListener('updateComplete',function(e){
+		alert('Save Complete');
+		ACS.getUserLoggedIn().first_name = e.firstName;
+		ACS.getUserLoggedIn().last_name = e.lastName;
+	});
+	
+	
 
 	dataForSetting.push(firstName);
 	dataForSetting.push(lastName);
 	accountTableView.setData(dataForSetting);
 	self.add(accountTableView);
+	self.add(saveButton);
 	
 	return self;
 	

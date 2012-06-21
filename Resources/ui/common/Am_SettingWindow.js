@@ -1,5 +1,7 @@
 var SettingWindow = function(_containingTab) {
 	
+	var ACS = require('lib/acs');
+
 	//UI STUFF
 	var SettingWindowAccount = require('ui/common/Am_SettingWindowAccount');
 	var SettingWindowSocialsharing = require('ui/common/Am_SettingWindowSocialsharing');
@@ -63,6 +65,10 @@ var SettingWindow = function(_containingTab) {
 	self.add(settingTableView);
 	self.add(fbLogoutButton);
 	
+	//Get UserID
+	var userInfo = ACS.getUserLoggedIn();
+	Ti.API.info(userInfo);
+	
 	
 	// create table view event listener
 	settingTableView.addEventListener('click', function(e){
@@ -79,6 +85,7 @@ var SettingWindow = function(_containingTab) {
 			self.containingTab.open(notification);			
 		}
 	});
+
 
 	
 	//CALLBACK FUNCTIONS	

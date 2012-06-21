@@ -1,5 +1,10 @@
 Am_SettingWindowNotification = function(){
 	
+	var Helper = require('helpers/settingHelper');
+	
+	var pushCommentCurrentSetting = Helper.getPushComment();
+	var friendsCheckinCurrentSetting = Helper.getFriendsCheckin();
+	
 	var dataForSetting = [];
 	
 	var backButton = Ti.UI.createButton({
@@ -76,32 +81,21 @@ Am_SettingWindowNotification = function(){
 	});
 	friendCheckin.add(friendCheckinSwitch);
 	
-	//Button
-	var text = [];
+	//Set Current Push Comment
+	receivedCommentSwitch.value = pushCommentCurrentSetting;
+	//Set Current Friends Checkin
+	friendCheckinSwitch.value = friendsCheckinCurrentSetting;
 	
-	var saveButtonTableViewRow = Ti.UI.createTableViewRow({
-		height: 40
+	receivedCommentSwitch.addEventListener('change',function(e){
+		var isShareComment = e.value;
+		Helper.setPushComment(isShareComment);
 	});
 	
-	var saveButtonLabel = Ti.UI.createLabel({
-		text: 'Save Changes',
-		font:{fontWeight:'bold',fontSize:16}
+	friendCheckinSwitch.addEventListener('change',function(e){
+		var isFriendsCheckin = e.value;
+		Helper.setFriendsCheckin(isFriendsCheckin);
 	});
-	saveButtonTableViewRow.add(saveButtonLabel);
-	
-	var saveButton = Ti.UI.createTableView({
-		style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
-		backgroundColor:'transparent',
-		rowBackgroundColor:'white',
-		scrollable:false,
-		top: 160,
-		separatorColor: 'white'
-	});
-	
-	text.push(saveButtonTableViewRow);
-	saveButton.setData(text);
-	self.add(saveButton);
-	
+
 	dataForSetting.push(receivedComment);
 	dataForSetting.push(friendCheckin);
 	notificationTableView.setData(dataForSetting);

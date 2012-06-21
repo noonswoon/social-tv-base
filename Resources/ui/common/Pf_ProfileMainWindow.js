@@ -87,6 +87,10 @@ function ProfileMainWindow(_id,_status) {
 		Ti.App.fireEvent('profileMainWindowClosing'+_id);
 	});
 	
+	// self.addEventListener('focus', function() {
+		// profileHeader.setProfileName();
+	// });
+	
 	return self;
 }
 

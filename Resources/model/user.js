@@ -26,6 +26,15 @@ exports.userModel_updateUserFromACS = function(_userProfile) {
 	//Ti.App.fireEvent("userDbUpdated");
 };
 
+exports.userModel_updateFirstNameLastName = function(_firstname,_lastname,_curUserId) {
+	var db = Ti.Database.open('Chatterbox');
+	var userId = _curUserId;
+	var newFirstName = _firstname;
+	var newLastName = _lastname;
+	db.execute('UPDATE users SET first_name = ?,last_name =?  WHERE acs_user_id = ?',_firstname, _lastname, userId);
+	db.close();
+};
+
 exports.userModel_fetchUserProfile = function(_id) {
 	var fetchUserProfile;
 	var db = Ti.Database.open('Chatterbox'); 

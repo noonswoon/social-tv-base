@@ -1,5 +1,9 @@
 Am_SettingWindowSocialsharing = function(){
 	
+	var Helper = require('helpers/settingHelper');
+	
+	var facebookCurrentSetting = Helper.getFacebookShare();
+	
 	var dataForSetting = [];
 	
 	var backButton = Ti.UI.createButton({
@@ -54,32 +58,15 @@ Am_SettingWindowSocialsharing = function(){
 		right: 10
 	});
 	facebook.add(facebookSwitch);
+
 	
-	//Button
-	var text = [];
+	//Set Current Switch
+	facebookSwitch.value = facebookCurrentSetting
 	
-	var saveButtonTableViewRow = Ti.UI.createTableViewRow({
-		height: 40
+	facebookSwitch.addEventListener('change',function(e){
+		var isShare = e.value;
+		Helper.setFacebookShare(isShare);
 	});
-	
-	var saveButtonLabel = Ti.UI.createLabel({
-		text: 'Save Changes',
-		font:{fontWeight:'bold',fontSize:16}
-	});
-	saveButtonTableViewRow.add(saveButtonLabel);
-	
-	var saveButton = Ti.UI.createTableView({
-		style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
-		backgroundColor:'transparent',
-		rowBackgroundColor:'white',
-		scrollable:false,
-		top: 160,
-		separatorColor: 'white'
-	});
-	
-	text.push(saveButtonTableViewRow);
-	saveButton.setData(text);
-	self.add(saveButton);
 	
 	dataForSetting.push(facebook);
 	socialsharingTableView.setData(dataForSetting);

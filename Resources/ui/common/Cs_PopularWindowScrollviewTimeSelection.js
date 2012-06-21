@@ -19,7 +19,7 @@ var PopularWindowSrcollviewTimeSelection = function(){
 	var hour;
 
 	var hourIndexStr = moment().format('HH'); //<< change name from hour to hourIndexStr
-	if(hourIndexStr <= 09){
+	if(hourIndexStr <= '09'){
 		var hourSubstring = hourIndexStr.substring(1);
 		hour = parseInt(hourSubstring);
 	}

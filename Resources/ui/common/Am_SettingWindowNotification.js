@@ -1,9 +1,9 @@
 Am_SettingWindowNotification = function(){
 	
-	var Helper = require('helpers/settingHelper');
+	var SettingHelper = require('helpers/settingHelper');
 	
-	var pushCommentCurrentSetting = Helper.getPushComment();
-	var friendsCheckinCurrentSetting = Helper.getFriendsCheckin();
+	var pushCommentCurrentSetting = SettingHelper.getPushComment();
+	var friendsCheckinCurrentSetting = SettingHelper.getFriendsCheckin();
 	
 	var dataForSetting = [];
 	
@@ -88,12 +88,12 @@ Am_SettingWindowNotification = function(){
 	
 	receivedCommentSwitch.addEventListener('change',function(e){
 		var isShareComment = e.value;
-		Helper.setPushComment(isShareComment);
+		SettingHelper.setPushComment(isShareComment);
 	});
 	
 	friendCheckinSwitch.addEventListener('change',function(e){
 		var isFriendsCheckin = e.value;
-		Helper.setFriendsCheckin(isFriendsCheckin);
+		SettingHelper.setFriendsCheckin(isFriendsCheckin);
 	});
 
 	dataForSetting.push(receivedComment);

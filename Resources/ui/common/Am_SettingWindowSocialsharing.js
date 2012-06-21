@@ -1,8 +1,8 @@
 Am_SettingWindowSocialsharing = function(){
 	
-	var Helper = require('helpers/settingHelper');
+	var SettingHelper = require('helpers/settingHelper');
 	
-	var facebookCurrentSetting = Helper.getFacebookShare();
+	var facebookCurrentSetting = SettingHelper.getFacebookShare();
 	
 	var dataForSetting = [];
 	
@@ -65,7 +65,7 @@ Am_SettingWindowSocialsharing = function(){
 	
 	facebookSwitch.addEventListener('change',function(e){
 		var isShare = e.value;
-		Helper.setFacebookShare(isShare);
+		SettingHelper.setFacebookShare(isShare);
 	});
 	
 	dataForSetting.push(facebook);

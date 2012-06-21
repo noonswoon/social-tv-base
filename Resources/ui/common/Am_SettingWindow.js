@@ -1,6 +1,4 @@
 var SettingWindow = function(_containingTab) {
-	
-	var ACS = require('lib/acs');
 
 	//UI STUFF
 	var SettingWindowAccount = require('ui/common/Am_SettingWindowAccount');
@@ -66,7 +64,7 @@ var SettingWindow = function(_containingTab) {
 	self.add(fbLogoutButton);
 	
 	//Get UserID
-	var userInfo = ACS.getUserLoggedIn();
+	var userInfo = acs.getUserLoggedIn();
 	Ti.API.info(userInfo);
 	
 	

@@ -1,10 +1,9 @@
 var Am_SettingWindowAccount = function(){
 	
 	var UserACS = require('acs/userACS');
-	var ACS = require('lib/acs');
 	var UserModel = require('model/user');
 	
-	var userInfo = ACS.getUserLoggedIn();
+	var userInfo = acs.getUserLoggedIn();
 	var curUserId = userInfo.id;
 	
 	var dataForSetting = [];
@@ -115,8 +114,8 @@ var Am_SettingWindowAccount = function(){
 	
 	Ti.App.addEventListener('updateComplete',function(e){
 		alert('Save Complete');
-		ACS.getUserLoggedIn().first_name = e.firstName;
-		ACS.getUserLoggedIn().last_name = e.lastName;
+		acs.getUserLoggedIn().first_name = e.firstName;
+		acs.getUserLoggedIn().last_name = e.lastName;
 	});
 	
 	

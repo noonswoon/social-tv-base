@@ -73,12 +73,8 @@ FriendsWindow = function(){
 				var program = results[i];
 				var number_checkins = 0;
 					for(var j=0;j<allTVPrograms.length;j++){
-						Ti.API.info('program.programId = '+program.programId);
-						Ti.API.info('allTVPrograms[j].id = '+allTVPrograms[j].id);
 						if(program.programId === allTVPrograms[j].id) {
 							number_checkins = allTVPrograms[j].number_checkins;
-							Ti.API.info('allTVPrograms[j].number_checkins = '+allTVPrograms[j].number_checkins);
-							Ti.API.info('number_checkins = '+number_checkins);
 							break;
 						}
 					}

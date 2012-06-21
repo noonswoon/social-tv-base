@@ -3,10 +3,12 @@ function LoginTabGroup() {
     var self = Titanium.UI.createTabGroup();
 	
 	var LoginFbOnlyWindow = require('ui/common/Am_LoginFbOnlyWindow');	
+	var LoginWindow = require('ui/common/LoginWindow');	
+	
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
-    var loginwin = new LoginFbOnlyWindow();
+    var loginwin = new LoginWindow();//LoginFbOnlyWindow();
 	var blankwin = new BlankWindow();
 
 	var loginTab = Ti.UI.createTab({

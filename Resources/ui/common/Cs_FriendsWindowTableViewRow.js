@@ -1,6 +1,8 @@
-FriendsWindowTableViewRow = function(tabledata,_checkins){	
-	var friendData = [];
-	for(var i=0;i<tabledata.friends.length;i++){
+FriendsWindowTableViewRow = function(tabledata,_checkins){
+	var BadgeCondition = require('helpers/badgeCondition');	
+	var friendData = [];	
+	var friendCheckIns = tabledata.friends.length;
+	for(var i=0;i<friendCheckIns;i++){
 		friendData.push(tabledata.friends[i].username);
 	}	
 
@@ -90,7 +92,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	});
 	var programFriendTotalCheckin = Ti.UI.createLabel({
 		//text: _totalFriendCheckins,
-		text: tabledata.friends.length,
+		text: friendCheckIns,
 		textAlign: 'left',
 		color: '#898687',
 		bottom: 0,
@@ -138,7 +140,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		width:320,
 	});
 
-	for(var i=0;i<tabledata.friends.length;i++) {
+	for(var i=0;i<friendCheckIns;i++) {
 		var friends = tabledata.friends;
 		var fbId = 0;
 		var numExternalAccounts = friends[i].external_accounts;
@@ -165,6 +167,10 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	}
 
 /////////////////////////////////////////////////////////////////////////////
+//badge condition check!
+	Ti.API.info('friendCheckIn = '+friendCheckIns);
+	if(friendCheckIns > 0) BadgeCondition.checkFriendCondition(friendCheckIns);
+//////////////////////////////////////////////////////////////////////////////
 	row.add(friendsScrollView);
 	return row;
 }

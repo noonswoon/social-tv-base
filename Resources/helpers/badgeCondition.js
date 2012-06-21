@@ -19,29 +19,22 @@ var checkCountCondition = function(e) {
 	//badge desc: nice to meet you
 	//condition: 1st check in
 	//badge id: 0
-	if(checkinCount = 1) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 0});
+	if(checkinCount >= 1) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 0});
 	//badge desc: fall for you	
 	//condition: 10th check in	
 	//badge id: 1
-	if(checkinCount = 10) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
+	else if(checkinCount >= 10) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
 	//badge desc: i'm loving it		
 	//condition: 20th check in
 	//badge id: 2
-	if(checkinCount = 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
+	else if(checkinCount >= 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
 }
-		
-var checkTimeCondition = function() {
-	var now = moment().format('HH');
-	Ti.API.info('checkTimeCondition: '+now);
-	//badge desc: early bird	
-	//condition: checkin 5.00-7.59 am
-	//badge id: 7
-	if(now === '05' || now === '06' || now === '07') Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 7});
-	//badge desc: insomnia		
-	//condition: checkin 1.00 - 3.59 am
-	//badge id: 8
-	if(now === '01' || now === '02' || now === '03') Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 8});
-}
+	exports.checkFriendCondition = function(_friendCheckIn) {
+	//badge desc: love sharing		
+	//condition: checkin with more than 5 friends
+	//badge id: 3	
+	if(_friendCheckIn >= 5) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
+}	
 	
 var checkTypeCondition = function(_type) {
 	var checkinCount = getNumCheckinsOfType(_type);
@@ -73,6 +66,19 @@ var checkTypeCondition = function(_type) {
 		}
 	}
 }	
+		
+var checkTimeCondition = function() {
+	var now = moment().format('HH');
+	Ti.API.info('checkTimeCondition: '+now);
+	//badge desc: early bird	
+	//condition: checkin 5.00-7.59 am
+	//badge id: 7
+	if(now === '05' || now === '06' || now === '07') Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 7});
+	//badge desc: insomnia		
+	//condition: checkin 1.00 - 3.59 am
+	//badge id: 8
+	if(now === '01' || now === '02' || now === '03') Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 8});
+}
 
 var newBadgeUnlockCallback = function(e){
 	var ActivityACS = require('acs/activityACS');
@@ -100,8 +106,8 @@ var newBadgeUnlockCallback = function(e){
 	LeaderACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 }
 	
-	Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);	
-	Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
+Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);	
+Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -114,7 +120,6 @@ exports.checkinEvent = function(_checkinData){
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	var myBadgeACS = require('acs/myBadgeACS');
 	var userID = acs.getUserId();
-	
 	Ti.API.info('badgeCondition_createBadgeUnlocked: '+ _badgeID);
 	myBadgeACS.myBadgeACS_createNewBadge(userID,_badgeID);
 };

@@ -8,7 +8,7 @@ function LoginTabGroup() {
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
-    var loginwin = new LoginWindow();//LoginFbOnlyWindow();
+    var loginwin = new LoginFbOnlyWindow();
 	var blankwin = new BlankWindow();
 
 	var loginTab = Ti.UI.createTab({

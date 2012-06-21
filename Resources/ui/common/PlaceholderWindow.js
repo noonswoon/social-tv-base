@@ -1,4 +1,4 @@
-var PlaceholderWindow = function() {
+var PlaceholderWindow = function(_parnetWindow) {
 	
 	
 	//UI COMPONENTS DECLARATION
@@ -14,55 +14,55 @@ var PlaceholderWindow = function() {
 		style:Titanium.UI.iPhone.SystemButtonStyle.PLAIN
 	});
 	
-	var fbExplHeader = Ti.UI.createLabel({
-		top: 5,
-		left: 5,
-		textAlign: 'center',
-		font: { fontSize: 20, fontFamily: 'Helvetica Neue', fontWeight:'bold'},
-		text: 	'Why we use Facebook'
-	});
-	
-	var fbExplPrelim = Ti.UI.createLabel({
-		top: 5,
-		left: 5,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'Using Facebook as our login system helps improve the user experience in a number of ways:'
-	});
-	
-	var fbExplFirst = Ti.UI.createLabel({
-		top: 5,
-		left: 5,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'1.) It makes it super fast to sign up and create a Chatterbox profile'
-	});
-	
-	var fbExplSecond = Ti.UI.createLabel({
-		top: 5,
-		left: 5,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'2.) It allows you to see what friends you have in common with other Chatterbox users'
-	});
-	
-	var fbExplThird = Ti.UI.createLabel({
-		top: 5,
-		left: 5,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'3.) It helps ensure that people are using their real identities'
-	});
-	
-	var fbExplConclude = Ti.UI.createLabel({
-		top: 5,
-		left: 5,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'We really want to earn your trust and we will not auto-post to your account or misuse your personal information in any way.'
-	});
-	
-	var fbExplContact = Ti.UI.createLabel({
-		top: 5,
-		left: 5,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 'Please let us know if you\'d like more login options or have feedback on this. Thanks!'
-	});
+	// var fbExplHeader = Ti.UI.createLabel({
+		// top: 5,
+		// left: 5,
+		// textAlign: 'center',
+		// font: { fontSize: 20, fontFamily: 'Helvetica Neue', fontWeight:'bold'},
+		// text: 	'Why we use Facebook'
+	// });
+// 	
+	// var fbExplPrelim = Ti.UI.createLabel({
+		// top: 5,
+		// left: 5,
+		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		// text: 	'Using Facebook as our login system helps improve the user experience in a number of ways:'
+	// });
+// 	
+	// var fbExplFirst = Ti.UI.createLabel({
+		// top: 5,
+		// left: 5,
+		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		// text: 	'1.) It makes it super fast to sign up and create a Chatterbox profile'
+	// });
+// 	
+	// var fbExplSecond = Ti.UI.createLabel({
+		// top: 5,
+		// left: 5,
+		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		// text: 	'2.) It allows you to see what friends you have in common with other Chatterbox users'
+	// });
+// 	
+	// var fbExplThird = Ti.UI.createLabel({
+		// top: 5,
+		// left: 5,
+		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		// text: 	'3.) It helps ensure that people are using their real identities'
+	// });
+// 	
+	// var fbExplConclude = Ti.UI.createLabel({
+		// top: 5,
+		// left: 5,
+		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		// text: 	'We really want to earn your trust and we will not auto-post to your account or misuse your personal information in any way.'
+	// });
+// 	
+	// var fbExplContact = Ti.UI.createLabel({
+		// top: 5,
+		// left: 5,
+		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		// text: 'Please let us know if you\'d like more login options or have feedback on this. Thanks!'
+	// });
 	
 	var b1 = Ti.UI.createButton({
 		title:'Run Query',
@@ -87,13 +87,13 @@ var PlaceholderWindow = function() {
 	
 	//ADDING UI COMPONENTS
 	pWin.setLeftNavButton(backBtn);
-	pWin.add(fbExplHeader);
-	pWin.add(fbExplPrelim);
-	pWin.add(fbExplFirst);
-	pWin.add(fbExplSecond);
-	pWin.add(fbExplThird);
-	pWin.add(fbExplConclude);
-	pWin.add(fbExplContact);
+	// pWin.add(fbExplHeader);
+	// pWin.add(fbExplPrelim);
+	// pWin.add(fbExplFirst);
+	// pWin.add(fbExplSecond);
+	// pWin.add(fbExplThird);
+	// pWin.add(fbExplConclude);
+	// pWin.add(fbExplContact);
 	
 	pWin.add(b1);
 	pWin.add(searchFriendsWithApp);
@@ -104,7 +104,7 @@ var PlaceholderWindow = function() {
 	{
 		b1.title = 'Loading...';
 	
-		var tableView = Ti.UI.createTableView({minRowHeight:100});
+		var tableView = Ti.UI.createTableView();
 		var win = Ti.UI.createWindow({title:'Facebook Query'});
 		win.add(tableView);
 	
@@ -112,19 +112,24 @@ var PlaceholderWindow = function() {
 		var close = Titanium.UI.createButton({
 			title:'Close'
 		});
+		
 		close.addEventListener('click', function()
 		{
 			win.close();
 		});
+		
 		if (Ti.Platform.osname == 'iphone' || Ti.Platform.osname == 'ipad') {
 			win.setRightNavButton(close);
 		}
 	
 		// run query, populate table view and open window
 		var query = "SELECT uid, name, pic_square, status FROM user ";
+		
 		query +=  "where uid IN (SELECT uid2 FROM friend WHERE uid1 = " + Titanium.Facebook.uid + ")";
-		query += "order by last_name limit 20";
+		//query +=  "where uid IN (SELECT uid2 FROM friend WHERE uid1 = " + acs.getUserFbId() + ")";
+		query += "order by last_name limit 10";
 		Ti.API.info('user id ' + Titanium.Facebook.uid);
+		//Ti.API.info('user id ' + acs.getUserFbId());
 		Titanium.Facebook.request('fql.query', {query: query},  function(r)
 		{
 			if (!r.success) {
@@ -142,7 +147,7 @@ var PlaceholderWindow = function() {
 				var row = result[c];
 	
 				var tvRow = Ti.UI.createTableViewRow({
-					height:'auto',
+					height:50,
 					selectedBackgroundColor:'#fff',
 					backgroundColor:'#fff'
 				});
@@ -150,32 +155,22 @@ var PlaceholderWindow = function() {
 				imageView = Ti.UI.createImageView({
 					image:row.pic_square === null ? '../images/custom_tableview/user.png' : row.pic_square,
 					left:10,
-					width:50,
-					height:50
+					width:40,
+					height:40
 				});
 				tvRow.add(imageView);
 	
 				var userLabel = Ti.UI.createLabel({
-					font:{fontSize:16, fontWeight:'bold'},
-					left:70,
-					top:5,
-					right:5,
+					font:{fontSize:15, fontWeight:'bold'},
+					left:60,
 					height:20,
-					color:'#576996',
+					width: 180,
+					color:'#000',
+					//backgroundColor: 'red',
 					text:row.name
 				});
 				tvRow.add(userLabel);
 	
-				var statusLabel = Ti.UI.createLabel({
-					font:{fontSize:13},
-					left:70,
-					top:25,
-					right:20,
-					height:'auto',
-					color:'#222',
-					text:(!row.status || !row.status.message ? 'No status message' : row.status.message)
-				});
-				tvRow.add(statusLabel);
 				tvRow.uid = row.uid;
 				data[c] = tvRow;
 			}
@@ -185,15 +180,14 @@ var PlaceholderWindow = function() {
 			b1.title = 'Run Query';
 		});
 	}
-	
+////	
 	//EVENT REGISTERING
 	backBtn.addEventListener('click',function() {
 		pWin.close();
 	});
 
 
-	b1.addEventListener('click', function()
-	{
+	b1.addEventListener('click', function() {
 		if (!Titanium.Facebook.loggedIn)
 		{
 			Ti.UI.createAlertDialog({title:'Chatterbox', message:'Login before running query'}).show();
@@ -207,10 +201,11 @@ var PlaceholderWindow = function() {
 			    if (e.success) {
 			        Ti.API.info('Friends Count: ' + e.users.length);
 			        for (var i = 0; i < e.users.length; i++) {
+			        	if(e.users.length==0) break;
 			            var user = e.users[i];
-			            alert('id: ' + user.id + '\\n' +
-			                'first name: ' + user.first_name + '\\n' +
-			                'last name: ' + user.last_name);
+			            // alert('id: ' + user.id + '\\n' +
+			                // 'first name: ' + user.first_name + '\\n' +
+			                // 'last name: ' + user.last_name);
 			         }
 			    } else {
 			        Ti.API.info('searchFriendsWithApp Error:\\n' +
@@ -218,7 +213,7 @@ var PlaceholderWindow = function() {
 			    }
 			});
 		});
-		
+////		
 	graphAPI.addEventListener('click', function() {
 		Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function(e) {
 		    if (e.success) {

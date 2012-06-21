@@ -43,19 +43,19 @@ exports.friendModel_fetchFriend = function(_myID) {
 	return fetchedFriend;
 };
 
-exports.friendModel_findMyFriend = function(_myId,_friendId) {
-	isFriend = false;
-	var db = Ti.Database.open('Chatterbox');
-	var result = db.excute('SELECT * FROM friends where my_id = ? and friend_id = ?', _myID, _friendId);
-	while(result.isValidRow()) {	
-		isFriend = true;
-		break;
-	}	
-	result.close();
-	db.close();
-	//return only true or false
-	return isFriend;	
-};
+// exports.friendModel_findMyFriend = function(_myId,_friendId) {
+	// isFriend = false;
+	// var db = Ti.Database.open('Chatterbox');
+	// var result = db.excute('SELECT * FROM friends where my_id = ? and friend_id = ?', _myID, _friendId);
+	// while(result.isValidRow()) {	
+		// isFriend = true;
+		// break;
+	// }
+	// result.close();
+	// db.close();
+	// //return only true or false
+	// return isFriend;
+// };
 
 //update one friend from approving
 exports.friend_create = function(_friend,fb_id){

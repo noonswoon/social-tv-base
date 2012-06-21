@@ -42,6 +42,13 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		backgroundColor: 'transparent'
 	});
 	
+	//testing friend from facebook
+	profilePicture.addEventListener('click', function(){
+	var AddFriendMainWindow = require('ui/common/Pf_addFriendMainWindow');
+	var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
+		_parentWindow.containingTab.open(addFriendMainWindow);
+	});
+	
 	var profilePictureContain = Ti.UI.createView({
 		backgroundColor: '#fff',
 		top: 10, left: 10,

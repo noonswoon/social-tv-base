@@ -15,7 +15,6 @@ function LoginTabGroup() {
 		window: loginwin
 	});
 	loginwin.containingTab = loginTab;
-	
 	self.addTab(loginTab);
 
     //save 1-clcik, direct to message board functionality

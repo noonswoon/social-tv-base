@@ -1,6 +1,15 @@
-var SettingWindow = function() {
+var SettingWindow = function(_containingTab) {
 	
 	//UI STUFF
+	var SettingWindowAccount = require('ui/common/Am_SettingWindowAccount');
+	var SettingWindowSocialsharing = require('ui/common/Am_SettingWindowSocialsharing');
+	var SettingWindowNotification = require('ui/common/Am_SettingWindowNotification');
+	
+	var setting = [
+	{title:'Account Setting', hasChild:true},
+	{title:'Social Sharing', hasChild:true},
+	{title:'Notifications', hasChild:true}
+	]
 	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/Backbutton.png',
@@ -13,54 +22,63 @@ var SettingWindow = function() {
 		title: "Setting",
 		leftNavButton: backButton
 	});
+	self.containingTab = _containingTab;
 	
 	backButton.addEventListener('click', function(){
    		self.close();
 	});
 	
-	var switchView = Ti.UI.createView({
-		backgroundImage: 'images/switchBG.png',
+	// create table view
+	var settingTableView = Ti.UI.createTableView({
+		data: setting,
+		style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
+		backgroundColor:'transparent',
+		rowBackgroundColor:'white',
+		scrollable:false
+	});
+
+	var text = [];
+	
+	var fbLogoutButtonTableViewRow = Ti.UI.createTableViewRow({
+		height: 40
+	});
+	
+	var fbLogoutButtonLabel = Ti.UI.createLabel({
+		text: 'Logout',
+		font:{fontWeight:'bold',fontSize:16}
+	});
+	fbLogoutButtonTableViewRow.add(fbLogoutButtonLabel);
+	
+	var fbLogoutButton = Ti.UI.createTableView({
+		style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
+		backgroundColor:'transparent',
+		rowBackgroundColor:'white',
+		scrollable:false,
 		top: 160,
-		width: 270,
-		height: 98
+		separatorColor: 'white'
 	});
 	
-	var pushSwitch = Ti.UI.createSwitch({
-		value: true,
-		top: 10,
-		right: 10,
-	});
-	switchView.add(pushSwitch);
-	
-	var shareSwitch = Ti.UI.createSwitch({
-		value: true,
-		top: 60,
-		right: 10,
-	});
-	switchView.add(shareSwitch);
-	
-	var saveButton = Ti.UI.createButton({
-		backgroundImage: '/images/buttonBG.png',
-		title: 'Save Changes',
-		bottom:50,
-		width:228,
-		height:41,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'}
-	});
-		
-	var fbLogoutButton = Ti.UI.createButton({
-		backgroundImage: '/images/buttonBG.png',
-		title: 'Log out',
-		bottom:10,
-		width:228,
-		height:41,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'}
-	});
-	
-	//ADDING UI COMPONENTS TO WINDOW
-	self.add(switchView);
+	text.push(fbLogoutButtonTableViewRow);
+	fbLogoutButton.setData(text);
+	self.add(settingTableView);
 	self.add(fbLogoutButton);
-	self.add(saveButton);
+	
+	
+	// create table view event listener
+	settingTableView.addEventListener('click', function(e){
+		if(e.index === 0){
+			var account = new SettingWindowAccount();
+			self.containingTab.open(account);
+		}
+		else if(e.index === 1){
+			var social = new SettingWindowSocialsharing();
+			self.containingTab.open(social);			
+		}
+		else if(e.index === 2){
+			var notification = new SettingWindowNotification();
+			self.containingTab.open(notification);			
+		}
+	});
 
 	
 	//CALLBACK FUNCTIONS	

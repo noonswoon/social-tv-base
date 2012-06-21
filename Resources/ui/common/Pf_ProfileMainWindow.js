@@ -77,7 +77,7 @@ function ProfileMainWindow(_id,_status) {
 	
 	settingButton.addEventListener('click',function(){
 		var SettingWindow = require('ui/common/Am_SettingWindow');					
-		var settingwin = new SettingWindow();
+		var settingwin = new SettingWindow(self.containingTab);
 		self.containingTab.open(settingwin);
 	});
 	

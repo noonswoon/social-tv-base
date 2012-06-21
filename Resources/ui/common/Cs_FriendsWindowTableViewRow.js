@@ -1,5 +1,4 @@
 FriendsWindowTableViewRow = function(tabledata,_checkins){	
-	//var CheckinACS = require('acs/checkinACS');
 	var friendData = [];
 	for(var i=0;i<tabledata.friends.length;i++){
 		friendData.push(tabledata.friends[i].username);

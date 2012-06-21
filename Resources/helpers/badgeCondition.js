@@ -45,7 +45,7 @@ var checkTimeCondition = function() {
 	
 var checkTypeCondition = function(_type) {
 	var checkinCount = getNumCheckinsOfType(_type);
-	Ti.API.info('checkinCount = '+checkinCount);
+	Ti.API.info('checkinCount// '+_type+' = '+checkinCount);
 
 	if(checkinCount==5) {
 		switch (_type){

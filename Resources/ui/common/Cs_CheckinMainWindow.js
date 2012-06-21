@@ -1,5 +1,4 @@
 CheckinMainWindow = function (_tvprogramData, _containingTab){
-	alert(_tvprogramData.program_type);
 
 	var CheckinACS = require('acs/checkinACS');
 	var PointACS = require('acs/pointACS');
@@ -259,21 +258,19 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			var leaderboardId = allIdDataForACS[1]; 		//acs id
 			var activityId = allIdDataForACS[2]; 			//local id
 
-			alert('checkindata!');
 			//require callback from acs
-/*			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
 			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 			
 			//done after adding to acs
 			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
 			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
-*/			
-/*			//check badge condition from checkin
-			checkinData.program_type = _tvprogramData.program_type;
-			Ti.API.info('calling BadgeCondition.checkinEvent / checkinData.program_type: '+checkinData.program_type);
+			
+			//check badge condition from checkin
+			checkinData.program_type = _tvprogramData.programType;
+			Ti.API.info('calling BadgeCondition.checkinEvent // checkinData.program_type: '+checkinData.program_type);
 			BadgeCondition.checkinEvent(checkinData);
-			//BadgeCondition.checkTypeCondition(checkinData);
-*/			myCurrentCheckinPrograms.push(_tvprogramData.programId);
+			myCurrentCheckinPrograms.push(_tvprogramData.programId);
 		
 			Ti.App.fireEvent('checkinToProgram');
 		});

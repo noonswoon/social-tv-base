@@ -103,13 +103,15 @@ function PopularWindow(_parent) {
 	});
 
 	programListTable.addEventListener('click',function(e){
-		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');	
+		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
+		Ti.API.info('program_type = '+e.row.tvprogram.program_type);
 		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.id,
 			programTitle: e.row.tvprogram.name,
 			programSubname: '',
 			programImage: e.row.tvprogram.photo,
 			programChannel: e.row.tvprogram.channel_id,
+			programType: e.row.tvprogram.program_type,
 			programStarttime: e.row.tvprogram.start_time,
 			programEndtime: e.row.tvprogram.recurring_until,
 			programNumCheckin: e.row.tvprogram.number_checkins

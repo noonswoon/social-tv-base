@@ -11,6 +11,9 @@ function PopularWindow(_parent) {
 	var numProgramsToLoadCheckins = 0;
 	var usingPull2Refresh = false;
 	
+	//Google Analytics
+	Titanium.App.Analytics.trackPageview('/Popular');
+	
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
 			Ti.App.fireEvent("showDiscoveryPage");

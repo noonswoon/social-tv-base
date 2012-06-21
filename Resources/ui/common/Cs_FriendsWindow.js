@@ -6,6 +6,9 @@ FriendsWindow = function(){
 	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
 	var ProgramWithFriends = require('helpers/ProgramWithFriends');
 	
+	//Google Analytics
+	Titanium.App.Analytics.trackPageview('/Friends');
+	
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'orange'
 	});

@@ -4,6 +4,9 @@ function ChatMainWindow(_program) {
 	// INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
 	// -------------------------------------------------------------------------
 	 Ti.include('./pubnub-chat.js');
+	 
+	 //Google Analytics
+	 Titanium.App.Analytics.trackPageview('/Chat');
 	
 	// -------------------------------------------------------------------------
 	// CREATE PUBNUB CHAT WINDOW

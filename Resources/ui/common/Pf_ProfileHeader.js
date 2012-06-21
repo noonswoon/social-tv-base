@@ -8,6 +8,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	var FriendsModel = require('model/friend');
 	var CacheHelper = require('helpers/cacheHelper');
 	var updateActivity = require('helpers/updateActivity');
+	var UserModel = require('model/user');
 
 	var FriendsMainWindow = require('ui/common/pf_friendsMainWindow');
 
@@ -289,6 +290,12 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  		}
  		addFriend(isRequest,i);
  	});
+
+	// headerView._setProfileName = function() {
+		// //select from db and set label text for firstname/lastname
+		// var profile = UserModel.userModel_fetchUserProfile(curId);
+		// profileName.text = profile.first_name + ' ' + profile.last_name;
+	// };
 
 	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);

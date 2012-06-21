@@ -1,5 +1,8 @@
 function GuideWindow(_parent) {
 	
+	//Google Analytics
+	Titanium.App.Analytics.trackPageview('/Guide');
+	
 	var ChannelInGuideWindow = require('ui/common/Cs_ChannelInGuideWindow');
 
 	var channelsList = ['3','5','7','9','11','ThaiPBS'];

@@ -240,6 +240,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		checkinView.addEventListener('touchend',function(){
 			remote.backgroundImage = 'images/checkin/checkin_remote.png';
 			
+			checkinView.touchEnabled = false;
 			messageboardView.touchEnabled = true;
 			chatView.touchEnabled = true;
 			productView.touchEnabled = true;

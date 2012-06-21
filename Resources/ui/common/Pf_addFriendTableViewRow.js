@@ -61,7 +61,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 		})
 		tableRow.add(addButton);
 	};
-
+	tableRow.filter = userLabel.text;
 	tableRow.add(imageView);
 	tableRow.add(userLabel);
 

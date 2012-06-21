@@ -44,8 +44,40 @@ AddFriendsMainView = function(_parentWindow) {
 		height: 317
 	});	
 			
-	var appFriend = Ti.UI.createTableView();		
+	var appFriend = Ti.UI.createTableView();
 	var facebookFriend = Ti.UI.createTableView();
+	
+	var appFriendSearch = Titanium.UI.createSearchBar({
+		barColor:'#fff',
+		showCancel:false,
+		hintText:'Search...'
+	});
+		
+	var facebookFriendSearch = Titanium.UI.createSearchBar({
+		barColor:'#fff',
+		showCancel:false,
+		hintText:'Search...'
+	});
+		
+	appFriendSearch.addEventListener('change', function(e) {
+		e.value; // search string as user types
+	});
+	appFriendSearch.addEventListener('return', function(e) {
+		appFriendSearch.blur();
+	});
+	appFriendSearch.addEventListener('cancel', function(e) {
+		appFriendSearch.blur();
+	});
+
+	facebookFriendSearch.addEventListener('change', function(e) {
+		e.value; // search string as user types
+	});
+	facebookFriendSearch.addEventListener('return', function(e) {
+		facebookFriendSearch.blur();
+	});
+	facebookFriendSearch.addEventListener('cancel', function(e) {
+		facebookFriendSearch.blur();
+	});		
 			
 	friendTab.addEventListener('click',function(e) {
 		for (var i in friendScrollView.children) {
@@ -61,7 +93,6 @@ AddFriendsMainView = function(_parentWindow) {
 			friendScrollView.add(facebookFriend);
 		}
 	});
-	friendScrollView.add(appFriend); //index: 0 -> default tab
 
 //////////////////////////////////////////////////////////////////////////////////////
 	
@@ -115,7 +146,9 @@ AddFriendsMainView = function(_parentWindow) {
 						}	
 			    		alert('friendWithNoApp.length = '+friendWithNoApp.length);
 						var friendOnFbRows = createFriendTable(friendWithNoApp,"facebook");
-						facebookFriend.setData(friendOnFbRows);		    	
+						facebookFriend.setData(friendOnFbRows);
+						facebookFriend.setSearch(facebookFriendSearch);
+						facebookFriend.setFilterAttribute('filter');
 			    	}
 					else Ti.API.info('SearchFriendsWithApp Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
 				});					
@@ -146,9 +179,11 @@ AddFriendsMainView = function(_parentWindow) {
 					var isFriend = checkAlreadyFriend(myfriends,friendWithApp[i].id);
 					if(isFriend) friendWithApp.splice(i,1);
 				}
-				
+				Ti.API.info('Friends Count: ' + friendWithApp.length);
 				var friendWithAppRows = createFriendTable(friendWithApp,"withApp");
 				appFriend.setData(friendWithAppRows);
+				appFriend.setSearch(appFriendSearch);
+				appFriend.setFilterAttribute('filter');
 			} else {
 				Ti.API.info('SearchFriendsWithApp Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
 			}
@@ -186,6 +221,7 @@ AddFriendsMainView = function(_parentWindow) {
 	appFriendQuery();
 	facebookFriendQuery();
 	
+	friendScrollView.add(appFriend); //index: 0 -> default tab
 	mainView.add(friendTab);
 	mainView.add(friendScrollView);
 	self.add(mainView);	

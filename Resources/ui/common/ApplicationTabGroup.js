@@ -130,11 +130,13 @@ function ApplicationTabGroup() {
 	LevelACS.levelACS_fetchedLevel();
 	BadgesACS.fetchedBadges();
 	//my user ACS
+	
 	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
+	//debug why is it not showing on device
 	FriendACS.showFriendsRequest();	
 	FriendACS.searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
-	
+ 	
 	function levelLoadedCallBack(e) {					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
 	}

@@ -104,12 +104,12 @@ CommentReplyTableViewRow = function(_comment, _level) {
 
 	var replyToolbar = Ti.UI.createView({
 		left: 0,
-		top: (heightOfContent*4)-5,
+		top: heightOfContent*6,
 		width: '100%',
 		height: 60,
 		visible: true,
 	});
-
+	
 	var replyTextField = Ti.UI.createTextField({
 		top: 0,
 		height: 28,
@@ -166,7 +166,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		top:0,
 		left: nestedOffset,
 		right: 10,
-		height: (heightOfContent*4)-10,
+		height: (heightOfContent*6)-5,
 		// backgroundColor: 'orange',
 		backgroundImage: 'images/messageboard/comment/reply_onclick.png',
 		zIndex: 1

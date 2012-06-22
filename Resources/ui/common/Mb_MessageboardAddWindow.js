@@ -30,14 +30,49 @@ function MessageboardAddWindow(_programId) {
 		heigth: 'auto',
 		backgroundImage: 'images/messageboard/add/textandbuttonviewBG.png'
 	});
+	
+	var title = Ti.UI.createLabel({
+		text: 'Topic Title',
+		top: 10,
+		left: 10,
+		font:{fontWeight:'bold',fontSize:14},
+	});
+	textAndButtonView.add(title);
+	
+	
+	var topicTextfield = Ti.UI.createTextField({
+		color:'#336699',
+		top: 30,
+		height:35,
+		left:10,
+		width:300,
+		editable: true,
+		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
+	})
+	textAndButtonView.add(topicTextfield);
+	
+	// var photoIcon = Ti.UI.createImageView({
+		// image: 'images/messageboard/add/photo.png',
+		// top: 80,
+		// left: 10
+	// });
+	// textAndButtonView.add(photoIcon);
+	
+	var title = Ti.UI.createLabel({
+		text: 'Say something',
+		top: 80,
+		left: 10,
+		font:{fontWeight:'bold',fontSize:14},
+	});
+	textAndButtonView.add(title);
 
 	var topicTextarea = Ti.UI.createTextArea({
 		value: '',
-		top: 20,
+		top: 100,
 		left: 10,
 		right: 10,
-		width: 227,
-		height: 54,
+		width: 300,
+		height: 80,
 		editable: true,
 		borderRadius: 5,
 		font: {fontSize:14},
@@ -47,15 +82,66 @@ function MessageboardAddWindow(_programId) {
 	});
 	textAndButtonView.add(topicTextarea);
 	
+	var addImage = Ti.UI.createButton({
+		title: 'Add Image',
+		top: 200,
+		width: 120,
+		height: 40,
+		left: 10
+	});
+	textAndButtonView.add(addImage);
+	
+	var thumbnailLabel = Ti.UI.createLabel({
+		text: 'No Image',
+		top: 200,
+		width: 120,
+		height: 40,
+		left: 140		
+	});
+	textAndButtonView.add(thumbnailLabel);
+	
+	var thumbnail = Ti.UI.createImageView({
+		top: 200,
+		width: 120,
+		height: 40,
+		left: 140		
+	});
+	textAndButtonView.add(thumbnail);
+	
 	var addButton = Ti.UI.createButton({
-		top: 20,
-		right: 10,
-		width: 58,
-		height: 56,
-		backgroundImage: 'images/messageboard/add/addbutton.png',
-		backgroundSelectedImage: 'images/messageboard/add/addbutton_onclick.png'
+		title: 'Post!',
+		top: 250,
+		left: 10,
+		width: 300,
+		height: 40,
+		// backgroundImage: 'images/messageboard/add/addbutton.png',
+		// backgroundSelectedImage: 'images/messageboard/add/addbutton_onclick.png'
 	});
 	textAndButtonView.add(addButton);
+	
+	var addImageDialog = Titanium.UI.createOptionDialog({
+		options: ['Take a photo','Select from library']
+	});
+	
+	addImage.addEventListener('click',function(){
+		addImageDialog.show();
+	});
+	
+	var galleryProps = {
+		success:function(event){
+			var image = event.media;
+			if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO)
+				thumbnail.image = image;
+			else alert('Sorry, something wrong');
+			}
+	}
+	
+	addImageDialog.addEventListener('click',function(e){
+		if(e.index === 1){
+			Ti.Media.openPhotoGallery(galleryProps);
+		}
+		else alert('Unavailable');
+	});
 	
 	//ADDING UI COMPONENTS TO THE WINDOW
 	self.add(topicTextarea);
@@ -96,13 +182,13 @@ function MessageboardAddWindow(_programId) {
 	
 	});
 	
-	self.addEventListener('open', function(e) {
-		topicTextarea.focus();
-	});
-	
-	self.addEventListener('close', function(e) {
-		topicTextarea.blur();
-	});	
+	// self.addEventListener('open', function(e) {
+		// topicTextarea.focus();
+	// });
+// 	
+	// self.addEventListener('close', function(e) {
+		// topicTextarea.blur();
+	// });	
 	
 	self._setProgramId = function(_newProgramId) {
 		programId = _newProgramId;

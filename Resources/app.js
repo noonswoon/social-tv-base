@@ -12,8 +12,8 @@ Ti.include('/lib/cacheFromRemote.js');
 //include xxx models here
 
 //GLOBAL VARIABLES DECARATION
-Ti.Facebook.appid = "269019986525306";
-Ti.Facebook.permissions = ['publish_stream','publish_actions', 'read_stream', 'email'];
+Ti.Facebook.appid = "269019986525306"; //actual id: 197422093706392
+Ti.Facebook.permissions = ['publish_stream','publish_actions', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
 var IS_ON_DEVICE = false;

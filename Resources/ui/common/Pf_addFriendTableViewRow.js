@@ -52,12 +52,32 @@ AddFriendsTableViewRow = function(_user,_category) {
 			backgroundImage: 'images/button/button_add.png',
 		});
 		
+		var createFriendActivity = function(_category){
+			var curUser = acs.getUserLoggedIn();
+	 		var friendActivityData = {
+	 			user: curUser.id,
+	 			targetedUserID: _user.id,
+				category: _category,
+				targetedObjectID: curUser.id,
+				additionalData: curUser.first_name + ' '+ curUser.last_name,
+	 		};
+	 		return  friendActivityData;
+ 		}		
+		
 		var addFriend = function(_response){
 			Ti.API.info(_response);
 			alert('Your friend has been added');
 		}
 		addButton.addEventListener('click', function(){
-			FriendACS.addFriendwithNoApprove(_user.id,addFriend);
+			var FriendACS = require('acs/friendsACS');
+			var ActivityACS = require('acs/activityACS');
+			var FriendsModel = require('model/friend');
+			var addFriendActivityData = createFriendActivity("addfriend");
+			alert(addFriendActivityData);
+		
+			FriendsModel.friend_create(_user,_user.fb_id);
+		 	FriendACS.addFriendwithNoApprove(_user.id,addFriend);
+			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
 		})
 		tableRow.add(addButton);
 	};

@@ -89,16 +89,17 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		height:30,
 		textAlign: 'left',
 		left: 10,
-		top:0
+		top:10
 	});
 
 	var leaderTable = Ti.UI.createTableView({
-		top: 30,
+		top: 40,
 		borderRadius: 10,
 		scrollable:false,
 		disableBounce: true,
 		width: 290,
 		height: 'auto',
+		zIndex: 10
 	});
 		
 	var createLeaderBoardView = function(leaderBoardData) {
@@ -180,12 +181,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;
 		profileStats.height = expSec.height + leaderSec.height;
-		
-		leaderTable.addEventListener('click',function(e) {
-			if(e.rowData.user_id!==curId) {
-				_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
-			}
-		});
 	} //end of function: createLeaderBoardView
 
 	updateExpBar();
@@ -221,13 +216,48 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			Ti.API.info('leaderBoardData.length = '+leaderBoardData.length);
 	    	leaderBoardData.sort(totalPointSort);
 	    	createLeaderBoardView(leaderBoardData);
+	    	addMoreFriend(leaderBoardData);
 	    	updateExpBar();
+		}
+		
+		var addMoreFriend = function(_data) {
+			if(_data.length<=10) {
+				var addFriendLabel = Ti.UI.createLabel({
+					text: ' + more friend...',
+					top: 0,
+					font: {fontSize: 14, fontWeight: 'bold'},
+					color: '#fff',
+					height: 30, width: 110,
+					zIndex: 2
+				});
+				var addFriendView = Ti.UI.createView({
+					backgroundColor: '#53b4df',
+					right: 11, top: 15,
+					width: 120, height: 50,
+					borderRadius: 10,
+					zIndex: 1
+				});
+			addFriendView.add(addFriendLabel);	
+			leaderSec.add(addFriendView);
+			addFriendLabel.addEventListener('click',function() {
+				var AddFriendMainWindow = require('ui/common/Pf_addFriendMainWindow');
+				var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
+				_parentWindow.containingTab.open(addFriendMainWindow);
+			});
+			}
 		}
 		
 		Ti.App.addEventListener('friendsLoaded',friendLoadedCallBack);
 		Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);	
 		Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);
 		Ti.App.addEventListener('leaderDbUpdated',leaderDbUpdatedCallBack);		
+		
+				
+		var newProfileWin = function(e){
+			if(e.rowData.user_id!==curId) _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
+		}
+		
+		leaderTable.addEventListener('click',newProfileWin);
 		
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);

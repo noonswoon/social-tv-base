@@ -48,15 +48,19 @@ AddFriendsMainView = function(_parentWindow) {
 	var facebookFriend = Ti.UI.createTableView();
 	
 	var appFriendSearch = Titanium.UI.createSearchBar({
-		barColor:'#fff',
+		barColor:'#43a5cf',
 		showCancel:false,
-		hintText:'Search...'
+		hintText:'Search...',
+		backgroundImage: 'images/searchbar_white.png',
+		borderWidth: 0,
 	});
 		
 	var facebookFriendSearch = Titanium.UI.createSearchBar({
-		barColor:'#fff',
+		barColor:'#43a5cf',
 		showCancel:false,
-		hintText:'Search...'
+		hintText:'Search...',
+		backgroundImage: 'images/searchbar_white.png',
+		borderWidth: 0,
 	});
 		
 	appFriendSearch.addEventListener('change', function(e) {
@@ -136,15 +140,13 @@ AddFriendsMainView = function(_parentWindow) {
 			    		friendWithApp = attachFbId(friendWithApp);
 			    		var friendWithNoApp = [];
 				    	for(i=0;i<result.length;i++) {
-				    		Ti.API.info('result[i].uid ='+result[i].uid);
 							for(j=0;j<friendWithApp.length;j++) {
 								if(String(friendWithApp[j].fb_id) !== String(result[i].uid)) {
 									friendWithNoApp.push(result[i]);
 									break;
 								}
 							}
-						}	
-			    		alert('friendWithNoApp.length = '+friendWithNoApp.length);
+						}
 						var friendOnFbRows = createFriendTable(friendWithNoApp,"facebook");
 						facebookFriend.setData(friendOnFbRows);
 						facebookFriend.setSearch(facebookFriendSearch);
@@ -170,7 +172,6 @@ AddFriendsMainView = function(_parentWindow) {
 	var appFriendQuery = function(){
 		Cloud.SocialIntegrations.searchFacebookFriends(function (e) {
 		    if (e.success) {
-				Ti.API.info('Friends Count: ' + e.users.length);
 				var friendWithApp = e.users;
 				var my_id = acs.getUserId();
 				var myfriends = FriendModel.friendModel_fetchFriend(my_id);
@@ -207,14 +208,14 @@ AddFriendsMainView = function(_parentWindow) {
 	var facebookFriend = Ti.UI.createTableView();
 	
 	facebookFriend.addEventListener('click',function(e) {
-		if(String(e.source) ==="[object TiUIButton]")
+		if(String(e.source) ==="[object TiUIButton]") {
 			Ti.API.info('Invite friend: '+ e.rowData.uid);
 			facebookFriend.deleteRow(e.index);
+		}
 	});
 
 	appFriend.addEventListener('click',function(e) {
-		if(String(e.source) ==="[object TiUIButton]")
-			appFriend.deleteRow(e.index);
+		if(String(e.source) ==="[object TiUIButton]") appFriend.deleteRow(e.index);
 	});
 
 ////////////////////////////

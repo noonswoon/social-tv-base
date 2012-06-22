@@ -23,7 +23,8 @@ FriendsTableViewRow = function(_user,_source) {
 		text: _user.first_name + ' ' + _user.last_name,
 		left: 60,
 		height: 20,
-		font: {fontSize: 14, fontStyle: 'bold'}
+		color: '#3e3e3e',
+		font: {fontSize: 14, fontWeight: 'bold'}
 	});
 	
 	var approveRequest = function(_response) {

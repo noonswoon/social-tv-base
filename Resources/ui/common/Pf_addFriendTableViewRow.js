@@ -31,9 +31,17 @@ AddFriendsTableViewRow = function(_user,_category) {
 			right: 10,
 			backgroundImage: 'images/button/button_invite.png',
 		});
+	
 		
-		inviteButton.addEventListener('click', function(){
+	var inviteFriend = function(_fbId) {
+		var FacebookSharing = require('helpers/facebookSharing');	
+		FacebookSharing.sendRequestOnFacebook(_fbId);
+	}		
+		
+	inviteButton.addEventListener('click', function(){
+		//TODO: invite function
 			alert('invite friend');
+			inviteFriend(_user.uid);
 		})
 		tableRow.add(inviteButton);
 	};

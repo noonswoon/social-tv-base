@@ -52,8 +52,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	// });
 	
 	profilePicture.addEventListener('click', function(){
-		var BadgeCondition = require('helpers/badgeCondition');
-		BadgeCondition.popUpFacebook("4");
+		var FacebookSharing = require('helpers/facebookSharing');
+		FacebookSharing.badgePopUpOnFacebook("4");
 	});
 	
 	var profilePictureContain = Ti.UI.createView({

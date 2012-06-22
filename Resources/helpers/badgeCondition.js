@@ -106,22 +106,7 @@ var newBadgeUnlockCallback = function(e){
 	LeaderACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 }
 	
-function showRequestResult(e) {
-	var s = '';
-	if (e.success) {
-		s = "SUCCESS";
-		if (e.result) s += "; " + e.result;
-		if (e.data) s += "; " + e.data;
-		if (!e.result && !e.data) s = '"success", but no data from FB.  I am guessing you cancelled the dialog.';
-	} else
-	if (e.cancelled) s = "CANCELLED";
-	else {
-		s = "FAIL";
-		if (e.error) s += "; " + e.error;	
-	}
-	Ti.API.info(s);
-}	
-	
+
 Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);	
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
 
@@ -139,20 +124,3 @@ exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	Ti.API.info('badgeCondition_createBadgeUnlocked: '+ _badgeID);
 	myBadgeACS.myBadgeACS_createNewBadge(userID,_badgeID);
 };
-
-exports.popUpFacebook = function(_badgeId) {
-	var user = acs.getUserLoggedIn();
-	var BadgeModel = require('model/badge');
-	var badge = BadgeModel.fetchedBadgeSearch(String(_badgeId));
-	
-	var data = {
-		link: "http://chatterbox.mobi/",
-		name: user.first_name+" "+user.last_name+" has unlocked new a badge: "+badge.title,
-		message: "",
-		caption: "",
-		picture: badge.url,
-		description: badge.desc
-	};
-	Titanium.Facebook.dialog("feed", data, showRequestResult);
-	
-}

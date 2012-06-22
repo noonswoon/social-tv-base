@@ -35,11 +35,11 @@ FriendsMainView = function(_parentWindow,_window){
 		image: 'images/icon/112-group.png',
 		left: 30
 	});
-	
+
 	addFriendLabel.addEventListener('click', function(){
 		var AddFriendMainWindow = require('ui/common/Pf_addFriendMainWindow');
 		var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
-		_parentWindow.containingTab.open(addFriendMainWindow);		
+		_parentWindow.containingTab.open(addFriendMainWindow);	
 	});
 
 	addFriendView.add(addFriendImage);
@@ -75,8 +75,7 @@ FriendsMainView = function(_parentWindow,_window){
 		}
 		else _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user.friend_id,_window));
 	});
-	
-
+		
 	self.addEventListener('close', function() {
 		Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
 	});

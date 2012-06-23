@@ -99,12 +99,26 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		textAlign: 'left',
 		zIndex: 2
 	});
+	
+	var commentTextLength = contentLabel.text.length;
+	
+	// var commentTextWidth = contentLabel.toImage().width;
+	// var commentTextHeight = contentLabel.toImage().height;
+	// var numLinesForHighlightedComment = Math.ceil(commentTextWidth / 230);
+	// var heightOfContent = 65 + (numLinesForHighlightedComment-1)*20;
+	
+	var numLinesForHighlightedComment = Math.ceil(commentTextLength / CHARACTER_PER_LINE);
+	var heightOfContent = 65 + (numLinesForHighlightedComment-1)*15;
 
-	var heightOfContent = contentLabel.toImage().height;
+
+
+	contentLabel.addEventListener('click',function(){
+		alert('heightOfContent: '+heightOfContent+', numLines: '+numLinesForHighlightedComment+', commentTextLength: '+commentTextLength);
+	});
 
 	var replyToolbar = Ti.UI.createView({
 		left: 0,
-		top: heightOfContent*6,
+		top: heightOfContent,
 		width: '100%',
 		height: 60,
 		visible: true,
@@ -166,7 +180,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		top:0,
 		left: nestedOffset,
 		right: 10,
-		height: (heightOfContent*6)-5,
+		height: heightOfContent,
 		// backgroundColor: 'orange',
 		backgroundImage: 'images/messageboard/comment/reply_onclick.png',
 		zIndex: 1

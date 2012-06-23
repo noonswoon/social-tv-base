@@ -279,9 +279,11 @@ function CommentWindow(_topicId) {
 	commentsTable.addEventListener('click', function(e) {
 		if(e.source.toString().indexOf("TiUIButton") > 0) return; //prevent event propagation of clicking reply,vote up/down
 		if(e.index == 0) return;
-		if(commentsTable.selectedToCommentRow != null)
+		if(commentsTable.selectedToCommentRow != null){
+
 			commentsTable.selectedToCommentRow._hideToolbar(e.index);	
-	
+		}
+
 		commentsTable.selectedToCommentRow = e.row;
 		commentsTable.selectedToCommentRow._showToolbar(e.index);
 	});

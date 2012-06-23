@@ -78,8 +78,10 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		if(expBar.value === 0) expBar.thumbImage = 'images/empty_thumb.png';
 		else expBar.thumbImage = 'images/slider/thumb_bar.png';
 		
-		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
+		myLevel = LevelModel.level_checkLevel(totalPoints);
+		myLevelLabel.text = myLevel;
 		expBar_light.value = (totalPoints+5);
+		
 	}
 
 	var leaderLabel = Ti.UI.createLabel({
@@ -218,6 +220,16 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	    	createLeaderBoardView(leaderBoardData);
 	    	addMoreFriend(leaderBoardData);
 	    	updateExpBar();
+	    //TODO: test test
+	    if(_status==="me") {
+			Ti.API.info("cache");
+			var totalPoints = PointModel.pointModel_fetchMyPoint(curId);
+			myLevel = LevelModel.level_checkLevel(totalPoints);
+			var CacheHelper = require('helpers/cacheHelper');
+			CacheHelper.levelUpCache("level"+acs.getUserId(),myLevel);
+		}	
+	    	
+	    	
 		}
 		
 		var addMoreFriend = function(_data) {

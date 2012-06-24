@@ -1,4 +1,4 @@
-function ChatMainWindow(_program) {
+function ChatMainWindow(_programId) {
 
     // -------------------------------------------------------------------------
 	// INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
@@ -15,12 +15,11 @@ function ChatMainWindow(_program) {
 	// Returns an Object with Titanium Window Inside
 	//
 	var pubnub_chat_window = Ti.App.Chat({
-	    "chat-room" : _program.programId,
+	    "chat-room" : _programId,
 	    "window"    : {
 			backgroundColor:'transparent'
 	    },
-	    "programId" : _program.programId,
-	    "programName": _program.programName
+	    "programId" : _programId
 	});
 		
 

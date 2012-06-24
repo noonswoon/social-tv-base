@@ -23,9 +23,9 @@ function ApplicationTabGroup() {
 	};
 	
 	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ChatMainWindow(programPublic);
-	var messageboardwin = new MessageboardMainWindow("CTB_PUBLIC");				
-	var productwin = new ProductMainWindow('CTB_PUBLIC');
+	var chatwin = new ChatMainWindow(myCurrentSelectedProgram);
+	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram);				
+	var productwin = new ProductMainWindow(myCurrentSelectedProgram);
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
 	

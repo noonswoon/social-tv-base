@@ -13,17 +13,28 @@
 	    origin        : 'pubsub.pubnub.com'
 	});
 	
-Ti.App.Chat = function(setup) {    
+Ti.App.Chat = function(_chatParams) {    
     
    	var TVProgram = require('model/tvprogram');
 	var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
 	var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
 		
 	var curUserInput = "";
-    var currentChatRoom = setup['programId'];
-   	var currentChatRoomName = setup['programName'];
-   	var currentProgramId = setup['programId'];
+    var currentChatRoom = _chatParams['programId'];
+   	var currentProgramId = _chatParams['programId'];
     
+	var programData = {}; 
+	if(currentProgramId !== 'CTB_PUBLIC')
+		programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
+	else programData = { program_id: 'CTB_PUBLIC', 
+		name:'Public Room', 
+		subname:'',
+		photo: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',
+		number_checkins: '-', 
+		program_type: 'etc'
+	};
+	var currentChatRoomName = programData.name;
+	
 	var hasLoadedPicker = false;
 	
 	//dummy userobject
@@ -194,6 +205,7 @@ Ti.App.Chat = function(setup) {
 				if(programId === 'CTB_PUBLIC') {
 					dataForPicker.push({title:'Public', progId:'CTB_PUBLIC'});
 				} else {
+					Ti.API.info('[209]programId: '+programId);
 					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 					var programName = programInfo[0].name;
 					var program_id = programInfo[0].program_id;
@@ -259,13 +271,15 @@ Ti.App.Chat = function(setup) {
 		pickerSelectedIndex = e.rowIndex;
 	});
 	
-	Ti.App.addEventListener('checkinToProgram', function(e) {
+	var checkinToProgramCallback = function(e) {
 		var checkinProgramId = e.checkinProgramId; 
 		var checkinProgramName = e.checkinProgramName;
 		alert('ciProgramId: '+checkinProgramId+', ciProgramName: '+checkinProgramName);
 		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, progId:checkinProgramId});
 		picker.add(newPickerRow);
-	});
+	};
+	
+	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);
 	//////
 
 	var userView = Ti.UI.createView({
@@ -468,6 +482,10 @@ Ti.App.Chat = function(setup) {
 		chatInputTextField.value = "";
     	chatInputTextField.blur();
     	chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
+    });
+    
+    chat_window.addEventListener('close', function() {
+    	Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallback);
     });
     
     return this;

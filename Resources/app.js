@@ -1,18 +1,23 @@
 // this sets the background color of the master UIView (when there are no windows/tab groups on it)
 Titanium.UI.setBackgroundColor('#000');
 
-Ti.include('/lib/date.js');
-Ti.include('/lib/rankingScore.js');
-Ti.include('/lib/TiPreloader.js');
+Ti.include('lib/date.js');
+Ti.include('lib/rankingScore.js');
+Ti.include('lib/TiPreloader.js');
+Ti.include('lib/cacheFromRemote.js');
 
-var moment = require('/lib/moment');
-Ti.include('/lib/cacheFromRemote.js');
+var moment = require('lib/moment');
+var acs = require('lib/acs');
+var UrbanAirship = require('lib/UrbanAirship');
+var Debug = require('lib/debug');
+var PullToRefresh = require('nl.icept.pull2refresh');
+var Cloud = require('ti.cloud');
 
 //include xxxACS.js here
 //include xxx models here
 
 //GLOBAL VARIABLES DECARATION
-Ti.Facebook.appid = "269019986525306"; //actual id: 197422093706392
+Ti.Facebook.appid = "197422093706392"; //actual id: 197422093706392
 Ti.Facebook.permissions = ['publish_stream','publish_actions', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
@@ -20,14 +25,8 @@ var IS_ON_DEVICE = false;
 var CACHE_TIMEOUT_IN_MINUTES = 1; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 	
-var acs = require('lib/acs');
-var UrbanAirship = require('lib/UrbanAirship');
-
-var Debug = require('lib/debug');
-var Cloud = require('ti.cloud');
-var PullToRefresh = require('nl.icept.pull2refresh');
-
 var myCurrentCheckinPrograms = ['CTB_PUBLIC']; //should be reset every hour to empty array
+var myCurrentSelectedProgram = 'CTB_PUBLIC';
 var friendRequests = [];
 
 // This is a single context application with mutliple windows in a stack
@@ -43,9 +42,7 @@ var friendRequests = [];
 	//yourself what you consider a tablet form factor for android
 	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
 	
-	
 	//Google Analytics
-	
 	//Set up analytics
 	Titanium.include('analytics.js');
 	var analytics = new Analytics('UA-32782163-1');
@@ -61,7 +58,6 @@ var friendRequests = [];
 	Titanium.App.addEventListener('analytics_trackEvent', function(e){
 		analytics.trackEvent(e.category, e.action, e.label, e.value);
 	});
-
 
 	// I've set a global Analytics object to contain the two functions to make it easier to fire the analytics events from other windows
 	Titanium.App.Analytics = {

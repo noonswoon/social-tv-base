@@ -109,7 +109,8 @@ function PopularWindow(_parent) {
 		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
 		Ti.API.info('program_type = '+e.row.tvprogram.program_type);
 		checkinmainwin = new CheckinMainWindow({
-			eventId: e.row.tvprogram.id,
+			eventId: e.row.tvprogram.id, //id of the particular show (one-time)
+			programId: e.row.tvprogram.program_id, //overall id of program id
 			programTitle: e.row.tvprogram.name,
 			programSubname: '',
 			programImage: e.row.tvprogram.photo,

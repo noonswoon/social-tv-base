@@ -50,7 +50,7 @@ function ProductMainWindow(_programId) {
 	productSelectProgramToolbar.add(callPicker);
 	
 	var selectProgramLabel = Ti.UI.createLabel({
-		text: 'Cool stuff',//infoForName[0].name,
+		text: 'Chatterbox Souvenirs',//infoForName[0].name,
 		left: 10,
 		width: 'auto',
 		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
@@ -113,8 +113,12 @@ function ProductMainWindow(_programId) {
 	callPicker.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
 			var dataForPicker = [];
+			var preSelectedRow = 0;
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 				var programId = myCurrentCheckinPrograms[i];
+				if(myCurrentSelectedProgram === programId) 
+					preSelectedRow = i;
+					
 				if(programId === 'CTB_PUBLIC') {
 					dataForPicker.push({title:'Chatterbox Souvenirs', progId:'CTB_PUBLIC'});
 				} else {
@@ -125,6 +129,7 @@ function ProductMainWindow(_programId) {
 					dataForPicker.push({title:programName, progId:program_id});
 				}
 			}
+			picker.setSelectedRow(0,preSelectedRow,false);
 			picker.add(dataForPicker);
 			picker_view.add(picker);
 			hasLoadedPicker = true;

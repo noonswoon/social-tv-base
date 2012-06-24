@@ -186,8 +186,11 @@ Ti.App.Chat = function(setup) {
 	selectProgramButton.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
 			var dataForPicker = [];
+			var preSelectedRow = 0;
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 				var programId = myCurrentCheckinPrograms[i];
+				if(myCurrentSelectedProgram === programId) 
+					preSelectedRow = i;
 				if(programId === 'CTB_PUBLIC') {
 					dataForPicker.push({title:'Public', progId:'CTB_PUBLIC'});
 				} else {
@@ -197,6 +200,7 @@ Ti.App.Chat = function(setup) {
 					dataForPicker.push({title:programName, progId:program_id});
 				}
 			}
+			picker.setSelectedRow(0,preSelectedRow,false);
 			picker.add(dataForPicker);
 			picker_view.add(picker);
 			hasLoadedPicker = true;
@@ -210,40 +214,58 @@ Ti.App.Chat = function(setup) {
 		chat_window.remove(opacityView);
 	});
 
-/**
- * PUBNUB.unsubscribe({ channel : 'my_chat' });
- * 
- */
 	done.addEventListener('click',function() {
 		picker_view.animate(slide_out);
 		chat_window.remove(opacityView);
 		
-		//unsubscribe the channel: 
-		pubnub.unsubscribe({channel: currentChatRoom});
-		
-		if(pickerSelectedIndex === 0) {
+		//only unsubscribe if it the channel changes
+		var selectedProgramId = 0; 
+		var isRoomChanged = false;
+		if(pickerSelectedIndex === 0 && currentProgramId !== 'CTB_PUBLIC') { //changing to public channel
+			pubnub.unsubscribe({channel: currentChatRoom});
 			currentProgramId = 'CTB_PUBLIC';
 			currentChatRoom = currentProgramId;
 			currentChatRoomName = 'Public Chat';
 			selectProgramLabel.text = currentChatRoomName;
+			isRoomChanged = true;
 		} else {
-			currentProgramId = picker.getSelectedRow(0).progId;
+			selectedProgramId = picker.getSelectedRow(0).progId; 
+		}
+		
+		if(pickerSelectedIndex !== 0 && selectedProgramId !== currentProgramId ){
+			pubnub.unsubscribe({channel: currentChatRoom});
+			currentProgramId = selectedProgramId;
 			currentChatRoom = currentProgramId;
 			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 			currentChatRoomName = selectedProgram[0].name;
 			selectProgramLabel.text = currentChatRoomName;
+			
+			//change the room
+			myCurrentSelectedProgram = currentProgramId;
+			isRoomChanged = true;
 		}
-		lastHistoryLoadedIndex = 0;
-		historyMessages = [];
-		loadHistoryButton.enabled = true;
-		//subscribe to new channel
-		subscribe_chat_room();
+		
+		if(isRoomChanged) {
+			myCurrentSelectedProgram = currentProgramId;
+			lastHistoryLoadedIndex = 0;
+			historyMessages = [];
+			loadHistoryButton.enabled = true;
+			//subscribe to new channel
+			subscribe_chat_room();
+		}
 	});
 
 	picker.addEventListener('change',function(e) {
 		pickerSelectedIndex = e.rowIndex;
 	});
 	
+	Ti.App.addEventListener('checkinToProgram', function(e) {
+		var checkinProgramId = e.checkinProgramId; 
+		var checkinProgramName = e.checkinProgramName;
+		alert('ciProgramId: '+checkinProgramId+', ciProgramName: '+checkinProgramName);
+		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, progId:checkinProgramId});
+		picker.add(newPickerRow);
+	});
 	//////
 
 	var userView = Ti.UI.createView({

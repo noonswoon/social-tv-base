@@ -11,7 +11,6 @@ function ApplicationTabGroup() {
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
-    var areTabsDiabled = false;
     var myUserId = acs.getUserId();
     
 	var programPublic = {
@@ -26,7 +25,7 @@ function ApplicationTabGroup() {
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(programPublic);
 	var messageboardwin = new MessageboardMainWindow("CTB_PUBLIC");				
-	var productwin = new ProductMainWindow('CH3_00TGT');
+	var productwin = new ProductMainWindow('CTB_PUBLIC');
 	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
 	
@@ -88,27 +87,7 @@ function ApplicationTabGroup() {
 		tabIndexToComeBack = 4;
 	});
 	
-	var disableTabsView = Titanium.UI.createView({
-	    backgroundColor: '#ffff',
-	    opacity: 0.2,
-	    height: 49,
-	    width:'60%',
-	    bottom:0,
-	    left:'20%'
-	});
-	
-	var checkinAlert = Titanium.UI.createAlertDialog({
-	    title:'Please checkin',
-	    message:'Please checkin to a program first.'
-	});
-
-	disableTabsView.addEventListener('click', function(e){
-   		checkinAlert.show();
-	});
-	
 	//////////////////////
-	//self.add(disableTabsView);
-	
 	self.addTab(selectionTab);
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  
@@ -148,11 +127,7 @@ function ApplicationTabGroup() {
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
 		//if checkin to at least 1 program, enable the chat/board/product bar
-		if(eventsCheckedIn.length > 0)  {
-			self.remove(disableTabsView);
-			areTabsDiabled = false;
-		}
-
+		
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id; 
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
@@ -169,22 +144,11 @@ function ApplicationTabGroup() {
 	
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
 	
-	//checkinToProgram event fires from Cs_CheckinMainWindow
-	function checkinToProgramCallback() {
-		if(areTabsDiabled) {
-   			self.remove(disableTabsView);
-			areTabsDiabled = false;	
-   		}
-	}
-	
-   	Ti.App.addEventListener('checkinToProgram', checkinToProgramCallback);
-   	
    	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');
    		Ti.App.removeEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
    		Ti.App.removeEventListener('levelLoaded',levelLoadedCallBack);
    		Ti.App.removeEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
-   		Ti.App.removeEventListener('checkinToProgram', checkinToProgramCallback);
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}

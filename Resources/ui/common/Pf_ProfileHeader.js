@@ -53,7 +53,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	profilePicture.addEventListener('click', function(){
 		var FacebookSharing = require('helpers/facebookSharing');
-		FacebookSharing.badgePopUpOnFacebook("4");
+		//FacebookSharing.badgePopUpOnFacebook("4");
+		FacebookSharing.checkinAppearOnFaceBook();
 	});
 	
 	var profilePictureContain = Ti.UI.createView({

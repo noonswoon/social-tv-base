@@ -1,6 +1,7 @@
 function showRequestResult(e) {
 	var s = '';
 	if (e.success) {
+		alert(e);
 		s = "SUCCESS";
 		if (e.result) s += "; " + e.result;
 		if (e.data) s += "; " + e.data;
@@ -11,7 +12,7 @@ function showRequestResult(e) {
 		s = "FAIL";
 		if (e.error) s += "; " + e.error;	
 	}
-	Ti.API.info(s);
+	alert(s);
 }	
 	
 
@@ -84,4 +85,63 @@ exports.levelUpPopUpOnFacebook = function(_levelTitle) {
 		};
 		Titanium.Facebook.dialog("feed", data, showRequestResult);
 	}
+}
+
+exports.checkinAppearOnFaceBook = function() {	
+	// FB.init({
+        // appId      : '197422093706392', // App ID
+        // status     : true, // check login status
+        // cookie     : true, // enable cookies to allow the server to access the session
+        // xfbml      : true  // parse XFBML
+      // });
+// 
+    // // Load the SDK Asynchronously
+    // (function(d) {
+      // var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
+      // js = d.createElement('script'); js.id = id; js.async = true;
+      // js.src = "//connect.facebook.net/en_US/all.js";
+      // d.getElementsByTagName('head')[0].appendChild(js);
+    // }(document));
+//     
+    // FB.api( //cannot send this dynamically yet; fb caching makes it hard to test -->
+      // '/me/og_chatterbox:cook&recipe='+encodeURIComponent('http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php?showTitle=ritsayaaa&showImage=buang&fbrefresh=1'), 
+      // 'post',
+      // function(response) {
+        // if (!response || response.error) {
+          // alert('Error occured');
+        // } else {
+            // alert('Cook was successful! Action ID: ' + response.id);
+        // }
+    // });
+//	var SettingHelper = require('helpers/settingHelper');	
+//	if(SettingHelper.getFacebookShare()) {
+		// var url = "http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php?showTitle=ritsayaaa&showImage=buang&fbrefresh=1"
+		// var data = {
+		// recipe: "http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php",
+		// access_token: Titanium.Facebook.accessToken
+		 // };
+// 
+		 // Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:cook&recipe=http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php",{},"POST",showRequestResult);
+		 var url = "https://graph.facebook.com/me/og_chatterbox:cook";
+          var data = {
+            //datatype: "http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php",
+          	recipe: "http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php",
+             access_token : Titanium.Facebook.accessToken
+        
+         };
+         var xhr = Ti.Network.createHTTPClient({
+        	  onload: function() {
+	    	 responseJSON = JSON.parse(this.responseText);
+	    	 alert(responseJSON);
+	     },onerror: function(e) {
+			 // this function is called when an error occurs, including a timeout
+	         Ti.API.debug(e.error);
+	         alert(JSON.stringify(e));
+	     },
+	     timeout:10000  /* in milliseconds */
+         });
+         xhr.open('POST', url, true);
+         xhr.send(data);
+		
+//	}
 }

@@ -220,14 +220,15 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	    	createLeaderBoardView(leaderBoardData);
 	    	addMoreFriend(leaderBoardData);
 	    	updateExpBar();
-	    //TODO: test test
-	    if(_status==="me") {
-			Ti.API.info("cache");
-			var totalPoints = PointModel.pointModel_fetchMyPoint(curId);
-			myLevel = LevelModel.level_checkLevel(totalPoints);
-			var CacheHelper = require('helpers/cacheHelper');
-			CacheHelper.levelUpCache("level"+acs.getUserId(),myLevel);
-		}	
+	    	
+		    //TODO: test test
+		    if(_status==="me") {
+				Ti.API.info("cache");
+				var totalPoints = PointModel.pointModel_fetchMyPoint(curId);
+				myLevel = LevelModel.level_checkLevel(totalPoints);
+				var CacheHelper = require('helpers/cacheHelper');
+				CacheHelper.levelUpCache("level"+acs.getUserId(),myLevel);
+			}	
 	    	
 	    	
 		}

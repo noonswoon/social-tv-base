@@ -56,19 +56,19 @@ exports.checkinACS_fetchedUserCheckIn = function(_id) {
 	    //update- at : today only // greater than start of the day : moment-> save in database 
 	    order: '-updated_at'
 }, function (e) {
-    if (e.success) {
-        var checkin =[];
-        for (var i = 0; i < e.checkins.length; i++) {
-        	 var curCheckin = e.checkins[i]; 
-               checkin.push(curCheckin);
-         }
-		Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
-    } 
-    else {
-        Ti.API.info('checkin Error:\\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
-    	 }
-			});
+	    if (e.success) {
+	        var checkin =[];
+	        for (var i = 0; i < e.checkins.length; i++) {
+	        	 var curCheckin = e.checkins[i]; 
+	               checkin.push(curCheckin);
+	         }
+			Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
+	    } 
+	    else {
+	        Ti.API.info('checkin Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
 		
 };
 

@@ -10,7 +10,7 @@ exports.getFacebookShare = function() {
 		return true;
 	}
 }
-
+ 
 exports.setPushComment = function(_pushCommentSetting) {
 	Ti.App.Properties.setInt('pushComment',_pushCommentSetting);
 }

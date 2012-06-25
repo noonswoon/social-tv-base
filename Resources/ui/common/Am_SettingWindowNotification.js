@@ -1,9 +1,26 @@
 Am_SettingWindowNotification = function(){
 	
-	var SettingHelper = require('helpers/settingHelper');
+	var NotificationTrackACS = require('acs/notificationTrackACS');
 	
-	var pushCommentCurrentSetting = SettingHelper.getPushComment();
-	var friendsCheckinCurrentSetting = SettingHelper.getFriendsCheckin();
+	var pushCommentCurrentSetting;
+	var friendsCheckinCurrentSetting;
+	var notificationACS_id = 0;
+	var user_id = acs.getUserId();
+	NotificationTrackACS.notificationTrackACS_fetchedAllowance(user_id);
+	
+	var fetchedAllowanceCallback = function(e) {
+		notificationACS_id = e.fetchedNotification.id;
+		Ti.API.info("notificationACS_id: "+notificationACS_id);
+		receivedCommentSwitch.value = e.fetchedNotification.comment;
+		friendCheckinSwitch.value = e.fetchedNotification.friendCheckin;
+		
+		pushCommentCurrentSetting = e.fetchedNotification.comment;	
+		friendsCheckinCurrentSetting = e.fetchedNotification.friendCheckin;
+		
+		receivedComment.add(receivedCommentSwitch);
+		friendCheckin.add(friendCheckinSwitch);
+	}
+	Ti.App.addEventListener('fetchedAllowance',fetchedAllowanceCallback);
 	
 	var dataForSetting = [];
 	
@@ -58,7 +75,7 @@ Am_SettingWindowNotification = function(){
 		value: true,
 		right: 10
 	});
-	receivedComment.add(receivedCommentSwitch);
+//	receivedComment.add(receivedCommentSwitch);
 	
 	//friends check-in to a program
 	var friendCheckin = Ti.UI.createTableViewRow({
@@ -79,7 +96,7 @@ Am_SettingWindowNotification = function(){
 		value: true,
 		right: 10
 	});
-	friendCheckin.add(friendCheckinSwitch);
+//	friendCheckin.add(friendCheckinSwitch);
 	
 	//Set Current Push Comment
 	receivedCommentSwitch.value = pushCommentCurrentSetting;
@@ -88,12 +105,12 @@ Am_SettingWindowNotification = function(){
 	
 	receivedCommentSwitch.addEventListener('change',function(e){
 		var isShareComment = e.value;
-		SettingHelper.setPushComment(isShareComment);
+		NotificationTrackACS.notificationTrackACS_updateCommentAllowance(notificationACS_id,isShareComment);
 	});
 	
 	friendCheckinSwitch.addEventListener('change',function(e){
 		var isFriendsCheckin = e.value;
-		SettingHelper.setFriendsCheckin(isFriendsCheckin);
+		NotificationTrackACS.notificationTrackACS_updateFriendCheckinAllowance(notificationACS_id,isFriendsCheckin);
 	});
 
 	dataForSetting.push(receivedComment);

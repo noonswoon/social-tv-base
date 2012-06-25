@@ -34,7 +34,7 @@ var LoginFbOnlyWindow = function() {
 	var fbLoginStatuslbl = Ti.UI.createLabel({
 		text:'We will not auto-post to your account.',
 		color: '#fff',
-		font:{fontSize:13, },//fontWeight: 'bold'},
+		font:{fontSize:13, },
 		height:'auto',
 		top: 170,
 		textAlign:'center'

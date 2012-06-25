@@ -15,7 +15,7 @@
     </deployment-targets>
     <sdk-version>2.0.1.GA2</sdk-version>
     <property name="ti.android.threadstacksize" type="int">327680</property>
-    <id>com.chatterbox.alpha</id>
+    <id>com.chatterbox.beta</id>
     <name>chatterbox</name>
     <version>1.0</version>
     <publisher>titaniummick</publisher>

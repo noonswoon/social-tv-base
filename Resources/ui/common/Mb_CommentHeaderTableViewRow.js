@@ -2,18 +2,19 @@ CommentHeaderTableViewRow = function() {
 	var headerTableData = [];
 	
 	var headerMainRow = Ti.UI.createTableViewRow({
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		backgroundColor: 'transparent'
+		// selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: 'orange'
 	});
 
 	//tableview inside tableviewrow	
 	var headerTable = Ti.UI.createTableView({
 		top: 0,
-		height: 125,
-		backgroundColor: 'transparent'
+		height: 420,
+		backgroundColor: 'green',
+		scrollable: false
 	});
 	
-//	COMMENT TOPIC SECTION
+// COMMENT TOPIC SECTION
 // DATE SUBMISSION SECTION
 	var topicRow = Ti.UI.createTableViewRow({
 		height: 52,
@@ -41,11 +42,42 @@ CommentHeaderTableViewRow = function() {
 		font: { fontSize: 10, fontFamily: 'Helvetica Neue' },
 	});
 	
+	//ADD PHOTO SECTION
+	var photoView = Ti.UI.createTableViewRow({
+		backgroundColor: 'red',
+		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		height: 'auto'
+	});
+	
+	var photoOfTopic = Ti.UI.createImageView({
+		image: 'dummy.png',
+		left: 10,
+		right: 10,
+		width: 300,
+		height: 200
+	});
+	
+	
+	//ADD CONTENT SECTION
+	var contentView = Ti.UI.createTableViewRow({
+		backgroundColor: 'blue',
+		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		height: 100
+	}); 
+	
+	var content = Ti.UI.createLabel({
+		text: '-',
+		top: 10,
+		left: 10,
+		right: 10
+	});
+	
 // ADD NEW COMMENT SECTION
 	var textAreaRow = Ti.UI.createTableViewRow({
 		top:52,
-		height: 73,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
+		height: 70,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: 'yellow'
 	});
 	
 	var replyButton = Titanium.UI.createButton({
@@ -66,15 +98,14 @@ CommentHeaderTableViewRow = function() {
 		left: 10,
 		right: 10,
 		width: 300,
-		height: 53,
+		height: 50,
 		value: "Write your comment here...",
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		keyboardToolbar : [cancelButton, spacer, replyButton], //this is iOS only
     	backgroundColor: 'transparent',
     	backgroundImage: 'images/messageboard/comment/replytopictextareaBG.png'
-	});
+	});	
 	
-		
 	cancelButton.addEventListener('click', function(e) {
 		replyTextArea.blur();
 	});
@@ -86,11 +117,16 @@ CommentHeaderTableViewRow = function() {
 	topicRow.add(topicLabel);
 	topicRow.add(dateLabel);
 	textAreaRow.add(replyTextArea);
+	photoView.add(photoOfTopic)
+	contentView.add(content);
+
 	
 	//setup data for the headerTable
 	headerTableData.push(topicRow);
+	headerTableData.push(photoView);
+	headerTableData.push(contentView);
 	headerTableData.push(textAreaRow);
-	
+
 	headerTable.setData(headerTableData);
 	
 	//class methods -- for some reason, has to have underscore '_' prefix
@@ -107,16 +143,17 @@ CommentHeaderTableViewRow = function() {
 	};
 	
 	headerMainRow._getTitle = function() {
-		return topicLabel.text;
+		return content.text;
 	};
 	
 	headerMainRow._setTitle = function(_title) {
-		topicLabel.text = _title;
-		var topicWidth = topicRow.toImage().width; 
-		var topicHeight = topicRow.toImage().height; 
-		
-		var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
-		headerMainRow.height = numLines * topicHeight + textAreaRow.toImage().height + 5;
+		content.text = _title;
+		// var topicWidth = topicRow.toImage().width; 
+		// var topicHeight = topicRow.toImage().height; 
+// 		
+		// var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
+		// alert('why are you messing with header height???');
+		// headerMainRow.height = numLines * topicHeight + textAreaRow.toImage().height + 5;
 	};
 	
 	headerMainRow._setSubmissionTime = function(_submissionTime) {

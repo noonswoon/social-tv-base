@@ -18,7 +18,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		allowsSelection: false,
 		className: "CommentRow",
 		backgroundColor: 'transparent',
-		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
+		// selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 
 	row.index = -1;
@@ -101,24 +101,16 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 	
 	var commentTextLength = contentLabel.text.length;
-	
-	// var commentTextWidth = contentLabel.toImage().width;
-	// var commentTextHeight = contentLabel.toImage().height;
-	// var numLinesForHighlightedComment = Math.ceil(commentTextWidth / 230);
-	// var heightOfContent = 65 + (numLinesForHighlightedComment-1)*20;
-	
 	var numLinesForHighlightedComment = Math.ceil(commentTextLength / CHARACTER_PER_LINE);
 	var heightOfContent = 65 + (numLinesForHighlightedComment-1)*15;
 
-
-
-	contentLabel.addEventListener('click',function(){
-		alert('heightOfContent: '+heightOfContent+', numLines: '+numLinesForHighlightedComment+', commentTextLength: '+commentTextLength);
-	});
+	// contentLabel.addEventListener('click',function(){
+		// alert('heightOfContent: '+heightOfContent+', numLines: '+numLinesForHighlightedComment+', commentTextLength: '+commentTextLength);
+	// });
 
 	var replyToolbar = Ti.UI.createView({
 		left: 0,
-		top: heightOfContent,
+		top: heightOfContent+5,
 		width: '100%',
 		height: 60,
 		visible: true,

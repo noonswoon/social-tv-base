@@ -28,7 +28,7 @@ exports.setFriendsCheckin = function(_friendsCheckinSetting) {
 	Ti.App.Properties.setInt('friendsCheckin',_friendsCheckinSetting);
 }
 
-exports.getFriendsCheckin = function(_friendsCheckinSetting) {
+exports.getFriendsCheckin = function() {
 	if(Ti.App.Properties.hasProperty('friendsCheckin'))
 		return Ti.App.Properties.getInt('friendsCheckin');
 	else {

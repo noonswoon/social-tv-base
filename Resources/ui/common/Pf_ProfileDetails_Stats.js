@@ -253,7 +253,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			addFriendView.add(addFriendLabel);	
 			leaderSec.add(addFriendView);
 			addFriendLabel.addEventListener('click',function() {
-				var AddFriendMainWindow = require('ui/common/Pf_addFriendMainWindow');
+				var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
 				var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
 				_parentWindow.containingTab.open(addFriendMainWindow);
 			});

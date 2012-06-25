@@ -29,7 +29,8 @@ var checkCountCondition = function(e) {
 	//badge id: 2
 	else if(checkinCount >= 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
 }
-	exports.checkFriendCondition = function(_friendCheckIn) {
+
+exports.checkFriendCondition = function(_friendCheckIn) {
 	//badge desc: love sharing		
 	//condition: checkin with more than 5 friends
 	//badge id: 3	

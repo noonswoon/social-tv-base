@@ -9,8 +9,10 @@ function ProductMainWindow(_programId) {
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Product');
 	
+	var currentProgramId = _programId;
 	var dataForTab = [];
 	var hasLoadedPicker = false;
+	var pickerSelectedIndex = 0;
 	
 	var infoForName = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
 	
@@ -48,7 +50,7 @@ function ProductMainWindow(_programId) {
 	productSelectProgramToolbar.add(callPicker);
 	
 	var selectProgramLabel = Ti.UI.createLabel({
-		text: 'Cool stuff',//infoForName[0].name,
+		text: 'Chatterbox Souvenirs',//infoForName[0].name,
 		left: 10,
 		width: 'auto',
 		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
@@ -110,15 +112,25 @@ function ProductMainWindow(_programId) {
 
 	callPicker.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
+			var dataForPicker = [];
+			var preSelectedRow = 0;
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-				var programCheckinId = myCurrentCheckinPrograms[i];
-				var programCheckinInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programCheckinId);
-				Ti.API.info('programCheckinId: '+programCheckinId+', programCheckinInfo: '+JSON.stringify(programCheckinInfo));
-				var programName = programCheckinInfo[0].name;
-				var program_id = programCheckinInfo[0].program_id;
-				dataForPicker = [{title: programName, progId:program_id}];
-				picker.add(dataForPicker);
+				var programId = myCurrentCheckinPrograms[i];
+				if(myCurrentSelectedProgram === programId) 
+					preSelectedRow = i;
+					
+				if(programId === 'CTB_PUBLIC') {
+					dataForPicker.push({title:'Chatterbox Souvenirs', progId:'CTB_PUBLIC'});
+				} else {
+					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+					Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
+					var programName = programInfo[0].name;
+					var program_id = programInfo[0].program_id;
+					dataForPicker.push({title:programName, progId:program_id});
+				}
 			}
+			picker.setSelectedRow(0,preSelectedRow,false);
+			picker.add(dataForPicker);
 			picker_view.add(picker);
 			hasLoadedPicker = true;
 		}
@@ -140,13 +152,33 @@ function ProductMainWindow(_programId) {
 		ProductACS.productACS_fetchedAllProducts(idOfProgram);
 	});
 
+	done.addEventListener('click',function() {
+		picker_view.animate(slide_out);
+		self.remove(opacityView);
+		if(pickerSelectedIndex === 0) {
+			currentProgramId = 'CTB_PUBLIC';
+			selectProgramLabel.text = 'Chatterbox Souvenirs';
+			//messageboardHeader._setHeader('General Board','Chatterbox General Board','http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',452,'CTB');
+			//ProductACS.productACS_fetchedAllProducts(currentProgramId);
+		} else {
+			currentProgramId = picker.getSelectedRow(0).progId;
+			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+			//messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
+			//ProductACS.productACS_fetchedAllProducts(currentProgramId);
+		}
+	});
+
+	picker.addEventListener('change',function(e) {
+		pickerSelectedIndex = e.rowIndex;
+	});
+
 	self.add(picker_view);
 ///////////////////////////////////////////////////////////////
 
 	var unavailable = Ti.UI.createLabel({
-		text: 'Sorry, product is not available',
+		text: 'Products will be available soon!',
 		color: 'white',
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
+		font: { fontSize: 16, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
 	});
 
 	ProductACS.productACS_fetchedAllProducts(_programId);
@@ -161,8 +193,7 @@ function ProductMainWindow(_programId) {
 		
 		if(totalProducts == 0){
 			self.add(unavailable);
-		}
-		else{
+		} else {
 			for(var i=0;i<numRows;i++){
 				var row = new ProductMainWindowTableViewRow(self);
 			
@@ -171,7 +202,7 @@ function ProductMainWindow(_programId) {
 					if(productIndex >= totalProducts)
 						break;
 					var curProduct = e.fetchedAllProduct[productIndex];
-					if(j % 2==0) { //left column
+					if(j % 2 === 0) { //left column
 						row._setProductOnLeftColumn(curProduct);
 					} else { //right column
 						row._setProductOnRightColumn(curProduct);
@@ -180,10 +211,8 @@ function ProductMainWindow(_programId) {
 				viewRowData.push(row);
 			}
 		}
-			productTableView.setData(viewRowData);	
-		
+		productTableView.setData(viewRowData);	
 	});	
-
 	return self;
 }
 

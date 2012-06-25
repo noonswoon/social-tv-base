@@ -1,6 +1,6 @@
 AddFriendsMainView = function(_parentWindow) {
 	var FriendModel = require('model/friend');
-	var AddFriendTableViewRow = require('ui/common/Pf_addFriendTableViewRow');
+	var AddFriendTableViewRow = require('ui/common/Pf_AddFriendTableViewRow');
 	var self = Titanium.UI.createWindow({
 		barColor:'#489ec3',
 		barImage: 'images/NavBG.png',

@@ -42,27 +42,33 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 
 //fetch checkin data only for today to keep in database
 exports.checkinACS_fetchedUserCheckIn = function(_id) {
-	var start_of_the_day = moment().sod().format('YYYY-MM-DD, HH:mm:ss');
+	var startOf_the_day = moment().sod().format('YYYY-MM-DD, HH:mm:ss');
+	
+	var startOfDayLocal = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
+	var acsConvertedStartOfDay = convertLocalTimeToACSTime(startOfDayLocal);
+	var dm = moment(acsConvertedStartOfDay, "YYYY-MM-DDTHH:mm:ss");
+	var acsConvertedStartOfDayFormatted = dm.format('YYYY-MM-DD, HH:mm:ss');
+	
 	Cloud.Checkins.query({
 	    page: 1,
 	    per_page: 100,
-	    where: {user_id: _id, updated_at: {"$gte": start_of_the_day}},
+	    where: {user_id: _id, updated_at: {"$gte": acsConvertedStartOfDayFormatted}},
 	    //update- at : today only // greater than start of the day : moment-> save in database 
 	    order: '-updated_at'
 }, function (e) {
-    if (e.success) {
-        var checkin =[];
-        for (var i = 0; i < e.checkins.length; i++) {
-        	 var curCheckin = e.checkins[i]; 
-               checkin.push(curCheckin);
-         }
-		Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
-    } 
-    else {
-        Ti.API.info('checkin Error:\\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
-    	 }
-			});
+	    if (e.success) {
+	        var checkin =[];
+	        for (var i = 0; i < e.checkins.length; i++) {
+	        	 var curCheckin = e.checkins[i]; 
+	               checkin.push(curCheckin);
+	         }
+			Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
+	    } 
+	    else {
+	        Ti.API.info('checkin Error:\\n' +
+	            ((e.error && e.message) || JSON.stringify(e)));
+	    }
+	});
 		
 };
 

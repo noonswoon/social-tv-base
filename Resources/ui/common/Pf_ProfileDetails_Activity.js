@@ -5,7 +5,7 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');	
 	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
-	var FriendsMainWindow = require('ui/common/pf_friendsMainWindow');
+	var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
 	
 	var curId = _userProfile.id;
 	

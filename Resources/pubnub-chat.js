@@ -272,11 +272,14 @@ Ti.App.Chat = function(_chatParams) {
 	});
 	
 	var checkinToProgramCallback = function(e) {
-		var checkinProgramId = e.checkinProgramId; 
-		var checkinProgramName = e.checkinProgramName;
-		alert('ciProgramId: '+checkinProgramId+', ciProgramName: '+checkinProgramName);
-		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, progId:checkinProgramId});
-		picker.add(newPickerRow);
+		alert('in checkinToProgramCallback');
+		if(hasLoadedPicker) { //only add a new one if it already loaded, if it isn't, the loading will take care of itself
+			var checkinProgramId = e.checkinProgramId; 
+			var checkinProgramName = e.checkinProgramName;
+			alert('ciProgramId: '+checkinProgramId+', ciProgramName: '+checkinProgramName);
+			var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, progId:checkinProgramId});
+			picker.add(newPickerRow);
+		}
 	};
 	
 	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);

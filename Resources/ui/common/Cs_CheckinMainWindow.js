@@ -272,7 +272,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			Ti.API.info('calling BadgeCondition.checkinEvent // checkinData.program_type: '+checkinData.program_type);
 			BadgeCondition.checkinEvent(checkinData);
 			myCurrentCheckinPrograms.push(_tvprogramData.programId);
-			alert('firing checinToProgram event!');
 			Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 		});
 	}

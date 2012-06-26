@@ -272,16 +272,15 @@ Ti.App.Chat = function(_chatParams) {
 	});
 	
 	var checkinToProgramCallback = function(e) {
-		alert('in checkinToProgramCallback');
 		if(hasLoadedPicker) { //only add a new one if it already loaded, if it isn't, the loading will take care of itself
 			var checkinProgramId = e.checkinProgramId; 
 			var checkinProgramName = e.checkinProgramName;
-			alert('ciProgramId: '+checkinProgramId+', ciProgramName: '+checkinProgramName);
 			var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, progId:checkinProgramId});
 			picker.add(newPickerRow);
 		}
 	};
 	
+	alert('adding listener: checkinToProgramCallback');
 	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);
 	//////
 
@@ -487,9 +486,10 @@ Ti.App.Chat = function(_chatParams) {
     	chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
     });
     
-    chat_window.addEventListener('close', function() {
-    	Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallback);
-    });
+    // chat_window.addEventListener('close', function() {
+    	// alert('removing checkinToProgramCallback listener--bug here');
+    	// Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallback);
+    // });
     
     return this;
 };

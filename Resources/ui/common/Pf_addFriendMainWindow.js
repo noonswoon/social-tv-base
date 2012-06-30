@@ -11,7 +11,7 @@ AddFriendsMainView = function(_parentWindow) {
 		window: self
 	});			
 	var settingButton = Titanium.UI.createButton({
-		image: 'images/icon/19-gear.png'
+		image: 'images/icon/pf_option.png'
 	});
 	settingButton.addEventListener('click',function(){	
 		var PlaceholderWindow = require('ui/common/PlaceholderWindow');			

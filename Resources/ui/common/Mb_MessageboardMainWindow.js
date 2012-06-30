@@ -33,7 +33,7 @@ function MessageboardMainWindow(_programId) {
 	var callPicker = Ti.UI.createButton({
 		width: 39,
 		height: 32,
-		backgroundImage: 'images/messageboard/optionbutton.png'
+		backgroundImage: 'images/messageboard/option_button.png'
 	});
 	
 	var self = Titanium.UI.createWindow({

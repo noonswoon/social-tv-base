@@ -16,7 +16,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var userID = acs.getUserId();
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 	
@@ -90,8 +90,8 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		height: 47,
 	});
 	var programChannelImage = Ti.UI.createImageView({
-		image: 'images/icon/tvchannel.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_tvchannel.png',
+		//opacity: 0.5,
 		top: 3
 	});
 	var programChannel = Ti.UI.createLabel({
@@ -113,8 +113,8 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		height: 47
 	});
 	var programNumCheckinImage = Ti.UI.createImageView({
-		image: 'images/icon/watch.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_watch.png',
+		//opacity: 0.5,
 		top: 0
 	});
 	var programNumCheckin = Ti.UI.createLabel({
@@ -135,7 +135,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		height: 47
 	});
 	var programNumFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/friends.png',
+		image: 'images/icon/cs_friends.png',
 		opacity: 0.5,
 		top: 0
 	});

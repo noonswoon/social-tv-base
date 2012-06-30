@@ -64,7 +64,7 @@ BadgeDetailWindow = function (_badge){
 	
 	self._setBadgeImage = function(_newImage,_unlock) {
 		if(_unlock===1){badgeImg.image = _newImage;}
-		else {badgeImg.image = 'images/lockbadge.png';}
+		else {badgeImg.image = 'images/badge/lockedbadge.png';}
 	};
 	self._setBadgeDesc = function(_newDesc,_unlock) {
 		if(_unlock===1){

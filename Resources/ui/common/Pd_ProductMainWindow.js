@@ -45,7 +45,7 @@ function ProductMainWindow(_programId) {
 		height: 34,
 		right: 10,
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/toolbarbutton.png'
+		image: 'images/toolbar_button.png'
 	});
 	productSelectProgramToolbar.add(callPicker);
 	

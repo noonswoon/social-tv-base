@@ -16,7 +16,7 @@ function CommentWindow(_topicId) {
 	var topicOwnerDeviceTokenId = "";
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 	

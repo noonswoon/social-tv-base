@@ -89,7 +89,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 	
 	var columnCheckInImage = Ti.UI.createImageView({
-		image: 'images/icon/tv.png',
+		image: 'images/icon/pf_checkin.png',
 		width: 22, height: 22, top: 10,
 	});
 	
@@ -113,7 +113,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 	
 	var columnFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/112-group.png',
+	//	image: 'images/icon/act_add_white.png',
+		image: 'images/icon/pf_friend.png',
 		top: 10
 	});
 	

@@ -49,7 +49,7 @@ FriendsTableViewRow = function(_user,_source) {
 			width: 66,
 			height: 30,
 			right: 10,
-			backgroundImage: 'images/button/button_accept.png',
+			backgroundImage: 'images/button/button_accept@2x.png',
 		});
 	
 		approveButton.addEventListener('click',function() {

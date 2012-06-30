@@ -11,7 +11,7 @@ var LoginFbOnlyWindow = function() {
 		navBarHidden: true
 	});
 	var cbLogo = Ti.UI.createImageView({
-		image: '/images/admin/chatterbox_logo_2@.png',
+		image: '/images/admin/chatterbox_logo@2x.png',
 		top: 100,
 		height: 57,
 		width: 174

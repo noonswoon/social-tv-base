@@ -100,7 +100,7 @@ Ti.App.Chat = function(_chatParams) {
 	subscribe_chat_room();
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 
@@ -145,7 +145,7 @@ Ti.App.Chat = function(_chatParams) {
 		height: 34,
 		right: 10,
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/toolbarbutton.png'
+		image: 'images/toolbar_button.png'
 	});
 	
 	//Opacity window when picker is shown

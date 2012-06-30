@@ -32,7 +32,8 @@ var ProfileDetailView = function(_parent,_userProfile,_status){
 	var detail = Ti.UI.createTableViewSection();
 	
 	var profileDetail = Ti.UI.createTableViewRow({
-		backgroundImage: '/images/admin/cb_backProfile.png',
+		//backgroundColor: 'white',
+		backgroundImage: 'images/admin/cb_backProfile.png',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	

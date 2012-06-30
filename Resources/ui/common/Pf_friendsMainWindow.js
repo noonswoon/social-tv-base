@@ -32,7 +32,7 @@ FriendsMainView = function(_parentWindow,_window){
 	});
 	
 	var addFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/112-group.png',
+		image: 'images/icon/act_add_white.png',
 		left: 30
 	});
 

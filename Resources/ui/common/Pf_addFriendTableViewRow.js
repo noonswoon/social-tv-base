@@ -29,6 +29,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 			height: 30,
 			width: 66,
 			right: 10,
+			//TODO: create invite button
 			backgroundImage: 'images/button/button_invite.png',
 		});
 	
@@ -39,7 +40,6 @@ AddFriendsTableViewRow = function(_user,_category) {
 	}		
 		
 	inviteButton.addEventListener('click', function(){
-		//TODO: invite function
 			alert('invite friend');
 			inviteFriend(_user.uid);
 		})

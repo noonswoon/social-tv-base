@@ -52,8 +52,8 @@ MessageboardHeader = function(_showName,_showSubName) {
 		height: 47
 	});
 	header.programNumCheckinImage = Ti.UI.createImageView({
-		image: 'images/icon/watch.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_watch.png',
+		//opacity: 0.5,
 		top: 0
 	});
 	header.programNumCheckin = Ti.UI.createLabel({
@@ -71,8 +71,9 @@ MessageboardHeader = function(_showName,_showSubName) {
 		height: 47
 	});
 	header.programNumFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/friends.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_friends.png',
+		width:30,height:30,
+		//opacity: 0.5,
 		top: 0
 	});
 	header.programNumFriend = Ti.UI.createLabel({
@@ -90,8 +91,8 @@ MessageboardHeader = function(_showName,_showSubName) {
 		height: 47,
 	});
 	header.programChannelImage = Ti.UI.createImageView({
-		image: 'images/icon/tvchannel.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_tvchannel.png',
+		//opacity: 0.5,
 		top: 3
 	});
 	header.programChannel = Ti.UI.createLabel({

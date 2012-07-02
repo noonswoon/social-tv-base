@@ -1,7 +1,7 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY, acs_object_id TEXT, program_id TEXT, title TEXT, comments_count INTEGER, username TEXT, device_token_id TEXT, is_deleted INTEGER,updated_at TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY, acs_object_id TEXT, program_id TEXT, title TEXT, comments_count INTEGER, username TEXT, device_token_id TEXT, is_deleted INTEGER,updated_at TEXT, content TEXT, photo TEXT);');
 db.close();
 
 exports.topicModel_fetchFromProgramId = function(_programId) {
@@ -75,10 +75,10 @@ exports.topicModel_updateACSObjectIdField = function(_topic) {
 	db.close();
 };
 
-var add = function(_programId,_acsObjectId,_title,_username,_deviceTokenId) {
+var add = function(_programId,_acsObjectId,_title,_photo,_content,_username,_deviceTokenId) {
 	var db = Ti.Database.open('Chatterbox');
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
-	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,comments_count,username,device_token_id,is_deleted,updated_at) VALUES(NULL,?,?,?,0,?,?,0,?)",_acsObjectId, _programId,_title,_username,_deviceTokenId,updatedAt);
+	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,photo,content,comments_count,username,device_token_id,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,0,?,?,0,?)",_acsObjectId,_programId,_title,_photo,_content,_username,_deviceTokenId,updatedAt);
 	var newId = db.lastInsertRowId;
 	db.close();
 	

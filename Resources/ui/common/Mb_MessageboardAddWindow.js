@@ -40,7 +40,7 @@ function MessageboardAddWindow(_programId) {
 	textAndButtonView.add(title);
 	
 	
-	var topicTextfield = Ti.UI.createTextField({
+	var topicTitle = Ti.UI.createTextField({
 		color:'#336699',
 		top: 30,
 		height:35,
@@ -49,7 +49,7 @@ function MessageboardAddWindow(_programId) {
 		editable: true,
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
 	})
-	textAndButtonView.add(topicTextfield);
+	textAndButtonView.add(topicTitle);
 	
 	// var photoIcon = Ti.UI.createImageView({
 		// image: 'images/messageboard/add/photo.png',
@@ -66,7 +66,7 @@ function MessageboardAddWindow(_programId) {
 	});
 	textAndButtonView.add(title);
 
-	var topicTextarea = Ti.UI.createTextArea({
+	var topicContent = Ti.UI.createTextArea({
 		value: '',
 		top: 100,
 		left: 10,
@@ -80,7 +80,7 @@ function MessageboardAddWindow(_programId) {
     	backgroundColor: 'transparent',
     	backgroundImage: 'images/messageboard/add/textareaBG.png'
 	});
-	textAndButtonView.add(topicTextarea);
+	textAndButtonView.add(topicContent);
 	
 	var addImage = Ti.UI.createButton({
 		title: 'Add Image',
@@ -144,23 +144,25 @@ function MessageboardAddWindow(_programId) {
 	});
 	
 	//ADDING UI COMPONENTS TO THE WINDOW
-	self.add(topicTextarea);
+	self.add(topicTitle);
 	self.add(addTopicToolbar);
 	self.add(textAndButtonView);
 		
 	//ADDING EVENT LISTENERS
 	addButton.addEventListener('click', function(e) {
 		
-		if(topicTextarea.value === '') {
+		if(topicTitle.value === '') {
 			return;
 		}
 		
 		//1. insert to the db topic table
-		var newId = Topic.topicModel_add(programId, 0,topicTextarea.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+		var newId = Topic.topicModel_add(programId, 0,topicTitle.value,'dummy.png',topicContent.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 		
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
-			title: topicTextarea.value,
+			title: topicTitle.value,
+			photo: 'dummy.png',
+			content: topicContent.value,
 			id: newId,
 			acsObjectId:0,
 			hasChild:true,
@@ -172,22 +174,22 @@ function MessageboardAddWindow(_programId) {
 		
 		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
-		//3 call TopicACS.topicACS_create(topicTextarea.value,programId,newId);
-		TopicACS.topicACS_create(topicTextarea.value,programId,newId);
+		//3 call TopicACS.topicACS_create(topicTitle.value,programId,newId);
+		TopicACS.topicACS_create(topicTitle.value,'dummy.png',topicContent.value,programId,newId);
 		
 		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
 		// in the function callback in Mb_MessageboardMainWindow.js
-		topicTextarea.value = '';		
+		topicTitle.value = '';		
 		self.close();
 	
 	});
 	
 	// self.addEventListener('open', function(e) {
-		// topicTextarea.focus();
+		// topicContent.focus();
 	// });
 // 	
 	// self.addEventListener('close', function(e) {
-		// topicTextarea.blur();
+		// topicContent.blur();
 	// });	
 	
 	self._setProgramId = function(_newProgramId) {

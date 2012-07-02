@@ -38,7 +38,7 @@ exports.topicACS_create = function(_title,_photo,_content,_programId,_localId) {
 	//connecting with Cloud
 	Cloud.Posts.create({
 			title: _title,
-			photo: _photo,
+			//photo: _photo,
 			content: _content, 
 			custom_fields: {"program_id": _programId,"local_id":_localId,"is_deleted":0}
 		}, function (e) {

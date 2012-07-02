@@ -101,6 +101,7 @@ function CommentWindow(_topicId) {
 		topicOwnerDeviceTokenId = curTopic.deviceTokenId;
 				
 		commentHeader._setTitle(curTopic.title);
+		commentHeader._setContent(curTopic.content);
 		
 		//use momentjs for helping on converting dateObject from string
 		//problematic because ACS stores the date as a string with timezone format (+0000)

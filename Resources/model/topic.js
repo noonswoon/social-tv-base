@@ -11,6 +11,8 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 	while(result.isValidRow()) {
 		fetchedTopics.push({
 			title: result.fieldByName('title'),
+			photo: result.fieldByName('photo'),
+			content: result.fieldByName('content'),
 			id: Number(result.fieldByName('id')),
 			acsObjectId: result.fieldByName('acs_object_id'),
 			hasChild:true,
@@ -57,6 +59,8 @@ exports.topicModel_getTopicById = function(_topicACSObjectId) {
 		topic.id = result.fieldByName('id'); 
 		topic.acsObjectId = result.fieldByName('acs_object_id'); 
 		topic.title = result.fieldByName('title');
+		topic.photo = result.fieldByName('photo');
+		topic.content = result.fieldByName('content');
 		topic.username = result.fieldByName('username');
 		topic.deviceTokenId = result.fieldByName('device_token_id');
 		topic.updatedAt = result.fieldByName('updated_at')

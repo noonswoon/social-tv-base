@@ -155,13 +155,15 @@ function MessageboardAddWindow(_programId) {
 			return;
 		}
 		
+		var mockupPhoto = 'http://blogs.suntimes.com/ebert/Google-logo.jpeg';
+		
 		//1. insert to the db topic table
-		var newId = Topic.topicModel_add(programId, 0,topicTitle.value,'dummy.png',topicContent.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+		var newId = Topic.topicModel_add(programId, 0,topicTitle.value,mockupPhoto,topicContent.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 		
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
 			title: topicTitle.value,
-			photo: 'dummy.png',
+			photo: mockupPhoto,
 			content: topicContent.value,
 			id: newId,
 			acsObjectId:0,
@@ -175,7 +177,7 @@ function MessageboardAddWindow(_programId) {
 		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
 		//3 call TopicACS.topicACS_create(topicTitle.value,programId,newId);
-		TopicACS.topicACS_create(topicTitle.value,'dummy.png',topicContent.value,programId,newId);
+		TopicACS.topicACS_create(topicTitle.value,mockupPhoto,topicContent.value,programId,newId);
 		
 		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
 		// in the function callback in Mb_MessageboardMainWindow.js

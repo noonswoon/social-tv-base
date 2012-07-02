@@ -23,7 +23,7 @@ CommentHeaderTableViewRow = function() {
 		backgroundImage: 'images/messageboard/comment/topictitletoolbar.png',
 	});
 		
-	var topicLabel = Ti.UI.createLabel({
+	var topicTitle = Ti.UI.createLabel({
 		text: '-',
 		textAlign: 'left',
 		left: 50,
@@ -114,12 +114,11 @@ CommentHeaderTableViewRow = function() {
 	headerMainRow.add(headerTable);
 	
 	//set up label in the 3 rows
-	topicRow.add(topicLabel);
+	topicRow.add(topicTitle);
 	topicRow.add(dateLabel);
 	textAreaRow.add(replyTextArea);
 	photoView.add(photoOfTopic)
 	contentView.add(content);
-
 	
 	//setup data for the headerTable
 	headerTableData.push(topicRow);
@@ -143,18 +142,27 @@ CommentHeaderTableViewRow = function() {
 	};
 	
 	headerMainRow._getTitle = function() {
-		return content.text;
+		return topicTitle.text;
 	};
 	
 	headerMainRow._setTitle = function(_title) {
-		content.text = _title;
+		topicTitle.text = _title;
+	};
+		
+	headerMainRow._getContent = function(){
+		return content.text;
+	};
+
+	headerMainRow._setContent = function(_content) {
+		content.text = _content;
+	};
+		
 		// var topicWidth = topicRow.toImage().width; 
 		// var topicHeight = topicRow.toImage().height; 
 // 		
 		// var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
 		// alert('why are you messing with header height???');
 		// headerMainRow.height = numLines * topicHeight + textAreaRow.toImage().height + 5;
-	};
 	
 	headerMainRow._setSubmissionTime = function(_submissionTime) {
 		dateLabel.text = _submissionTime;

@@ -19,31 +19,22 @@ FriendsMainView = function(_parentWindow,_window){
 
 	var addFriendView = Ti.UI.createView({
 		height: 50, 
-		backgroundColor: '#42a1c9'
-	});
-	
-	var addFriendLabel = Ti.UI.createLabel({
-		text: 'Add friends to get more fun:)',
-		color: '#fff',
-		height: 30,
-		bottom: 10,
-		left: 70,
-		font: { fontWeight: 'bold', fontSize: 15},
+		//backgroundColor: '#42a1c9'
+		backgroundColor: '#fff'
 	});
 	
 	var addFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/act_add_white.png',
-		left: 30
+		image: 'images/icon/addfriend_header.png',
+		left: 5
 	});
 
-	addFriendLabel.addEventListener('click', function(){
+	addFriendImage.addEventListener('click', function(){
 		var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
 		var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
 		_parentWindow.containingTab.open(addFriendMainWindow);	
 	});
 
 	addFriendView.add(addFriendImage);
-	addFriendView.add(addFriendLabel);
 
 	var createFriendTable = function(myFriends){
 		var myFriendsList = [];

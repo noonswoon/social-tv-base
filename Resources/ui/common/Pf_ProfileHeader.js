@@ -40,8 +40,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	var profilePicture = Ti.UI.createImageView({
 		image: acs.getUserImageNormalOfFbId(_userProfile.fb_id),
-		width: 90,
-		height: 90,
+		width: 88,
+		height: 88,
 		backgroundColor: 'transparent'
 	});
 	
@@ -60,11 +60,12 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 
 	var profilePictureContain = Ti.UI.createView({
-		backgroundColor: '#fff',
+		//backgroundColor: '#fff',
 		top: 10, left: 10,
-		borderWidth: 1,
-		width:100, height:100,
-		borderColor: '#b1b1b1'
+		//borderWidth: 1,
+		width:103, height:104,
+		backgroundImage: 'images/icon/pf_imagedisplay.png'
+		//borderColor: '#b1b1b1'
 	});
 
 	var profileName = Ti.UI.createLabel({
@@ -82,15 +83,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		left: 120,
 		width: 60,
 		height: 70,
-		backgroundColor: '#a7c63d',
+		backgroundColor: '#acd032',
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: '#8ba82f'
+		borderColor: '#8fb125'
 	});
 	
 	var columnCheckInImage = Ti.UI.createImageView({
 		image: 'images/icon/pf_checkin.png',
-		width: 22, height: 22, top: 10,
+		top: 10,
 	});
 	
 	var columnCheckInCount = Ti.UI.createLabel({
@@ -98,7 +99,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		shadowColor: '#999',
 		color: '#fff',
 		height: 30,
-		bottom:10
+		bottom:5
 	});
 	
 	var columnFriend = Ti.UI.createView({
@@ -106,16 +107,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		left: 185,
 		width: 60,
 		height: 70,
-		backgroundColor: '#9969a8',
+		backgroundColor: '#a570b6',
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: '#80538e'
+		borderColor: '#8d5c9d'
 	});
 	
 	var columnFriendImage = Ti.UI.createImageView({
-	//	image: 'images/icon/act_add_white.png',
 		image: 'images/icon/pf_friend.png',
-		top: 10
+		top: 15
 	});
 	
 	var columnFriendCount = Ti.UI.createLabel({
@@ -123,7 +123,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
 	
 	 var columnIsFriend = Ti.UI.createView({
@@ -148,7 +148,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
 
 	 var columnNotFriend = Ti.UI.createView({
@@ -173,7 +173,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#8e8e8e',
 		shadowColor: '#d3d2d1',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
  
 	 var columnAddFriend = Ti.UI.createView({
@@ -198,7 +198,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
 	
 	var sendRequest = function(_response){

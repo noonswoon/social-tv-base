@@ -119,7 +119,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#fff',
 				height: 45,
-				selectedBackgroundColor: '#d2eaff',
+				selectedBackgroundColor: '#53b4df',
 				color: '#666'
 			});
 				
@@ -221,7 +221,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	    	addMoreFriend(leaderBoardData);
 	    	updateExpBar();
 	    	
-		    //TODO: test test
 		    if(_status==="me") {
 				Ti.API.info("cache");
 				var totalPoints = PointModel.pointModel_fetchMyPoint(curId);

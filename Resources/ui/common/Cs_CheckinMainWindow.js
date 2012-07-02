@@ -136,7 +136,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	var programNumFriendImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_friends.png',
-		opacity: 0.5,
 		top: 0
 	});
 	var programNumFriend = Ti.UI.createLabel({

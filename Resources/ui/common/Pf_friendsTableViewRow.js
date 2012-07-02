@@ -8,7 +8,7 @@ FriendsTableViewRow = function(_user,_source) {
 	
 	var tableRow = Ti.UI.createTableViewRow({
 		height: 50,
-		selectedBackgroundColor: '#d2eaff',
+		selectedBackgroundColor: '#53b4df',
 	});
 	
 	var friendPhoto = Ti.UI.createImageView({

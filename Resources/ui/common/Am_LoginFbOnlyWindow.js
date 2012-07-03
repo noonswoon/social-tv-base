@@ -11,10 +11,9 @@ var LoginFbOnlyWindow = function() {
 		navBarHidden: true
 	});
 	var cbLogo = Ti.UI.createImageView({
-		image: '/images/admin/chatterbox_logo@2x.png',
+		image: '/images/admin/chatterbox_logo.png',
 		top: 100,
-		height: 57,
-		width: 174
+		width: 173, height: 56,
 	});	
 	var cbLabel = Ti.UI.createLabel({
 		text: 'Changing the way you watch TV',
@@ -26,7 +25,7 @@ var LoginFbOnlyWindow = function() {
 	var fbLoginButton = Ti.UI.createButton({
 		top: 5,
 		width: 200,
-		height: 35,
+		height: 39,
 		backgroundImage: '/images/admin/button/fb_button_login.png',
 		visible: true
 	});	
@@ -36,7 +35,7 @@ var LoginFbOnlyWindow = function() {
 		color: '#fff',
 		font:{fontSize:13, },
 		height:'auto',
-		top: 170,
+		top: 150,
 		textAlign:'center'
 	});
 	
@@ -44,7 +43,7 @@ var LoginFbOnlyWindow = function() {
 		backgroundImage: '/images/admin/button/button_whyfb.png',
 		top:7,
 		width:145,
-		height:25,
+		height:27,
 		visible:true
 	});
 	
@@ -70,6 +69,7 @@ var LoginFbOnlyWindow = function() {
 	
 	//ADDING UI COMPONENTS TO WINDOW
 	self.add(cbLogo);
+	self.add(cbLabel);
 	self.add(fbLoginButton);
 	self.add(fbLoginStatuslbl);
 	self.add(whyFbBtn);

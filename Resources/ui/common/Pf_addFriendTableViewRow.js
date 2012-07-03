@@ -47,7 +47,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 	};
 
 	if(_category==="withApp") {
-		var FriendACS = require('acs/friendsACS');
+		//var FriendACS = require('acs/friendsACS');
 		
 		imageView.image = acs.getUserImageNormalOfFbId(_user.fb_id);
 		userLabel.text = _user.first_name+' '+_user.last_name;

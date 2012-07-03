@@ -141,7 +141,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var reportButton = Ti.UI.createButton({
 		left: nestedOffset + 110,
 		top: 35,
-		width: 46,
+		width: 59,
 		height: 18,
 		backgroundImage: 'images/messageboard/comment/flag.png'
 	});
@@ -149,7 +149,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var deleteButton = Ti.UI.createButton({
 		left: nestedOffset + 110,
 		top: 35,
-		width: 46,
+		width: 59,
 		height: 18,
 		backgroundImage: 'images/messageboard/comment/flag.png'
 	});

@@ -60,12 +60,9 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 
 	var profilePictureContain = Ti.UI.createView({
-		//backgroundColor: '#fff',
 		top: 10, left: 10,
-		//borderWidth: 1,
 		width:103, height:104,
 		backgroundImage: 'images/icon/pf_imagedisplay.png'
-		//borderColor: '#b1b1b1'
 	});
 
 	var profileName = Ti.UI.createLabel({
@@ -309,6 +306,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		profileName.text = profile.first_name + ' ' + profile.last_name;
 	};
 	*/
+	
 	
 	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);

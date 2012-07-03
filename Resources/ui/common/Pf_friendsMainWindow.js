@@ -19,7 +19,6 @@ FriendsMainView = function(_parentWindow,_window){
 
 	var addFriendView = Ti.UI.createView({
 		height: 50, 
-		//backgroundColor: '#42a1c9'
 		backgroundColor: '#fff'
 	});
 	

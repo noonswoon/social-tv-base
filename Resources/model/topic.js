@@ -79,16 +79,16 @@ exports.topicModel_updateACSObjectIdField = function(_topic) {
 	db.close();
 };
 
-var add = function(_programId,_acsObjectId,_title,_photo,_content,_username,_deviceTokenId) {
+exports.topicModel_add = function(_programId,_acsObjectId,_title,_photo,_content,_username,_deviceTokenId) {
 	var db = Ti.Database.open('Chatterbox');
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
 	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,photo,content,comments_count,username,device_token_id,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,0,?,?,0,?)",_acsObjectId,_programId,_title,_photo,_content,_username,_deviceTokenId,updatedAt);
 	var newId = db.lastInsertRowId;
 	db.close();
-	
+
 	return newId;
 };
-exports.topicModel_add = add;
+// exports.topicModel_add = add;
 
 
 exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId) {

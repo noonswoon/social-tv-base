@@ -11,7 +11,7 @@ function CommentWindow(_topicId) {
 	var CacheHelper = require('helpers/cacheHelper');
 	
 	//OBJECTS INSTANTIATION
-	var commentHeader = new CommentHeaderTableViewRow();
+	var commentHeader = new CommentHeaderTableViewRow(_topicId);
 	var usingPull2Refresh = false;
 	var topicOwnerDeviceTokenId = "";
 	
@@ -102,6 +102,7 @@ function CommentWindow(_topicId) {
 				
 		commentHeader._setTitle(curTopic.title);
 		commentHeader._setContent(curTopic.content);
+		// commentHeader._setPhoto(curTopic.photo);	
 		
 		//use momentjs for helping on converting dateObject from string
 		//problematic because ACS stores the date as a string with timezone format (+0000)

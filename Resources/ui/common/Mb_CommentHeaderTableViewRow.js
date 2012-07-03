@@ -1,4 +1,10 @@
-CommentHeaderTableViewRow = function() {
+CommentHeaderTableViewRow = function(_topicId) {
+	
+	Ti.API.info("This is topiccccccccccccccccccccccccc: "+_topicId);
+	
+	var Topic = require('model/topic');
+	var topic = Topic.topicModel_getTopicById(_topicId);
+	
 	var headerTableData = [];
 	
 	var headerMainRow = Ti.UI.createTableViewRow({
@@ -50,7 +56,7 @@ CommentHeaderTableViewRow = function() {
 	});
 	
 	var photoOfTopic = Ti.UI.createImageView({
-		image: 'dummy.png',
+		// image: 'dummy.png',
 		left: 10,
 		right: 10,
 		width: 300,
@@ -66,7 +72,7 @@ CommentHeaderTableViewRow = function() {
 	}); 
 	
 	var content = Ti.UI.createLabel({
-		text: '-',
+		text: topic.content,
 		top: 10,
 		left: 10,
 		right: 10
@@ -157,6 +163,13 @@ CommentHeaderTableViewRow = function() {
 		content.text = _content;
 	};
 		
+	// headerMainRow._getPhoto = function(){
+		// return photoOfTopic.image;
+	// };
+// 
+	// headerMainRow._setPhoto = function(_photo) {
+		// photoOfTopic.image = _photo;
+	// };
 		// var topicWidth = topicRow.toImage().width; 
 		// var topicHeight = topicRow.toImage().height; 
 // 		

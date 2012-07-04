@@ -212,7 +212,7 @@ AddFriendsMainView = function(_parentWindow) {
 	var facebookFriend = Ti.UI.createTableView();
 	
 	facebookFriend.addEventListener('click',function(e) {
-		if(String(e.source) ==="[object TiUIButton]") {
+		if(String(e.source) ==="[object TiUIImageView]") {
 			Ti.API.info('Invite friend: '+ e.rowData.uid);
 			facebookFriend.deleteRow(e.index);
 		}

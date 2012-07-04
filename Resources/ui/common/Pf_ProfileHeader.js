@@ -186,7 +186,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	 
 	 var columnAddFriendImage = Ti.UI.createImageView({
 	 	image: 'images/icon/act_add_white.png',
-		top: 10,
+		top: 15,
 	 });
 	 
 	var columnAddFriendLabel = Ti.UI.createLabel({

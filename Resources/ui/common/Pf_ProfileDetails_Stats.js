@@ -101,7 +101,8 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		disableBounce: true,
 		width: 290,
 		height: 'auto',
-		zIndex: 10
+		zIndex: 10,
+		separatorColor: '#fff'
 	});
 		
 	var createLeaderBoardView = function(leaderBoardData) {

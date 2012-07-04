@@ -106,6 +106,8 @@ var SettingWindow = function(_containingTab) {
 	fbLogoutButton.addEventListener('click', function() {
 		Ti.Facebook.logout(); //logout from fb
 		acs.logout(logoutCallback); //logout from chatterbox
+		//TODO: delete all event in profileSection
+		Ti.App.fireEvent('profileMainWindowClosing'+ acs.getUserId());
 	});
 	
 	return self;

@@ -58,7 +58,7 @@ function ProductMainWindow(_programId) {
 	productSelectProgramToolbar.add(selectProgramLabel);
 
 	var productTableView = Ti.UI.createTableView({
-		top: 44,
+		top: 42,
 		backgroundColor: 'transparent', 
 		separatorColor: 'transparent'
 	});

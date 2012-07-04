@@ -60,6 +60,7 @@ function MessageboardMainWindow(_programId) {
         backgroundRepeat:true,
 		showCancel:false,
 		hintText:'Search here...',
+		barColor:'#43a5cf',
 	});
 
 	var addButton = Ti.UI.createButton({
@@ -173,8 +174,9 @@ function MessageboardMainWindow(_programId) {
 //////////////////
 
 	var allTopicTable = Ti.UI.createTableView({
-		top: 170,
-		bottom: 10,
+		top: 165,
+		//bottom: 10,
+		bottom:0,
 		scrollable: true,
 		//separatorColor: 'transparent',
 		search: searchTextField,//messageboardHeader.searchTextField,
@@ -188,7 +190,6 @@ function MessageboardMainWindow(_programId) {
 	self.add(messageboardHeader);
 	self.add(searchView);
 	self.add(allTopicTable);
-
 
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {

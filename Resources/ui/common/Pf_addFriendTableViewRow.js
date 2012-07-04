@@ -6,10 +6,10 @@ AddFriendsTableViewRow = function(_user,_category) {
 	});
 
 	var imageView = Ti.UI.createImageView({
-		image: 'images/kuma100x100.png',
 		left: 10,
 		width: 40,
-		height: 40
+		height: 40,
+		touchEnabled: false
 	});
 
 	var userLabel = Ti.UI.createLabel({
@@ -25,12 +25,11 @@ AddFriendsTableViewRow = function(_user,_category) {
 		userLabel.text =  _user.name;
 		tableRow.uid = _user.uid;
 		
-		var inviteButton = Ti.UI.createButton({
+		var inviteButton = Ti.UI.createImageView({
 			height: 30,
-			width: 66,
+			width: 58,
 			right: 10,
-			//TODO: create invite button
-			backgroundImage: 'images/button/button_invite.png',
+			backgroundImage: 'images/button/button_invite@2x.png',
 		});
 	
 		
@@ -40,24 +39,23 @@ AddFriendsTableViewRow = function(_user,_category) {
 	}		
 		
 	inviteButton.addEventListener('click', function(){
-			alert('invite friend');
+			alert('Invite '+_user.name);
 			inviteFriend(_user.uid);
 		})
 		tableRow.add(inviteButton);
 	};
 
 	if(_category==="withApp") {
-		//var FriendACS = require('acs/friendsACS');
-		
 		imageView.image = acs.getUserImageNormalOfFbId(_user.fb_id);
 		userLabel.text = _user.first_name+' '+_user.last_name;
 		tableRow.uid = _user.fb_id;
 
-		var addButton = Ti.UI.createButton({
-			height: 30,
-			width: 66,
+		var addButton = Ti.UI.createImageView({
+			height: 28,
+			width: 61,
 			right: 10,
-			backgroundImage: 'images/button/button_add.png',
+			image: 'images/button/button_add@2x.png',
+			
 		});
 		
 		var createFriendActivity = function(_category){

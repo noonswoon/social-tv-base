@@ -72,16 +72,36 @@ ProductBuyWindow = function(_product){
 		height: 264,
 		left: 10,
 		right: 10,
-		
-		backgroundImage: 'images/product/productdetail.png'
+		backgroundColor: '#eee',
+		borderRadius: 10
+		//backgroundImage: 'images/product/productdetail.png'
 	});
+	
+	var productHeaderView = Ti.UI.createView({
+		top: 10,
+		width: 281,
+		height: 40,
+		backgroundImage: 'images/product/producthead.png'
+	});
+	
+	var productTab = Titanium.UI.iOS.createTabbedBar({
+		labels: ['Product Detail'],
+		backgroundColor: '#43a3cc',
+		style: Titanium.UI.iPhone.SystemButtonStyle.BAR,
+		width: 100, height: 35,
+		left: 5,
+		top: 3,
+		index: 0
+	});		
+	productHeaderView.add(productTab);
 	
 	var productName = Ti.UI.createLabel({
 		top: 60,
 		text: _product.product_name,
-		font: { fontSize: 26, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
+		font: { fontSize: 24, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 		left: 15
 	});
+	productDetailView.add(productHeaderView);
 	productDetailView.add(productName);
 	
 	var productDescription = Ti.UI.createLabel({

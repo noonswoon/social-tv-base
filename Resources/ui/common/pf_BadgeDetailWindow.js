@@ -40,11 +40,23 @@ BadgeDetailWindow = function (_badge){
 		color: '#999',
 		font: {fontSize: 12}
 	});	
+	
+	var badgeWinClose = Ti.UI.createButton({
+		bottom: 45,
+		width: 200,
+		height: 30,
+		title: 'close'
+	});
+
+	badgeWinClose.addEventListener('click',function(){
+		self.animate(animateRight);
+	});
 
 	badgeView.add(badgeImg);
 	badgeView.add(badgeTitle);
 	badgeView.add(badgeCons);
-	badgeView.add(badgeDesc);	
+	badgeView.add(badgeDesc);
+	badgeView.add(badgeWinClose);	
 	self.add(badgeView);
 	
 	var animateRight = Ti.UI.createAnimation({
@@ -53,9 +65,9 @@ BadgeDetailWindow = function (_badge){
 		duration: 500
 	});
 	
-	badgeView.addEventListener('click',function(){
-		self.animate(animateRight);
-	});
+	// badgeView.addEventListener('click',function(){
+		// self.animate(animateRight);
+	// });
 	
 	self._setBadgeTitle = function(_newTitle,_unlock) {
 		if(_unlock===1){badgeTitle.text = _newTitle;} 

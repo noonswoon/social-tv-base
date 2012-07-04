@@ -379,11 +379,11 @@ Ti.App.Chat = function(_chatParams) {
     });
 	
     // Send Button
-    var sendButton = Ti.UI.createButton({
+    var sendButton = Ti.UI.createImageView({
 		width: 60,
 		height: 31,
 		right: 10,
-		backgroundImage: 'images/chat/send.png'
+		image: 'images/chat/send.png'
     });
     
 	chatInputView.add(chatInputTextField);

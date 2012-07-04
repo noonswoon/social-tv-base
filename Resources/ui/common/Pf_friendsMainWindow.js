@@ -4,7 +4,7 @@ FriendsMainView = function(_parentWindow,_window){
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var tableViewRow = require('ui/common/Pf_FriendsTableViewRow');
 	
-	var userId = acs.getUserId();
+	var my_id = acs.getUserId();
 	
 	var self = Ti.UI.createWindow({
 		backgroundColor:'#fff',
@@ -24,7 +24,7 @@ FriendsMainView = function(_parentWindow,_window){
 	
 	var addFriendImage = Ti.UI.createImageView({
 		image: 'images/icon/addfriend_header.png',
-		left: 5
+		left: 5,
 	});
 
 	addFriendImage.addEventListener('click', function(){
@@ -48,7 +48,7 @@ FriendsMainView = function(_parentWindow,_window){
 	var createFriendsMainView = function(){
 		if(_window === "friend"){
 			self.title = "My Friends";
-			var myFriends = FriendModel.friendModel_fetchFriend(userId);
+			var myFriends = FriendModel.friendModel_fetchFriend(my_id);
 			createFriendTable(myFriends);
 		}
 		else {
@@ -58,7 +58,7 @@ FriendsMainView = function(_parentWindow,_window){
 	}
 
 	friendsTable.addEventListener('click',function(e) {
-		if(String(e.source) ==="[object TiUIButton]") {
+		if(String(e.source) ==="[object TiUIImageView]") {
 			Ti.API.info('approve friend from friendsMainwindow');
 			friendsTable.deleteRow(e.index);
 			friendRequests.splice(e.index,1);
@@ -68,6 +68,8 @@ FriendsMainView = function(_parentWindow,_window){
 		
 	self.addEventListener('close', function() {
 		Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
+		var FriendACS = require('acs/friendsACS');
+		FriendACS.friendACS_fetchedUserTotalFriends(my_id);
 	});
 	
 	self.addEventListener('focus', function() {

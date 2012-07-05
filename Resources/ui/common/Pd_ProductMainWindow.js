@@ -18,7 +18,7 @@ function ProductMainWindow(_programId) {
 	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		backgroundImage: 'images/bg.png'
 	});
 

@@ -8,7 +8,7 @@ FriendsMainView = function(_parentWindow,_window){
 	
 	var self = Ti.UI.createWindow({
 		backgroundColor:'#fff',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		barColor:'#489ec3'
 	});
 

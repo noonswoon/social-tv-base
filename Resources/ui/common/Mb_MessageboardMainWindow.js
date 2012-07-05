@@ -38,7 +38,7 @@ function MessageboardMainWindow(_programId) {
 	
 	var self = Titanium.UI.createWindow({
 		backgroundImage: 'images/messageboard/appBG.png',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		title: "Message Board",
 		rightNavButton: callPicker
 	});

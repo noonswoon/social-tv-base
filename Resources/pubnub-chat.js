@@ -106,7 +106,7 @@ Ti.App.Chat = function(_chatParams) {
 
 	var chat_window = Ti.UI.createWindow({
 		title: "Group Chat",
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		backgroundImage: 'images/bg.png',
 		tabBarHidden: true,
 		leftNavButton:backButton

@@ -22,7 +22,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 	 	leftNavButton:backButton
 	});
 	

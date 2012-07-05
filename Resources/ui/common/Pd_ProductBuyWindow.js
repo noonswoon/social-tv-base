@@ -7,7 +7,7 @@ ProductBuyWindow = function(_product){
 	
 	var self = Ti.UI.createWindow({
 		title: 'Product',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		backgroundImage: 'images/bg.png',
 		leftNavButton: backButton
 	});

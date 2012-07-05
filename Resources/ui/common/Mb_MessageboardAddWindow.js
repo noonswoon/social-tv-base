@@ -11,7 +11,7 @@ function MessageboardAddWindow(_programId) {
 	});
 	
 	var self = Titanium.UI.createWindow({
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		title: "Message Board",
 	 	leftNavButton:backButton
 	});

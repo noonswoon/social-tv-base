@@ -23,7 +23,7 @@ function CommentWindow(_topicId) {
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
 		title: "Message Board",
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 	 	leftNavButton:backButton
 	});
 	

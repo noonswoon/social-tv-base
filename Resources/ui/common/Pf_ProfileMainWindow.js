@@ -15,7 +15,7 @@ function ProfileMainWindow(_id,_status) {
 	});
 	
 	var self = Titanium.UI.createWindow({
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		rightNavButton: settingButton,
 		barColor:'#489ec3'
 	});			

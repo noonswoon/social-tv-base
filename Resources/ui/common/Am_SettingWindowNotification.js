@@ -31,7 +31,7 @@ Am_SettingWindowNotification = function(){
 
 	var self = Ti.UI.createWindow({
 		backgroundImage: '/images/admin/cb_back.png',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		title: 'Notifications',
 		leftNavButton: backButton
 	});

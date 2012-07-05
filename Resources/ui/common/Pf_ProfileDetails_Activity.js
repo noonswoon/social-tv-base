@@ -106,7 +106,7 @@ if(_status==="me") {
 	
 	var userActivity = Ti.UI.createTableView({
 		width: 290,
-		backgroundColor: '#fff',
+		backgroundColor: '#eeeeee',
 		borderRadius: 10,
 		scrollable: false,
 		bottom: 10,
@@ -138,10 +138,10 @@ if(_status==="me") {
 			var activityDateStr = since(dm);
 			
 			var userActivityRow = Ti.UI.createTableViewRow({
-				backgroundColor: '#fff',
+				backgroundColor: '#eeeeee',
 				width: 290,
 				height: 55,
-				selectedBackgroundColor: '#fff'
+				selectedBackgroundColor: '#eeeeee'
 			});
 			
 			var activityType = Ti.UI.createImageView({

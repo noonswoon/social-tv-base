@@ -87,7 +87,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	var leaderLabel = Ti.UI.createLabel({
 		text:'LEADERBOARD',
 		font: {fontSize: 14, fontWeight: 'bold'},
-		color: '#fff',
+		color: '#eeeeee',
 		height:30,
 		textAlign: 'left',
 		left: 10,
@@ -102,7 +102,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		width: 290,
 		height: 'auto',
 		zIndex: 10,
-		separatorColor: '#fff'
+		separatorColor: 'transparent'
 	});
 		
 	var createLeaderBoardView = function(leaderBoardData) {
@@ -118,7 +118,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
 			
 			var userRank = Ti.UI.createTableViewRow({
-				backgroundColor: '#fff',
+				backgroundColor: '#eeeeee',
 				height: 45,
 				selectedBackgroundColor: '#53b4df',
 				color: '#666'

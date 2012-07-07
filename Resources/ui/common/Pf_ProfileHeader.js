@@ -10,7 +10,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	var updateActivity = require('helpers/updateActivity');
 	var UserModel = require('model/user');
 
-	var FriendsMainWindow = require('ui/common/pf_friendsMainWindow');
+	var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
 
 	var currentUser = acs.getUserLoggedIn();
 	var curId = _userProfile.id;
@@ -45,7 +45,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	//testing friend from facebook
 	profilePicture.addEventListener('click', function(){
-	var AddFriendMainWindow = require('ui/common/Pf_addFriendMainWindow');
+	var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
 	var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
 		_parentWindow.containingTab.open(addFriendMainWindow);
 	});

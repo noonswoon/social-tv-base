@@ -91,7 +91,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	var programChannelImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_tvchannel.png',
-		//opacity: 0.5,
 		top: 3
 	});
 	var programChannel = Ti.UI.createLabel({
@@ -114,7 +113,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	var programNumCheckinImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_watch.png',
-		//opacity: 0.5,
 		top: 0
 	});
 	var programNumCheckin = Ti.UI.createLabel({
@@ -156,7 +154,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		left:0,
 		height: 265,
 		width:320,
-		backgroundImage: 'images/checkinBG.png'
+		backgroundImage: 'images/checkin/checkin_bg.png'
 	});
 
 	var remote = Ti.UI.createView({

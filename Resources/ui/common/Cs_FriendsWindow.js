@@ -13,7 +13,9 @@ FriendsWindow = function(){
 		backgroundColor: 'orange'
 	});
 	
-	var friendsTableView = Ti.UI.createTableView();
+	var friendsTableView = Ti.UI.createTableView({
+		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+	});
 
 	//Get all friends from DB
 	//with mock user_id	

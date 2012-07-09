@@ -63,7 +63,6 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	});
 	var programNumCheckinImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_watch.png',
-		//opacity: 0.5,
 		top: 0
 	});
 	var programNumCheckin = Ti.UI.createLabel({
@@ -87,7 +86,6 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	
 	var programFriendCheckinImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_friends.png',
-		opacity: 0.5,
 		top: 0
 	});
 	var programFriendTotalCheckin = Ti.UI.createLabel({
@@ -111,7 +109,6 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	});
 	var ChannelImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_tvchannel.png',
-		//opacity: 0.5,
 		top: 3
 	});
 	var Channel = Ti.UI.createLabel({

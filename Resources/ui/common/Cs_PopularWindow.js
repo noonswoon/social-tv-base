@@ -39,9 +39,9 @@ function PopularWindow(_parent) {
 	timeSelectionView.add(timeSelection);
 	
 	var programListTable = Ti.UI.createTableView({
-		top: 42
+		top: 42,
+		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 	});
-
 	
 	function tvprogramLoadedCompleteCallback(e) {
 		programListTable.data = [];	

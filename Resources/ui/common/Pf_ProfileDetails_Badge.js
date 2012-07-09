@@ -17,6 +17,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	var badgeImagesReady = false;
 	var myUnlockBadgesReady = false;	
 
+	var availableBadge = 9;
 	var myUnlockedBadges = []; //array of 9 with 0/1 value
 	var badgesCollection =[];
 	var badgeIndex = [];
@@ -46,7 +47,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 			myUnlockedBadges[e.fetchedMyUnlockBadges[i].badge_id] = 1;
 		}
 		//set 0 for locked badges
-		for(i=0;i<9;i++) {
+		for(i=0;i<availableBadge;i++) {
 			if(myUnlockedBadges[i]===undefined) myUnlockedBadges[i] = 0;
 		}
 		myUnlockBadgesReady = true;

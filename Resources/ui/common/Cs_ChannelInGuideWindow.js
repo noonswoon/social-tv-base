@@ -8,7 +8,9 @@ ChannelInGuideWindow = function (_index){
 		top: 42
 	});
 	
-	var programsInChannelTableView = Ti.UI.createTableView();
+	var programsInChannelTableView = Ti.UI.createTableView({
+		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE
+	});
 
 	var programsInChannel = [];		
 	var allprograms = TVProgram.TVProgramModel_fetchPrograms(); 

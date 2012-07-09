@@ -43,6 +43,14 @@ function MessageboardMainWindow(_programId) {
 		rightNavButton: callPicker
 	});
 	
+	alert(myCurrentCheckinPrograms);
+	if(myCurrentCheckinPrograms.length<=0) {
+	//if(myCurrentCheckinPrograms.length==0) {
+		var CheckinFirstWindow = require('ui/common/Howto_CheckinFirst');
+		var checkinFirstWindow = new CheckinFirstWindow('messageboard');
+		self.add(checkinFirstWindow);
+	}
+	
 	var searchView = Ti.UI.createView({
 		top: 120,
 		width:'auto',
@@ -153,7 +161,7 @@ function MessageboardMainWindow(_programId) {
 		self.remove(opacityView);
 		if(pickerSelectedIndex === 0) {
 			currentProgramId = 'CTB_PUBLIC';
-			messageboardHeader._setHeader('General Board','Chatterbox General Board','http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',452,'CTB');
+			messageboardHeader._setHeader('ธรณีนี่นี้ใครครอง','ตอนที่ 17','images/messageboard/yaya.jpg',2000,'ch3');
 		} else {
 			currentProgramId = picker.getSelectedRow(0).progId;
 			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);

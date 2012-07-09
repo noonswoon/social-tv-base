@@ -2,7 +2,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	//possible value for _status = me / friend / stranger
 
 	var CheckinACS = require('acs/checkinACS');		
-	var FriendACS = require('acs/friendsACS');
 	var myBadgeACS = require('acs/myBadgeACS');
 	var ActivityACS = require('acs/activityACS');
 
@@ -29,6 +28,16 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		height:20,
 		width:20
 	});
+	refreshButton.addEventListener('click', function(){
+		var FriendACS = require('acs/friendsACS');
+
+		myBadgeACS.myBadgeACS_fetchedBadge(curId);
+		ActivityACS.activityACS_fetchedMyActivity(curId,curUserName);
+		CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
+		FriendACS.showFriendsRequest();	
+		FriendACS.searchFriend(myUserId);
+		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
+	});
 
 	var headerView = Ti.UI.createView();
 	headerView.backgroundGradient = {
@@ -53,11 +62,10 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		// _parentWindow.containingTab.open(addFriendMainWindow);
 	// });
 	
-	profilePicture.addEventListener('click', function(){
-		var FacebookSharing = require('helpers/facebookSharing');
-		//FacebookSharing.badgePopUpOnFacebook("4");
-		FacebookSharing.checkinAppearOnFaceBook();
-	});
+	// profilePicture.addEventListener('click', function(){
+		// var FacebookSharing = require('helpers/facebookSharing');
+		// FacebookSharing.checkinAppearOnFaceBook();
+	// });
 
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,
@@ -205,7 +213,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  	var approveRequest = function(_response){
 		alert('You have approved the request');
 		Ti.API.info(_response);
-		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
+		var FriendACS = require('acs/friendsACS');
+	//	FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		var approveFriendActivityData = createFriendActivity("approvefriend");
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
@@ -224,6 +233,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  	}		
 
  	var addFriend = function(isRequest,i) {
+ 		var FriendACS = require('acs/friendsACS');
  		//condition 1: no request from this user
  		if(!isRequest) {
 		 	var addFriendActivityData = createFriendActivity("addfriend");

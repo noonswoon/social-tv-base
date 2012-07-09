@@ -56,11 +56,11 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 				
 				//link with third party account
 				var leaderBoardACS = require('acs/leaderBoardACS');
-				var NotificationTrackACS = require('acs/notificationTrackACS');
+				var PushNotificationCTB = require('ctb/pushnotificationCTB');
 				var pointModel = require('model/point');
 				
 				leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
-				NotificationTrackACS.notificationTrackACS_createUserInfo(e.users[0].id);
+				PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());
 				
 				var leaderboardCallBack = function(e) {
 					pointModel.pointModel_updateLeadersFromACS(e.fetchedUser);

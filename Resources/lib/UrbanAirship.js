@@ -72,19 +72,19 @@ exports.registerDeviceToken = function(_deviceToken) {
 	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(getAppKey() + ':' + getAppSecret()));
 	
 	var registerParameters = {
-	    "alias": "mickey_id",
+	    // "alias": "mickey_id",
 	    "tags": [
-	        "tag1",
-	        "tag2"
+	        "v1_release",
+	        "comment_friendcheckin"
 	    ],
-	    "badge": 2,
-	    "quiettime": {
-	        "start": "6:00",
-	        "end": "7:00"
-	    },
-	    "tz": "America/Los_Angeles"
+	    // "badge": 2,
+	    // "quiettime": {
+	        // "start": "6:00",
+	        // "end": "7:00"
+	    // },
+	    // "tz": "America/Los_Angeles"
 	};
-	xhr.send(JSON.stringify(registerParameters));	  
+	xhr.send(JSON.stringify(registerParameters));
 };
 
 exports.unRegisterDeviceToken = function() {

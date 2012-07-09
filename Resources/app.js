@@ -23,7 +23,7 @@ Ti.Facebook.appid = "197422093706392";
 Ti.Facebook.permissions = ['publish_stream','publish_actions', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
-var IS_ON_DEVICE = false;
+var IS_ON_DEVICE = true;
 var CACHE_TIMEOUT_IN_MINUTES = 1; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 	

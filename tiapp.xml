@@ -13,9 +13,9 @@
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>2.0.1.GA2</sdk-version>
+    <sdk-version>2.1.0.GA</sdk-version>
     <property name="ti.android.threadstacksize" type="int">327680</property>
-    <id>com.chatterbox.beta</id>
+    <id>com.chatterbox.alpha</id>
     <name>chatterbox</name>
     <version>1.0</version>
     <publisher>titaniummick</publisher>

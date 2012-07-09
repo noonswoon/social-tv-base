@@ -62,7 +62,7 @@ ChannelInGuideTableViewRow = function(_program){
 	});
 	programImageView.add(programImage);
 	row.add(programImageView);
-
+	row.tvprogram = _program;
 	return row;	
 }
 module.exports = ChannelInGuideTableViewRow;

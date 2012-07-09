@@ -111,7 +111,7 @@ function PopularWindow(_parent) {
 		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.id,
 			programTitle: e.row.tvprogram.name,
-			programSubname: '',
+			programSubname: e.row.tvprogram.subname,
 			programImage: e.row.tvprogram.photo,
 			programChannel: e.row.tvprogram.channel_id,
 			programType: e.row.tvprogram.program_type,

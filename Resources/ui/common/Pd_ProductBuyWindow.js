@@ -72,8 +72,29 @@ ProductBuyWindow = function(_product){
 		height: 264,
 		left: 10,
 		right: 10,
-		
 		backgroundImage: 'images/product/productdetail.png'
+	});
+	
+	var productDetailButton = Ti.UI.createImageView({
+		image: 'images/product/productdetail_button.png',
+		width: 110,
+		height: 32,
+		top: 13,
+		left: 15
+	});
+	productDetailView.add(productDetailButton);
+	
+	var buyNowButton = Ti.UI.createButton({
+		backgroundImage: 'images/product/buynow_button.png',
+		width: 72,
+		height: 32,
+		top: 13,
+		left: 125
+	});
+	productDetailView.add(buyNowButton);
+	
+	buyNowButton.addEventListener('click',function(){
+		Ti.Platform.openURL('http://www.google.com');		
 	});
 	
 	var productName = Ti.UI.createLabel({
@@ -93,24 +114,28 @@ ProductBuyWindow = function(_product){
 		top: productDescTopIndent+70,
 		width: 270,
 		height: 50,
-		text: 'Description: sssssssssssssssssssssssssssssssssssssssssss'+_product.description,
+		text: 'Description: '+_product.description,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
 		left: 15
 	});
 	productDetailView.add(productDescription);
 	
-	var productDescWidth = productDescription.toImage().width; 
-	var productDescHeight = productDescription.toImage().height; 
-	var numLines = Math.ceil(productDescWidth / ONE_LINE_LENGTH); 
-	var productLinkTopIndent = numLines * productDescHeight;
+	// var productDescWidth = productDescription.toImage().width; 
+	// var productDescHeight = productDescription.toImage().height; 
+	// var numLines = Math.ceil(productDescWidth / ONE_LINE_LENGTH); 
+	// var productLinkTopIndent = numLines * productDescHeight;
+// 	
+	// var productLink = Ti.UI.createLabel({
+		// top: productLinkTopIndent+50,
+		// text: 'Link: http://www.google.com',
+		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
+		// left: 15
+	// });
+	// productDetailView.add(productLink);
 	
-	var productLink = Ti.UI.createLabel({
-		top: productLinkTopIndent+110,
-		text: 'Link: http://www.google.com',
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		left: 15
-	});
-	productDetailView.add(productLink);
+	// productLink.addEventListener('click',function(){
+		// Ti.Platform.openURL('http://www.google.com');
+	// });
 	
 	self.add(scrollView);
 	scrollView.add(productImageView);

@@ -102,7 +102,7 @@ function MessageboardAddWindow(_programId) {
 	
 	var thumbnail = Ti.UI.createImageView({
 		top: 200,
-		width: 120,
+		width: 40,
 		height: 40,
 		left: 140		
 	});
@@ -130,8 +130,10 @@ function MessageboardAddWindow(_programId) {
 	var galleryProps = {
 		success:function(event){
 			var image = event.media;
-			if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO)
+			if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO){
 				thumbnail.image = image;
+				thumbnailLabel.hide();				
+			}
 			else alert('Sorry, something wrong');
 			}
 	}

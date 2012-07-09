@@ -32,7 +32,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 	row.add(programLabelName);
 		
 	var programLabelSubname = Ti.UI.createLabel({
-		text: _curTVProgram.channel_id,
+		text: _curTVProgram.subname,
 		color: '#333',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},

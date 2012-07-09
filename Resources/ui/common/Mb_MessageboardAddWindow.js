@@ -159,7 +159,7 @@ function MessageboardAddWindow(_programId) {
 		
 		//1. insert to the db topic table
 		var newId = Topic.topicModel_add(programId, 0,topicTitle.value,mockupPhoto,topicContent.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
-		
+
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
 			title: topicTitle.value,

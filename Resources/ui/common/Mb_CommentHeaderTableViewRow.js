@@ -154,22 +154,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 	headerMainRow._setTitle = function(_title) {
 		topicTitle.text = _title;
 	};
-		
-	headerMainRow._getContent = function(){
-		return content.text;
-	};
-
-	headerMainRow._setContent = function(_content) {
-		content.text = _content;
-	};
-		
-	// headerMainRow._getPhoto = function(){
-		// return photoOfTopic.image;
-	// };
-// 
-	// headerMainRow._setPhoto = function(_photo) {
-		// photoOfTopic.image = _photo;
-	// };
+	
 		// var topicWidth = topicRow.toImage().width; 
 		// var topicHeight = topicRow.toImage().height; 
 // 		

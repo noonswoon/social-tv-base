@@ -101,7 +101,7 @@ function CommentWindow(_topicId) {
 		topicOwnerDeviceTokenId = curTopic.deviceTokenId;
 				
 		commentHeader._setTitle(curTopic.title);
-		commentHeader._setContent(curTopic.content);
+		// commentHeader._setContent(curTopic.content);
 		// commentHeader._setPhoto(curTopic.photo);	
 		
 		//use momentjs for helping on converting dateObject from string

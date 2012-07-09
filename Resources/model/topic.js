@@ -84,8 +84,21 @@ exports.topicModel_add = function(_programId,_acsObjectId,_title,_photo,_content
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
 	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,photo,content,comments_count,username,device_token_id,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,0,?,?,0,?)",_acsObjectId,_programId,_title,_photo,_content,_username,_deviceTokenId,updatedAt);
 	var newId = db.lastInsertRowId;
+	// var result = db.execute('SELECT * FROM topics WHERE acs_object_id = ?',_acsObjectId);
+	// while(result.isValidRow()) {
+		// id = result.fieldByName('id'); 
+		// acsObjectId = result.fieldByName('acs_object_id'); 
+		// title = result.fieldByName('title');
+		// photo = result.fieldByName('photo');
+		// content = result.fieldByName('content');
+		// username = result.fieldByName('username');
+		// deviceTokenId = result.fieldByName('device_token_id');
+		// updatedAt = result.fieldByName('updated_at')
+		// result.next();
+	// }	
+	// alert('title: '+result.fieldByName('title'));
+	// alert('content: '+result.fieldByName('content'));
 	db.close();
-
 	return newId;
 };
 // exports.topicModel_add = add;

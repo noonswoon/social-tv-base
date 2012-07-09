@@ -79,34 +79,38 @@ ProductBuyWindow = function(_product){
 	var productName = Ti.UI.createLabel({
 		top: 60,
 		text: _product.product_name,
-		font: { fontSize: 26, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
+		font: { fontSize: 24, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 		left: 15
 	});
 	productDetailView.add(productName);
 	
+	var productNameWidth = productName.toImage().width; 
+	var productNameHeight = productName.toImage().height; 
+	var numLines = Math.ceil(productNameWidth / ONE_LINE_LENGTH); 
+	var productDescTopIndent = numLines * productNameHeight;
+
 	var productDescription = Ti.UI.createLabel({
-		top: 100,
-		text: 'Description: '+_product.description,
+		top: productDescTopIndent+70,
+		width: 270,
+		height: 50,
+		text: 'Description: sssssssssssssssssssssssssssssssssssssssssss'+_product.description,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
 		left: 15
 	});
 	productDetailView.add(productDescription);
 	
-	var productPrice = Ti.UI.createLabel({
-		top: 120,
-		text: 'Price: '+_product.price,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		left: 15
-	});
-	productDetailView.add(productPrice);
+	var productDescWidth = productDescription.toImage().width; 
+	var productDescHeight = productDescription.toImage().height; 
+	var numLines = Math.ceil(productDescWidth / ONE_LINE_LENGTH); 
+	var productLinkTopIndent = numLines * productDescHeight;
 	
-	var productContact = Ti.UI.createLabel({
-		top: 140,
-		text: 'Contact: '+_product.contact,
+	var productLink = Ti.UI.createLabel({
+		top: productLinkTopIndent+110,
+		text: 'Link: http://www.google.com',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
 		left: 15
 	});
-	productDetailView.add(productContact);
+	productDetailView.add(productLink);
 	
 	self.add(scrollView);
 	scrollView.add(productImageView);

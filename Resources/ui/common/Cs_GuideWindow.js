@@ -143,32 +143,32 @@ function GuideWindow(_parent) {
 	picker.addEventListener('change',function(e){
 		var index = e.rowIndex;
 		if(index === 0){
-			var ch3 = new ChannelInGuideWindow(index);
+			var ch3 = new ChannelInGuideWindow(index,_parent);
 			self.add(ch3);				
 			selectChannelLabel.text = 'CH3';
 		}
 		else if(index === 1){
-			var ch5 = new ChannelInGuideWindow(index);
+			var ch5 = new ChannelInGuideWindow(index,_parent);
 			self.add(ch5);
 			selectChannelLabel.text = 'CH5';	
 		}
 		else if(index === 2){
-			var ch7 = new ChannelInGuideWindow(index);
+			var ch7 = new ChannelInGuideWindow(index,_parent);
 			self.add(ch7);
 			selectChannelLabel.text = 'CH7';	
 		}
 		else if(index === 3){
-			var ch9 = new ChannelInGuideWindow(index);
+			var ch9 = new ChannelInGuideWindow(index,_parent);
 			self.add(ch9);	
 			selectChannelLabel.text = 'CH9';
 		}
 		else if(index === 4){
-			var ch11 = new ChannelInGuideWindow(index);
+			var ch11 = new ChannelInGuideWindow(index,_parent);
 			self.add(ch11);	
 			selectChannelLabel.text = 'CH11';
 		}
 		else if(index === 5){
-			var thaiPBS = new ChannelInGuideWindow(index);
+			var thaiPBS = new ChannelInGuideWindow(index,_parent);
 			self.add(thaiPBS);
 			selectChannelLabel.text = 'ThaiPBS';
 		}	

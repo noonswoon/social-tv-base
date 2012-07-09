@@ -1,4 +1,4 @@
-ChannelInGuideWindow = function (_index){
+ChannelInGuideWindow = function (_index,_parent){
 	
 	var TVProgram = require('model/tvprogram');
 	var ChannelInGuideTableViewRow = require('ui/common/Cs_ChannelInGuideTableViewRow');
@@ -43,6 +43,22 @@ ChannelInGuideWindow = function (_index){
 		}
 		programsInChannelTableView.data = [];
 		programsInChannelTableView.setData(programsInChannel);	
+		
+		programsInChannelTableView.addEventListener('click',function(e){
+			var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
+			checkinmainwin = new CheckinMainWindow({
+				eventId: '2',
+				programTitle: 'test',
+				programSubname: '',
+				programImage: 'test',
+				programChannel: 'test',
+				programType: 'test',
+				programStarttime: 'test',
+				programEndtime: 'test',
+				programNumCheckin: 'test'
+			}, _parent.containingTab);
+			_parent.containingTab.open(checkinmainwin);
+		});
 
 	self.add(programsInChannelTableView);
 	return self;

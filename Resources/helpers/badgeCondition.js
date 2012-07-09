@@ -1,5 +1,4 @@
 //check if you reach new badge or not!
-
 var getNumCheckinsOfType = function(_programType) {
 	if(!Ti.App.Properties.hasProperty(_programType+'Count')) { //do some caching
 		Ti.App.Properties.setInt(_programType+'Count',1);
@@ -12,6 +11,20 @@ var getNumCheckinsOfType = function(_programType) {
 	}	
 }
 exports.getNumCheckinsOfType = getNumCheckinsOfType;
+
+var getNumCheckinsOfProgramId = function(_programId) {
+	if(!Ti.App.Properties.hasProperty(_programId+'Count')) { //do some caching
+		Ti.App.Properties.setInt(_programId+'Count',1);
+		return 1;
+	} else {
+		var numCheckInsSoFar = Ti.App.Properties.getInt(_programId+'Count');
+		var newNumCheckins = numCheckInsSoFar + 1
+		Ti.App.Properties.setString(_programId+'Count',newNumCheckins);
+		Ti.API.info('getNumCheckinsOfProgramId: '+_programId+'//'+newNumCheckins);
+		return newNumCheckins;
+	}	
+}
+exports.getNumCheckinsOfProgramId = getNumCheckinsOfProgramId;
 
 ////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
@@ -66,7 +79,7 @@ var checkTypeCondition = function(_type) {
 			};			
 		}
 	}
-}	
+}
 		
 var checkTimeCondition = function() {
 	var now = moment().format('HH');
@@ -80,6 +93,36 @@ var checkTimeCondition = function() {
 	//badge id: 8
 	if(now === '01' || now === '02' || now === '03') Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 8});
 }
+
+var determineShowBadgeId = function(_programId,_numCheckins) {
+	if(_programId === "CH3_CTBMT") {
+		//badge desc: AKBingo LV1		
+		//condition: 3 checkins in AKBingo
+		//badge id: 9
+		if(_numCheckins === 3) return 9;
+		//badge desc: AKBingo LV2		
+		//condition: 5 checkins in AKBingo
+		//badge id: 10
+		else if(_numCheckins === 5) return 10;
+		//badge desc: AKBingo LV3		
+		//condition: 10 checkins in AKBingo
+		//badge id: 11
+		else if(_numcheckins === 10) return 11;
+	} else if(_programId === "CH3_TNNKK") {
+		if(_numCheckins === 3) return 12;
+		else if(_numCheckins === 5) return 13;
+		else if(_numcheckins === 10) return 14;
+	}
+	else return 0;
+}
+
+var checkProgramCondition = function(_programId) {
+	var checkinCount = getNumCheckinsOfProgramId(_programId);
+	alert('checkinCount// '+_programId+' = '+checkinCount);
+	var badgeId = determineShowBadgeId(_programId,checkinCount);
+	alert('badgeId: '+badgeId);
+	if(badgeId!==0) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: badgeId});
+}	
 
 var newBadgeUnlockCallback = function(e){
 	var ActivityACS = require('acs/activityACS');
@@ -107,7 +150,6 @@ var newBadgeUnlockCallback = function(e){
 	LeaderACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 }
 	
-
 Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);	
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
 
@@ -117,6 +159,7 @@ exports.checkinEvent = function(_checkinData){
 	checkTimeCondition();
 	Ti.API.info('checkinEvent//_checkinData.program_type: '+_checkinData.program_type);
 	checkTypeCondition(_checkinData.program_type);
+	checkProgramCondition(_checkinData.program_id);
 }
 
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){

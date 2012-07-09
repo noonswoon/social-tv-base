@@ -257,20 +257,21 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			var activityId = allIdDataForACS[2]; 			//local id
 
 			//require callback from acs
-			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
-			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+		//	CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+		//	ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 			
 			//done after adding to acs
-			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
-			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+		//	PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
+		//	LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 			
 			//check badge condition from checkin
 			checkinData.program_type = _tvprogramData.programType;
+			checkinData.program_id = _tvprogramData.programId;
 			Ti.API.info('calling BadgeCondition.checkinEvent // checkinData.program_type: '+checkinData.program_type);
 			BadgeCondition.checkinEvent(checkinData);
-			myCurrentCheckinPrograms.push(_tvprogramData.programId);
-			Ti.API.info('firing checinToProgram event!');
-			Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
+		//	myCurrentCheckinPrograms.push(_tvprogramData.programId);
+		//	Ti.API.info('firing checinToProgram event!');
+		//	Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 		});
 	}
 	else{

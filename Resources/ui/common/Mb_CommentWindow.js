@@ -101,8 +101,6 @@ function CommentWindow(_topicId) {
 		topicOwnerDeviceTokenId = curTopic.deviceTokenId;
 				
 		commentHeader._setTitle(curTopic.title);
-		// commentHeader._setContent(curTopic.content);
-		// commentHeader._setPhoto(curTopic.photo);	
 		
 		//use momentjs for helping on converting dateObject from string
 		//problematic because ACS stores the date as a string with timezone format (+0000)
@@ -245,8 +243,9 @@ function CommentWindow(_topicId) {
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
 		var topicOwnerUsername = curTopic.username;
 		if(topicOwnerUsername !== acs.getUserLoggedIn().username) { //only send if someone else (not You!) comments on the post
-			UrbanAirship.sendPushNotification(topicOwnerDeviceTokenId,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
-			Ti.API.info('sending notification..coz someone else comments on your topic');
+			var PushNotificationCTB = require('ctb/pushnotificationCTB');
+			PushNotificationCTB.pushNotificationCTB_sendPN(topicOwnerDeviceTokenId,1,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
+		
 		}
 		
 		//activity on comment

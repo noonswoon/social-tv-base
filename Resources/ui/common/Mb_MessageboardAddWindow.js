@@ -39,7 +39,7 @@ function MessageboardAddWindow(_programId) {
 	});
 	textAndButtonView.add(titleLabel);
 		
-	var topicTitle = Ti.UI.createTextField({
+	var titleTextFieldInput = Ti.UI.createTextField({
 		top: 30,
 		height:35,
 		left:10,
@@ -47,7 +47,7 @@ function MessageboardAddWindow(_programId) {
 		editable: true,
 		borderStyle:Titanium.UI.INPUT_BORDERSTYLE_ROUNDED
 	})
-	textAndButtonView.add(topicTitle);
+	textAndButtonView.add(titleTextFieldInput);
 	
 	var contentLabel = Ti.UI.createLabel({
 		text: 'Content',
@@ -57,7 +57,7 @@ function MessageboardAddWindow(_programId) {
 	});
 	textAndButtonView.add(contentLabel);
 
-	var topicContent = Ti.UI.createTextArea({
+	var contentTextAreaInput = Ti.UI.createTextArea({
 		value: '',
 		top: 100,
 		left: 10,
@@ -70,16 +70,16 @@ function MessageboardAddWindow(_programId) {
     	backgroundColor: 'transparent',
     	backgroundImage: 'images/messageboard/add/textareaBG.png'
 	});
-	textAndButtonView.add(topicContent);
+	textAndButtonView.add(contentTextAreaInput);
 	
-	var addImage = Ti.UI.createButton({
+	var addImageButton = Ti.UI.createButton({
 		title: 'Add Image',
 		top: 200,
 		width: 120,
 		height: 40,
 		left: 10
 	});
-	textAndButtonView.add(addImage);
+	textAndButtonView.add(addImageButton);
 	
 	var thumbnailLabel = Ti.UI.createLabel({
 		text: 'No Image',
@@ -99,22 +99,20 @@ function MessageboardAddWindow(_programId) {
 	});
 	textAndButtonView.add(thumbnail);
 	
-	var addButton = Ti.UI.createButton({
+	var postButton = Ti.UI.createButton({
 		title: 'Post!',
 		top: 250,
 		left: 10,
 		width: 300,
 		height: 40,
-		// backgroundImage: 'images/messageboard/add/addbutton.png',
-		// backgroundSelectedImage: 'images/messageboard/add/addbutton_onclick.png'
 	});
-	textAndButtonView.add(addButton);
+	textAndButtonView.add(postButton);
 	
 	var addImageDialog = Titanium.UI.createOptionDialog({
 		options: ['Take a photo','Select from library']
 	});
 	
-	addImage.addEventListener('click',function(){
+	addImageButton.addEventListener('click',function(){
 		addImageDialog.show();
 	});
 	
@@ -140,30 +138,30 @@ function MessageboardAddWindow(_programId) {
 	
 	
 	//ADDING UI COMPONENTS TO THE WINDOW
-	self.add(topicTitle);
+	self.add(titleTextFieldInput);
 	self.add(addTopicToolbar);
 	self.add(textAndButtonView);
 		
 	//ADDING EVENT LISTENERS
-	addButton.addEventListener('click', function(e) {
-		if(topicTitle.value === '') {
+	postButton.addEventListener('click', function(e) {
+		if(titleTextFieldInput.value === '') {
 			return;
 		}
 		
 		//1. insert to the db topic table
 		var fileNamePath = null;
 		if(filename === null){
-			var newId = Topic.topicModel_add(programId, 0,topicTitle.value,topicContent.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+			var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 		}
 		else{
 			fileNamePath = filename.nativePath
-			var newId = Topic.topicModel_add(programId, 0,topicTitle.value,topicContent.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+			var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 		}
 
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
-			title: topicTitle.value,
-			content: topicContent.value,
+			title: titleTextFieldInput.value,
+			content: contentTextAreaInput.value,
 			photo: fileNamePath,
 			id: newId,
 			acsObjectId:0,
@@ -176,12 +174,12 @@ function MessageboardAddWindow(_programId) {
 		
 		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
-		//3 call TopicACS.topicACS_create(topicTitle.value,programId,newId);
-		TopicACS.topicACS_create(topicTitle.value,topicContent.value,filename,programId,newId);
+		//3 call TopicACS.topicACS_create(titleTextFieldInput.value,programId,newId);
+		TopicACS.topicACS_create(titleTextFieldInput.value,contentTextAreaInput.value,filename,programId,newId);
 		
 		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
 		// in the function callback in Mb_MessageboardMainWindow.js
-		topicTitle.value = '';		
+		titleTextFieldInput.value = '';		
 		self.close();
 	
 	});

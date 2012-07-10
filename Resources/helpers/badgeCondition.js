@@ -29,7 +29,8 @@ var checkCountCondition = function(e) {
 	//badge id: 2
 	else if(checkinCount >= 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
 }
-	exports.checkFriendCondition = function(_friendCheckIn) {
+
+exports.checkFriendCondition = function(_friendCheckIn) {
 	//badge desc: love sharing		
 	//condition: checkin with more than 5 friends
 	//badge id: 3	
@@ -106,15 +107,16 @@ var newBadgeUnlockCallback = function(e){
 	LeaderACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 }
 	
+
 Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);	
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
 
 /////////////////////////////////////////////////////////////////////
 
 exports.checkinEvent = function(_checkinData){
-		checkTimeCondition();
-		Ti.API.info('checkinEvent//_checkinData.program_type: '+_checkinData.program_type);
-		checkTypeCondition(_checkinData.program_type);
+	checkTimeCondition();
+	Ti.API.info('checkinEvent//_checkinData.program_type: '+_checkinData.program_type);
+	checkTypeCondition(_checkinData.program_type);
 }
 
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){

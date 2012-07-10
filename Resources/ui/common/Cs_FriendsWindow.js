@@ -22,7 +22,6 @@ FriendsWindow = function(_parent){
 	var friendsList = [];
 
 	allMyFriends = friend.friendModel_fetchFriend(user_id);
-	Ti.API.info('allMyFriends.length = '+allMyFriends);
 	for(var i = 0; i<allMyFriends.length;i++){
 		var friends = allMyFriends[i].friend_id;
 		friendsList.push(friends);
@@ -43,9 +42,11 @@ FriendsWindow = function(_parent){
 	//EventListener
 	Ti.App.addEventListener('friendsCheckInLoaded',function(e){
 		var checkinsOfFriends;
-		if(e.fetchedAllFriendsCheckins=== undefined) checkinsOfFriends = 0;
-		else checkinsOfFriends = e.fetchedAllFriendsCheckins;
-		Ti.API.info(checkinsOfFriends);
+		if(e.fetchedAllFriendsCheckins=== undefined)
+			checkinsOfFriends = 0;
+		else
+			checkinsOfFriends = e.fetchedAllFriendsCheckins;
+		
 		var totalFriendCheckins = e.fetchedTotalFriendCheckins;
 		var results = [];
 		
@@ -91,7 +92,6 @@ FriendsWindow = function(_parent){
 	});
 	
 	friendsTableView.addEventListener('click',function(e){
-
  		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.programId,
 			programTitle: e.row.tvprogram.programName,
@@ -100,7 +100,6 @@ FriendsWindow = function(_parent){
 			programChannel: e.row.tvprogram.programChannel,
 			programNumCheckin: e.row.checkin
 		}, _parent.containingTab);	
-		
 		_parent.containingTab.open(checkinmainwin);
 	})
 	

@@ -35,7 +35,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	lWin.add(enterUsername);
 
 	//EVENTS REGISTERING
-	enterUsername.addEventListener('click', function() {
+	enterUsername.addEventListener('click', function() {ะ
 		var providedUsername = usernameTextField.value;
 		Debug.debug_print("Creating new user");
 		Cloud.Users.create({
@@ -56,9 +56,13 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 				
 				//link with third party account
 				var leaderBoardACS = require('acs/leaderBoardACS');
-				leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
+				var PushNotificationCTB = require('ctb/pushnotificationCTB');
 				var pointModel = require('model/point');
-				var leaderboardCallBack = function(e){
+				
+				leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
+				PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());
+				
+				var leaderboardCallBack = function(e) {
 					pointModel.pointModel_updateLeadersFromACS(e.fetchedUser);
 				};
 				Ti.App.addEventListener("createLeaderBoardUser",leaderboardCallBack);

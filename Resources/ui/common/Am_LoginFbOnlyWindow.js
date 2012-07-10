@@ -34,7 +34,7 @@ var LoginFbOnlyWindow = function() {
 	var fbLoginStatuslbl = Ti.UI.createLabel({
 		text:'We will not auto-post to your account.',
 		color: '#fff',
-		font:{fontSize:13, },//fontWeight: 'bold'},
+		font:{fontSize:13, },
 		height:'auto',
 		top: 170,
 		textAlign:'center'
@@ -48,24 +48,25 @@ var LoginFbOnlyWindow = function() {
 		visible:true
 	});
 	
+	var registerPushNotifBtn = Ti.UI.createButton({
+		title:'Register device',
+		top:0,
+		width:200,
+		height:20
+	});
+	
 	var label = Ti.UI.createLabel({
 		text:'Attempting to register with Apple for Push Notifications...',
 		textAlign:'center',
-		width:'auto'
-	});
-	
-	var registerPushNotifBtn = Ti.UI.createButton({
-		title:'Register device',
-		top:10,
-		width:200,
-		height:40
+		width:'auto',
+		backgroundColor: 'white'
 	});
 	
 	var urbanAirshipUnregisterDeviceBtn = Ti.UI.createButton({
 		title:'Unregister device from UA',
-		top:10,
+		top:0,
 		width:200,
-		height:40
+		height:20
 	});
 	
 	//ADDING UI COMPONENTS TO WINDOW
@@ -74,9 +75,9 @@ var LoginFbOnlyWindow = function() {
 	self.add(fbLoginStatuslbl);
 	self.add(whyFbBtn);
 	
-	self.add(label);
-	self.add(registerPushNotifBtn);
-	self.add(urbanAirshipUnregisterDeviceBtn);
+//	self.add(registerPushNotifBtn);
+//	self.add(label);
+//	self.add(urbanAirshipUnregisterDeviceBtn);
 	
 	//FUNCTIONS CALLBACK
 	function successNotifCallback(e) {
@@ -112,7 +113,18 @@ var LoginFbOnlyWindow = function() {
 		}
 		alert(message);	
 	}	
-
+		
+	// register for push notifications
+	Titanium.Network.registerForPushNotifications({
+		types:[
+			Titanium.Network.NOTIFICATION_TYPE_BADGE,
+			Titanium.Network.NOTIFICATION_TYPE_ALERT,
+			Titanium.Network.NOTIFICATION_TYPE_SOUND
+		],
+		success: successNotifCallback, //successful registration will call this fn
+		error: errorNotifCallback, //failed registration will call this
+		callback: messageNotifCallback //when receive the message will call this fn
+	});
 	
 	//EVENTS REGISTERING		
 	fbLoginButton.addEventListener('click', function() {
@@ -129,19 +141,7 @@ var LoginFbOnlyWindow = function() {
 	Ti.Facebook.addEventListener('login', facebookAuthenCallback); //facebookAuthenCallback def is in helpers/facebookAuthenListeners.js
 	//do Ti.Facebook.removeEventListener('login', xxx) in Am_LoginTabGroup file (when the tab is about to close)
 	
-	registerPushNotifBtn.addEventListener('click', function() {
-		// register for push notifications
-		Titanium.Network.registerForPushNotifications({
-			types:[
-		        Titanium.Network.NOTIFICATION_TYPE_BADGE,
-		        Titanium.Network.NOTIFICATION_TYPE_ALERT,
-		        Titanium.Network.NOTIFICATION_TYPE_SOUND
-		    ],
-		    success: successNotifCallback, //successful registration will call this fn
-		    error: errorNotifCallback, //failed registration will call this
-		    callback: messageNotifCallback //when receive the message will call this fn
-		});			
-	});
+	
 	
 	urbanAirshipUnregisterDeviceBtn.addEventListener('click', function() {
 		UrbanAirship.unRegisterDeviceToken();

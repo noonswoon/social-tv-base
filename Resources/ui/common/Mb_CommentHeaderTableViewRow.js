@@ -1,7 +1,4 @@
 CommentHeaderTableViewRow = function(_topicId) {
-	
-	Ti.API.info("This is topiccccccccccccccccccccccccc: "+_topicId);
-	
 	var Topic = require('model/topic');
 	var topic = Topic.topicModel_getTopicById(_topicId);
 	
@@ -22,8 +19,8 @@ CommentHeaderTableViewRow = function(_topicId) {
 		backgroundColor: 'transparent'
 	});
 	
-// COMMENT TOPIC SECTION
-// DATE SUBMISSION SECTION
+	// COMMENT TOPIC SECTION
+	// DATE SUBMISSION SECTION
 	var topicRow = Ti.UI.createTableViewRow({
 		height: 52,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
@@ -83,7 +80,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 	var numLines = Math.ceil(contentWidth / ONE_LINE_LENGTH); 
 	var commentTopIndent = numLines * contentHeight;
 	
-// ADD NEW COMMENT SECTION
+	// ADD NEW COMMENT SECTION
 	var textAreaRow = Ti.UI.createTableViewRow({
 		top: commentTopIndent,
 		height: 70,
@@ -161,13 +158,6 @@ CommentHeaderTableViewRow = function(_topicId) {
 	headerMainRow._setTitle = function(_title) {
 		topicTitle.text = _title;
 	};
-	
-		// var topicWidth = topicRow.toImage().width; 
-		// var topicHeight = topicRow.toImage().height; 
-// 		
-		// var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
-		// alert('why are you messing with header height???');
-		// headerMainRow.height = numLines * topicHeight + textAreaRow.toImage().height + 5;
 	
 	headerMainRow._setSubmissionTime = function(_submissionTime) {
 		dateLabel.text = _submissionTime;

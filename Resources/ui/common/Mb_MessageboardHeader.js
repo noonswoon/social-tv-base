@@ -16,6 +16,7 @@ MessageboardHeader = function(_showName,_showSubName) {
 		width:120,
 		height:90
 	});
+	
 	header.programImageView = Ti.UI.createView({
 		width: 133,
 		height: 104,

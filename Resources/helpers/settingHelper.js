@@ -2,7 +2,7 @@ exports.setFacebookShare = function(_shareSetting) {
 	Ti.App.Properties.setInt('facebookShare',_shareSetting);
 }
 
-exports.getFacebookShare = function(_shareSetting) {
+exports.getFacebookShare = function() {
 	if(Ti.App.Properties.hasProperty('facebookShare'))
 		return Ti.App.Properties.getInt('facebookShare');
 	else {
@@ -10,12 +10,12 @@ exports.getFacebookShare = function(_shareSetting) {
 		return true;
 	}
 }
-
+ 
 exports.setPushComment = function(_pushCommentSetting) {
 	Ti.App.Properties.setInt('pushComment',_pushCommentSetting);
 }
 
-exports.getPushComment = function(_pushCommentSetting) {
+exports.getPushComment = function() {
 	if(Ti.App.Properties.hasProperty('pushComment'))
 		return Ti.App.Properties.getInt('pushComment');
 	else {
@@ -28,7 +28,7 @@ exports.setFriendsCheckin = function(_friendsCheckinSetting) {
 	Ti.App.Properties.setInt('friendsCheckin',_friendsCheckinSetting);
 }
 
-exports.getFriendsCheckin = function(_friendsCheckinSetting) {
+exports.getFriendsCheckin = function() {
 	if(Ti.App.Properties.hasProperty('friendsCheckin'))
 		return Ti.App.Properties.getInt('friendsCheckin');
 	else {

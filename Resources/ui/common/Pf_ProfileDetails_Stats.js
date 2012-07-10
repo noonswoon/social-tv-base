@@ -78,8 +78,10 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		if(expBar.value === 0) expBar.thumbImage = 'images/empty_thumb.png';
 		else expBar.thumbImage = 'images/slider/thumb_bar.png';
 		
-		myLevelLabel.text = LevelModel.level_checkLevel(totalPoints);
+		myLevel = LevelModel.level_checkLevel(totalPoints);
+		myLevelLabel.text = myLevel;
 		expBar_light.value = (totalPoints+5);
+		
 	}
 
 	var leaderLabel = Ti.UI.createLabel({
@@ -89,16 +91,17 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		height:30,
 		textAlign: 'left',
 		left: 10,
-		top:0
+		top:10
 	});
 
 	var leaderTable = Ti.UI.createTableView({
-		top: 30,
+		top: 40,
 		borderRadius: 10,
 		scrollable:false,
 		disableBounce: true,
 		width: 290,
 		height: 'auto',
+		zIndex: 10
 	});
 		
 	var createLeaderBoardView = function(leaderBoardData) {
@@ -180,12 +183,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;
 		profileStats.height = expSec.height + leaderSec.height;
-		
-		leaderTable.addEventListener('click',function(e) {
-			if(e.rowData.user_id!==curId) {
-				_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
-			}
-		});
 	} //end of function: createLeaderBoardView
 
 	updateExpBar();
@@ -221,13 +218,59 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			Ti.API.info('leaderBoardData.length = '+leaderBoardData.length);
 	    	leaderBoardData.sort(totalPointSort);
 	    	createLeaderBoardView(leaderBoardData);
+	    	addMoreFriend(leaderBoardData);
 	    	updateExpBar();
+	    	
+		    //TODO: test test
+		    if(_status==="me") {
+				Ti.API.info("cache");
+				var totalPoints = PointModel.pointModel_fetchMyPoint(curId);
+				myLevel = LevelModel.level_checkLevel(totalPoints);
+				var CacheHelper = require('helpers/cacheHelper');
+				CacheHelper.levelUpCache("level"+acs.getUserId(),myLevel);
+			}	
+	    	
+	    	
+		}
+		
+		var addMoreFriend = function(_data) {
+			if(_data.length<=10) {
+				var addFriendLabel = Ti.UI.createLabel({
+					text: ' + more friend...',
+					top: 0,
+					font: {fontSize: 14, fontWeight: 'bold'},
+					color: '#fff',
+					height: 30, width: 110,
+					zIndex: 2
+				});
+				var addFriendView = Ti.UI.createView({
+					backgroundColor: '#53b4df',
+					right: 11, top: 15,
+					width: 120, height: 50,
+					borderRadius: 10,
+					zIndex: 1
+				});
+			addFriendView.add(addFriendLabel);	
+			leaderSec.add(addFriendView);
+			addFriendLabel.addEventListener('click',function() {
+				var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
+				var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
+				_parentWindow.containingTab.open(addFriendMainWindow);
+			});
+			}
 		}
 		
 		Ti.App.addEventListener('friendsLoaded',friendLoadedCallBack);
 		Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);	
 		Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);
 		Ti.App.addEventListener('leaderDbUpdated',leaderDbUpdatedCallBack);		
+		
+				
+		var newProfileWin = function(e){
+			if(e.rowData.user_id!==curId) _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
+		}
+		
+		leaderTable.addEventListener('click',newProfileWin);
 		
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);

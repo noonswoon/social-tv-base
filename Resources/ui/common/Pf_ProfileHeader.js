@@ -1,14 +1,16 @@
 var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	//possible value for _status = me / friend / stranger
+
 	var CheckinACS = require('acs/checkinACS');		
 	var FriendACS = require('acs/friendsACS');
 	var myBadgeACS = require('acs/myBadgeACS');
 	var ActivityACS = require('acs/activityACS');
 
 	var FriendsModel = require('model/friend');
+	var UserModel = require('model/user');
+	
 	var CacheHelper = require('helpers/cacheHelper');
 	var updateActivity = require('helpers/updateActivity');
-	var UserModel = require('model/user');
 
 	var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
 
@@ -35,21 +37,14 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		endPoint: { x: '0%', y: '100%' },
 		colors: [{ color: '#fffefd', offset: 0.0}, { color: '#d2d1d0', offset: 1.0 }]
 	};	
-
+	
 	var profilePicture = Ti.UI.createImageView({
 		image: acs.getUserImageNormalOfFbId(_userProfile.fb_id),
 		width: 90,
 		height: 90,
 		backgroundColor: 'transparent'
 	});
-	
-	//testing friend from facebook
-	profilePicture.addEventListener('click', function(){
-	var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
-	var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
-		_parentWindow.containingTab.open(addFriendMainWindow);
-	});
-	
+
 	var profilePictureContain = Ti.UI.createView({
 		backgroundColor: '#fff',
 		top: 10, left: 10,
@@ -57,7 +52,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		width:100, height:100,
 		borderColor: '#b1b1b1'
 	});
-		
+
 	var profileName = Ti.UI.createLabel({
 		text: _userProfile.first_name + ' ' + _userProfile.last_name,
 		top: 5,
@@ -66,8 +61,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		width: 'auto',
 		height: 30,
 		font: { fontWeight: 'bold', fontSize: 15}
-	})
-		
+	});
+
 	var columnCheckIn = Ti.UI.createView({
 		top: 40,
 		left: 120,
@@ -131,6 +126,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	 	image: 'images/icon/checkin.png',
 		top: 10,
 	 });
+	 
 	var columnIsFriendLabel = Ti.UI.createLabel({
 		text: "Friend",
 		font: {fontSize: 15, fontStyle: 'bold'},
@@ -231,7 +227,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		}	
 		_parentWindow.close();
  	}	
-
+ 	
 	//Create view for header
 	var createHeaderView = function(status){
 		profilePictureContain.add(profilePicture);
@@ -290,13 +286,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  		}
  		addFriend(isRequest,i);
  	});
-
-	// headerView._setProfileName = function() {
-		// //select from db and set label text for firstname/lastname
-		// var profile = UserModel.userModel_fetchUserProfile(curId);
-		// profileName.text = profile.first_name + ' ' + profile.last_name;
-	// };
-
+	
+	/* setting stuff..unrelated
+	headerView._setProfileName = function() {
+		//select from db and set label text for firstname/lastname
+		var profile = UserModel.userModel_fetchUserProfile(curId);
+		profileName.text = profile.first_name + ' ' + profile.last_name;
+	};
+	*/
+	
 	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);
 

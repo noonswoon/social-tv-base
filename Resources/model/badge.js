@@ -40,16 +40,6 @@ exports.badge_fetchBadges = function(){
 
 exports.fetchedBadgeSearch = function(_badgeId){
 	var db = Ti.Database.open('Chatterbox'); 
-	
-	var result = db.execute('SELECT * FROM badges');
-	var count = 0;
-	while(result.isValidRow()) {
-		Ti.API.info('badgeId in loop: '+result.fieldByName('badgeID'));
-		count++;
-		result.next();
-	}
-	Ti.API.info("total numBadges: "+count);
-	
 	Ti.API.info('we are looking for badgeId: '+_badgeId);
 	var result = db.execute('SELECT * from badges where badgeID = ?', _badgeId+""); //WATCH OUT..NEED TO CONVERT _badgeId to String since we store it in db as TEXT
 	var badgeData = null;
@@ -65,7 +55,5 @@ exports.fetchedBadgeSearch = function(_badgeId){
 	}
 	result.close();
 	db.close();
-	//Ti.App.fireEvent('finishSearchBadge',{badgeData: fetchedABadge});
-	//return fetchedABadge;
 	return badgeData;
 };

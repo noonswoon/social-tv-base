@@ -235,7 +235,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		var addMoreFriend = function(_data) {
 			if(_data.length<=10) {
 				var addFriendLabel = Ti.UI.createLabel({
-					text: ' + more friend...',
+					text: ' + add friends...',
 					top: 0,
 					font: {fontSize: 14, fontWeight: 'bold'},
 					color: '#fff',

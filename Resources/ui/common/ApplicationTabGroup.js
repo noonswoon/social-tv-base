@@ -101,7 +101,6 @@ function ApplicationTabGroup() {
 	function levelLoadedCallBack(e) {					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
 	}
-	
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
 	
 	function checkinDbLoadedCallBack(e){			
@@ -114,6 +113,23 @@ function ApplicationTabGroup() {
 			var eventId = eventsCheckedIn[i].event_id; 
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
 			myCurrentCheckinPrograms.push(programId);
+		}
+		
+		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length >= 0) { //re-instantiate 3 windows
+			myCurrentSelectedProgram = myCurrentCheckinPrograms[0];
+			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+			messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
+			productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+			
+			chatwin.containingTab = chatTab;
+			messageboardwin.containingTab = messageboardTab;
+			productwin.containingTab = productTab;
+				
+			chatTab.window = chatwin;
+    		messageboardTab.window = messageboardwin;
+			productTab.window = productwin;
+
+			Ti.API.info('reinstantinated 3 windows...');		
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	}	
@@ -134,6 +150,18 @@ function ApplicationTabGroup() {
    	}
   	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
    	
+   	var checkinToProgramCallbackInAppTabGroup = function(e) {
+		var checkinProgramId = e.checkinProgramId; 
+		var checkinProgramName = e.checkinProgramName;
+		myCurrentSelectedProgram = checkinProgramId;
+		myCurrentCheckinPrograms.push(checkinProgramId);
+		if(myCurrentSelectedProgram === '') { //re-instantiate 3 windows
+			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+			messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
+			productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+		}
+	};
+	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
     return self;
 };
 

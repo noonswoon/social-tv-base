@@ -8,7 +8,7 @@ exports.tvprogramACS_fetchAllProgramShowingNow = function() {
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr'+
 			  	'&per_page=20&where={"start_time":{"$gte":"'+start_of_the_day+'","$lte":"'+end_of_the_day+'"}}';	
 			  			  	
-	Ti.API.info('fetchAllProgramShowingNow: '+url);	
+	//Ti.API.info('fetchAllProgramShowingNow: '+url);	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);

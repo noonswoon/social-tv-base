@@ -1,6 +1,5 @@
 
-var setAppProperties_permission = function(_permissions) {
-	Ti.API.info('_permissions.length = '+_permissions.length);
+var setBadgeOfShowPermission = function(_permissions) {
 	for(var i=0;i<_permissions.length;i++) {
 		if(!Ti.App.Properties.hasProperty(_permissions[i].program_id+'allowance')) {
 			Ti.App.Properties.setBool(_permissions[i].program_id+'allowance',_permissions[i].isAllowed);
@@ -13,8 +12,8 @@ var setAppProperties_permission = function(_permissions) {
 	Ti.App.fireEvent('badgeShowPermissionLoaded');
 }
 
-exports.getAppProperties_permission = function(_program_id) {
-	var permission = Ti.App.Properties.getBool(_program_id+'allowance');
+exports.getBadgeOfShowPermission = function(_programId) {
+	var permission = Ti.App.Properties.getBool(_programId+'allowance');
 	if(permission) return true;
 	else return false;
 }
@@ -29,10 +28,9 @@ exports.badgeShowPermissionACS_fetchedPermission = function() {
 	    	var permission =[];
 	        for (var i = 0; i < e.BadgeShowPermission.length; i++) {
 	        	 var curAllowed = e.BadgeShowPermission[i];
-	        	 Ti.API.info('Show allowed to get badge #'+i+': '+curAllowed.program_id);
-	               permission.push(curAllowed);
+	        	 permission.push(curAllowed);
 	         }
-	         setAppProperties_permission(permission);
+	         setBadgeOfShowPermission(permission);
 	    } 
 	    else {
 	        alert('badgeShowPermissionACS/fetchedPermission Error:\\n' +

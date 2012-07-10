@@ -105,9 +105,9 @@ function PopularWindow(_parent) {
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
 		var viewRowsData = [];
 		for (var i=0;i<currentTVPrograms.length;i++) {
-			 var curTVProgram = currentTVPrograms[i];
-				var row = new PopularWindowTableViewRow(curTVProgram);
-				viewRowsData.push(row);
+			var curTVProgram = currentTVPrograms[i];
+			var row = new PopularWindowTableViewRow(curTVProgram);
+			viewRowsData.push(row);
 		}
 		programListTable.setData(viewRowsData);
 		

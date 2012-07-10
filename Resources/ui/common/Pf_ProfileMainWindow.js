@@ -39,7 +39,6 @@ function ProfileMainWindow(_id,_status) {
 	var userProfile = UserModel.userModel_fetchUserProfile(_id);
 			
 	var createProfileView = function(userProfile){
-		Ti.API.info('createProfileView: ' + userProfile.first_name +' ' + userProfile.last_name);	
 		if(_status==="me"){
 			self.title = 'My Profile';
 		}

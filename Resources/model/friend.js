@@ -14,7 +14,6 @@ exports.friendModel_updateFriendsFromACS = function(_friendsCollection) {
 	db.execute('DELETE FROM friends');
 	for(var i=0;i < _friendsCollection.length; i++) {
 		var curFriend = _friendsCollection[i];
-		Ti.API.info("FACSBOOK ID: "+curFriend.fb_id);
 		db.execute("INSERT INTO friends(id,my_id,friend_id,fb_id,username,first_name,last_name,email) VALUES(null,?,?,?,?,?,?,?)", curFriend.my_id,curFriend.friend_id,curFriend.fb_id,curFriend.username,curFriend.first_name,curFriend.last_name,curFriend.email);
 	}
 	db.close();
@@ -39,7 +38,6 @@ exports.friendModel_fetchFriend = function(_myID) {
 	}
 	result.close();
 	db.close();
-	Ti.API.info('fetchedFriend.length = '+fetchedFriend.length);
 	return fetchedFriend;
 };
 

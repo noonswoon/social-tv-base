@@ -10,14 +10,7 @@ AddFriendsMainView = function(_parentWindow) {
 	var nav = Ti.UI.iPhone.createNavigationGroup({
 		window: self
 	});			
-	var settingButton = Titanium.UI.createButton({
-		image: 'images/icon/pf_option.png'
-	});
-	settingButton.addEventListener('click',function(){	
-		var PlaceholderWindow = require('ui/common/PlaceholderWindow');			
-		var placeholderWindow = new PlaceholderWindow();
-		_parentWindow.containingTab.open(placeholderWindow);
-	});
+
 //////////////////////////////////////////////////////////////////
 	var mainView = Ti.UI.createView({
 		top: 0,
@@ -235,7 +228,6 @@ AddFriendsMainView = function(_parentWindow) {
 	mainView.add(friendTab);
 	mainView.add(friendScrollView);
 	self.add(mainView);	
-	self.setRightNavButton(settingButton);	
 	return self;
 }
 module.exports = AddFriendsMainView;

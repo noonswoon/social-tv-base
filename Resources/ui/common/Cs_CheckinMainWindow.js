@@ -272,7 +272,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
 		checkinView.touchEnabled = false;
 	}
-
 	
 	//Me Button
 	meView.addEventListener('touchstart',function(){

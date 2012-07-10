@@ -9,8 +9,7 @@ exports.leaderACS_fetchedRank = function(_ids){
 	}, function (e) {
 	    if (e.success) {
 	    	var leaders = [];
-	    	Ti.API.info('success: '+e.LeaderBoard.length);
-	        for (var i = 0; i < e.LeaderBoard.length; i++){
+	    	for (var i = 0; i < e.LeaderBoard.length; i++){
 	        	 var curRank = e.LeaderBoard[i];
 	        	 leaders.push(curRank);
 	         }

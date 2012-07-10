@@ -8,16 +8,18 @@ CommentHeaderTableViewRow = function(_topicId) {
 	var headerTableData = [];
 	
 	var headerMainRow = Ti.UI.createTableViewRow({
-		// selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		backgroundColor: 'orange'
+	 	selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: 'transparent'
 	});
 
 	//tableview inside tableviewrow	
 	var headerTable = Ti.UI.createTableView({
 		top: 0,
-		height: 420,
-		backgroundColor: 'green',
-		scrollable: false
+		height: 'auto',
+		scrollable: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		separatorColor: 'transparent',
+		backgroundColor: 'transparent'
 	});
 	
 // COMMENT TOPIC SECTION
@@ -50,13 +52,12 @@ CommentHeaderTableViewRow = function(_topicId) {
 	
 	//ADD PHOTO SECTION
 	var photoView = Ti.UI.createTableViewRow({
-		backgroundColor: 'red',
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		height: 'auto'
 	});
 	
 	var photoOfTopic = Ti.UI.createImageView({
-		// image: 'dummy.png',
+		image: topic.photo,
 		left: 10,
 		right: 10,
 		width: 300,
@@ -66,24 +67,27 @@ CommentHeaderTableViewRow = function(_topicId) {
 	
 	//ADD CONTENT SECTION
 	var contentView = Ti.UI.createTableViewRow({
-		backgroundColor: 'blue',
-		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		height: 100
+		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
 	}); 
 	
 	var content = Ti.UI.createLabel({
 		text: topic.content,
 		top: 10,
 		left: 10,
-		right: 10
+		right: 10,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	});
+	
+	var contentWidth = content.toImage().width; 
+	var contentHeight = content.toImage().height; 
+	var numLines = Math.ceil(contentWidth / ONE_LINE_LENGTH); 
+	var commentTopIndent = numLines * contentHeight;
 	
 // ADD NEW COMMENT SECTION
 	var textAreaRow = Ti.UI.createTableViewRow({
-		top:52,
+		top: commentTopIndent,
 		height: 70,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		backgroundColor: 'yellow'
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
 	
 	var replyButton = Titanium.UI.createButton({
@@ -123,17 +127,20 @@ CommentHeaderTableViewRow = function(_topicId) {
 	topicRow.add(topicTitle);
 	topicRow.add(dateLabel);
 	textAreaRow.add(replyTextArea);
-	photoView.add(photoOfTopic)
 	contentView.add(content);
 	
 	//setup data for the headerTable
 	headerTableData.push(topicRow);
-	headerTableData.push(photoView);
+	
+	if(topic.photo !== null){
+		photoView.add(photoOfTopic);	
+		headerTableData.push(photoView);
+	}
+
 	headerTableData.push(contentView);
 	headerTableData.push(textAreaRow);
-
 	headerTable.setData(headerTableData);
-	
+
 	//class methods -- for some reason, has to have underscore '_' prefix
 	headerMainRow._getReplyTextAreaContent = function() {
 		return replyTextArea.value;

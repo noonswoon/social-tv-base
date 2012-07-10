@@ -120,23 +120,6 @@ ProductBuyWindow = function(_product){
 	});
 	productDetailView.add(productDescription);
 	
-	// var productDescWidth = productDescription.toImage().width; 
-	// var productDescHeight = productDescription.toImage().height; 
-	// var numLines = Math.ceil(productDescWidth / ONE_LINE_LENGTH); 
-	// var productLinkTopIndent = numLines * productDescHeight;
-// 	
-	// var productLink = Ti.UI.createLabel({
-		// top: productLinkTopIndent+50,
-		// text: 'Link: http://www.google.com',
-		// font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		// left: 15
-	// });
-	// productDetailView.add(productLink);
-	
-	// productLink.addEventListener('click',function(){
-		// Ti.Platform.openURL('http://www.google.com');
-	// });
-	
 	self.add(scrollView);
 	scrollView.add(productImageView);
 	scrollView.add(barOfProduct);

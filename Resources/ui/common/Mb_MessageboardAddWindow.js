@@ -27,21 +27,19 @@ function MessageboardAddWindow(_programId) {
 	
 	var textAndButtonView = Ti.UI.createView({
 		top: 49,
-		heigth: 'auto',
+		heigth: 70,
 		backgroundImage: 'images/messageboard/add/textandbuttonviewBG.png'
 	});
 	
 	var title = Ti.UI.createLabel({
-		text: 'Topic Title',
+		text: 'Title',
 		top: 10,
 		left: 10,
 		font:{fontWeight:'bold',fontSize:14},
 	});
 	textAndButtonView.add(title);
-	
-	
+		
 	var topicTitle = Ti.UI.createTextField({
-		color:'#336699',
 		top: 30,
 		height:35,
 		left:10,
@@ -51,15 +49,8 @@ function MessageboardAddWindow(_programId) {
 	})
 	textAndButtonView.add(topicTitle);
 	
-	// var photoIcon = Ti.UI.createImageView({
-		// image: 'images/messageboard/add/photo.png',
-		// top: 80,
-		// left: 10
-	// });
-	// textAndButtonView.add(photoIcon);
-	
 	var title = Ti.UI.createLabel({
-		text: 'Say something',
+		text: 'Content',
 		top: 80,
 		left: 10,
 		font:{fontWeight:'bold',fontSize:14},
@@ -73,9 +64,8 @@ function MessageboardAddWindow(_programId) {
 		right: 10,
 		width: 300,
 		height: 80,
-		editable: true,
 		borderRadius: 5,
-		font: {fontSize:14},
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		textAlign: 'left',
     	backgroundColor: 'transparent',
     	backgroundImage: 'images/messageboard/add/textareaBG.png'
@@ -96,7 +86,8 @@ function MessageboardAddWindow(_programId) {
 		top: 200,
 		width: 120,
 		height: 40,
-		left: 140		
+		left: 140,
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },		
 	});
 	textAndButtonView.add(thumbnailLabel);
 	
@@ -127,23 +118,26 @@ function MessageboardAddWindow(_programId) {
 		addImageDialog.show();
 	});
 	
-	var galleryProps = {
-		success:function(event){
-			var image = event.media;
-			if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO){
-				thumbnail.image = image;
-				thumbnailLabel.hide();				
-			}
-			else alert('Sorry, something wrong');
-			}
-	}
-	
+	var uploadedImage = null;
+	var filename  = null;
 	addImageDialog.addEventListener('click',function(e){
 		if(e.index === 1){
-			Ti.Media.openPhotoGallery(galleryProps);
+			Ti.Media.openPhotoGallery({
+				success:function(event){
+					uploadedImage = event.media;
+					if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO){
+						thumbnail.image = uploadedImage;
+						thumbnailLabel.hide();
+						filename = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory,''+_programId+'.png');
+	 	 	  			filename.write(uploadedImage);		
+					}
+					else alert('Sorry, something wrong');
+				}
+			});
 		}
 		else alert('Unavailable');
 	});
+	
 	
 	//ADDING UI COMPONENTS TO THE WINDOW
 	self.add(topicTitle);
@@ -152,21 +146,25 @@ function MessageboardAddWindow(_programId) {
 		
 	//ADDING EVENT LISTENERS
 	addButton.addEventListener('click', function(e) {
-		
 		if(topicTitle.value === '') {
 			return;
 		}
 		
-		var mockupPhoto = 'http://blogs.suntimes.com/ebert/Google-logo.jpeg';
-		
 		//1. insert to the db topic table
-		var newId = Topic.topicModel_add(programId, 0,topicTitle.value,mockupPhoto,topicContent.value,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+		var fileNamePath = null;
+		if(filename === null){
+			var newId = Topic.topicModel_add(programId, 0,topicTitle.value,topicContent.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+		}
+		else{
+			fileNamePath = filename.nativePath
+			var newId = Topic.topicModel_add(programId, 0,topicTitle.value,topicContent.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+		}
 
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
 			title: topicTitle.value,
-			photo: mockupPhoto,
 			content: topicContent.value,
+			photo: fileNamePath,
 			id: newId,
 			acsObjectId:0,
 			hasChild:true,
@@ -179,7 +177,7 @@ function MessageboardAddWindow(_programId) {
 		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
 		//3 call TopicACS.topicACS_create(topicTitle.value,programId,newId);
-		TopicACS.topicACS_create(topicTitle.value,mockupPhoto,topicContent.value,programId,newId);
+		TopicACS.topicACS_create(topicTitle.value,topicContent.value,filename,programId,newId);
 		
 		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
 		// in the function callback in Mb_MessageboardMainWindow.js
@@ -187,15 +185,7 @@ function MessageboardAddWindow(_programId) {
 		self.close();
 	
 	});
-	
-	// self.addEventListener('open', function(e) {
-		// topicContent.focus();
-	// });
-// 	
-	// self.addEventListener('close', function(e) {
-		// topicContent.blur();
-	// });	
-	
+
 	self._setProgramId = function(_newProgramId) {
 		programId = _newProgramId;
 	};

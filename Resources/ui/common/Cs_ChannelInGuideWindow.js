@@ -23,9 +23,6 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 	programsOfChannelTableView.setData(programsOfChannelData);	
 		
 	programsOfChannelTableView.addEventListener('click',function(e){
-		
-		alert(e.row.tvprogram.id);
-		
  		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.id,
 			programTitle: e.row.tvprogram.name,
@@ -37,7 +34,6 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 			programEndtime: e.row.tvprogram.recurring_until,
 			programNumCheckin: e.row.tvprogram.number_checkins
 		}, _channelSelectionWin.containingTab);	
-		
 		_channelSelectionWin.containingTab.open(checkinmainwin);
 	});
 

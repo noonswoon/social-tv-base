@@ -20,7 +20,9 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	            	id: post.id,
 	            	programId: _programId,
 	            	title: post.title,
-	            	user:post.user,
+	            	content: post.content,
+	            	photo: post.photo,
+	            	user:post.user,	        
 	            	commentsCount: numComments,
 	            	isDeleted: post.custom_fields.is_deleted,
 	            	updatedAt: post.updated_at
@@ -34,21 +36,38 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	});
 }
 	
-exports.topicACS_create = function(_title,_photo,_content,_programId,_localId) {
+exports.topicACS_create = function(_title,_content,_filename,_programId,_localId) {
 	//connecting with Cloud
-	Cloud.Posts.create({
+	if(_filename !==null) {
+		Ti.API.info('filename is NOT NULL');
+		Cloud.Posts.create({
 			title: _title,
-			// photo: Titanium.Filesystem.getFile('_photo'),
+			photo: Titanium.Filesystem.getFile(_filename.nativePath),
 			content: _content, 
 			custom_fields: {"program_id": _programId,"local_id":_localId,"is_deleted":0}
 		}, function (e) {
 			if (e.success) {
-		    	var post = e.posts[0];
-		    	Ti.API.info('Posting Success: id: ' + post.id);
-		    	Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
-		    } else {
-		        Ti.API.info('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
-		   	}
-		}
-	);
+		   		var post = e.posts[0];
+		   		Ti.API.info('Posting Success: id: ' + post.id);
+		   		Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
+		   	} else {
+		       	Ti.API.info('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
+		  	}
+		});
+	} else {
+		Ti.API.info('filename is NULL');
+		Cloud.Posts.create({
+			title: _title,
+			content: _content, 
+			custom_fields: {"program_id": _programId,"local_id":_localId,"is_deleted":0}
+		}, function (e) {
+			if (e.success) {
+		   		var post = e.posts[0];
+		   		Ti.API.info('Posting Success: id: ' + post.id);
+		   		Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
+		   	} else {
+		       	Ti.API.info('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
+		 	}
+		});
+	}
 }

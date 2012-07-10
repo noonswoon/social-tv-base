@@ -13,12 +13,14 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
-		top:0,
+		top: 0,
 		height: 'auto',
 		allowsSelection: false,
 		className: "CommentRow",
+		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		separatorColor: 'transparent',
 		backgroundColor: 'transparent',
-		// selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
+		zIndex: 10
 	});
 
 	row.index = -1;
@@ -103,10 +105,6 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var commentTextLength = contentLabel.text.length;
 	var numLinesForHighlightedComment = Math.ceil(commentTextLength / CHARACTER_PER_LINE);
 	var heightOfContent = 65 + (numLinesForHighlightedComment-1)*15;
-
-	// contentLabel.addEventListener('click',function(){
-		// alert('heightOfContent: '+heightOfContent+', numLines: '+numLinesForHighlightedComment+', commentTextLength: '+commentTextLength);
-	// });
 
 	var replyToolbar = Ti.UI.createView({
 		left: 0,

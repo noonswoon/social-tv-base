@@ -1,17 +1,19 @@
 //create for user in the first time log in
+var chatterboxPNBackendAccess = 'chatterbox:d1srupt'
 exports.pushNotificationCTB_createUserInfo = function(_userid,_username,_pnDeviceToken) {
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
-			alert('responseText: '+this.responseText);
+			Ti.API.info(this.responseText);
 		},
 		onerror:function(e) {
-			alert('cannot register pn to ctb server: '+e);
+			Ti.API.info('cannot register pn to ctb server: '+e);
 		}
 	}); 
 	
 	// Register device token with UA
 	xhr.open('POST', 'http://localhost:3000/push_notification_details/create.json', true);
 	xhr.setRequestHeader("Content-Type","application/json");
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxPNBackendAccess));
 	
 	var sendParameters = {
 	    'userid': _userid,
@@ -27,47 +29,17 @@ exports.pushNotificationCTB_getPNPermissions = function(_userid){
 		onload:function(e) {
 			var responseJSON = JSON.parse(this.responseText); 
 			var userPNPermissions = responseJSON['user_pn_permissions'];
+			Ti.API.info(this.responseText);
 			Ti.App.fireEvent('fetchedUserPNPermissions',{userPNPermissions:userPNPermissions});
 		},
 		onerror:function(e) {
-			alert('cannot get comment permission pn to ctb server: '+e);
+			Ti.API.info('cannot get comment permission pn to ctb server: '+e);
 		}
 	}); 
 
 	xhr.open('GET', url, true);
 	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.send();
-};
-
-exports.pushNotificationCTB_isAllowToSendWhenGetComment = function(_userid){
-	var url = 'http://localhost:3000/push_notification_details/is_allow_to_send_when_get_comment/'+_userid+'.json';
-	var xhr = Titanium.Network.createHTTPClient({
-		onload:function(e) {
-			alert('responseText: '+this.responseText);
-		},
-		onerror:function(e) {
-			alert('cannot get comment permission pn to ctb server: '+e);
-		}
-	}); 
-
-	xhr.open('GET', url, true);
-	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.send();
-};
-
-exports.pushNotificationCTB_isAllowToSendWhenGetComment = function(_userid){
-	var url = 'http://localhost:3000/push_notification_details/is_allow_to_send_when_friend_checkin/'+_userid+'.json';
-	var xhr = Titanium.Network.createHTTPClient({
-		onload:function(e) {
-			alert('responseText: '+this.responseText);
-		},
-		onerror:function(e) {
-			alert('cannot get friendCheckin permission pn to ctb server: '+e);
-		}
-	}); 
-	
-	xhr.open('GET', url, true);
-	xhr.setRequestHeader("Content-Type","application/json");
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxPNBackendAccess));
 	xhr.send();
 };
 
@@ -84,6 +56,7 @@ exports.pushNotificationCTB_updatePNPermission = function(_userid,_permissionVal
 	// Register device token with UA
 	xhr.open('PUT', url, true);
 	xhr.setRequestHeader("Content-Type","application/json");
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxPNBackendAccess));
 	
 	var sendParameters = null; 
 	if(_permissionType === 1) //getCommentPermission
@@ -97,16 +70,17 @@ exports.pushNotificationCTB_updatePNPermission = function(_userid,_permissionVal
 exports.pushNotificationCTB_sendPN = function(_userid,_pnSendingType,_messageToSend) {
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
-			alert('responseText: '+this.responseText);
+			Ti.API.info('responseText: '+this.responseText);
 		},
 		onerror:function(e) {
-			alert('cannot send pn from ctb server: '+JSON.stringify(e));
+			Ti.API.info('cannot send pn from ctb server: '+JSON.stringify(e));
 		}
 	}); 
 	
 	// Register device token with UA
 	xhr.open('POST', 'http://localhost:3000/push_notification_details/send_notification.json', true);
 	xhr.setRequestHeader("Content-Type","application/json");
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxPNBackendAccess));
 	
 	var sendParameters = {
 	    'userid': _userid,

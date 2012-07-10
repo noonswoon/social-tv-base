@@ -17,12 +17,6 @@ MessageboardHeader = function(_showName,_showSubName) {
 		height:90
 	});
 	
-	header.programImage.addEventListener('click', function() {
-		var PushNotificationCTB = require('ctb/pushnotificationCTB');
-		PushNotificationCTB.pushNotificationCTB_getPNPermissions('4cm2354');
-		//for testing stuff - KA
-	});
-	
 	header.programImageView = Ti.UI.createView({
 		width: 133,
 		height: 104,

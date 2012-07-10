@@ -2,7 +2,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	//possible value for _status = me / friend / stranger
 
 	var CheckinACS = require('acs/checkinACS');		
-	var FriendACS = require('acs/friendsACS');
 	var myBadgeACS = require('acs/myBadgeACS');
 	var ActivityACS = require('acs/activityACS');
 
@@ -29,6 +28,16 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		height:20,
 		width:20
 	});
+	refreshButton.addEventListener('click', function(){
+		var FriendACS = require('acs/friendsACS');
+
+		myBadgeACS.myBadgeACS_fetchedBadge(curId);
+		ActivityACS.activityACS_fetchedMyActivity(curId,curUserName);
+		CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
+		FriendACS.showFriendsRequest();	
+		FriendACS.searchFriend(myUserId);
+		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
+	});
 
 	var headerView = Ti.UI.createView();
 	headerView.backgroundGradient = {
@@ -40,17 +49,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	var profilePicture = Ti.UI.createImageView({
 		image: acs.getUserImageNormalOfFbId(_userProfile.fb_id),
-		width: 90,
-		height: 90,
+		width: 88,
+		height: 88,
 		backgroundColor: 'transparent'
 	});
 
 	var profilePictureContain = Ti.UI.createView({
-		backgroundColor: '#fff',
 		top: 10, left: 10,
-		borderWidth: 1,
-		width:100, height:100,
-		borderColor: '#b1b1b1'
+		width:103, height:104,
+		backgroundImage: 'images/icon/pf_imagedisplay.png'
 	});
 
 	var profileName = Ti.UI.createLabel({
@@ -68,15 +75,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		left: 120,
 		width: 60,
 		height: 70,
-		backgroundColor: '#a7c63d',
+		backgroundColor: '#acd032',
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: '#8ba82f'
+		borderColor: '#8fb125'
 	});
 	
 	var columnCheckInImage = Ti.UI.createImageView({
-		image: 'images/icon/tv.png',
-		width: 22, height: 22, top: 10,
+		image: 'images/icon/pf_checkin.png',
+		top: 10,
 	});
 	
 	var columnCheckInCount = Ti.UI.createLabel({
@@ -84,7 +91,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		shadowColor: '#999',
 		color: '#fff',
 		height: 30,
-		bottom:10
+		bottom:5
 	});
 	
 	var columnFriend = Ti.UI.createView({
@@ -92,15 +99,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		left: 185,
 		width: 60,
 		height: 70,
-		backgroundColor: '#9969a8',
+		backgroundColor: '#a570b6',
 		borderRadius: 10,
 		borderWidth: 1,
-		borderColor: '#80538e'
+		borderColor: '#8d5c9d'
 	});
 	
 	var columnFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/112-group.png',
-		top: 10
+		image: 'images/icon/pf_friend.png',
+		top: 15
 	});
 	
 	var columnFriendCount = Ti.UI.createLabel({
@@ -108,7 +115,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
 	
 	 var columnIsFriend = Ti.UI.createView({
@@ -133,7 +140,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
 
 	 var columnNotFriend = Ti.UI.createView({
@@ -158,7 +165,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#8e8e8e',
 		shadowColor: '#d3d2d1',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
  
 	 var columnAddFriend = Ti.UI.createView({
@@ -174,7 +181,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	 
 	 var columnAddFriendImage = Ti.UI.createImageView({
 	 	image: 'images/icon/act_add_white.png',
-		top: 10,
+		top: 15,
 	 });
 	 
 	var columnAddFriendLabel = Ti.UI.createLabel({
@@ -183,7 +190,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,
-		bottom: 10
+		bottom: 5
 	});
 	
 	var sendRequest = function(_response){
@@ -193,7 +200,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  	var approveRequest = function(_response){
 		alert('You have approved the request');
 		Ti.API.info(_response);
-		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
+		var FriendACS = require('acs/friendsACS');
+	//	FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		var approveFriendActivityData = createFriendActivity("approvefriend");
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
@@ -212,6 +220,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  	}		
 
  	var addFriend = function(isRequest,i) {
+ 		var FriendACS = require('acs/friendsACS');
  		//condition 1: no request from this user
  		if(!isRequest) {
 		 	var addFriendActivityData = createFriendActivity("addfriend");
@@ -294,6 +303,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		profileName.text = profile.first_name + ' ' + profile.last_name;
 	};
 	*/
+	
 	
 	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);

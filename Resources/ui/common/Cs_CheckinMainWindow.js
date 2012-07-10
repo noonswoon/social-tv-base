@@ -1,28 +1,23 @@
 CheckinMainWindow = function (_tvprogramData, _containingTab){
-
+	
 	var CheckinACS = require('acs/checkinACS');
 	var PointACS = require('acs/pointACS');
 	var LeaderBoardACS = require('acs/leaderBoardACS');
 	var ActivityACS = require('acs/activityACS');
-	var CheckinModel = require('model/checkin');
 	var BadgeCondition = require('helpers/badgeCondition');
-	
-	var TVProgram = require('model/tvprogram');
-	
 	var updateActivity = require('helpers/updateActivity');
-	
-	var checkinPoint = 10;
-	
+	var CheckinModel = require('model/checkin');		
+	var TVProgram = require('model/tvprogram');
 	var userID = acs.getUserId();
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 	
 	var self = Ti.UI.createWindow({
 		title: 'Selected Program',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 	 	leftNavButton:backButton
 	});
 	
@@ -90,8 +85,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		height: 47,
 	});
 	var programChannelImage = Ti.UI.createImageView({
-		image: 'images/icon/tvchannel.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_tvchannel.png',
 		top: 3
 	});
 	var programChannel = Ti.UI.createLabel({
@@ -113,8 +107,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		height: 47
 	});
 	var programNumCheckinImage = Ti.UI.createImageView({
-		image: 'images/icon/watch.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_watch.png',
 		top: 0
 	});
 	var programNumCheckin = Ti.UI.createLabel({
@@ -135,8 +128,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		height: 47
 	});
 	var programNumFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/friends.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_friends.png',
 		top: 0
 	});
 	var programNumFriend = Ti.UI.createLabel({
@@ -157,7 +149,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		left:0,
 		height: 265,
 		width:320,
-		backgroundImage: 'images/checkinBG.png'
+		backgroundImage: 'images/checkin/checkin_bg.png'
 	});
 
 	var remote = Ti.UI.createView({
@@ -253,11 +245,11 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			var leaderboardData = allActivityDataForACS[1];
 			var activityData = allActivityDataForACS[2];
 		
-			var allIdDataForACS = ActivityDataIdForACS[1];	//idArray
+			var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
 			// checkinId / leaderboardId / activityId
-			var checkinId = allIdDataForACS[0]; 			//local id
-			var leaderboardId = allIdDataForACS[1]; 		//acs id
-			var activityId = allIdDataForACS[2]; 			//local id
+			var checkinId = allIdDataForACS[0]; 					//local id
+			var leaderboardId = allIdDataForACS[1];			 		//acs id
+			var activityId = allIdDataForACS[2]; 					//local id
 
 			//require callback from acs
 			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
@@ -269,6 +261,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			
 			//check badge condition from checkin
 			checkinData.program_type = _tvprogramData.programType;
+			checkinData.program_id = _tvprogramData.programId;
 			Ti.API.info('calling BadgeCondition.checkinEvent // checkinData.program_type: '+checkinData.program_type);
 			BadgeCondition.checkinEvent(checkinData);
 			myCurrentCheckinPrograms.push(_tvprogramData.programId);
@@ -327,19 +320,14 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		curTabGroup.setActiveTab(3)
 	});
 	
-
 	function update1checkinCallBack(e) {
 		var num = TVProgram.TVProgramModel_countCheckins(_tvprogramData.eventId);
-		
+		var FacebookSharing = require('helpers/facebookSharing');		
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
-	
-		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
-		
-		//TODO: create facebook popup
-		var FacebookSharing = require('helpers/facebookSharing');
-		alert(e.fetchedACheckin);
 		FacebookSharing.checkinPopUpOnFacebook(e.fetchedACheckin);
+		
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
 		
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');

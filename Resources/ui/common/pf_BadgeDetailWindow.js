@@ -18,7 +18,7 @@ BadgeDetailWindow = function (_badge){
 		top: 35,
 	});
 	var badgeTitle = Ti.UI.createLabel({
-		font: {fontSize: 20, fontWeight: 'bold'},
+		font: {fontSize: 16, fontWeight: 'bold'},
 		top: 245,
 		textAlign: 'center',
 		height: 30,
@@ -40,21 +40,29 @@ BadgeDetailWindow = function (_badge){
 		color: '#999',
 		font: {fontSize: 12}
 	});	
+	
+	var badgeWinClose = Ti.UI.createButton({
+		bottom: 45,
+		width: 200,
+		height: 30,
+		title: 'close'
+	});
+
+	badgeWinClose.addEventListener('click',function(){
+		self.animate(animateRight);
+	});
 
 	badgeView.add(badgeImg);
 	badgeView.add(badgeTitle);
 	badgeView.add(badgeCons);
-	badgeView.add(badgeDesc);	
+	badgeView.add(badgeDesc);
+	badgeView.add(badgeWinClose);	
 	self.add(badgeView);
 	
 	var animateRight = Ti.UI.createAnimation({
 		left: 320,
 		curve: Ti.UI.iOS.ANIMATION_CURVE_EASE_OUT,
 		duration: 500
-	});
-	
-	badgeView.addEventListener('click',function(){
-		self.animate(animateRight);
 	});
 	
 	self._setBadgeTitle = function(_newTitle,_unlock) {
@@ -64,7 +72,7 @@ BadgeDetailWindow = function (_badge){
 	
 	self._setBadgeImage = function(_newImage,_unlock) {
 		if(_unlock===1){badgeImg.image = _newImage;}
-		else {badgeImg.image = 'images/lockbadge.png';}
+		else {badgeImg.image = 'images/badge/lockedbadge.png';}
 	};
 	self._setBadgeDesc = function(_newDesc,_unlock) {
 		if(_unlock===1){

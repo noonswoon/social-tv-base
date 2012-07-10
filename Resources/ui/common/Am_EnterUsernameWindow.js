@@ -26,8 +26,8 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		//title:'Register',
 		backgroundImage: '/images/admin/button/buttons_register.png',
 		top: 10,
-		width: 149,
-		height: 34,
+		width: 161,
+		height: 39,
 	});
 	
 	//ADDING UI COMPONENTS TO WINDOW

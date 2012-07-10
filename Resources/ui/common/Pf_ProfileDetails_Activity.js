@@ -106,7 +106,7 @@ if(_status==="me") {
 	
 	var userActivity = Ti.UI.createTableView({
 		width: 290,
-		backgroundColor: '#fff',
+		backgroundColor: '#eeeeee',
 		borderRadius: 10,
 		scrollable: false,
 		bottom: 10,
@@ -138,10 +138,10 @@ if(_status==="me") {
 			var activityDateStr = since(dm);
 			
 			var userActivityRow = Ti.UI.createTableViewRow({
-				backgroundColor: '#fff',
+				backgroundColor: '#eeeeee',
 				width: 290,
 				height: 55,
-				selectedBackgroundColor: '#fff'
+				selectedBackgroundColor: '#eeeeee'
 			});
 			
 			var activityType = Ti.UI.createImageView({
@@ -171,13 +171,13 @@ if(_status==="me") {
 			if(myActivity[i].category==='addfriend') {
 				if(name ==="You") _name = "you";
 				else _name = name;
-				activityType.image= 'images/icon/act_add_color.png'
+				activityType.image= 'images/icon/act_add.png'
 				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' you a friend request';
 			} else
 			if (myActivity[i].category==='approvefriend') {
 				if(name ==="You") _name = "you";
 				else _name = name;
-				activityType.image= 'images/icon/act_add_color.png';
+				activityType.image= 'images/icon/act_add.png';
 				activityInfo.text = myActivity[i].additionalData + ' approved '+_name+' as a friend';
 			} else
 			if (myActivity[i].category==='comment') {
@@ -185,11 +185,11 @@ if(_status==="me") {
 				activityInfo.text = name+' has commented on '+myActivity[i].additionalData;
 			} else
 			if (myActivity[i].category==='getbadge') {
-				activityType.image= 'images/icon/act_badge_color.png';
+				activityType.image= 'images/icon/act_badge.png';
 				activityInfo.text = name + ' have got a new badge: ' + myActivity[i].additionalData;
 			} else
 			if (myActivity[i].category==='checkin') {
-				activityType.image= 'images/icon/act_tv_color.png';
+				activityType.image= 'images/icon/act_tv.png';
 				activityInfo.text = name + ' have checked in to ' + myActivity[i].additionalData;
 			};
 			

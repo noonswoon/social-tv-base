@@ -100,13 +100,13 @@ Ti.App.Chat = function(_chatParams) {
 	subscribe_chat_room();
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 
 	var chat_window = Ti.UI.createWindow({
 		title: "Group Chat",
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		backgroundImage: 'images/bg.png',
 		tabBarHidden: true,
 		leftNavButton:backButton
@@ -145,7 +145,7 @@ Ti.App.Chat = function(_chatParams) {
 		height: 34,
 		right: 10,
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/toolbarbutton.png'
+		image: 'images/toolbar_button.png'
 	});
 	
 	//Opacity window when picker is shown
@@ -379,11 +379,11 @@ Ti.App.Chat = function(_chatParams) {
     });
 	
     // Send Button
-    var sendButton = Ti.UI.createButton({
+    var sendButton = Ti.UI.createImageView({
 		width: 60,
 		height: 31,
 		right: 10,
-		backgroundImage: 'images/chat/send.png'
+		image: 'images/chat/send.png'
     });
     
 	chatInputView.add(chatInputTextField);

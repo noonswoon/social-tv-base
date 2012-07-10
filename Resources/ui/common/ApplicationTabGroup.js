@@ -1,6 +1,9 @@
 function ApplicationTabGroup() {
     // create tab group, create module instance
-    var self = Titanium.UI.createTabGroup();
+    var self = Titanium.UI.createTabGroup({
+    	backgroundColor: '#fff',
+    	
+    });
 
 	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
@@ -22,69 +25,80 @@ function ApplicationTabGroup() {
 		programNumCheckin: 25345
 	};
 	
-	var selectionwin = new ChannelSelectionMainWindow();
-	var chatwin = new ChatMainWindow(myCurrentSelectedProgram);
-	var messageboardwin = new ProductMainWindow(myCurrentSelectedProgram);//new MessageboardMainWindow(myCurrentSelectedProgram);				
-	var productwin = new ProductMainWindow(myCurrentSelectedProgram);
-	var profilewin =  new ProfileMainWindow(myUserId,"me");
+	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
+	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
+	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
 	var blankwin = new BlankWindow();
+
+	   	
+   	var updateCustomTabBar = function(_tab) {
+   		myCustomTabBar.back(_tab);
+   	}
 	
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
-		title: 'Discover',
-		icon: '/images/discover.png',
+	//	title: 'Discover',
+	//	icon: '/images/discover.png',
 		window: selectionwin
 	});
 	selectionwin.containingTab = selectionTab;
 	selectionTab.tabGroup = self; 
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
     var chatTab = Titanium.UI.createTab({  
-        icon: '/images/chat-2.png',
-		title: 'Chat',
+      // icon: '/images/chat-2.png',
+		// title: 'Chat',
 		window: blankwin,
 		touchEnabled: false
     });
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
     	chatwin.containingTab.open(chatwin);
+    	myCustomTabBar.hide();
     });
    
     chatwin.addEventListener('close', function() {
     	self.setActiveTab(self.tabs[tabIndexToComeBack]);
+    	myCustomTabBar.back(tabIndexToComeBack);
+    	myCustomTabBar.show();
     });
     
     var messageboardTab = Titanium.UI.createTab({  
-        icon:'/images/messageboard.png',
-        title:'Board',
+       // icon:'/images/messageboard.png',
+      //  title:'Board',
         window: messageboardwin,
-		touchEnabled: false
     });
     messageboardwin.containingTab = messageboardTab;
     messageboardTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 2;
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
 	var productTab = Ti.UI.createTab({
-		icon: '/images/product.png',
-		title: 'Product',
+	//	icon: '/images/product.png',
+	//	title: 'Product',
 		window: productwin,
 	});
 	productwin.containingTab = productTab;
 	productTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 3;	
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
 	var profileTab = Ti.UI.createTab({
-		icon: '/images/me.png',
-		title: 'Me',
+	//	icon: '/images/me.png',
+	//	title: 'Me',
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 4;
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
 	//////////////////////
@@ -99,6 +113,25 @@ function ApplicationTabGroup() {
 	
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
+
+	self.open();
+	
+	Ti.include('lib/customTabBar.js');
+	var myCustomTabBar = new CustomTabBar({
+		tabBar: self,
+		imagePath: 'images/tabgroup/',
+		width: 64,
+		height: 54,
+		items: [
+		{ image: 'discover.png', selected: 'discover_over.png' },
+		{ image: 'chat.png', selected: 'chat_over.png' },
+		{ image: 'board.png', selected: 'board_over.png' },
+		{ image: 'shop.png', selected: 'shop_over.png' },
+		{ image: 'me.png', selected: 'me_over.png' }
+		]
+	});
+
+	myCustomTabBar.show();
    	
 	//PROFILE: CALLING ACS
 	var LevelACS = require('acs/levelACS');	
@@ -137,14 +170,12 @@ function ApplicationTabGroup() {
 			myCurrentCheckinPrograms.push(programId);
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
-	}
-	
+	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	
 	function updateHeaderCheckinCallback() {
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
 	}
-	
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
 	
    	function closeApplicationTabGroupCallback() {
@@ -155,8 +186,7 @@ function ApplicationTabGroup() {
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}
-   	
-   	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
+  	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
    	
     return self;
 };

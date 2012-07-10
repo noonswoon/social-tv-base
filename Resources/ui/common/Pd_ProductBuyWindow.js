@@ -1,13 +1,13 @@
 ProductBuyWindow = function(_product){
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 	
 	var self = Ti.UI.createWindow({
 		title: 'Product',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		backgroundImage: 'images/bg.png',
 		leftNavButton: backButton
 	});
@@ -96,6 +96,7 @@ ProductBuyWindow = function(_product){
 	buyNowButton.addEventListener('click',function(){
 		Ti.Platform.openURL('http://www.google.com');		
 	});
+
 	
 	var productName = Ti.UI.createLabel({
 		top: 60,
@@ -103,6 +104,7 @@ ProductBuyWindow = function(_product){
 		font: { fontSize: 24, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 		left: 15
 	});
+	productDetailView.add(productHeaderView);
 	productDetailView.add(productName);
 	
 	var productNameWidth = productName.toImage().width; 

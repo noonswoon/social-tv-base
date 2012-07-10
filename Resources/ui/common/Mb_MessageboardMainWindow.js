@@ -33,15 +33,21 @@ function MessageboardMainWindow(_programId) {
 	var callPicker = Ti.UI.createButton({
 		width: 39,
 		height: 32,
-		backgroundImage: 'images/messageboard/optionbutton.png'
+		backgroundImage: 'images/messageboard/option_button.png'
 	});
 	
 	var self = Titanium.UI.createWindow({
 		backgroundImage: 'images/messageboard/appBG.png',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		title: "Message Board",
 		rightNavButton: callPicker
 	});
+	
+	if(myCurrentCheckinPrograms.length<=0) {
+		var CheckinFirstWindow = require('ui/common/Howto_CheckinFirst');
+		var checkinFirstWindow = new CheckinFirstWindow('messageboard');
+		self.add(checkinFirstWindow);
+	}
 	
 	var searchView = Ti.UI.createView({
 		top: 120,
@@ -60,6 +66,7 @@ function MessageboardMainWindow(_programId) {
         backgroundRepeat:true,
 		showCancel:false,
 		hintText:'Search here...',
+		barColor:'#43a5cf',
 	});
 
 	var addButton = Ti.UI.createButton({
@@ -152,7 +159,7 @@ function MessageboardMainWindow(_programId) {
 		self.remove(opacityView);
 		if(pickerSelectedIndex === 0) {
 			currentProgramId = 'CTB_PUBLIC';
-			messageboardHeader._setHeader('General Board','Chatterbox General Board','http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',452,'CTB');
+			messageboardHeader._setHeader('ธรณีนี่นี้ใครครอง','ตอนที่ 17','images/messageboard/yaya.jpg',2000,'ch3');
 		} else {
 			currentProgramId = picker.getSelectedRow(0).progId;
 			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
@@ -173,8 +180,9 @@ function MessageboardMainWindow(_programId) {
 //////////////////
 
 	var allTopicTable = Ti.UI.createTableView({
-		top: 170,
-		bottom: 10,
+		top: 165,
+		//bottom: 10,
+		bottom:0,
 		scrollable: true,
 		//separatorColor: 'transparent',
 		search: searchTextField,//messageboardHeader.searchTextField,
@@ -188,7 +196,6 @@ function MessageboardMainWindow(_programId) {
 	self.add(messageboardHeader);
 	self.add(searchView);
 	self.add(allTopicTable);
-
 
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {

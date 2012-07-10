@@ -24,7 +24,7 @@ function GuideWindow(_channelSelectionWin) {
 		height: 34,
 		right: 10,
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/toolbarbutton.png'
+		image: 'images/toolbar_button.png'
 	});
 	selectChannelToolbar.add(selectChannelButton);
 	

@@ -12,13 +12,13 @@ var SettingWindow = function(_containingTab) {
 	]
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 
 	var self = Ti.UI.createWindow({
 		backgroundImage: '/images/admin/cb_back.png',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		title: "Setting",
 		leftNavButton: backButton
 	});
@@ -106,6 +106,8 @@ var SettingWindow = function(_containingTab) {
 	fbLogoutButton.addEventListener('click', function() {
 		Ti.Facebook.logout(); //logout from fb
 		acs.logout(logoutCallback); //logout from chatterbox
+		//TODO: delete all event in profileSection
+		Ti.App.fireEvent('profileMainWindowClosing'+ acs.getUserId());
 	});
 	
 	return self;

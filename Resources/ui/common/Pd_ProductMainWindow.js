@@ -5,6 +5,7 @@ function ProductMainWindow(_programId) {
 	var Checkin = require('model/checkin');
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
 	var TVProgram = require('model/tvprogram');
+	//var CheckinFirst = require('ui/common/Howto_CheckinFirst');
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Product');
@@ -29,6 +30,12 @@ function ProductMainWindow(_programId) {
 		rightNavButton: callPicker
 	});
 
+	if(myCurrentCheckinPrograms.length<=0) {
+		var CheckinFirstWindow = require('ui/common/Howto_CheckinFirst');
+		var checkinFirstWindow = new CheckinFirstWindow('product');
+		self.add(checkinFirstWindow);
+	}	
+	
 	var productSelectProgramToolbar = Ti.UI.createView({
 		top: 0,
 		height: 44,
@@ -45,7 +52,7 @@ function ProductMainWindow(_programId) {
 	productSelectProgramToolbar.add(selectProgramLabel);
 
 	var productTableView = Ti.UI.createTableView({
-		top: 44,
+		top: 42,
 		backgroundColor: 'transparent', 
 		separatorColor: 'transparent'
 	});

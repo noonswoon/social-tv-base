@@ -71,6 +71,7 @@ exports.getUserImageNormal = function() {
 	var fbId = getUserFbId(); 
 	if(fbId == 0 || fbId == -1) return "";
 	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
+//	else return "https://graph.facebook.com/"+fbId+"/picture?type=square"
 }
 
 exports.getUserImageNormalOfFbId = function(fbId) {

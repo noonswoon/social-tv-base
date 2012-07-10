@@ -1,7 +1,7 @@
 Cs_PopularWindowTableViewRow = function(_curTVProgram){	
 	var TVProgram = require('model/tvprogram');
 	var row = Ti.UI.createTableViewRow({
-		height: 121
+		height: 121,
 	});
 	row.backgroundGradient = { type: 'linear',
        		startPoint: { x: '0%', y: '0%' },
@@ -15,7 +15,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		height: 30,
 		width: 30,
 		borderRadius:15,
-		image:'images/icon/detailButton.png'
+		image:'images/icon/detail_button.png'
 	});
 	row.add(detailButton);
 	
@@ -64,8 +64,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		height: 47
 	});
 	var programNumCheckinImage = Ti.UI.createImageView({
-		image: 'images/icon/watch.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_watch.png',
 		top: 0
 	});
 	var programNumCheckin = Ti.UI.createLabel({
@@ -86,8 +85,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		height: 47
 	});
 	var programNumFriendImage = Ti.UI.createImageView({
-		image: 'images/icon/friends.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_friends.png',
 		top: 0
 	});
 	var programNumFriend = Ti.UI.createLabel({
@@ -108,8 +106,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		height: 47,
 	});
 	var programChannelImage = Ti.UI.createImageView({
-		image: 'images/icon/tvchannel.png',
-		opacity: 0.5,
+		image: 'images/icon/cs_tvchannel.png',
 		top: 3
 	});
 	var programChannel = Ti.UI.createLabel({

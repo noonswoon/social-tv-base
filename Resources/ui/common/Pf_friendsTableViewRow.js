@@ -8,7 +8,7 @@ FriendsTableViewRow = function(_user,_source) {
 	
 	var tableRow = Ti.UI.createTableViewRow({
 		height: 50,
-		selectedBackgroundColor: '#d2eaff',
+		selectedBackgroundColor: '#53b4df',
 	});
 	
 	var friendPhoto = Ti.UI.createImageView({
@@ -17,6 +17,7 @@ FriendsTableViewRow = function(_user,_source) {
 		height: 40,
 		width:40,
 		borderRadius: 10,
+		touchEnabled: false
 	});
 	
 	var friendName = Ti.UI.createLabel({
@@ -45,11 +46,11 @@ FriendsTableViewRow = function(_user,_source) {
  	}
  	
 	if(_source === "stranger") {
-		var approveButton = Ti.UI.createButton({
-			width: 66,
-			height: 30,
+		var approveButton = Ti.UI.createImageView({
+			width: 58,
+			height: 27,
 			right: 10,
-			backgroundImage: 'images/button/button_accept.png',
+			image: 'images/button/button_accept@2x.png',
 		});
 	
 		approveButton.addEventListener('click',function() {

@@ -1,5 +1,4 @@
 //check if you reach new badge or not!
-
 var getNumCheckinsOfType = function(_programType) {
 	if(!Ti.App.Properties.hasProperty(_programType+'Count')) { //do some caching
 		Ti.App.Properties.setInt(_programType+'Count',1);
@@ -13,21 +12,35 @@ var getNumCheckinsOfType = function(_programType) {
 }
 exports.getNumCheckinsOfType = getNumCheckinsOfType;
 
+var getNumCheckinsOfProgramId = function(_programId) {
+	if(!Ti.App.Properties.hasProperty(_programId+'Count')) { //do some caching
+		Ti.App.Properties.setInt(_programId+'Count',1);
+		return 1;
+	} else {
+		var numCheckInsSoFar = Ti.App.Properties.getInt(_programId+'Count');
+		var newNumCheckins = numCheckInsSoFar + 1
+		Ti.App.Properties.setString(_programId+'Count',newNumCheckins);
+		Ti.API.info('getNumCheckinsOfProgramId: '+_programId+'//'+newNumCheckins);
+		return newNumCheckins;
+	}	
+}
+exports.getNumCheckinsOfProgramId = getNumCheckinsOfProgramId;
+
 ////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
 	var checkinCount = e.result;
 	//badge desc: nice to meet you
 	//condition: 1st check in
 	//badge id: 0
-	if(checkinCount >= 1) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 0});
+	if(checkinCount == 1) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 0});
 	//badge desc: fall for you	
 	//condition: 10th check in	
 	//badge id: 1
-	else if(checkinCount >= 10) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
+	else if(checkinCount == 10) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
 	//badge desc: i'm loving it		
 	//condition: 20th check in
 	//badge id: 2
-	else if(checkinCount >= 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
+	else if(checkinCount == 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
 }
 
 exports.checkFriendCondition = function(_friendCheckIn) {
@@ -66,7 +79,7 @@ var checkTypeCondition = function(_type) {
 			};			
 		}
 	}
-}	
+}
 		
 var checkTimeCondition = function() {
 	var now = moment().format('HH');
@@ -79,6 +92,162 @@ var checkTimeCondition = function() {
 	//condition: checkin 1.00 - 3.59 am
 	//badge id: 8
 	if(now === '01' || now === '02' || now === '03') Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 8});
+}
+
+var determineShowBadgeId = function(_programId,_numCheckins) {
+	alert('_numCheckin: '+_numCheckins)
+	if(_programId === "CH3_ATTEN") {
+		//badge desc: At-Ten Fan LV1		
+		//condition: 3 checkins in At-Ten
+		//badge id: 9
+		if(_numCheckins === 3) return 9;
+		//badge desc: At-Ten Fan LV2		
+		//condition: 5 checkins in At-Ten
+		//badge id: 10
+		else if(_numCheckins === 5) return 10;
+		//badge desc: At-Ten Fan LV3		
+		//condition: 10 checkins in At-Ten
+		//badge id: 11
+		else if(_numCheckins === 10) return 11;
+	} else 
+	if(_programId === "CH3_TNSHO") {
+		//badge desc: At-Ten Fan LV1		
+		//condition: 3 checkins in At-Ten
+		//badge id: 12		
+		if(_numCheckins === 3) return 12;
+		//badge desc: At-Ten Fan LV2		
+		//condition: 5 checkins in At-Ten
+		//badge id: 13	
+		else if(_numCheckins === 5) return 13;
+		//badge desc: At-Ten Fan LV3		
+		//condition: 10 checkins in At-Ten
+		//badge id: 14			
+		else if(_numCheckins === 10) return 14;
+	} else 
+	if(_programId === "CH3_WMTWM") {
+		//badge desc: Woman to Woman Fan LV1		
+		//condition: 3 checkins in Woman to Woman
+		//badge id: 15		
+		if(_numCheckins === 3) return 15;
+		//badge desc: Woman to Woman Fan LV2		
+		//condition: 5 checkins in Woman to Woman
+		//badge id: 16	
+		else if(_numCheckins === 5) return 16;
+		//badge desc: Woman to Woman Fan LV3		
+		//condition: 10 checkins in Woman to Woman
+		//badge id: 17			
+		else if(_numCheckins === 10) return 17;
+	} else 
+	if(_programId === "CH3_MNGNE") {
+		//badge desc: Morning News Fan LV1
+		//condition: 3 checkins in Morning News
+		//badge id: 18
+		if(_numCheckins === 3) return 18;
+		//badge desc: Morning News Fan LV2
+		//condition: 5 checkins in Morning News
+		//badge id: 19
+		else if(_numCheckins === 5) return 19;
+		//badge desc: Morning News Fan LV3	
+		//condition: 10 checkins in Morning News
+		//badge id: 20	
+		else if(_numCheckins === 10) return 20;
+	} else 
+	if(_programId === "CH3_STSNE") {
+		//badge desc: Sat-Sun News Fan LV1
+		//condition: 3 checkins in Sat-Sun News
+		//badge id: 21
+		if(_numCheckins === 3) return 21;
+		//badge desc: Sat-Sun News Fan LV2
+		//condition: 5 checkins in Sat-Sun News
+		//badge id: 22
+		else if(_numCheckins === 5) return 22;
+		//badge desc: Sat-Sun News Fan LV3
+		//condition: 10 checkins in Sat-Sun News
+		//badge id: 23	
+		else if(_numCheckins === 10) return 23;
+	} else 
+	if(_programId === "CH5_JOJAI") {
+		//badge desc: Jor Jai Fan LV1
+		//condition: 3 checkins in Jor Jai
+		//badge id: 24
+		if(_numCheckins === 3) return 24;
+		//badge desc: Jor Jai Fan LV2
+		//condition: 5 checkins in Jor Jai
+		//badge id: 25
+		else if(_numCheckins === 5) return 25;
+		//badge desc: Jor Jai Fan LV3
+		//condition: 10 checkins in Jor Jai
+		//badge id: 26	
+		else if(_numCheckins === 10) return 26;
+	} else 
+	if(_programId === "CH5_SBUDS") {
+		//badge desc: Sabud Show Fan LV1
+		//condition: 3 checkins in Sabud Show
+		//badge id: 27
+		if(_numCheckins === 3) return 27;
+		//badge desc: Sabud Show Fan LV2
+		//condition: 5 checkins in Sabud Show
+		//badge id: 28
+		else if(_numCheckins === 5) return 28;
+		//badge desc: Sabud Show Fan LV3
+		//condition: 10 checkins in Sabud Show
+		//badge id: 29	
+		else if(_numCheckins === 10) return 29;
+	} else
+	if(_programId === "CH9_WDYKU") {
+		//badge desc: Woody Talk Show Fan LV1
+		//condition: 3 checkins in Woody Talk Show
+		//badge id: 30
+		if(_numCheckins === 3) return 30;
+		//badge desc: Woody Talk Show Fan LV2
+		//condition: 5 checkins in Woody Talk Show
+		//badge id: 31
+		else if(_numCheckins === 5) return 31;
+		//badge desc: Woody Talk Show Fan LV3
+		//condition: 10 checkins in Woody Talk Show
+		//badge id: 32	
+		else if(_numCheckins === 10) return 32;
+	} else
+	if(_programId === "CH9_WDYMN") {
+		//badge desc: Morning Woody Fan LV1
+		//condition: 3 checkins in  Morning Woody
+		//badge id: 33
+		if(_numCheckins === 3) return 33;
+		//badge desc: Morning Woody Fan LV2
+		//condition: 5 checkins in  Morning Woody
+		//badge id: 34
+		else if(_numCheckins === 5) return 34;
+		//badge desc: Morning Woody Fan LV3
+		//condition: 10 checkins in  Morning Woody		
+		//badge id: 35	
+		else if(_numCheckins === 10) return 35;
+	} else
+	if(_programId === "CH7_IRCHF") {
+		//badge desc: Iron Chef Thailand Fan LV1
+		//condition: 3 checkins in  Iron Chef Thailand
+		//badge id: 36
+		if(_numCheckins === 3) return 36;
+		//badge desc: Iron Chef Thailand Fan LV2
+		//condition: 5 checkins in  Iron Chef Thailand
+		//badge id: 37
+		else if(_numCheckins === 5) return 37;
+		//badge desc: Iron Chef Thailand Fan LV3
+		//condition: 10 checkins in  Iron Chef Thailand
+		//badge id: 38	
+		else if(_numCheckins === 10) return 38;
+	}
+	return 0;
+}
+
+var checkProgramCondition = function(_programId) {
+	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
+	var checkinCount = getNumCheckinsOfProgramId(_programId);
+	Ti.API.info('checkinCount/'+_programId+' = '+checkinCount);
+	if(BadgeShowPermissionACS.getAppProperties_permission(_programId)) {
+		var badgeId = determineShowBadgeId(_programId,checkinCount);
+		Ti.API.info('badgeId: '+badgeId);		
+	}
+	if(badgeId!==0 || badgeId!==undefined) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: badgeId});
 }
 
 var newBadgeUnlockCallback = function(e){
@@ -107,7 +276,6 @@ var newBadgeUnlockCallback = function(e){
 	LeaderACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 }
 	
-
 Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);	
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
 
@@ -117,11 +285,12 @@ exports.checkinEvent = function(_checkinData){
 	checkTimeCondition();
 	Ti.API.info('checkinEvent//_checkinData.program_type: '+_checkinData.program_type);
 	checkTypeCondition(_checkinData.program_type);
+	checkProgramCondition(_checkinData.program_id);
 }
 
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	var myBadgeACS = require('acs/myBadgeACS');
-	var userID = acs.getUserId();
+	var my_id = acs.getUserId();
 	Ti.API.info('badgeCondition_createBadgeUnlocked: '+ _badgeID);
-	myBadgeACS.myBadgeACS_createNewBadge(userID,_badgeID);
+	myBadgeACS.myBadgeACS_createNewBadge(my_id,_badgeID);
 };

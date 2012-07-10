@@ -7,7 +7,7 @@ function ChannelSelectionMainWindow(){
 	//TODO
 	//Bug when click at inappropriate area
 	var self = Ti.UI.createWindow({
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 	});
 	
 	var popularwin = new PopularWindow(self); 

@@ -3,7 +3,7 @@ AddFriendsMainView = function(_parentWindow) {
 	var AddFriendTableViewRow = require('ui/common/Pf_AddFriendTableViewRow');
 	var self = Titanium.UI.createWindow({
 		barColor:'#489ec3',
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 		title: 'Add Friends'
 	});		
 
@@ -11,7 +11,7 @@ AddFriendsMainView = function(_parentWindow) {
 		window: self
 	});			
 	var settingButton = Titanium.UI.createButton({
-		image: 'images/icon/19-gear.png'
+		image: 'images/icon/pf_option.png'
 	});
 	settingButton.addEventListener('click',function(){	
 		var PlaceholderWindow = require('ui/common/PlaceholderWindow');			
@@ -139,7 +139,7 @@ AddFriendsMainView = function(_parentWindow) {
 			    		friendWithApp = e.users;
 			    		friendWithApp = attachFbId(friendWithApp);
 			    		var friendWithNoApp = [];
-				    	for(i=0;i<result.length;i++) {
+				    	for(var i=0;i<result.length;i++) {
 							for(j=0;j<friendWithApp.length;j++) {
 								if(String(friendWithApp[j].fb_id) !== String(result[i].uid)) {
 									friendWithNoApp.push(result[i]);
@@ -160,7 +160,7 @@ AddFriendsMainView = function(_parentWindow) {
 	
 	var checkAlreadyFriend = function(_friendList,friend_id){
 		var isFriend = false;
-		for(i=0;i<_friendList.length;i++) {
+		for(var i=0;i<_friendList.length;i++) {
 			if(_friendList[i].friend_id===friend_id) {
 				isFriend = true;
 				break;	
@@ -175,13 +175,17 @@ AddFriendsMainView = function(_parentWindow) {
 				var friendWithApp = e.users;
 				var my_id = acs.getUserId();
 				var myfriends = FriendModel.friendModel_fetchFriend(my_id);
-				
-				for(i=0; i<friendWithApp.length;i++) {
-					var isFriend = checkAlreadyFriend(myfriends,friendWithApp[i].id);
-					if(isFriend) friendWithApp.splice(i,1);
+				var notYetFriendinCB = [];
+				Ti.API.info('friendWithApp.length: '+friendWithApp.length);
+				for(var k=0; k<friendWithApp.length;k++) {
+					var isFriend = checkAlreadyFriend(myfriends,friendWithApp[k].id);
+					if(isFriend) Ti.API.info(friendWithApp[k].first_name+' is already friend');
+					else notYetFriendinCB.push(friendWithApp[k]);
 				}
-				Ti.API.info('Friends Count: ' + friendWithApp.length);
-				var friendWithAppRows = createFriendTable(friendWithApp,"withApp");
+				
+				Ti.API.info('Friends with App Count: ' + friendWithApp.length);
+				Ti.API.info('Not yet friend in CB: '+notYetFriendinCB.length);
+				var friendWithAppRows = createFriendTable(notYetFriendinCB,"withApp");
 				appFriend.setData(friendWithAppRows);
 				appFriend.setSearch(appFriendSearch);
 				appFriend.setFilterAttribute('filter');
@@ -208,7 +212,7 @@ AddFriendsMainView = function(_parentWindow) {
 	var facebookFriend = Ti.UI.createTableView();
 	
 	facebookFriend.addEventListener('click',function(e) {
-		if(String(e.source) ==="[object TiUIButton]") {
+		if(String(e.source) ==="[object TiUIImageView]") {
 			Ti.API.info('Invite friend: '+ e.rowData.uid);
 			facebookFriend.deleteRow(e.index);
 		}
@@ -218,6 +222,11 @@ AddFriendsMainView = function(_parentWindow) {
 		if(String(e.source) ==="[object TiUIButton]") appFriend.deleteRow(e.index);
 	});
 
+	self.addEventListener('close',function(){
+		var FriendACS = require('acs/friendsACS');
+		var my_id = acs.getUserId();
+		FriendACS.friendACS_fetchedUserTotalFriends(my_id);
+	});
 ////////////////////////////
 	appFriendQuery();
 	facebookFriendQuery();

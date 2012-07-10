@@ -16,14 +16,14 @@ function CommentWindow(_topicId) {
 	var topicOwnerDeviceTokenId = "";
 	
 	var backButton = Ti.UI.createButton({
-        backgroundImage:'images/Backbutton.png',
+        backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
 	
 	//UI STUFF
 	var self = Titanium.UI.createWindow({
 		title: "Message Board",
-		barImage: 'images/NavBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
 	 	leftNavButton:backButton
 	});
 	

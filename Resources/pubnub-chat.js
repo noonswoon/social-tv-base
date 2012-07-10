@@ -25,6 +25,7 @@ Ti.App.Chat = function(_chatParams) {
     
 	var programData = {}; 
 	if(currentProgramId !== 'CTB_PUBLIC')
+	//TODO: check this out!!!
 		programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
 	else programData = { program_id: 'CTB_PUBLIC', 
 		name:'Public Room', 

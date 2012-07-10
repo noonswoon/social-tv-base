@@ -30,8 +30,8 @@ var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in 
 var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
 
 	
-var myCurrentCheckinPrograms = []; //should be reset every hour to empty array
-var myCurrentSelectedProgram = '';
+var myCurrentCheckinPrograms = ['CH3_CTBSW']; //should be reset every hour to empty array
+var myCurrentSelectedProgram = 'CH3_CTBSW'; //dummy value
 var friendRequests = [];
 
 // This is a single context application with mutliple windows in a stack

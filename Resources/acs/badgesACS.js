@@ -5,7 +5,7 @@ function badgeSort(a,b) {
 exports.fetchedBadges = function() {
 	Cloud.Photos.query({
 	    page: 1,
-	    per_page: 20,
+	    per_page: 100,
 	    where: {tag: "badge"}
 	}, function (e) {
 	    if (e.success) {

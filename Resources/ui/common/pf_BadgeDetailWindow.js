@@ -18,7 +18,7 @@ BadgeDetailWindow = function (_badge){
 		top: 35,
 	});
 	var badgeTitle = Ti.UI.createLabel({
-		font: {fontSize: 20, fontWeight: 'bold'},
+		font: {fontSize: 16, fontWeight: 'bold'},
 		top: 245,
 		textAlign: 'center',
 		height: 30,
@@ -64,10 +64,6 @@ BadgeDetailWindow = function (_badge){
 		curve: Ti.UI.iOS.ANIMATION_CURVE_EASE_OUT,
 		duration: 500
 	});
-	
-	// badgeView.addEventListener('click',function(){
-		// self.animate(animateRight);
-	// });
 	
 	self._setBadgeTitle = function(_newTitle,_unlock) {
 		if(_unlock===1){badgeTitle.text = _newTitle;} 

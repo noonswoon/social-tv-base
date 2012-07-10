@@ -66,7 +66,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		// var FacebookSharing = require('helpers/facebookSharing');
 		// FacebookSharing.checkinAppearOnFaceBook();
 	// });
-
+	
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,
 		width:103, height:104,

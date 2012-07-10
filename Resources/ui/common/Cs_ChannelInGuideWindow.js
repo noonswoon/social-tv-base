@@ -9,8 +9,16 @@ ChannelInGuideWindow = function (_index){
 	});
 	
 	var programsInChannelTableView = Ti.UI.createTableView({
-		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE
+		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		backgroundColor: 'transparent',
 	});
+	
+	programsInChannelTableView.backgroundGradient = {
+		type: 'linear',
+		startPoint: { x: '0%', y: '0%' },
+		endPoint: { x: '0%', y: '100%' },
+		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
+	};	
 
 	var programsInChannel = [];		
 	var allprograms = TVProgram.TVProgramModel_fetchPrograms(); 

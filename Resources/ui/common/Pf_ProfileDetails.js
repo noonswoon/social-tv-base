@@ -21,7 +21,7 @@ var ProfileDetailView = function(_parent,_userProfile,_status){
 	};	
 	
 	var profileTab = Titanium.UI.iOS.createTabbedBar({
-		labels: ['Stats', 'Activity', 'Badges', 'Rewards'],
+		labels: ['Stats', 'Activity', 'Badges'],//, 'Rewards'],
 		backgroundColor: '#5baad1',
 		style: Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		height: 30,

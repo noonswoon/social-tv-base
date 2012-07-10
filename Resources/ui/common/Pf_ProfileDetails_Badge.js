@@ -17,7 +17,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	var badgeImagesReady = false;
 	var myUnlockBadgesReady = false;	
 
-	var availableBadge = 12;
+	var availableBadge = 39;
 	var badgeRow = availableBadge/3;
 	var myUnlockedBadges = []; //array of 9 with 0/1 value
 	var badgesCollection =[];
@@ -25,7 +25,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	
 	var badgeView = Ti.UI.createView({
 		width: 320,
-		height: (badgeRow*100)+((badgeRow-1)*7)
+		height: (badgeRow*100)+((badgeRow-1)*4)
 	});
 
 	var animateNegativeLeft = Ti.UI.createAnimation({

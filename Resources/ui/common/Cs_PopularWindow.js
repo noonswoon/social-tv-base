@@ -1,13 +1,15 @@
 function PopularWindow(_parent) {
-	
-	var TVProgram = require('model/tvprogram');
+	alert(_parent);
 	var TVProgramACS = require('acs/tvprogramACS');
-	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
 	var CheckinACS = require('acs/checkinACS');
+	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
 	var CheckinModel = require('model/checkin');
+	var TVProgram = require('model/tvprogram');
 	var CacheHelper = require('helpers/cacheHelper');
-
-	var areAllProgramsTitlesLoaded = false; 
+	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
+	
+	var areAllProgramsTitlesLoaded = false;
+	var areBadgeShowPermissionReady = false;
 	var numProgramsToLoadCheckins = 0;
 	var usingPull2Refresh = false;
 	
@@ -15,13 +17,19 @@ function PopularWindow(_parent) {
 	Titanium.App.Analytics.trackPageview('/Popular');
 	
 	function isEverythingReady() {
-		if(areAllProgramsTitlesLoaded && (numProgramsToLoadCheckins === 0)) {
+		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0)) {
 			Ti.App.fireEvent("showDiscoveryPage");
 			hidePreloader(self);
 		}
 	}
+	
 	Ti.App.addEventListener('tvprogramsTitlesLoaded',function() {
 		areAllProgramsTitlesLoaded = true;
+		isEverythingReady();
+	});
+	
+	Ti.App.addEventListener('badgeShowPermissionLoaded',function() {
+		areBadgeShowPermissionReady = true;
 		isEverythingReady();
 	});
 	
@@ -41,7 +49,15 @@ function PopularWindow(_parent) {
 	var programListTable = Ti.UI.createTableView({
 		top: 42,
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		backgroundColor: 'transparent',
 	});
+	
+	programListTable.backgroundGradient = {
+		type: 'linear',
+		startPoint: { x: '0%', y: '0%' },
+		endPoint: { x: '0%', y: '100%' },
+		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
+	};	
 	
 	function tvprogramLoadedCompleteCallback(e) {
 		programListTable.data = [];	
@@ -143,6 +159,7 @@ function PopularWindow(_parent) {
 	});	
 	
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+	BadgeShowPermissionACS.badgeShowPermissionACS_fetchedPermission();
 	
 	return self;
 }

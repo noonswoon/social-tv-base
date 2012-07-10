@@ -158,14 +158,12 @@ function ApplicationTabGroup() {
 			myCurrentCheckinPrograms.push(programId);
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
-	}
-	
+	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	
 	function updateHeaderCheckinCallback() {
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
 	}
-	
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
 	
    	function closeApplicationTabGroupCallback() {
@@ -176,8 +174,7 @@ function ApplicationTabGroup() {
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}
-   	
-   	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
+  	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
    	
     return self;
 };

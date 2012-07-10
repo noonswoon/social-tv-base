@@ -5,7 +5,7 @@ var CheckinNotice = function(_tab) {
 		top: 0,
 		width: 320,
 		height: 365,
-		zIndex:40,
+		zIndex:40
 		
 	});
 

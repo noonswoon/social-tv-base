@@ -1,18 +1,14 @@
 CheckinMainWindow = function (_tvprogramData, _containingTab){
-
+	alert(_containingTab);
 	var CheckinACS = require('acs/checkinACS');
 	var PointACS = require('acs/pointACS');
 	var LeaderBoardACS = require('acs/leaderBoardACS');
 	var ActivityACS = require('acs/activityACS');
-	var CheckinModel = require('model/checkin');
 	var BadgeCondition = require('helpers/badgeCondition');
-	
-	var TVProgram = require('model/tvprogram');
-	
 	var updateActivity = require('helpers/updateActivity');
-	
-	var checkinPoint = 10;
-	
+	var customTabBar = require('lib/customTabBar');
+	var CheckinModel = require('model/checkin');		
+	var TVProgram = require('model/tvprogram');
 	var userID = acs.getUserId();
 	
 	var backButton = Ti.UI.createButton({
@@ -250,28 +246,28 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			var leaderboardData = allActivityDataForACS[1];
 			var activityData = allActivityDataForACS[2];
 		
-			var allIdDataForACS = ActivityDataIdForACS[1];	//idArray
+			var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
 			// checkinId / leaderboardId / activityId
-			var checkinId = allIdDataForACS[0]; 			//local id
-			var leaderboardId = allIdDataForACS[1]; 		//acs id
-			var activityId = allIdDataForACS[2]; 			//local id
+			var checkinId = allIdDataForACS[0]; 					//local id
+			var leaderboardId = allIdDataForACS[1];			 		//acs id
+			var activityId = allIdDataForACS[2]; 					//local id
 
 			//require callback from acs
-		//	CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
-		//	ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 			
 			//done after adding to acs
-		//	PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
-		//	LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
+			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 			
 			//check badge condition from checkin
 			checkinData.program_type = _tvprogramData.programType;
 			checkinData.program_id = _tvprogramData.programId;
 			Ti.API.info('calling BadgeCondition.checkinEvent // checkinData.program_type: '+checkinData.program_type);
 			BadgeCondition.checkinEvent(checkinData);
-		//	myCurrentCheckinPrograms.push(_tvprogramData.programId);
-		//	Ti.API.info('firing checinToProgram event!');
-		//	Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
+			myCurrentCheckinPrograms.push(_tvprogramData.programId);
+			Ti.API.info('firing checinToProgram event!');
+			Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 		});
 	}
 	else{
@@ -326,19 +322,14 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		curTabGroup.setActiveTab(3)
 	});
 	
-
 	function update1checkinCallBack(e) {
 		var num = TVProgram.TVProgramModel_countCheckins(_tvprogramData.eventId);
-		
+		var FacebookSharing = require('helpers/facebookSharing');		
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
-	
-		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
-		
-		//TODO: create facebook popup
-		var FacebookSharing = require('helpers/facebookSharing');
-		alert(e.fetchedACheckin);
 		FacebookSharing.checkinPopUpOnFacebook(e.fetchedACheckin);
+		
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
 		
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');

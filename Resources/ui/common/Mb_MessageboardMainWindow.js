@@ -43,9 +43,7 @@ function MessageboardMainWindow(_programId) {
 		rightNavButton: callPicker
 	});
 	
-	alert(myCurrentCheckinPrograms);
 	if(myCurrentCheckinPrograms.length<=0) {
-	//if(myCurrentCheckinPrograms.length==0) {
 		var CheckinFirstWindow = require('ui/common/Howto_CheckinFirst');
 		var checkinFirstWindow = new CheckinFirstWindow('messageboard');
 		self.add(checkinFirstWindow);

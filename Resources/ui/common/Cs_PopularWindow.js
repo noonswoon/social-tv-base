@@ -1,5 +1,4 @@
 function PopularWindow(_parent) {
-	alert(_parent);
 	var TVProgramACS = require('acs/tvprogramACS');
 	var CheckinACS = require('acs/checkinACS');
 	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');

@@ -1,12 +1,11 @@
 CheckinMainWindow = function (_tvprogramData, _containingTab){
-	alert(_containingTab);
+	
 	var CheckinACS = require('acs/checkinACS');
 	var PointACS = require('acs/pointACS');
 	var LeaderBoardACS = require('acs/leaderBoardACS');
 	var ActivityACS = require('acs/activityACS');
 	var BadgeCondition = require('helpers/badgeCondition');
 	var updateActivity = require('helpers/updateActivity');
-	var customTabBar = require('lib/customTabBar');
 	var CheckinModel = require('model/checkin');		
 	var TVProgram = require('model/tvprogram');
 	var userID = acs.getUserId();

@@ -31,6 +31,11 @@ function ApplicationTabGroup() {
 	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
 	var blankwin = new BlankWindow();
+
+	   	
+   	var updateCustomTabBar = function(_tab) {
+   		myCustomTabBar.back(_tab);
+   	}
 	
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
@@ -42,6 +47,7 @@ function ApplicationTabGroup() {
 	selectionTab.tabGroup = self; 
 	selectionTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
     var chatTab = Titanium.UI.createTab({  
@@ -70,6 +76,7 @@ function ApplicationTabGroup() {
     messageboardwin.containingTab = messageboardTab;
     messageboardTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 2;
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
 	var productTab = Ti.UI.createTab({
@@ -80,6 +87,7 @@ function ApplicationTabGroup() {
 	productwin.containingTab = productTab;
 	productTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 3;	
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
 	var profileTab = Ti.UI.createTab({
@@ -90,6 +98,7 @@ function ApplicationTabGroup() {
 	profilewin.containingTab = profileTab;
 	profileTab.addEventListener('focus', function() {
 		tabIndexToComeBack = 4;
+		updateCustomTabBar(tabIndexToComeBack);
 	});
 	
 	//////////////////////

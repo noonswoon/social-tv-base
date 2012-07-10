@@ -36,7 +36,6 @@ exports.getCacheTime = function(key) {
 
 
 exports.levelUpCache = function(_user,_title) {
-	Ti.API.info('levelUpCache');
 	if(!Ti.App.Properties.hasProperty(_user)) {
 		Ti.App.Properties.setString(_user,_title);
 		Ti.API.info('first time setting //level: '+_title);
@@ -47,6 +46,5 @@ exports.levelUpCache = function(_user,_title) {
 			var FacebookSharing = require('helpers/facebookSharing');
 			FacebookSharing.levelUpPopUpOnFacebook(_title);
 		}
-		else Ti.API.info(_user+' level: '+_title+' .....not yet LV up');
 	}
 }

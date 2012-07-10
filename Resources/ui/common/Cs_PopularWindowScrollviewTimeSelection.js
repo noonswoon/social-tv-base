@@ -42,12 +42,12 @@ var PopularWindowSrcollviewTimeSelection = function(){
 	{
 		showNow.left = hour*50-22;
 	}
-	selectionView.add(showNow);
+	// selectionView.add(showNow);
 	
 	var textOfShowNow = Ti.UI.createLabel({
 		text: '',
 		left: 12+hour*50,
-		color: 'white',
+		color: 'red',
 		font:{fontSize:14,fontWeight:'bold'},
 		textAlign:'center',
 		zIndex: 1

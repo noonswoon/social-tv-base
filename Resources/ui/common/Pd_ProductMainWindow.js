@@ -5,12 +5,26 @@ function ProductMainWindow(_programId) {
 	var Checkin = require('model/checkin');
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
 	var TVProgram = require('model/tvprogram');
-	//var CheckinFirst = require('ui/common/Howto_CheckinFirst');
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Product');
 	
 	var currentProgramId = _programId;
+	
+	//Check whether user has checkin to any program
+	var self = Titanium.UI.createWindow({
+		backgroundImage: 'images/messageboard/appBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
+		title: "Product"
+	});
+
+	if(currentProgramId === '') { //have not checkedin to any program yet
+		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+		var checkinguidelinewin = new CheckinGuidelineWindow('product');
+		self.add(checkinguidelinewin);
+		return self;
+	}
+	
 	var dataForTab = [];
 	var hasLoadedPicker = false;
 	var pickerSelectedIndex = 0;
@@ -23,18 +37,7 @@ function ProductMainWindow(_programId) {
 		backgroundImage: 'images/messageboard/optionbutton.png'
 	});
 	
-	var self = Titanium.UI.createWindow({
-		title: "Product",
-		barImage: 'images/NavBG.png',
-		backgroundImage: 'images/bg.png',
-		rightNavButton: callPicker
-	});
-
-	if(myCurrentCheckinPrograms.length<=0) {
-		var CheckinFirstWindow = require('ui/common/Howto_CheckinFirst');
-		var checkinFirstWindow = new CheckinFirstWindow('product');
-		self.add(checkinFirstWindow);
-	}	
+	self.rightNavButton = callPicker
 	
 	var productSelectProgramToolbar = Ti.UI.createView({
 		top: 0,
@@ -44,7 +47,7 @@ function ProductMainWindow(_programId) {
 	self.add(productSelectProgramToolbar);
 	
 	var selectProgramLabel = Ti.UI.createLabel({
-		text: 'Chatterbox Souvenirs',//infoForName[0].name,
+		text: infoForName[0].name,
 		left: 10,
 		width: 'auto',
 		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
@@ -149,17 +152,8 @@ function ProductMainWindow(_programId) {
 	done.addEventListener('click',function() {
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
-		if(pickerSelectedIndex === 0) {
-			currentProgramId = 'CTB_PUBLIC';
-			selectProgramLabel.text = 'Chatterbox Souvenirs';
-			//messageboardHeader._setHeader('General Board','Chatterbox General Board','http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',452,'CTB');
-			//ProductACS.productACS_fetchedAllProducts(currentProgramId);
-		} else {
-			currentProgramId = picker.getSelectedRow(0).progId;
-			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-			//messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
-			//ProductACS.productACS_fetchedAllProducts(currentProgramId);
-		}
+		currentProgramId = picker.getSelectedRow(0).progId;
+		alert('selecting new programId: '+currentProgramId);
 	});
 
 	picker.addEventListener('change',function(e) {
@@ -178,9 +172,7 @@ function ProductMainWindow(_programId) {
 	ProductACS.productACS_fetchedAllProducts(_programId);
 
 	Ti.App.addEventListener('fetchedAllProduct', function(e){
-		
 		self.remove(unavailable);
-		
 		var viewRowData = [];
 		var totalProducts = e.fetchedAllProduct.length;
 		var numRows = Math.ceil(totalProducts/2);
@@ -190,7 +182,6 @@ function ProductMainWindow(_programId) {
 		} else {
 			for(var i=0;i<numRows;i++){
 				var row = new ProductMainWindowTableViewRow(self);
-			
 				for(var j=0;j<=1;j++){
 					var productIndex = i*2 + j;
 					if(productIndex >= totalProducts)

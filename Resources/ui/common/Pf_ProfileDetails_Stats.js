@@ -216,8 +216,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 
 		var leaderDbUpdatedCallBack = function() {
 			var leaderBoardData = PointModel.pointModel_fetchRank();
-			Ti.API.info('leaderBoardData.length = '+leaderBoardData.length);
-	    	leaderBoardData.sort(totalPointSort);
+			leaderBoardData.sort(totalPointSort);
 	    	createLeaderBoardView(leaderBoardData);
 	    	addMoreFriend(leaderBoardData);
 	    	updateExpBar();

@@ -4,26 +4,17 @@ function ApplicationTabGroup() {
     	backgroundColor: '#fff',
     	
     });
-
+	Ti.include('lib/customTabBar.js');
+		
 	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
-	
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
     
     var myUserId = acs.getUserId();
-    
-	var programPublic = {
-		programId: 'CTB_PUBLIC', 
-		programName:'Public', 
-		programSubname:'',
-		programImage: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',
-		programChannel: 'CTB',
-		programNumCheckin: 25345
-	};
 	
 	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
 	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
@@ -31,77 +22,33 @@ function ApplicationTabGroup() {
 	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
 	var blankwin = new BlankWindow();
-
-	   	
-   	var updateCustomTabBar = function(_tab) {
-   		myCustomTabBar.back(_tab);
-   	}
 	
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
-	//	title: 'Discover',
-	//	icon: '/images/discover.png',
 		window: selectionwin
 	});
 	selectionwin.containingTab = selectionTab;
 	selectionTab.tabGroup = self; 
-	selectionTab.addEventListener('focus', function() {
-		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
-		updateCustomTabBar(tabIndexToComeBack);
-	});
 	
     var chatTab = Titanium.UI.createTab({  
-      // icon: '/images/chat-2.png',
-		// title: 'Chat',
-		window: chatwin,
-	//	touchEnabled: false
-    });
+     	window: chatwin,
+	});
     chatwin.containingTab = chatTab;
-    chatTab.addEventListener('focus', function() {
-    	tabIndexToComeBack = 1;
-		updateCustomTabBar(tabIndexToComeBack);
-   // 	chatwin.containingTab.open(chatwin);
-    //	myCustomTabBar.hide();
-    });
    
-    // chatwin.addEventListener('close', function() {
-    	// self.setActiveTab(self.tabs[tabIndexToComeBack]);
-    	// myCustomTabBar.back(tabIndexToComeBack);
-    	// myCustomTabBar.show();
-    // });
-//     
     var messageboardTab = Titanium.UI.createTab({  
-       // icon:'/images/messageboard.png',
-      //  title:'Board',
         window: messageboardwin,
     });
     messageboardwin.containingTab = messageboardTab;
-    messageboardTab.addEventListener('focus', function() {
-		tabIndexToComeBack = 2;
-		updateCustomTabBar(tabIndexToComeBack);
-	});
 	
 	var productTab = Ti.UI.createTab({
-	//	icon: '/images/product.png',
-	//	title: 'Product',
 		window: productwin,
 	});
 	productwin.containingTab = productTab;
-	productTab.addEventListener('focus', function() {
-		tabIndexToComeBack = 3;	
-		updateCustomTabBar(tabIndexToComeBack);
-	});
 	
 	var profileTab = Ti.UI.createTab({
-	//	icon: '/images/me.png',
-	//	title: 'Me',
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;
-	profileTab.addEventListener('focus', function() {
-		tabIndexToComeBack = 4;
-		updateCustomTabBar(tabIndexToComeBack);
-	});
 	
 	//////////////////////
 	self.addTab(selectionTab);
@@ -115,24 +62,21 @@ function ApplicationTabGroup() {
 	
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
-
 	self.open();
 	
-	Ti.include('lib/customTabBar.js');
 	var myCustomTabBar = new CustomTabBar({
 		tabBar: self,
 		imagePath: 'images/tabgroup/',
 		width: 64,
 		height: 54,
 		items: [
-		{ image: 'discover.png', selected: 'discover_over.png' },
-		{ image: 'chat.png', selected: 'chat_over.png' },
-		{ image: 'board.png', selected: 'board_over.png' },
-		{ image: 'shop.png', selected: 'shop_over.png' },
-		{ image: 'me.png', selected: 'me_over.png' }
+			{ image: 'discover.png', selected: 'discover_over.png' },
+			{ image: 'chat.png', selected: 'chat_over.png' },
+			{ image: 'board.png', selected: 'board_over.png' },
+			{ image: 'shop.png', selected: 'shop_over.png' },
+			{ image: 'me.png', selected: 'me_over.png' }
 		]
 	});
-
 	myCustomTabBar.show();
    	
 	//PROFILE: CALLING ACS

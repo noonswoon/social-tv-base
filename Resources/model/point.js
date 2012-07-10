@@ -8,13 +8,11 @@ db.close();
 exports.pointModel_updateLeadersFromACS = function(_leadersCollection) {
 	var db = Ti.Database.open('Chatterbox'); 
 	db.execute('DELETE FROM leaderboard');
-	Ti.API.info('_leadersCollection = '+_leadersCollection.length);
 	for(var i=0;i < _leadersCollection.length; i++) {
 		var curRank = _leadersCollection[i];
 		var name =  curRank.user.first_name +' '+ curRank.user.last_name;
 		db.execute("INSERT INTO leaderboard(id, leader_acs_id, user_id, fb_id, name, totalPoint) VALUES(NULL,?,?,?,?,?)", curRank.id, curRank.user.id, curRank.user.external_accounts[0].external_id, name, curRank.totalPoint);
 	}
-	Ti.API.info('pointModel_updateLeadersFromACS / LeaderBoard database length: '+ i);
 	db.close();
 	Ti.App.fireEvent("leaderDbUpdated");
 };
@@ -72,13 +70,7 @@ exports.pointModel_updateLeaderToACS = function(_point) {
 	if(isExisted) {
 		db.execute('UPDATE leaderboard SET totalPoint = ? where user_id = ?', newPoint, _point.user_id);
 	} 
-	Ti.API.info('pointModel_updateLeaderToACS / totalPoint = ' + newPoint);
-	//usually this won't happen
-	//else {
-		//insert something here
-	//	db.execute("INSERT INTO leaderboard(id, leader_acs_id, user_id, name, totalPoint) VALUES(NULL,NULL,?,?,?)", _point.user_id, _point.name, _point.point);		
-		//get newId
-	//	newId = db.lastInsertRowId;}
+
 	returnFromPointModel.push(newPoint);
 	result.close();
 	db.close();

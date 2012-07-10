@@ -9,12 +9,12 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 		top: 42
 	});
 	
-	var programsInChannelTableView = Ti.UI.createTableView({
+	var programsOfChannelTableView = Ti.UI.createTableView({
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		backgroundColor: 'transparent',
 	});
 	
-	programsInChannelTableView.backgroundGradient = {
+	programsOfChannelTableView.backgroundGradient = {
 		type: 'linear',
 		startPoint: { x: '0%', y: '0%' },
 		endPoint: { x: '0%', y: '100%' },

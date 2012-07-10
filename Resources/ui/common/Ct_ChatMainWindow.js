@@ -1,5 +1,5 @@
 function ChatMainWindow(_programId) {
-//	var CheckinACS = require('acs/checkinACS');
+
     // -------------------------------------------------------------------------
 	// INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
 	// -------------------------------------------------------------------------
@@ -13,7 +13,8 @@ function ChatMainWindow(_programId) {
 	//
 	// Returns an Object with Titanium Window Inside
 	//
-
+	var currentProgramId = _programId;
+	
 //	var pubnub_chat_window = Ti.App.Chat({
 //	    "chat-room" : _programId,
 //	    "window"    : {
@@ -24,12 +25,19 @@ function ChatMainWindow(_programId) {
 		
 
 //	return pubnub_chat_window.chat_window;
-
+	
 	var self = Titanium.UI.createWindow({
 		barImage: 'images/nav_bg_w_pattern.png',
 		title: 'Group Chat',
 		backgroundColor: 'red'
 	});		
+	
+	if(currentProgramId === '') { //have not checkedin to any program yet
+		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+		var checkinguidelinewin = new CheckinGuidelineWindow('chat');
+		self.add(checkinguidelinewin);
+		return self;
+	}
 
 	var tableView = Ti.UI.createTableView({
 		backgroundColor: 'transparent',

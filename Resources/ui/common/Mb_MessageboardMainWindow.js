@@ -12,17 +12,27 @@ function MessageboardMainWindow(_programId) {
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Messageboard');
-
+	
+	var self = Titanium.UI.createWindow({
+		backgroundImage: 'images/messageboard/appBG.png',
+		barImage: 'images/nav_bg_w_pattern.png',
+		title: "Message Board",
+	});
+	
 	//OBJECTS INSTANTIATION		
 	var currentProgramId = _programId;
-	var messageboardHeader = new MessageboardHeader('General Board','Chatterbox General Board');	
-	if(currentProgramId === 'CTB_PUBLIC') {
-		messageboardHeader._setHeader('General Board','Chatterbox General Board','http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png',452,'CTB');
+	var messageboardHeader = new MessageboardHeader('Chatterbox','Chatterbox Message Board');	
+	
+	//Check whether user has checkin to any program
+	if(currentProgramId === '') { //have not checkedin to any program yet
+		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+		var checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
+		self.add(checkinguidelinewin);
+		return self;
 	} else {
 		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);	
 	}	
-	
 	
 	var addWindow = new MessageboardAddWindow(currentProgramId);	
 	var usingPull2Refresh = false;
@@ -36,18 +46,7 @@ function MessageboardMainWindow(_programId) {
 		backgroundImage: 'images/messageboard/option_button.png'
 	});
 	
-	var self = Titanium.UI.createWindow({
-		backgroundImage: 'images/messageboard/appBG.png',
-		barImage: 'images/nav_bg_w_pattern.png',
-		title: "Message Board",
-		rightNavButton: callPicker
-	});
-	
-	if(myCurrentCheckinPrograms.length<=0) {
-		var CheckinFirstWindow = require('ui/common/Howto_CheckinFirst');
-		var checkinFirstWindow = new CheckinFirstWindow('messageboard');
-		self.add(checkinFirstWindow);
-	}
+	self.rightNavButton = callPicker;
 	
 	var searchView = Ti.UI.createView({
 		top: 120,
@@ -131,15 +130,10 @@ function MessageboardMainWindow(_programId) {
 			var dataForPicker = [];
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
 				var programId = myCurrentCheckinPrograms[i];
-				if(programId === 'CTB_PUBLIC') {
-					dataForPicker.push({title:'Public Board', progId:'CTB_PUBLIC'});
-				} else {
-					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-					Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
-					var programName = programInfo[0].name;
-					var program_id = programInfo[0].program_id;
-					dataForPicker.push({title:programName, progId:program_id});
-				}
+				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+				Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
+				var programName = programInfo[0].name;
+				dataForPicker.push({title:programName, programId:programId});
 			}
 			picker.add(dataForPicker);
 			picker_view.add(picker);
@@ -157,14 +151,11 @@ function MessageboardMainWindow(_programId) {
 	done.addEventListener('click',function() {
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
-		if(pickerSelectedIndex === 0) {
-			currentProgramId = 'CTB_PUBLIC';
-			messageboardHeader._setHeader('ธรณีนี่นี้ใครครอง','ตอนที่ 17','images/messageboard/yaya.jpg',2000,'ch3');
-		} else {
-			currentProgramId = picker.getSelectedRow(0).progId;
-			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-			messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
-		}
+		
+		currentProgramId = picker.getSelectedRow(0).programId;
+		var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
+		
 		//reset programId for addWindow
 		addWindow._setProgramId(currentProgramId);
 		

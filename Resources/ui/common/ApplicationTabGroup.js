@@ -53,21 +53,23 @@ function ApplicationTabGroup() {
     var chatTab = Titanium.UI.createTab({  
       // icon: '/images/chat-2.png',
 		// title: 'Chat',
-		window: blankwin,
-		touchEnabled: false
+		window: chatwin,
+	//	touchEnabled: false
     });
     chatwin.containingTab = chatTab;
     chatTab.addEventListener('focus', function() {
-    	chatwin.containingTab.open(chatwin);
-    	myCustomTabBar.hide();
+    	tabIndexToComeBack = 1;
+		updateCustomTabBar(tabIndexToComeBack);
+   // 	chatwin.containingTab.open(chatwin);
+    //	myCustomTabBar.hide();
     });
    
-    chatwin.addEventListener('close', function() {
-    	self.setActiveTab(self.tabs[tabIndexToComeBack]);
-    	myCustomTabBar.back(tabIndexToComeBack);
-    	myCustomTabBar.show();
-    });
-    
+    // chatwin.addEventListener('close', function() {
+    	// self.setActiveTab(self.tabs[tabIndexToComeBack]);
+    	// myCustomTabBar.back(tabIndexToComeBack);
+    	// myCustomTabBar.show();
+    // });
+//     
     var messageboardTab = Titanium.UI.createTab({  
        // icon:'/images/messageboard.png',
       //  title:'Board',

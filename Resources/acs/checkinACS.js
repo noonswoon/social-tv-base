@@ -1,7 +1,7 @@
 exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 	Cloud.Checkins.query({
     page: 1,
-    per_page: 500,
+    per_page: 100,
     where: {event_id: _eventId},
     order: '-updated_at'
 
@@ -43,7 +43,6 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 //fetch checkin data only for today to keep in database
 exports.checkinACS_fetchedUserCheckIn = function(_id) {
 	var startOf_the_day = moment().sod().format('YYYY-MM-DD, HH:mm:ss');
-	
 	var startOfDayLocal = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
 	var acsConvertedStartOfDay = convertLocalTimeToACSTime(startOfDayLocal);
 	var dm = moment(acsConvertedStartOfDay, "YYYY-MM-DDTHH:mm:ss");

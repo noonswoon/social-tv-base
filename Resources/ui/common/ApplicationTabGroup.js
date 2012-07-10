@@ -94,6 +94,9 @@ function ApplicationTabGroup() {
     self.addTab(productTab);
     self.addTab(profileTab);
 
+	//reset app badge number
+	Ti.UI.iPhone.appBadge = null;
+	
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
    	

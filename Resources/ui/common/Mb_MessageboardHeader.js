@@ -19,7 +19,7 @@ MessageboardHeader = function(_showName,_showSubName) {
 	
 	header.programImage.addEventListener('click', function() {
 		var PushNotificationCTB = require('ctb/pushnotificationCTB');
-		PushNotificationCTB.pushNotificationCTB_isAllowToSendWhenGetComment('2455334mickeysasdf');
+		PushNotificationCTB.pushNotificationCTB_getPNPermissions('4cm2354');
 		//for testing stuff - KA
 	});
 	

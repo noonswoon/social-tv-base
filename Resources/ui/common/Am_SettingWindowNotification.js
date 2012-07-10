@@ -1,28 +1,10 @@
 Am_SettingWindowNotification = function(){
-	
-	var NotificationTrackACS = require('acs/notificationTrackACS');
-	
-	var pushCommentCurrentSetting;
-	var friendsCheckinCurrentSetting;
-	var notificationACS_id = 0;
-	var user_id = acs.getUserId();
-	NotificationTrackACS.notificationTrackACS_fetchedAllowance(user_id);
-	
-	var fetchedAllowanceCallback = function(e) {
-		notificationACS_id = e.fetchedNotification.id;
-		Ti.API.info("notificationACS_id: "+notificationACS_id);
-		receivedCommentSwitch.value = e.fetchedNotification.comment;
-		friendCheckinSwitch.value = e.fetchedNotification.friendCheckin;
-		
-		pushCommentCurrentSetting = e.fetchedNotification.comment;	
-		friendsCheckinCurrentSetting = e.fetchedNotification.friendCheckin;
-		
-		receivedComment.add(receivedCommentSwitch);
-		friendCheckin.add(friendCheckinSwitch);
-	}
-	Ti.App.addEventListener('fetchedAllowance',fetchedAllowanceCallback);
-	
+	var PushNotificationCTB = require('ctb/pushnotificationCTB');
+	var userId = acs.getUserId();
 	var dataForSetting = [];
+	
+	PushNotificationCTB.pushNotificationCTB_getPNPermissions(userId);
+	
 	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/Backbutton.png',
@@ -41,7 +23,7 @@ Am_SettingWindowNotification = function(){
 	});
 
 	var headerLabel = Ti.UI.createLabel({
-		text: 'Receive a push notification on ...',
+		text: 'Receive a push notification when ...',
 		color: 'white',
 		font:{fontWeight:'bold',fontSize:16},
 		left: 20,
@@ -58,66 +40,66 @@ Am_SettingWindowNotification = function(){
 		top: 30
 	});
 	
-	//received comment
-	var receivedComment = Ti.UI.createTableViewRow({
-		selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		height: 50
-	});
-	
-	var receivedCommentLabel = Ti.UI.createLabel({
-		text: 'Received comment',
-		font:{fontWeight:'bold',fontSize:16},
-		left: 10
-	});
-	receivedComment.add(receivedCommentLabel);
-	
-	var receivedCommentSwitch = Ti.UI.createSwitch({
+	//get a comment
+	var getCommentPNSwitch = Ti.UI.createSwitch({
 		value: true,
 		right: 10
 	});
-//	receivedComment.add(receivedCommentSwitch);
+
+	var getCommentPNLabel = Ti.UI.createLabel({
+		text: 'Your post gets comments',
+		font:{fontWeight:'bold',fontSize:14},
+		left: 10
+	});
 	
-	//friends check-in to a program
-	var friendCheckin = Ti.UI.createTableViewRow({
+	var getCommentPN = Ti.UI.createTableViewRow({
 		selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		height: 50
 	});
 	
-	var friendCheckinLabel = Ti.UI.createLabel({
-		text: 'Friends check-in to a program',
+	var friendCheckinPNSwitch = Ti.UI.createSwitch({
+		value: true,
+		right: 10
+	});
+	
+	var friendCheckinPNLabel = Ti.UI.createLabel({
+		text: 'Your friends checkin to a program',
 		width: 170,
 		left: 10,
 		textAlign: 'left',
-		font:{fontWeight:'bold',fontSize:16}
-	});
-	friendCheckin.add(friendCheckinLabel);
-	
-	var friendCheckinSwitch = Ti.UI.createSwitch({
-		value: true,
-		right: 10
-	});
-//	friendCheckin.add(friendCheckinSwitch);
-	
-	//Set Current Push Comment
-	receivedCommentSwitch.value = pushCommentCurrentSetting;
-	//Set Current Friends Checkin
-	friendCheckinSwitch.value = friendsCheckinCurrentSetting;
-	
-	receivedCommentSwitch.addEventListener('change',function(e){
-		var isShareComment = e.value;
-		NotificationTrackACS.notificationTrackACS_updateCommentAllowance(notificationACS_id,isShareComment);
+		font:{fontWeight:'bold',fontSize:14}
 	});
 	
-	friendCheckinSwitch.addEventListener('change',function(e){
-		var isFriendsCheckin = e.value;
-		NotificationTrackACS.notificationTrackACS_updateFriendCheckinAllowance(notificationACS_id,isFriendsCheckin);
+	var friendCheckinPN = Ti.UI.createTableViewRow({
+		selectionStyle:Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		height: 50
+	});
+	
+	getCommentPN.add(getCommentPNLabel);
+	getCommentPN.add(getCommentPNSwitch);
+	friendCheckinPN.add(friendCheckinPNLabel);
+	friendCheckinPN.add(friendCheckinPNSwitch);
+	dataForSetting.push(getCommentPN);
+	dataForSetting.push(friendCheckinPN);
+	notificationTableView.setData(dataForSetting);	
+	self.add(notificationTableView);
+	
+	var fetchedUserPNPermissionsCallback = function(e) {
+		getCommentPNSwitch.value = e.userPNPermissions[0];
+		friendCheckinPNSwitch.value = e.userPNPermissions[1];
+	}
+	Ti.App.addEventListener('fetchedUserPNPermissions',fetchedUserPNPermissionsCallback);
+	
+	getCommentPNSwitch.addEventListener('change',function(e){
+		var notifyWhenGetComment = e.value;
+		PushNotificationCTB.pushNotificationCTB_updatePNPermission(userId, notifyWhenGetComment,1);
+	});
+	
+	friendCheckinPNSwitch.addEventListener('change',function(e){
+		var notifyWhenFriendCheckin = e.value;
+		PushNotificationCTB.pushNotificationCTB_updatePNPermission(userId, notifyWhenFriendCheckin,2);
 	});
 
-	dataForSetting.push(receivedComment);
-	dataForSetting.push(friendCheckin);
-	notificationTableView.setData(dataForSetting);
-	
-	self.add(notificationTableView);
 	return self;
 }
 module.exports = Am_SettingWindowNotification;

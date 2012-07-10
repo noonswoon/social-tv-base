@@ -31,13 +31,13 @@ function MessageboardAddWindow(_programId) {
 		backgroundImage: 'images/messageboard/add/textandbuttonviewBG.png'
 	});
 	
-	var title = Ti.UI.createLabel({
+	var titleLabel = Ti.UI.createLabel({
 		text: 'Title',
 		top: 10,
 		left: 10,
 		font:{fontWeight:'bold',fontSize:14},
 	});
-	textAndButtonView.add(title);
+	textAndButtonView.add(titleLabel);
 		
 	var topicTitle = Ti.UI.createTextField({
 		top: 30,
@@ -49,13 +49,13 @@ function MessageboardAddWindow(_programId) {
 	})
 	textAndButtonView.add(topicTitle);
 	
-	var title = Ti.UI.createLabel({
+	var contentLabel = Ti.UI.createLabel({
 		text: 'Content',
 		top: 80,
 		left: 10,
 		font:{fontWeight:'bold',fontSize:14},
 	});
-	textAndButtonView.add(title);
+	textAndButtonView.add(contentLabel);
 
 	var topicContent = Ti.UI.createTextArea({
 		value: '',

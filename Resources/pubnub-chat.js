@@ -35,10 +35,11 @@ Ti.App.Chat = function(setup) {
 	var pickerSelectedIndex = 0;
 	
 	var chatMessagesTableView = Ti.UI.createTableView({
-		top:90,
-		height: 290,
+		top:45,
+		height: 'auto',
 		backgroundColor: 'transparent',
 		separatorColor: 'transparent',
+		scrollable: true
 	});
 	
     // ----------------------------------
@@ -92,13 +93,20 @@ Ti.App.Chat = function(setup) {
         backgroundImage:'images/Backbutton.png',
         width:57,height:34
 	});
+	
+	var callPicker = Ti.UI.createButton({
+		width: 39,
+		height: 32,
+		backgroundImage: 'images/messageboard/optionbutton.png'
+	});
 
 	var chat_window = Ti.UI.createWindow({
 		title: "Group Chat",
 		barImage: 'images/NavBG.png',
 		backgroundImage: 'images/bg.png',
 		tabBarHidden: true,
-		leftNavButton:backButton
+		leftNavButton: backButton,
+		rightNavButton: callPicker
 	});
 	
 	backButton.addEventListener('click', function(){
@@ -111,31 +119,12 @@ Ti.App.Chat = function(setup) {
 		backgroundImage: 'images/chat/selectprogramtoolbarBG.png'
 	});
 
-	
 	var selectProgramLabel = Ti.UI.createLabel({
 		text: currentChatRoomName,
 		left: 10,
 		width: 'auto',
 		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
 	});	
-	
-	var watchLabel = Ti.UI.createLabel({
-		color: '#8c8c8c',
-		width: 70,
-		height: 50,
-		right: 55,
-		textAlign: 'right',
-		text: 'WATCH',
-		font:{fontSize: 11}
-	});
-
-	var selectProgramButton = Ti.UI.createButton({
-		width: 41,
-		height: 34,
-		right: 10,
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/toolbarbutton.png'
-	});
 	
 	//Opacity window when picker is shown
 	var opacityView = Ti.UI.createView({
@@ -183,7 +172,7 @@ Ti.App.Chat = function(setup) {
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 
-	selectProgramButton.addEventListener('click',function() {
+	callPicker.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
 			var dataForPicker = [];
 			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
@@ -246,70 +235,8 @@ Ti.App.Chat = function(setup) {
 	
 	//////
 
-	var userView = Ti.UI.createView({
-		top: 40,
-		left:0,
-		height: 47,
-	});
-	
-	var scrollView = Ti.UI.createScrollView({
-		backgroundImage: 'images/chat/users_onlineBG.png',
-		contentWidth:500,
-		contentHeight:35,
-		top:0,
-		height:47,
-		width:320
-	});
-	
-	//scrollable users -> still dummy values
-	for(var i=0;i<5;i++){
-		var userDisplayBorder = Ti.UI.createView({
-			backgroundImage: 'images/chat/users_display.png',
-			width: 36,
-			height: 37,
-			top:3,
-			left:i*40+10
-		});
-		
-		var starTag = Ti.UI.createImageView({
-			width: 13,
-			height: 11,
-			image: 'images/chat/star_tag.png',
-			top: 0,
-			right: 0,
-			zIndex: 2
-		});
-					
-		var dummyImage = Ti.UI.createImageView({
-			image:'images/chat/dummy.png',
-			top: 2,
-			left: 2,
-			height:30,
-			width:30
-		});
-		userDisplayBorder.add(dummyImage);	
-		userDisplayBorder.add(starTag);
-		scrollView.add(userDisplayBorder);
-	}
-	
-	var addFriendView = Ti.UI.createView({
-		top: 0,
-		width: 65,
-		height: 43,
-		right: 0,
-		backgroundImage: 'images/chat/addfriendBG.png'
-	});
-	
-	var addFriend = Ti.UI.createButton({
-		width: 32,
-		height: 32,
-		right: 8,
-		backgroundImage: 'images/chat/addfriend.png'
-	});
-	// addFriendView.add(addFriend);
-	
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
-		top: 120,
+		top: 10,
 		height: 30,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
@@ -338,8 +265,7 @@ Ti.App.Chat = function(setup) {
         font: {fontSize:14},
         textAlign: 'left',
         backgroundColor: 'transparent',
-        backgroundImage: 'images/chat/chattextfieldBG.png',
-        // suppressReturn: false
+        backgroundImage: 'images/chat/chattextfieldBG.png'
     });
 	
     // Send Button
@@ -354,12 +280,7 @@ Ti.App.Chat = function(setup) {
 	chatInputView.add(sendButton);
 	
 	selectProgramToolbar.add(selectProgramLabel);
-	selectProgramToolbar.add(watchLabel);
-	selectProgramToolbar.add(selectProgramButton);
-	userView.add(scrollView);
-	// userView.add(addFriendView);
 	chat_window.add(selectProgramToolbar);
-	chat_window.add(userView);
 	chat_window.add(chatMessagesTableView);
 	chat_window.add(chatInputView);
 	chat_window.add(picker_view);

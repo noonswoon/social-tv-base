@@ -51,7 +51,7 @@ function ChannelSelectionMainWindow(){
 		}
 		else if (e.index==2){
 			if(friendswin == null)
-				friendswin = new FriendsWindow();
+				friendswin = new FriendsWindow(self);
 			mainView.add(friendswin);
 		} else {
 			Ti.API.info('what is going on???: '+JSON.stringify(e));

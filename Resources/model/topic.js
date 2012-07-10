@@ -1,7 +1,7 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY, acs_object_id TEXT, program_id TEXT, title TEXT, comments_count INTEGER, username TEXT, device_token_id TEXT, is_deleted INTEGER,updated_at TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY, acs_object_id TEXT, program_id TEXT, title TEXT, content TEXT, photo TEXT, comments_count INTEGER, username TEXT, device_token_id TEXT, is_deleted INTEGER,updated_at TEXT);');
 db.close();
 
 exports.topicModel_fetchFromProgramId = function(_programId) {
@@ -11,6 +11,8 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 	while(result.isValidRow()) {
 		fetchedTopics.push({
 			title: result.fieldByName('title'),
+			content: result.fieldByName('content'),
+			photo: result.fieldByName('photo'),
 			id: Number(result.fieldByName('id')),
 			acsObjectId: result.fieldByName('acs_object_id'),
 			hasChild:true,
@@ -57,6 +59,8 @@ exports.topicModel_getTopicById = function(_topicACSObjectId) {
 		topic.id = result.fieldByName('id'); 
 		topic.acsObjectId = result.fieldByName('acs_object_id'); 
 		topic.title = result.fieldByName('title');
+		topic.content = result.fieldByName('content');
+		topic.photo = result.fieldByName('photo');
 		topic.username = result.fieldByName('username');
 		topic.deviceTokenId = result.fieldByName('device_token_id');
 		topic.updatedAt = result.fieldByName('updated_at')
@@ -75,16 +79,15 @@ exports.topicModel_updateACSObjectIdField = function(_topic) {
 	db.close();
 };
 
-var add = function(_programId,_acsObjectId,_title,_username,_deviceTokenId) {
+exports.topicModel_add = function(_programId,_acsObjectId,_title,_content,_photo,_username,_deviceTokenId) {
 	var db = Ti.Database.open('Chatterbox');
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
-	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,comments_count,username,device_token_id,is_deleted,updated_at) VALUES(NULL,?,?,?,0,?,?,0,?)",_acsObjectId, _programId,_title,_username,_deviceTokenId,updatedAt);
+	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,content,photo,comments_count,username,device_token_id,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,0,?,?,0,?)",_acsObjectId,_programId,_title,_content,_photo,_username,_deviceTokenId,updatedAt);
 	var newId = db.lastInsertRowId;
 	db.close();
-	
 	return newId;
 };
-exports.topicModel_add = add;
+
 
 
 exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId) {
@@ -96,11 +99,14 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 	for(var i=0;i < _topicsCollection.length; i++) {
 		var curTopic = _topicsCollection[i];
 		var deviceToken = "UNDEFINED";
+		var photoUrl = null;
 		if(curTopic.user.custom_fields !== undefined && curTopic.user.custom_fields.device_token_id !== undefined)
 			deviceToken = curTopic.user.custom_fields.device_token_id;
-
-		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,comments_count, username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?)", 
-					curTopic.id,_programId,curTopic.title,curTopic.commentsCount, curTopic.user.username,deviceToken,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
+		if(curTopic.photo !== undefined)
+			photoUrl = curTopic.photo.urls.original;
+			
+		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,content,photo,comments_count, username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?,?,?)", 
+					curTopic.id,_programId,curTopic.title,curTopic.content,photoUrl,curTopic.commentsCount, curTopic.user.username,deviceToken,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
 	}
 	db.close();
 	Ti.App.fireEvent("topicsDbUpdated");

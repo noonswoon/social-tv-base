@@ -13,12 +13,14 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		
 	//UI Stuff
 	var row = Ti.UI.createTableViewRow({
-		top:0,
+		top: 0,
 		height: 'auto',
 		allowsSelection: false,
 		className: "CommentRow",
+		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		separatorColor: 'transparent',
 		backgroundColor: 'transparent',
-		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE
+		zIndex: 10
 	});
 
 	row.index = -1;
@@ -99,17 +101,19 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		textAlign: 'left',
 		zIndex: 2
 	});
-
-	var heightOfContent = contentLabel.toImage().height;
+	
+	var commentTextLength = contentLabel.text.length;
+	var numLinesForHighlightedComment = Math.ceil(commentTextLength / CHARACTER_PER_LINE);
+	var heightOfContent = 65 + (numLinesForHighlightedComment-1)*15;
 
 	var replyToolbar = Ti.UI.createView({
 		left: 0,
-		top: (heightOfContent*4)-5,
+		top: heightOfContent+5,
 		width: '100%',
 		height: 60,
 		visible: true,
 	});
-
+	
 	var replyTextField = Ti.UI.createTextField({
 		top: 0,
 		height: 28,
@@ -123,42 +127,42 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	});
 
 	var upButton = Ti.UI.createButton({
-		left: nestedOffset + 5,
+		left: nestedOffset,
 		top: 35,
-		width: 40,
-		height: 18,
+		width: 50,
+		height: 23,
 		backgroundImage: 'images/messageboard/comment/up.png'
 	});
 
 	var downButton = Ti.UI.createButton({
-		left: nestedOffset + 50,
+		left: nestedOffset + 55,
 		top: 35,
-		width: 55,
-		height: 18,
+		width: 70,
+		height: 23,
 		backgroundImage: 'images/messageboard/comment/down.png'
 	});
 	
 	var reportButton = Ti.UI.createButton({
-		left: nestedOffset + 110,
+		left: nestedOffset + 130,
 		top: 35,
-		width: 46,
-		height: 18,
+		width: 73,
+		height: 23,
 		backgroundImage: 'images/messageboard/comment/flag.png'
 	});
 	
 	var deleteButton = Ti.UI.createButton({
-		left: nestedOffset + 110,
+		left: nestedOffset + 130,
 		top: 35,
-		width: 46,
-		height: 18,
-		backgroundImage: 'images/messageboard/comment/flag.png'
+		width: 73,
+		height: 23,
+		backgroundImage: 'images/messageboard/comment/delete.png'
 	});
 
 	var replyButton = Ti.UI.createButton({
 		right: 10,
 		top: 35,
-		width: 40,
-		height: 18,
+		width: 50,
+		height: 23,
 		backgroundImage: 'images/messageboard/comment/reply.png'
 	});
 	
@@ -166,7 +170,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		top:0,
 		left: nestedOffset,
 		right: 10,
-		height: (heightOfContent*4)-10,
+		height: heightOfContent,
 		// backgroundColor: 'orange',
 		backgroundImage: 'images/messageboard/comment/reply_onclick.png',
 		zIndex: 1

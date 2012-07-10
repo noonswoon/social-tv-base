@@ -279,8 +279,6 @@ Ti.App.Chat = function(_chatParams) {
 			picker.add(newPickerRow);
 		}
 	};
-	
-	alert('adding listener: checkinToProgramCallback');
 	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);
 	//////
 

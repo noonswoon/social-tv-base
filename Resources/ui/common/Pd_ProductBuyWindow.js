@@ -72,41 +72,53 @@ ProductBuyWindow = function(_product){
 		height: 264,
 		left: 10,
 		right: 10,
-		
 		backgroundImage: 'images/product/productdetail.png'
+	});
+	
+	var productDetailButton = Ti.UI.createImageView({
+		image: 'images/product/productdetail_button.png',
+		width: 110,
+		height: 32,
+		top: 13,
+		left: 15
+	});
+	productDetailView.add(productDetailButton);
+	
+	var buyNowButton = Ti.UI.createButton({
+		backgroundImage: 'images/product/buynow_button.png',
+		width: 72,
+		height: 32,
+		top: 13,
+		left: 125
+	});
+	productDetailView.add(buyNowButton);
+	
+	buyNowButton.addEventListener('click',function(){
+		Ti.Platform.openURL('http://www.google.com');		
 	});
 	
 	var productName = Ti.UI.createLabel({
 		top: 60,
 		text: _product.product_name,
-		font: { fontSize: 26, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
+		font: { fontSize: 24, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 		left: 15
 	});
 	productDetailView.add(productName);
 	
+	var productNameWidth = productName.toImage().width; 
+	var productNameHeight = productName.toImage().height; 
+	var numLines = Math.ceil(productNameWidth / ONE_LINE_LENGTH); 
+	var productDescTopIndent = numLines * productNameHeight;
+
 	var productDescription = Ti.UI.createLabel({
-		top: 100,
+		top: productDescTopIndent+70,
+		width: 270,
+		height: 50,
 		text: 'Description: '+_product.description,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
 		left: 15
 	});
 	productDetailView.add(productDescription);
-	
-	var productPrice = Ti.UI.createLabel({
-		top: 120,
-		text: 'Price: '+_product.price,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		left: 15
-	});
-	productDetailView.add(productPrice);
-	
-	var productContact = Ti.UI.createLabel({
-		top: 140,
-		text: 'Contact: '+_product.contact,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		left: 15
-	});
-	productDetailView.add(productContact);
 	
 	self.add(scrollView);
 	scrollView.add(productImageView);

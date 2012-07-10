@@ -112,7 +112,7 @@ function PopularWindow(_parent) {
 			eventId: e.row.tvprogram.id, //id of the particular show (one-time)
 			programId: e.row.tvprogram.program_id, //overall id of program id
 			programTitle: e.row.tvprogram.name,
-			programSubname: '',
+			programSubname: e.row.tvprogram.subname,
 			programImage: e.row.tvprogram.photo,
 			programChannel: e.row.tvprogram.channel_id,
 			programType: e.row.tvprogram.program_type,

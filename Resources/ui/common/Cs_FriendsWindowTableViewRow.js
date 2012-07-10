@@ -1,4 +1,5 @@
 FriendsWindowTableViewRow = function(tabledata,_checkins){
+
 	var BadgeCondition = require('helpers/badgeCondition');	
 	var friendData = [];	
 	var friendCheckIns = tabledata.friends.length;
@@ -29,7 +30,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	row.add(programLabelName);
 
 	var programLabelSubname = Ti.UI.createLabel({
-		text: tabledata.programChannel,
+		text: tabledata.programSubname,
 		color: '#333',
 		textAlign:'left',
 		font:{fontWeight:'bold',fontSize:13},
@@ -171,7 +172,11 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	Ti.API.info('friendCheckIn = '+friendCheckIns);
 	if(friendCheckIns > 0) BadgeCondition.checkFriendCondition(friendCheckIns);
 //////////////////////////////////////////////////////////////////////////////
+	
 	row.add(friendsScrollView);
+	row.tvprogram = tabledata;
+	row.checkin = _checkins;
+	row.frdCheckin = friendCheckIns;
 	return row;
 }
 module.exports = FriendsWindowTableViewRow;

@@ -16,10 +16,17 @@ function ProductMainWindow(_programId) {
 	
 	var infoForName = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
 	
+	var callPicker = Ti.UI.createButton({
+		width: 39,
+		height: 32,
+		backgroundImage: 'images/messageboard/optionbutton.png'
+	});
+	
 	var self = Titanium.UI.createWindow({
 		title: "Product",
 		barImage: 'images/NavBG.png',
-		backgroundImage: 'images/bg.png'
+		backgroundImage: 'images/bg.png',
+		rightNavButton: callPicker
 	});
 
 	var productSelectProgramToolbar = Ti.UI.createView({
@@ -28,26 +35,6 @@ function ProductMainWindow(_programId) {
 		backgroundImage: 'images/ToolbarBG.png'
 	});
 	self.add(productSelectProgramToolbar);
-	
-	var watchLabel = Ti.UI.createLabel({
-		color: '#8c8c8c',
-		width: 70,
-		height: 50,
-		right: 55,
-		textAlign: 'right',
-		text: 'WATCH',
-		font:{fontSize: 11}
-	});
-	productSelectProgramToolbar.add(watchLabel);
-	
-	var callPicker = Ti.UI.createButton({
-		width: 41,
-		height: 34,
-		right: 10,
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		image: 'images/toolbarbutton.png'
-	});
-	productSelectProgramToolbar.add(callPicker);
 	
 	var selectProgramLabel = Ti.UI.createLabel({
 		text: 'Chatterbox Souvenirs',//infoForName[0].name,

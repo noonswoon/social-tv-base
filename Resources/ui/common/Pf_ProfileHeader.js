@@ -11,7 +11,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	var CacheHelper = require('helpers/cacheHelper');
 	var updateActivity = require('helpers/updateActivity');
-	
+
 	var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
 
 	var currentUser = acs.getUserLoggedIn();
@@ -43,20 +43,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		width: 90,
 		height: 90,
 		backgroundColor: 'transparent'
-	});
-	
-	//testing friend from facebook
-	
-	// profilePicture.addEventListener('click', function(){
-	// var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
-	// var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
-		// _parentWindow.containingTab.open(addFriendMainWindow);
-	// });
-	
-	profilePicture.addEventListener('click', function(){
-		var FacebookSharing = require('helpers/facebookSharing');
-		//FacebookSharing.badgePopUpOnFacebook("4");
-		FacebookSharing.checkinAppearOnFaceBook();
 	});
 
 	var profilePictureContain = Ti.UI.createView({

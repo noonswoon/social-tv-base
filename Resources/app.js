@@ -26,6 +26,9 @@ Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 var IS_ON_DEVICE = true;
 var CACHE_TIMEOUT_IN_MINUTES = 1; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
+
+var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
+
 	
 var myCurrentCheckinPrograms = ['CTB_PUBLIC']; //should be reset every hour to empty array
 var myCurrentSelectedProgram = 'CTB_PUBLIC';

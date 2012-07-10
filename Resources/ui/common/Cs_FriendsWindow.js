@@ -1,10 +1,11 @@
-FriendsWindow = function(){
+FriendsWindow = function(_parent){
 	
 	var FriendsACS = require('acs/friendsACS');
 	var friend = require('model/friend');
 	var tvprogram = require('model/tvprogram');
 	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
 	var ProgramWithFriends = require('helpers/ProgramWithFriends');
+	var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Friends');
@@ -21,7 +22,6 @@ FriendsWindow = function(){
 	var friendsList = [];
 
 	allMyFriends = friend.friendModel_fetchFriend(user_id);
-	Ti.API.info('allMyFriends.length = '+allMyFriends);
 	for(var i = 0; i<allMyFriends.length;i++){
 		var friends = allMyFriends[i].friend_id;
 		friendsList.push(friends);
@@ -42,8 +42,11 @@ FriendsWindow = function(){
 	//EventListener
 	Ti.App.addEventListener('friendsCheckInLoaded',function(e){
 		var checkinsOfFriends;
-		if(e.fetchedAllFriendsCheckins=== undefined) checkinsOfFriends = 0;
-		else checkinsOfFriends = e.fetchedAllFriendsCheckins;
+		if(e.fetchedAllFriendsCheckins=== undefined)
+			checkinsOfFriends = 0;
+		else
+			checkinsOfFriends = e.fetchedAllFriendsCheckins;
+		
 		var totalFriendCheckins = e.fetchedTotalFriendCheckins;
 		var results = [];
 		
@@ -87,6 +90,18 @@ FriendsWindow = function(){
 			}
 		friendsTableView.setData(viewRowData);
 	});
+	
+	friendsTableView.addEventListener('click',function(e){
+ 		checkinmainwin = new CheckinMainWindow({
+			eventId: e.row.tvprogram.programId,
+			programTitle: e.row.tvprogram.programName,
+			programSubname: e.row.tvprogram.programSubname,
+			programImage: e.row.tvprogram.programImage,
+			programChannel: e.row.tvprogram.programChannel,
+			programNumCheckin: e.row.checkin
+		}, _parent.containingTab);	
+		_parent.containingTab.open(checkinmainwin);
+	})
 	
 	self.add(friendsTableView);
 	return self;

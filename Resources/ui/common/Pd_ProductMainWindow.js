@@ -123,15 +123,28 @@ function ProductMainWindow(_programId) {
 		picker.setSelectedRow(0,preSelectedRow,false);
 		picker.add(dataForPicker);
 		pickerView.add(picker);
-	}
+	};
 	
-	self._updatePickerData = function(checkinProgramId, checkinProgramName) {
+	self._addNewPickerData = function(checkinProgramId, checkinProgramName) {
 		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
 		picker.add(newPickerRow);
 		
 		var latestRow = picker.columns[0].rowCount - 1; 
 		picker.setSelectedRow(0,latestRow,false);
-	}
+	};
+	
+	self._updateSelectedPicker = function(newSelectedProgram) {
+		var numRows = picker.columns[0].rowCount; 
+		var selectedRow = 0;
+		for(var i = 0; i < numRows; i++){
+			var curProgramId = picker.columns[0].rows[i].programId; 
+			if(curProgramId === newSelectedProgram) {
+				selectedRow = i;
+				break;
+			}		
+		}
+		picker.setSelectedRow(0,selectedRow,false);
+	};
 	
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;
@@ -160,9 +173,12 @@ function ProductMainWindow(_programId) {
 		pickerView.animate(slide_out);
 		self.remove(opacityView);
 		
-		selectProgramLabel.text = picker.getSelectedRow(0).title;
-		currentProgramId = picker.getSelectedRow(0).programId;
-		ProductACS.productACS_fetchedAllProducts(currentProgramId);
+		if(currentProgramId !== picker.getSelectedRow(0).programId) {
+			selectProgramLabel.text = picker.getSelectedRow(0).title;
+			currentProgramId = picker.getSelectedRow(0).programId;
+			ProductACS.productACS_fetchedAllProducts(currentProgramId);
+			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
+		}
 	});
 
 	picker.addEventListener('change',function(e) {

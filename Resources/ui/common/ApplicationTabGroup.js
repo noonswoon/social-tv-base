@@ -160,11 +160,25 @@ function ApplicationTabGroup() {
 			messageboardwin._updatePageContent(checkinProgramId);
 			productwin._updatePageContent(checkinProgramId);
 			
-			messageboardwin._updatePickerData(checkinProgramId,checkinProgramName);			
-			productwin._updatePickerData(checkinProgramId,checkinProgramName);
+			messageboardwin._addNewPickerData(checkinProgramId,checkinProgramName);			
+			productwin._addNewPickerData(checkinProgramId,checkinProgramName);
 		}
 	};
 	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
+	
+	var changingCurrentSelectedProgramCallback = function(e) {
+		var newSelectedProgram = e.newSelectedProgram; 
+		myCurrentSelectedProgram = newSelectedProgram;
+		
+		////update program content
+		messageboardwin._updatePageContent(newSelectedProgram);
+		productwin._updatePageContent(newSelectedProgram);
+
+		//update picker
+		messageboardwin._updateSelectedPicker(newSelectedProgram);
+		productwin._updateSelectedPicker(newSelectedProgram);		
+	};
+	Ti.App.addEventListener('changingCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
 	
    	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');
@@ -172,6 +186,7 @@ function ApplicationTabGroup() {
    		Ti.App.removeEventListener('levelLoaded',levelLoadedCallBack);
    		Ti.App.removeEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
    		Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
+   		Ti.App.removeEventListener('changingOfCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}

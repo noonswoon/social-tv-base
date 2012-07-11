@@ -141,15 +141,18 @@ function MessageboardMainWindow(_programId) {
 		pickerView.animate(slide_out);
 		self.remove(opacityView);
 		
-		currentProgramId = picker.getSelectedRow(0).programId;
-		var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-		messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
+		if(currentProgramId !== picker.getSelectedRow(0).programId) { //only change if user selected a new programId
+			currentProgramId = picker.getSelectedRow(0).programId;
+			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+			messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
 		
-		//reset programId for addWindow
-		addWindow._setProgramId(currentProgramId);
+			//reset programId for addWindow
+			addWindow._setProgramId(currentProgramId);
 		
-		//reset data in the tableview
-		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+			//reset data in the tableview
+			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
+		}
 	});
 
 	picker.addEventListener('change',function(e) {
@@ -192,15 +195,28 @@ function MessageboardMainWindow(_programId) {
 		picker.setSelectedRow(0,preSelectedRow,false);
 		picker.add(dataForPicker);
 		pickerView.add(picker);
-	}
+	};
 	
-	self._updatePickerData = function(checkinProgramId, checkinProgramName) {
+	self._addNewPickerData = function(checkinProgramId, checkinProgramName) {
 		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
 		picker.add(newPickerRow);
 		
 		var latestRow = picker.columns[0].rowCount - 1; 
 		picker.setSelectedRow(0,latestRow,false);
-	}
+	};
+	
+	self._updateSelectedPicker = function(newSelectedProgram) {
+		var numRows = picker.columns[0].rowCount; 
+		var selectedRow = 0;
+		for(var i = 0; i < numRows; i++){
+			var curProgramId = picker.columns[0].rows[i].programId; 
+			if(curProgramId === newSelectedProgram) {
+				selectedRow = i;
+				break;
+			}		
+		}
+		picker.setSelectedRow(0,selectedRow,false);
+	};
 	
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;

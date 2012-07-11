@@ -167,7 +167,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			});
 		
 			if(i===myIndex) {
-				userRank.selectedBackgroundColor = '#fff';
+				userRank.selectedBackgroundColor = '#eeeeee';
 				userRankNo.color = '#000';
 				userRankName.color = '#000';
 				userRankScore.color = '#000';

@@ -16,10 +16,14 @@ function ApplicationTabGroup() {
     
     var myUserId = acs.getUserId();
 	
+	var updateCustomTabBar = function(_tab) {
+		myCustomTabBar.back(_tab);
+	}
+	
 	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
 	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
-	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+	var messageboardwin = new BlankWindow();//new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
+	var productwin = new BlankWindow();//new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
 	var blankwin = new BlankWindow();
 	
@@ -29,26 +33,46 @@ function ApplicationTabGroup() {
 	});
 	selectionwin.containingTab = selectionTab;
 	selectionTab.tabGroup = self; 
-	
+	selectionTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
+		
     var chatTab = Titanium.UI.createTab({  
      	window: chatwin,
 	});
     chatwin.containingTab = chatTab;
+	chatTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 1;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});   
    
     var messageboardTab = Titanium.UI.createTab({  
         window: messageboardwin,
     });
     messageboardwin.containingTab = messageboardTab;
+	messageboardTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 2;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
 	
 	var productTab = Ti.UI.createTab({
 		window: productwin,
 	});
 	productwin.containingTab = productTab;
+	productTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 3;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
 	
 	var profileTab = Ti.UI.createTab({
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;
+	profileTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 4;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
 	
 	//////////////////////
 	self.addTab(selectionTab);
@@ -103,7 +127,7 @@ function ApplicationTabGroup() {
 	}
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
 	
-	function checkinDbLoadedCallBack(e){			
+	function checkinDbLoadedCallBack(e) {			
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
@@ -119,9 +143,9 @@ function ApplicationTabGroup() {
 			myCurrentSelectedProgram = myCurrentCheckinPrograms[0];
 			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});			
 			chatwin.containingTab = chatTab;
-			
-			messageboardwin._removeGuidelineWindow();
-			productwin._removeGuidelineWindow();
+//			messageboardwin._removeGuidelineWindow();
+//			productwin._removeGuidelineWindow();
+			Ti.App.fireEvent('myCurrentCheckinProgramsReady');			
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	}	
@@ -147,6 +171,9 @@ function ApplicationTabGroup() {
 		var checkinProgramName = e.checkinProgramName;
 		myCurrentSelectedProgram = checkinProgramId;
 		myCurrentCheckinPrograms.push(checkinProgramId);
+		if(!myCurrentCheckinPrograms.length) {
+			chatwin._createChatMainWindowView();
+		};
 		if(myCurrentSelectedProgram === '') {
 			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 			messageboardwin._removeGuidelineWindow();

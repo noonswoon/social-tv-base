@@ -20,6 +20,37 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 	db.close();
 };
 
+//chat window used: pull data from currentCheckin
+exports.tvprogramsModel_getProgramData = function(_program_ids) {
+	var programData = [];
+	var db = Ti.Database.open('Chatterbox');
+	for(var i=0;i<_program_ids.length;i++) {
+		var curProgram_id = _program_ids[i];
+		var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ?',curProgram_id);
+		while(result.isValidRow()) {
+			programData.push({
+				id: result.fieldByName('id'),
+				name: result.fieldByName('name'),
+				subname: result.fieldByName('subname'),
+				photo: result.fieldByName('photo'),
+				start_time: result.fieldByName('start_time'),
+				recurring_until: result.fieldByName('recurring_until'),
+				number_checkins: result.fieldByName('number_checkins'),
+				channel_id: result.fieldByName('channel_id'),
+				program_id: result.fieldByName('program_id'),
+				program_type: result.fieldByName('program_type'),
+				hasChild:true				
+			});
+			result.next();
+		}
+		result.close();
+		db.close;
+	}
+	return programData;
+}
+//id TEXT PRIMARY KEY, name TEXT, subname TEXT, photo TEXT, 
+//start_time TEXT, recurring_until TEXT, number_checkins INTEGER, 
+//channel_id TEXT, program_id TEXT, program_type TEXT
 
 exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins) {	
 	var db = Ti.Database.open('Chatterbox'); 

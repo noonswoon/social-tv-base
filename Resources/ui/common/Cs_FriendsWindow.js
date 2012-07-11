@@ -46,8 +46,13 @@ FriendsWindow = function(_parent){
 		programsList.push(programs);
 	}
 	
-	//Send allTVProgramID and allFriends to data from ACS then pull data
-	FriendsACS.friendsCheckins(friendsList,programsList);
+	var friendsCheckinsUpdate = function() {
+		//Send allTVProgramID and allFriends to data from ACS then pull data
+		FriendsACS.friendsCheckins(friendsList,programsList);
+	}
+	friendsCheckinsUpdate();
+	
+	Ti.App.addEventListener('friendsDbUpdated',friendsCheckinsUpdate);
 	
 	var createAddMoreFriendsRow = function(){
 		var viewRowData = [];

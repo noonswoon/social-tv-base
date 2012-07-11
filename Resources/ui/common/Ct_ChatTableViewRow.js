@@ -21,7 +21,7 @@ Ct_ChatTableViewRow = function(_curTVProgram){
 	row.add(detailButton);
 	
 	var programLabelName = Ti.UI.createLabel({
-		text: _curTVProgram.event.name,
+		text: _curTVProgram.name,
 		textAlign: 'left',
 		color: '#333',
 		left: 120,
@@ -32,7 +32,7 @@ Ct_ChatTableViewRow = function(_curTVProgram){
 	row.add(programLabelName);
 	
 	var programImage = Ti.UI.createImageView({
-		image: _curTVProgram.event.photo.urls.medium_640,
+		image: _curTVProgram.photo,
 		width:90,
 		height:60
 	});
@@ -45,14 +45,13 @@ Ct_ChatTableViewRow = function(_curTVProgram){
 	});
 	programImageView.add(programImage);
 	row.add(programImageView);
-//	row.tvprogram = _curTVProgram;
 	
-	alert(_curTVProgram.event.custom_fields.program_id);
+	alert(_curTVProgram.program_id);
 	row.addEventListener('click', function(){
 		var pubnub_chat_window = Ti.App.Chat({
-		    "chat-room" : _curTVProgram.event.custom_fields.program_id,
+		    "chat-room" : _curTVProgram.program_id,
 		    "window"    : {backgroundColor:'transparent'},
-		    "programId" : _curTVProgram.event.custom_fields.program_id
+		    "programId" : _curTVProgram.program_id
 		});
 	});
 			

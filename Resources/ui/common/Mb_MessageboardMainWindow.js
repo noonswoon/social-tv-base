@@ -191,10 +191,19 @@ function MessageboardMainWindow(_programId) {
 	self.add(searchView);
 	self.add(allTopicTable);
 
-	self._removeGuidelineWindow = function() {
+	self._updatePickerData = function(checkinProgramId) {
+		
+	}
+	
+	self._removeGuidelineWindow = function(checkinProgramId) {
 		self.remove(checkinguidelinewin);
 		
-		//do something		
+		//update content on the page
+		currentProgramId = checkinProgramId;
+		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);
+		
+		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	
 	};
 	
 	//CALLBACK FUNCTIONS

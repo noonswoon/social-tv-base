@@ -110,20 +110,19 @@ function ApplicationTabGroup() {
 		//if checkin to at least 1 program, enable the chat/board/product bar
 		
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
-			var eventId = eventsCheckedIn[i].event_id; 
+			var eventId = eventsCheckedIn[i].event_id;
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
 			myCurrentCheckinPrograms.push(programId);
 		}
 		
-		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length >= 0) {
+		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length > 0) {
 			myCurrentSelectedProgram = myCurrentCheckinPrograms[0];
-			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});			
-			chatwin.containingTab = chatTab;
-			
-			messageboardwin._removeGuidelineWindow();
-			productwin._removeGuidelineWindow();
+			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});			
+			//chatwin.containingTab = chatTab;
+			//alert('calling _removeGuidelineWindow: AppTabGroup ln 122: currentSelectedProgram: '+myCurrentSelectedProgram);
+			messageboardwin._removeGuidelineWindow(myCurrentSelectedProgram);
+			productwin._removeGuidelineWindow(myCurrentSelectedProgram);
 		}
-		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	
@@ -145,14 +144,12 @@ function ApplicationTabGroup() {
    	var checkinToProgramCallbackInAppTabGroup = function(e) {
 		var checkinProgramId = e.checkinProgramId; 
 		var checkinProgramName = e.checkinProgramName;
-		myCurrentSelectedProgram = checkinProgramId;
-		myCurrentCheckinPrograms.push(checkinProgramId);
 		if(myCurrentSelectedProgram === '') {
-			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-			messageboardwin._removeGuidelineWindow();
-			productwin._removeGuidelineWindow();
-			alert('productwin-should remove guidelinewindow');
+			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+			messageboardwin._removeGuidelineWindow(checkinProgramId);
+			productwin._removeGuidelineWindow(checkinProgramId);
 		}
+		myCurrentSelectedProgram = checkinProgramId;
 	};
 	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
     return self;

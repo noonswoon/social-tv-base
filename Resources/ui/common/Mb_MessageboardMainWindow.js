@@ -39,7 +39,6 @@ function MessageboardMainWindow(_programId) {
 	
 	var addWindow = new MessageboardAddWindow(currentProgramId);	
 	var usingPull2Refresh = false;
-	var hasLoadedPicker = false;
 	var pickerSelectedIndex = 0;
 	
 	//UI STUFF
@@ -92,7 +91,7 @@ function MessageboardMainWindow(_programId) {
 	});
 
 	//Picker
-	var picker_view = Titanium.UI.createView({
+	var pickerView = Titanium.UI.createView({
 		height:251,
 		bottom:-251,
 		zIndex: 2
@@ -123,36 +122,23 @@ function MessageboardMainWindow(_programId) {
 	});
 		
 	picker.selectionIndicator=true;	
-	picker_view.add(toolbar);
+	pickerView.add(toolbar);
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 	
 	callPicker.addEventListener('click',function() {
-		if(!hasLoadedPicker) {
-			var dataForPicker = [];
-			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-				var programId = myCurrentCheckinPrograms[i];
-				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-				Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
-				var programName = programInfo[0].name;
-				dataForPicker.push({title:programName, programId:programId});
-			}
-			picker.add(dataForPicker);
-			picker_view.add(picker);
-			hasLoadedPicker = true;
-		}
-		picker_view.animate(slide_in);
+		pickerView.animate(slide_in);
 		self.add(opacityView);
 	});
 
 	cancel.addEventListener('click',function() {
-		picker_view.animate(slide_out);
+		pickerView.animate(slide_out);
 		self.remove(opacityView);
 	});
 
 	done.addEventListener('click',function() {
-		picker_view.animate(slide_out);
+		pickerView.animate(slide_out);
 		self.remove(opacityView);
 		
 		currentProgramId = picker.getSelectedRow(0).programId;
@@ -170,7 +156,7 @@ function MessageboardMainWindow(_programId) {
 		pickerSelectedIndex = e.rowIndex;
 	});
 	
-	self.add(picker_view);
+	self.add(pickerView);
 //////////////////
 
 	var allTopicTable = Ti.UI.createTableView({
@@ -191,6 +177,23 @@ function MessageboardMainWindow(_programId) {
 	self.add(searchView);
 	self.add(allTopicTable);
 
+	self._initializePicker = function() {
+		var dataForPicker = [];
+		var preSelectedRow = 0;
+		for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+			var programId = myCurrentCheckinPrograms[i];
+			if(myCurrentSelectedProgram === programId) 
+				preSelectedRow = i;
+					
+			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+			var programName = programInfo[0].name;
+			dataForPicker.push({title:programName, programId:programId});
+		}
+		picker.setSelectedRow(0,preSelectedRow,false);
+		picker.add(dataForPicker);
+		pickerView.add(picker);
+	}
+	
 	self._updatePickerData = function(checkinProgramId) {
 		
 	}

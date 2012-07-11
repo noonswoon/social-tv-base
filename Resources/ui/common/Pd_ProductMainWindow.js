@@ -30,7 +30,6 @@ function ProductMainWindow(_programId) {
 	}
 	
 	var dataForTab = [];
-	var hasLoadedPicker = false;
 	var pickerSelectedIndex = 0;
 
 	var callPicker = Ti.UI.createButton({
@@ -109,6 +108,23 @@ function ProductMainWindow(_programId) {
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 
+	self._initializePicker = function() {
+		var dataForPicker = [];
+		var preSelectedRow = 0;
+		for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+			var programId = myCurrentCheckinPrograms[i];
+			if(myCurrentSelectedProgram === programId) 
+				preSelectedRow = i;
+					
+			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+			var programName = programInfo[0].name;
+			dataForPicker.push({title:programName, programId:programId});
+		}
+		picker.setSelectedRow(0,preSelectedRow,false);
+		picker.add(dataForPicker);
+		pickerView.add(picker);
+	}
+	
 	self._updatePickerData = function(checkinProgramId) {
 		
 	}
@@ -126,23 +142,6 @@ function ProductMainWindow(_programId) {
 	};
 	
 	callPicker.addEventListener('click',function() {
-		if(!hasLoadedPicker) {
-			var dataForPicker = [];
-			var preSelectedRow = 0;
-			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-				var programId = myCurrentCheckinPrograms[i];
-				if(myCurrentSelectedProgram === programId) 
-					preSelectedRow = i;
-					
-				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-				var programName = programInfo[0].name;
-				dataForPicker.push({title:programName, programId:programId});
-			}
-			picker.setSelectedRow(0,preSelectedRow,false);
-			picker.add(dataForPicker);
-			pickerView.add(picker);
-			hasLoadedPicker = true;
-		}
 		pickerView.animate(slide_in);
 		self.add(opacityView);
 	});

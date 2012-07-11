@@ -115,6 +115,7 @@ function ApplicationTabGroup() {
 			myCurrentCheckinPrograms.push(programId);
 		}
 		
+		//first load, and the user already checkin in some program
 		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length > 0) {
 			myCurrentSelectedProgram = myCurrentCheckinPrograms[0];
 			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});			
@@ -122,6 +123,9 @@ function ApplicationTabGroup() {
 			//alert('calling _removeGuidelineWindow: AppTabGroup ln 122: currentSelectedProgram: '+myCurrentSelectedProgram);
 			messageboardwin._removeGuidelineWindow(myCurrentSelectedProgram);
 			productwin._removeGuidelineWindow(myCurrentSelectedProgram);
+			
+			messageboardwin._initializePicker();
+			productwin._initializePicker();
 		}
 	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
@@ -144,10 +148,13 @@ function ApplicationTabGroup() {
    	var checkinToProgramCallbackInAppTabGroup = function(e) {
 		var checkinProgramId = e.checkinProgramId; 
 		var checkinProgramName = e.checkinProgramName;
-		if(myCurrentSelectedProgram === '') {
+		if(myCurrentSelectedProgram === '') { //haven't checkin before, picker hasn't loaded yet
 			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 			messageboardwin._removeGuidelineWindow(checkinProgramId);
 			productwin._removeGuidelineWindow(checkinProgramId);
+		} else { //already have at least 1 checkin, need to figure out if picker already
+			//loaded, if it is, just add, if not, load the picker automatically
+			
 		}
 		myCurrentSelectedProgram = checkinProgramId;
 	};

@@ -45,15 +45,7 @@ Ct_ChatTableViewRow = function(_curTVProgram){
 	});
 	programImageView.add(programImage);
 	row.add(programImageView);
-	
-	alert(_curTVProgram.program_id);
-	row.addEventListener('click', function(){
-		var pubnub_chat_window = Ti.App.Chat({
-		    "chat-room" : _curTVProgram.program_id,
-		    "window"    : {backgroundColor:'transparent'},
-		    "programId" : _curTVProgram.program_id
-		});
-	});
+	row.program_id = _curTVProgram.program_id;
 			
 	return row;
 }

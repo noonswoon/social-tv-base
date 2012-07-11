@@ -2,9 +2,7 @@ function ApplicationTabGroup() {
     // create tab group, create module instance
     var self = Titanium.UI.createTabGroup({
     	backgroundColor: '#fff',
-    	
     });
-	Ti.include('lib/customTabBar.js');
 		
 	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
@@ -13,6 +11,8 @@ function ApplicationTabGroup() {
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
+        
+	Ti.include('lib/customTabBar.js');
     
     var myUserId = acs.getUserId();
 	
@@ -21,9 +21,9 @@ function ApplicationTabGroup() {
 	}
 	
 	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
-	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-	var messageboardwin = new BlankWindow();//new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
-	var productwin = new BlankWindow();//new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,myCustomTabBar,{height:426, tabBarHidden: true});
+	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
+	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
 	var blankwin = new BlankWindow();
 	
@@ -101,8 +101,7 @@ function ApplicationTabGroup() {
 			{ image: 'me.png', selected: 'me_over.png' }
 		]
 	});
-	myCustomTabBar.show();
-   	
+	
 	//PROFILE: CALLING ACS
 	var LevelACS = require('acs/levelACS');	
 	var BadgesACS = require('acs/badgesACS');
@@ -145,7 +144,7 @@ function ApplicationTabGroup() {
 			chatwin.containingTab = chatTab;
 //			messageboardwin._removeGuidelineWindow();
 //			productwin._removeGuidelineWindow();
-			Ti.App.fireEvent('myCurrentCheckinProgramsReady');			
+			Ti.App.fireEvent('myCurrentCheckinProgramsReady');			//fire event to update chatroom in ChatMainWindow
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	}	

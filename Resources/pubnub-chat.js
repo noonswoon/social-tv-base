@@ -24,10 +24,8 @@ Ti.App.Chat = function(_chatParams) {
    	var currentProgramId = _chatParams['programId'];
     
 	var programData = {}; 
-	programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
-	var currentChatRoomName = programData.name;
-	
-	var hasLoadedPicker = false;
+	programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+	var currentChatRoomName = programData[0].name;
 	
 	//dummy userobject
 	var userObject = {id:acs.getUserId(),fbId: acs.getUserFbId(),imageUrl: acs.getUserImage()};
@@ -35,11 +33,10 @@ Ti.App.Chat = function(_chatParams) {
 	var historyMessages = [];
 	var lastHistoryLoadedIndex = 0;
 	var totalHistoryMessages = 0;
-	var pickerSelectedIndex = 0;
 	
 	var chatMessagesTableView = Ti.UI.createTableView({
-		top:45,
-		height: 'auto',
+		top:5,
+		height:320,
 		backgroundColor: 'transparent',
 		separatorColor: 'transparent',
 		scrollable: true
@@ -96,162 +93,21 @@ Ti.App.Chat = function(_chatParams) {
         backgroundImage:'images/back_button.png',
         width:57,height:34
 	});
-	
-	var callPicker = Ti.UI.createButton({
-		width: 39,
-		height: 32,
-		backgroundImage: 'images/messageboard/optionbutton.png'
-	});
 
 	var chat_window = Ti.UI.createWindow({
-		title: "Group Chat",
+		title: currentChatRoomName,
 		barImage: 'images/nav_bg_w_pattern.png',
 		backgroundImage: 'images/bg.png',
-		tabBarHidden: true,
-		leftNavButton: backButton,
-		rightNavButton: callPicker
+		barColor:'#489ec3',
+		leftNavButton: backButton
 	});
 	
 	backButton.addEventListener('click', function(){
    		chat_window.close();
 	});
-	
-	var selectProgramToolbar = Ti.UI.createView({
-		top: 0,
-		height: 40,
-		backgroundImage: 'images/chat/selectprogramtoolbarBG.png'
-	});
-
-	var selectProgramLabel = Ti.UI.createLabel({
-		text: currentChatRoomName,
-		left: 10,
-		width: 'auto',
-		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
-	});	
-
-	//Opacity window when picker is shown
-	var opacityView = Ti.UI.createView({
-		opacity : 0.6,
-		top : 0,
-		height : 165,
-		zIndex : 7777,
-		backgroundColor: '#000'
-	});
-	
-	//Picker
-	var picker_view = Titanium.UI.createView({
-		height:251,
-		bottom:-251,
-		zIndex: 2
-	});
-
-	var cancel =  Titanium.UI.createButton({
-		title:'Cancel',
-		style:Titanium.UI.iPhone.SystemButtonStyle.BORDERED
-	});
-
-	var done =  Titanium.UI.createButton({
-		title:'Done',
-		style:Titanium.UI.iPhone.SystemButtonStyle.DONE
-	});
-
-	var spacer =  Titanium.UI.createButton({
-		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
-	});
-
-
-	var toolbar =  Titanium.UI.iOS.createToolbar({
-		top:0,
-		zIndex: 3,
-		items:[cancel,spacer,done]
-	});
-
-	var picker = Titanium.UI.createPicker({
-		top:43
-	});
-	picker.selectionIndicator=true;
-	picker_view.add(toolbar);
-
-	var slide_in =  Titanium.UI.createAnimation({bottom:0});
-	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
-
-	callPicker.addEventListener('click',function() {
-		if(!hasLoadedPicker) {
-			var dataForPicker = [];
-			var preSelectedRow = 0;
-			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-				var programId = myCurrentCheckinPrograms[i];
-				if(myCurrentSelectedProgram === programId) 
-					preSelectedRow = i;
-				
-				Ti.API.info('[209]programId: '+programId);
-				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-				var programName = programInfo[0].name;
-				var program_id = programInfo[0].program_id;
-				dataForPicker.push({title:programName, progId:program_id});
-			}
-			picker.setSelectedRow(0,preSelectedRow,false);
-			picker.add(dataForPicker);
-			picker_view.add(picker);
-			hasLoadedPicker = true;
-		}
-		picker_view.animate(slide_in);
-		chat_window.add(opacityView);
-	});
-
-	cancel.addEventListener('click',function() {
-		picker_view.animate(slide_out);
-		chat_window.remove(opacityView);
-	});
-
-	done.addEventListener('click',function() {
-		picker_view.animate(slide_out);
-		chat_window.remove(opacityView);
-		
-		//only unsubscribe if it the channel changes
-		var selectedProgramId = 0; 
-		var isRoomChanged = false;
-		
-		selectedProgramId = picker.getSelectedRow(0).progId; 
-		
-		if(selectedProgramId !== currentProgramId ){
-			pubnub.unsubscribe({channel: currentChatRoom});
-			currentProgramId = selectedProgramId;
-			currentChatRoom = currentProgramId;
-			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-			currentChatRoomName = selectedProgram[0].name;
-			selectProgramLabel.text = currentChatRoomName;
-			myCurrentSelectedProgram = currentProgramId;
-			isRoomChanged = true;
-		}
-		
-		if(isRoomChanged) {
-			myCurrentSelectedProgram = currentProgramId;
-			lastHistoryLoadedIndex = 0;
-			historyMessages = [];
-			loadHistoryButton.enabled = true;
-			//subscribe to new channel
-			subscribe_chat_room();
-		}
-	});
-
-	picker.addEventListener('change',function(e) {
-		pickerSelectedIndex = e.rowIndex;
-	});
-	
-	var checkinToProgramCallback = function(e) {
-		if(hasLoadedPicker) { //only add a new one if it already loaded, if it isn't, the loading will take care of itself
-			var checkinProgramId = e.checkinProgramId; 
-			var checkinProgramName = e.checkinProgramName;
-			var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, progId:checkinProgramId});
-			picker.add(newPickerRow);
-		}
-	};
-	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);
-	//////
 
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
-		top: 10,
+		top: 0,
 		height: 30,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
@@ -264,8 +120,9 @@ Ti.App.Chat = function(_chatParams) {
 	loadHistoryMessagesRow.add(loadHistoryButton);
 	
 	var chatInputView = Ti.UI.createView({
-		bottom: 0,
-		height: 51,
+		//bottom: 0,
+		top: 325,
+		height: 40,
 		width: '100%',
 		zIndex: 2,
 		backgroundImage: 'images/chat/footerBG.png'
@@ -294,11 +151,8 @@ Ti.App.Chat = function(_chatParams) {
 	chatInputView.add(chatInputTextField);
 	chatInputView.add(sendButton);
 	
-	selectProgramToolbar.add(selectProgramLabel);
-	chat_window.add(selectProgramToolbar);
 	chat_window.add(chatMessagesTableView);
 	chat_window.add(chatInputView);
-	chat_window.add(picker_view);
 	///////////////////////////////////////////////////////////////////////////////////////////			
 	
 	var chatData = [loadHistoryMessagesRow]; 	
@@ -366,7 +220,7 @@ Ti.App.Chat = function(_chatParams) {
 	});
 	
 	chatInputTextField.addEventListener('blur', function() {
-		chatInputView.top = 375;
+		chatInputView.top = 325;
 		chatInputView.height = 40;
 		chatInputTextField.height = 30;
 	});

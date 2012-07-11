@@ -7,9 +7,9 @@ AddFriendsMainView = function(_parentWindow) {
 		title: 'Add Friends'
 	});		
 
-	var nav = Ti.UI.iPhone.createNavigationGroup({
-		window: self
-	});			
+	// var nav = Ti.UI.iPhone.createNavigationGroup({
+		// window: self
+	// });			
 
 //////////////////////////////////////////////////////////////////
 	var mainView = Ti.UI.createView({

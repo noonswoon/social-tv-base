@@ -1,4 +1,4 @@
-function ChatMainWindow(_programId) {
+function ChatMainWindow(_programId,_tabBar) {
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var checkinguidelinewin = null;
 		
@@ -16,16 +16,6 @@ function ChatMainWindow(_programId) {
 	// Returns an Object with Titanium Window Inside
 	//
 	var currentProgramId = _programId;
-//	var pubnub_chat_window = Ti.App.Chat({
-//	    "chat-room" : _programId,
-//	    "window"    : {
-//			backgroundColor:'transparent'
-//	    },
-//	    "programId" : _programId
-//	});
-		
-
-//	return pubnub_chat_window.chat_window;
 	
 	var self = Titanium.UI.createWindow({
 		barImage: 'images/nav_bg_w_pattern.png',
@@ -43,18 +33,6 @@ function ChatMainWindow(_programId) {
 		endPoint: { x: '0%', y: '100%' },
 		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
 	};	
-		
-//	alert('currentProgramId = '+currentProgramId);
-//	alert('myCurrentCheckinPrograms = '+myCurrentCheckinPrograms);
-
-	// if(currentProgramId === '') { //have not checkedin to any program yet
-		// checkinguidelinewin = new CheckinGuidelineWindow('chat');
-		// self.add(checkinguidelinewin);
-		// currentProgramId = 'CTB_PUBLIC';
-	// }
-	// else{
-		// myCurrentCheckinPrograms
-	// }
 	
 	self._removeGuidelineWindow = function() {
 		self.remove(checkinguidelinewin);	
@@ -62,7 +40,6 @@ function ChatMainWindow(_programId) {
 	};
 	
 	Ti.App.addEventListener('myCurrentCheckinProgramsReady', function() {
-	//	myCurrentCheckinProgramsReady = 
 		for (var i in self.children) {
 			if (self.children.hasOwnProperty(i)) self.remove(self.children[i]);
 		};		
@@ -75,7 +52,6 @@ function ChatMainWindow(_programId) {
 			//pull data from tvprogram where mycurentcheckinprograms are
 			var tvprogram = require('model/tvprogram');
 			var checkinProgram_today = tvprogram.tvprogramsModel_getProgramData(myCurrentCheckinPrograms);
-			alert('checkinProgram_today.length: '+checkinProgram_today.length);
 			var tableViewData = [];
 			var ChatTableViewRow = require('ui/common/Ct_ChatTableViewRow');
 			for(var i = 0;i<checkinProgram_today.length;i++) {
@@ -87,27 +63,16 @@ function ChatMainWindow(_programId) {
 		}		
 
 	});
+	
+	tableView.addEventListener('click',function(e){
+		var pubnub_chat_window = Ti.App.Chat({
+		    "chat-room" : e.row.program_id,
+		    "window"    : {backgroundColor:'transparent'},
+		    "programId" : e.row.program_id
+		});
+		self.containingTab.open(pubnub_chat_window.chat_window);
+	});
 
-	
-
-	
-
-	
-	// var loadCheckinProgram = function(e) {
-		// var tableViewData = [];
-		// var ChatTableViewRow = require('ui/common/Ct_ChatTableViewRow');
-		// Ti.API.info("loadCheckinProgram// "+e.fetchedCheckin);
-		// var todayCheckins = e.fetchedCheckin;
-		// for(var i=0;i<todayCheckins.length;i++) {
-			// var programRow = new ChatTableViewRow(todayCheckins[i]);
-			// tableViewData.push(programRow);	
-		// }
-		// tableView.data = tableViewData;
-	// }
-	
-//	Ti.App.addEventListener('checkinDbLoaded',loadCheckinProgram);
-	
-//	self.add(tableView);
 	return self;
 }
 

@@ -126,19 +126,24 @@ function ProductMainWindow(_programId) {
 	}
 	
 	self._updatePickerData = function(checkinProgramId, checkinProgramName) {
-		//to be continue here...
+		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
+		picker.add(newPickerRow);
+		
+		var latestRow = picker.columns[0].rowCount - 1; 
+		picker.setSelectedRow(0,latestRow,false);
 	}
 	
-	self._removeGuidelineWindow = function(checkinProgramId) {
-		self.remove(checkinguidelinewin);
-		
-		//update content on the page
-		currentProgramId = checkinProgramId;
+	self._updatePageContent = function(_newProgramId) {
+		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		programName = programData[0].name;
 		selectProgramLabel.text = programName;
 		
 		ProductACS.productACS_fetchedAllProducts(currentProgramId);	
+	};
+	
+	self._removeGuidelineWindow = function(checkinProgramId) {
+		self.remove(checkinguidelinewin);
 	};
 	
 	callPicker.addEventListener('click',function() {

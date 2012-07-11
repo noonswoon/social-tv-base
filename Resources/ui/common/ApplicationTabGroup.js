@@ -124,6 +124,9 @@ function ApplicationTabGroup() {
 			messageboardwin._removeGuidelineWindow(myCurrentSelectedProgram);
 			productwin._removeGuidelineWindow(myCurrentSelectedProgram);
 			
+			messageboardwin._updatePageContent(myCurrentSelectedProgram);
+			productwin._updatePageContent(myCurrentSelectedProgram);
+			
 			messageboardwin._initializePicker();
 			productwin._initializePicker();
 		}
@@ -135,32 +138,45 @@ function ApplicationTabGroup() {
 	}
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
 	
+	var checkinToProgramCallbackInAppTabGroup = function(e) {
+		var checkinProgramId = e.checkinProgramId; 
+		var checkinProgramName = e.checkinProgramName;
+		myCurrentCheckinPrograms.push(checkinProgramId);
+		if(myCurrentSelectedProgram === '') { //haven't checkin before, picker hasn't loaded yet
+			
+			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+			messageboardwin._removeGuidelineWindow(checkinProgramId);
+			productwin._removeGuidelineWindow(checkinProgramId);
+			
+			messageboardwin._updatePageContent(checkinProgramId);
+			productwin._updatePageContent(checkinProgramId);
+			
+			myCurrentSelectedProgram = checkinProgramId; //after comparison, assign new value to myCurrentSelectedProgram
+			messageboardwin._initializePicker();
+			productwin._initializePicker();
+		} else { //already have at least 1 checkin and picker is already loaded, load the picker automatically, add new item to picker
+			myCurrentSelectedProgram = checkinProgramId;
+
+			messageboardwin._updatePageContent(checkinProgramId);
+			productwin._updatePageContent(checkinProgramId);
+			
+			messageboardwin._updatePickerData(checkinProgramId,checkinProgramName);			
+			productwin._updatePickerData(checkinProgramId,checkinProgramName);
+		}
+	};
+	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
+	
    	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');
    		Ti.App.removeEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
    		Ti.App.removeEventListener('levelLoaded',levelLoadedCallBack);
    		Ti.App.removeEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
+   		Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}
   	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
-   	
-   	var checkinToProgramCallbackInAppTabGroup = function(e) {
-		var checkinProgramId = e.checkinProgramId; 
-		var checkinProgramName = e.checkinProgramName;
-		if(myCurrentSelectedProgram === '') { //haven't checkin before, picker hasn't loaded yet
-			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-			messageboardwin._removeGuidelineWindow(checkinProgramId);
-			productwin._removeGuidelineWindow(checkinProgramId);
-			
-			messageboardwin._initializePicker();
-			productwin._initializePicker();
-		} else { //already have at least 1 checkin and picker is already loaded, load the picker automatically, add new item to picker
-			productwin._updatePickerData(checkinProgramId,checkinProgramName);
-		}
-		myCurrentSelectedProgram = checkinProgramId;
-	};
-	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
+   	   	
     return self;
 };
 

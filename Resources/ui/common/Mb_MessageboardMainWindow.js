@@ -194,19 +194,25 @@ function MessageboardMainWindow(_programId) {
 		pickerView.add(picker);
 	}
 	
-	self._updatePickerData = function(checkinProgramId) {
+	self._updatePickerData = function(checkinProgramId, checkinProgramName) {
+		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
+		picker.add(newPickerRow);
 		
+		var latestRow = picker.columns[0].rowCount - 1; 
+		picker.setSelectedRow(0,latestRow,false);
 	}
 	
-	self._removeGuidelineWindow = function(checkinProgramId) {
-		self.remove(checkinguidelinewin);
-		
-		//update content on the page
-		currentProgramId = checkinProgramId;
-		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);
+	self._updatePageContent = function(_newProgramId) {
+		currentProgramId = _newProgramId;
+		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
+										programData[0].number_checkins,programData[0].channel_id);
 		
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	
+	};
+	
+	self._removeGuidelineWindow = function(checkinProgramId) {
+		self.remove(checkinguidelinewin);	
 	};
 	
 	//CALLBACK FUNCTIONS

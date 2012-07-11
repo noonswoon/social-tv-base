@@ -125,8 +125,8 @@ function ProductMainWindow(_programId) {
 		pickerView.add(picker);
 	}
 	
-	self._updatePickerData = function(checkinProgramId) {
-		
+	self._updatePickerData = function(checkinProgramId, checkinProgramName) {
+		//to be continue here...
 	}
 	
 	self._removeGuidelineWindow = function(checkinProgramId) {

@@ -152,9 +152,11 @@ function ApplicationTabGroup() {
 			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 			messageboardwin._removeGuidelineWindow(checkinProgramId);
 			productwin._removeGuidelineWindow(checkinProgramId);
-		} else { //already have at least 1 checkin, need to figure out if picker already
-			//loaded, if it is, just add, if not, load the picker automatically
 			
+			messageboardwin._initializePicker();
+			productwin._initializePicker();
+		} else { //already have at least 1 checkin and picker is already loaded, load the picker automatically, add new item to picker
+			productwin._updatePickerData(checkinProgramId,checkinProgramName);
 		}
 		myCurrentSelectedProgram = checkinProgramId;
 	};

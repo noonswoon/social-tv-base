@@ -104,7 +104,7 @@ ProductBuyWindow = function(_product){
 		font: { fontSize: 24, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 		left: 15
 	});
-	productDetailView.add(productHeaderView);
+
 	productDetailView.add(productName);
 	
 	var productNameWidth = productName.toImage().width; 

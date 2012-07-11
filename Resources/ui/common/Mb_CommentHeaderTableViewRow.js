@@ -49,6 +49,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 	
 	//ADD PHOTO SECTION
 	var photoView = Ti.UI.createTableViewRow({
+		top: 20,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		height: 'auto'
 	});

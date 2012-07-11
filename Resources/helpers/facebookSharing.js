@@ -1,4 +1,5 @@
 function showRequestResult(e) {
+	
 	var s = '';
 	if (e.success) {
 		alert(e);
@@ -18,7 +19,7 @@ function showRequestResult(e) {
 
 exports.badgePopUpOnFacebook = function(_badgeId) {
 	var SettingHelper = require('helpers/settingHelper');
-	
+
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 		var BadgeModel = require('model/badge');
@@ -35,10 +36,10 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 		Titanium.Facebook.dialog("feed", data, showRequestResult);
 	}
 }
+
 //send request via facebook to friend who dont have this app:(
 exports.sendRequestOnFacebook = function(_fbId) {
 	var SettingHelper = require('helpers/settingHelper');
-	
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 	 	var data = {
@@ -55,7 +56,6 @@ exports.sendRequestOnFacebook = function(_fbId) {
 exports.checkinPopUpOnFacebook = function(_checkin) {
 	Ti.API.info(_checkin);	
 	var SettingHelper = require('helpers/settingHelper');
-	
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 		var data = {
@@ -72,7 +72,6 @@ exports.checkinPopUpOnFacebook = function(_checkin) {
 
 exports.levelUpPopUpOnFacebook = function(_levelTitle) {	
 	var SettingHelper = require('helpers/settingHelper');
-	
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 		var data = {
@@ -88,7 +87,7 @@ exports.levelUpPopUpOnFacebook = function(_levelTitle) {
 }
 
 exports.cookAppearOnFaceBook = function() {
-//	var SettingHelper = require('helpers/settingHelper');	
+		// var SettingHelper = require('helpers/settingHelper');
 //	if(SettingHelper.getFacebookShare()) {
 	 	var data = {
 		 recipe: "http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php",
@@ -115,12 +114,23 @@ exports.cookAppearOnFaceBook = function() {
 }
 
 
-exports.postAppearOnFaceBook = function() {
-	 	var data = {
-		 topic: "http://chatterbox.mobi/opengraph/og_post_obj_dynamic.php",
-		 access_token: Titanium.Facebook.accessToken
-		  };
-		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:post",data,"POST",showRequestResult);
+exports.postAppearOnFaceBook = function(_topicTitle,_topicContent,_programPhoto) {
+	var SettingHelper = require('helpers/settingHelper');	
+	if(SettingHelper.getFacebookShare()) {
+		var user = acs.getUserLoggedIn();
+		var data = {
+			link: "http://chatterbox.mobi/",
+			name: user.first_name+" posted a new discussion '"+_topicTitle+"'",
+			message: "",
+			caption: "",
+			picture: _programPhoto,
+			topic: "http://chatterbox.mobi/opengraph/og_post_obj_dynamic.php",
+			access_token: Titanium.Facebook.accessToken,
+			description: _topicContent
+		};
+		// Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:post",data,"POST",showRequestResult);
+		Titanium.Facebook.dialog("feed", data, showRequestResult);
+	}
 }
 
 exports.checkinAppearOnFaceBook = function() {

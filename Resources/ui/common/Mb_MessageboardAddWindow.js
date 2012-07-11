@@ -1,7 +1,8 @@
-function MessageboardAddWindow(_programId) {
+function MessageboardAddWindow(_programId,_programPhoto) {
 	//HEADERS
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
+	var FacebookSharing = require('helpers/facebookSharing');
 	var programId = _programId;
 	//UI STUFF
 	
@@ -14,10 +15,6 @@ function MessageboardAddWindow(_programId) {
 		barImage: 'images/nav_bg_w_pattern.png',
 		title: "Message Board",
 	 	leftNavButton:backButton
-	});
-
-	backButton.addEventListener('click', function(){
-   		self.close();
 	});
 	
 	var addTopicToolbar = Ti.UI.createImageView({
@@ -109,7 +106,7 @@ function MessageboardAddWindow(_programId) {
 	textAndButtonView.add(postButton);
 	
 	var addImageDialog = Titanium.UI.createOptionDialog({
-		options: ['Take a photo','Select from library']
+		options: ['Take a Picture','Choose from Gallery']
 	});
 	
 	addImageButton.addEventListener('click',function(){
@@ -126,14 +123,43 @@ function MessageboardAddWindow(_programId) {
 					if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO){
 						thumbnail.image = uploadedImage;
 						thumbnailLabel.hide();
-						filename = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory,''+_programId+'.png');
+						filename = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory,_programId+'.png');
 	 	 	  			filename.write(uploadedImage);		
 					}
-					else alert('Sorry, something wrong');
 				}
 			});
 		}
-		else alert('Unavailable');
+		else{
+			Titanium.Media.showCamera({
+				success:function(event){
+					uploadedImage = event.media;
+					if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO){
+						thumbnail.image = uploadedImage;
+						thumbnailLabel.hide();
+						filename = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory,_programId+'.png');
+	 	 	  			filename.write(uploadedImage);	
+					}
+					else alert("Video is not available ="+event.mediaType);
+				},
+				cancel:function(){
+				},
+				error:function(error){
+					// create alert
+					var a = Titanium.UI.createAlertDialog({title:'Camera'});
+					// set message
+					if (error.code == Titanium.Media.NO_CAMERA){
+						a.setMessage('Please run this test on device');
+					}
+					else{
+						a.setMessage('Unexpected error: ' + error.code);
+					}
+					// show alert
+					a.show();
+				},
+				saveToPhotoGallery:true,
+				mediaTypes:[Ti.Media.MEDIA_TYPE_VIDEO,Ti.Media.MEDIA_TYPE_PHOTO]
+			});
+		}
 	});
 	
 	
@@ -150,13 +176,10 @@ function MessageboardAddWindow(_programId) {
 		
 		//1. insert to the db topic table
 		var fileNamePath = null;
-		if(filename === null){
-			var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
-		}
-		else{
+		if(filename !== null) {
 			fileNamePath = filename.nativePath
-			var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 		}
+		var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {
@@ -179,14 +202,30 @@ function MessageboardAddWindow(_programId) {
 		
 		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
 		// in the function callback in Mb_MessageboardMainWindow.js
-		titleTextFieldInput.value = '';		
+		
+		//Post appear on Facebook
+		FacebookSharing.postAppearOnFaceBook(titleTextFieldInput.value,contentTextAreaInput.value,_programPhoto);
+		
 		self.close();
-	
+		titleTextFieldInput.value = '';	
+   		contentTextAreaInput.value = '';
+   		thumbnailLabel.show();
+   		uploadedImage = null;
+   		thumbnail.image = '';	
 	});
 
 	self._setProgramId = function(_newProgramId) {
 		programId = _newProgramId;
 	};
+	
+	backButton.addEventListener('click', function(){
+   		self.close();
+   		titleTextFieldInput.value = '';
+   		contentTextAreaInput.value = '';
+   		thumbnailLabel.show();
+   		uploadedImage = null;
+   		thumbnail.image = '';
+	});
 	
 	return self;
 }

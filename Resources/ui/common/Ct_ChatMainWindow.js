@@ -1,5 +1,7 @@
 function ChatMainWindow(_programId) {
-
+	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+	var checkinguidelinewin = null;
+		
     // -------------------------------------------------------------------------
 	// INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
 	// -------------------------------------------------------------------------
@@ -33,22 +35,27 @@ function ChatMainWindow(_programId) {
 	});		
 	
 	if(currentProgramId === '') { //have not checkedin to any program yet
-		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
-		var checkinguidelinewin = new CheckinGuidelineWindow('chat');
+		checkinguidelinewin = new CheckinGuidelineWindow('chat');
 		self.add(checkinguidelinewin);
-		return self;
+		currentProgramId = 'CTB_PUBLIC';
 	}
 
 	var tableView = Ti.UI.createTableView({
 		backgroundColor: 'transparent',
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE
 	});
+	
 	tableView.backgroundGradient = {
 		type: 'linear',
 		startPoint: { x: '0%', y: '0%' },
 		endPoint: { x: '0%', y: '100%' },
 		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
 	};	
+	
+	self._removeGuidelineWindow = function() {
+		self.remove(checkinguidelinewin);	
+		//do something		
+	};
 	
 	var loadCheckinProgram = function(e) {
 		var tableViewData = [];

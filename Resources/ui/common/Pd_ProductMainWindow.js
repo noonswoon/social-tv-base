@@ -5,7 +5,8 @@ function ProductMainWindow(_programId) {
 	var Checkin = require('model/checkin');
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
 	var TVProgram = require('model/tvprogram');
-	
+	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+	var checkinguidelinewin = null;
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Product');
 	
@@ -17,20 +18,21 @@ function ProductMainWindow(_programId) {
 		barImage: 'images/nav_bg_w_pattern.png',
 		title: "Product"
 	});
-
+	
+	var programName = "Something";
 	if(currentProgramId === '') { //have not checkedin to any program yet
-		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
-		var checkinguidelinewin = new CheckinGuidelineWindow('product');
+		checkinguidelinewin = new CheckinGuidelineWindow('product');
 		self.add(checkinguidelinewin);
-		return self;
+		currentProgramId = 'CTB_PUBLIC';
+	} else {
+		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		programName = programData[0].name;
 	}
 	
 	var dataForTab = [];
 	var hasLoadedPicker = false;
 	var pickerSelectedIndex = 0;
-	
-	var infoForName = TVProgram.TVProgramModel_fetchProgramsWithProgramId(_programId);
-	
+
 	var callPicker = Ti.UI.createButton({
 		width: 39,
 		height: 32,
@@ -47,7 +49,7 @@ function ProductMainWindow(_programId) {
 	self.add(productSelectProgramToolbar);
 	
 	var selectProgramLabel = Ti.UI.createLabel({
-		text: infoForName[0].name,
+		text: programName,
 		left: 10,
 		width: 'auto',
 		font: { fontSize: 18, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
@@ -107,6 +109,12 @@ function ProductMainWindow(_programId) {
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 
+	self._removeGuidelineWindow = function() {
+		self.remove(checkinguidelinewin);
+		
+		//do something		
+	};
+	
 	callPicker.addEventListener('click',function() {
 		if(!hasLoadedPicker) {
 			var dataForPicker = [];
@@ -117,13 +125,12 @@ function ProductMainWindow(_programId) {
 					preSelectedRow = i;
 					
 				if(programId === 'CTB_PUBLIC') {
-					dataForPicker.push({title:'Chatterbox Souvenirs', progId:'CTB_PUBLIC'});
+					dataForPicker.push({title:'Chatterbox Souvenirs', programId:'CTB_PUBLIC'});
 				} else {
 					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-					Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
 					var programName = programInfo[0].name;
 					var program_id = programInfo[0].program_id;
-					dataForPicker.push({title:programName, progId:program_id});
+					dataForPicker.push({title:programName, programId:programId});
 				}
 			}
 			picker.setSelectedRow(0,preSelectedRow,false);
@@ -145,14 +152,14 @@ function ProductMainWindow(_programId) {
 		self.remove(opacityView);
 		
 		selectProgramLabel.text = picker.getSelectedRow(0).title;
-		var idOfProgram = picker.getSelectedRow(0).progId;
+		var idOfProgram = picker.getSelectedRow(0).programId;
 		ProductACS.productACS_fetchedAllProducts(idOfProgram);
 	});
 
 	done.addEventListener('click',function() {
 		picker_view.animate(slide_out);
 		self.remove(opacityView);
-		currentProgramId = picker.getSelectedRow(0).progId;
+		currentProgramId = picker.getSelectedRow(0).programId;
 		alert('selecting new programId: '+currentProgramId);
 	});
 
@@ -169,7 +176,7 @@ function ProductMainWindow(_programId) {
 		font: { fontSize: 16, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
 	});
 
-	ProductACS.productACS_fetchedAllProducts(_programId);
+	ProductACS.productACS_fetchedAllProducts(currentProgramId);
 
 	Ti.App.addEventListener('fetchedAllProduct', function(e){
 		self.remove(unavailable);

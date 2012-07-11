@@ -115,21 +115,13 @@ function ApplicationTabGroup() {
 			myCurrentCheckinPrograms.push(programId);
 		}
 		
-		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length >= 0) { //re-instantiate 3 windows
+		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length >= 0) {
 			myCurrentSelectedProgram = myCurrentCheckinPrograms[0];
-			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-			messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
-			productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-			
+			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});			
 			chatwin.containingTab = chatTab;
-			messageboardwin.containingTab = messageboardTab;
-			productwin.containingTab = productTab;
-				
-			chatTab.window = chatwin;
-    		messageboardTab.window = messageboardwin;
-			productTab.window = productwin;
-
-			Ti.API.info('reinstantinated 3 windows...');		
+			
+			messageboardwin._removeGuidelineWindow();
+			productwin._removeGuidelineWindow();
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	}	
@@ -155,10 +147,11 @@ function ApplicationTabGroup() {
 		var checkinProgramName = e.checkinProgramName;
 		myCurrentSelectedProgram = checkinProgramId;
 		myCurrentCheckinPrograms.push(checkinProgramId);
-		if(myCurrentSelectedProgram === '') { //re-instantiate 3 windows
+		if(myCurrentSelectedProgram === '') {
 			chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-			messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
-			productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+			messageboardwin._removeGuidelineWindow();
+			productwin._removeGuidelineWindow();
+			alert('productwin-should remove guidelinewindow');
 		}
 	};
 	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);

@@ -9,7 +9,9 @@ function MessageboardMainWindow(_programId) {
 	var MessageboardAddWindow = require('ui/common/Mb_MessageboardAddWindow');
 	var CommentWindow = require('ui/common/Mb_CommentWindow');
 	var CacheHelper = require('helpers/cacheHelper');
-	
+	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+	var checkinguidelinewin = null;
+		
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Messageboard');
 	
@@ -26,9 +28,10 @@ function MessageboardMainWindow(_programId) {
 	//Check whether user has checkin to any program
 	if(currentProgramId === '') { //have not checkedin to any program yet
 		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
-		var checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
+		checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
 		self.add(checkinguidelinewin);
-		return self;
+		currentProgramId = 'CTB_PUBLIC';
+		messageboardHeader._setHeader('Chatterbox','CTB subname','ctbdummy.png',0,'ch3');
 	} else {
 		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);	
@@ -188,6 +191,12 @@ function MessageboardMainWindow(_programId) {
 	self.add(searchView);
 	self.add(allTopicTable);
 
+	self._removeGuidelineWindow = function() {
+		self.remove(checkinguidelinewin);
+		
+		//do something		
+	};
+	
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db

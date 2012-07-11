@@ -1,7 +1,6 @@
 var CheckinGuideline = function(_tab) {
 		
 	var self = Ti.UI.createView({
-		//backgroundColor:'#000',
 		top: 0,
 		width: 320,
 		height: 365,

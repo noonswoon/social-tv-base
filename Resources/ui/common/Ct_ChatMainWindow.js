@@ -33,7 +33,8 @@ function ChatMainWindow(_programId) {
 		title: 'Group Chat',
 		backgroundColor: 'red'
 	});		
-	
+	alert('currentProgramId = '+currentProgramId);
+	alert('myCurrentCheckinPrograms = '+myCurrentCheckinPrograms);
 	if(currentProgramId === '') { //have not checkedin to any program yet
 		checkinguidelinewin = new CheckinGuidelineWindow('chat');
 		self.add(checkinguidelinewin);

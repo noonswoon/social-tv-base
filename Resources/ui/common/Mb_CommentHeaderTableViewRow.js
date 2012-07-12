@@ -51,7 +51,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 	var photoView = Ti.UI.createTableViewRow({
 		top: 20,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		height: 300,
+		height: 'auto',
 		backgroundColor: 'orange'
 	});
 	
@@ -68,7 +68,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 	//ADD CONTENT SECTION
 	var contentView = Ti.UI.createTableViewRow({
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		backgroundColor: 'black'
+		zIndex: 10
 	}); 
 	
 	var content = Ti.UI.createLabel({
@@ -166,7 +166,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 		var topicWidth = topicRow.toImage().width; 
 		var topicHeight = topicRow.toImage().height; 
 		var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
-		headerMainRow.height = numLines * topicHeight + dateLabel.toImage().height + textAreaRow.toImage().height + 5;
+		topicRow.height = numLines * topicHeight + dateLabel.toImage().height + textAreaRow.toImage().height + 5;
 	};
 	
 	headerMainRow._setSubmissionTime = function(_submissionTime) {

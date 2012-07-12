@@ -36,8 +36,8 @@ function CommentWindow(_topicId) {
 		scrollable: true,
 		height:'auto',
 		selectedToCommentRow: null,
-		separatorColor: 'transparent',
-		backgroundColor: 'red',
+		separatorColor: 'black',
+		backgroundColor: 'transparent'
 	});
 	
 	// commentsTable.backgroundGradient = {

@@ -263,12 +263,12 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				var activityId = allIdDataForACS[2]; 					//local id
 	
 				//require callback from acs
-	//			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
-	//			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+				CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+				ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 				
 				//done after adding to acs
-	//			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
-	//			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+				PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
+				LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 				
 				//check badge condition from checkin
 				checkinData.program_type = _tvprogramData.programType;

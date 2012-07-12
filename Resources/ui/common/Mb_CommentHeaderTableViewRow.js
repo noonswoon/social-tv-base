@@ -27,15 +27,6 @@ CommentHeaderTableViewRow = function(_topicId) {
 		className: "DetailedTopicTableViewRow",
 		backgroundImage: 'images/messageboard/comment/topictitletoolbar.png',
 	});
-	
-	var letterImage = Ti.UI.createImageView({
-		image: 'images/messageboard/messageboardIcon.png',
-		top: 15,
-		left: 10,
-		width: 30,
-		height: 30
-	});
-	topicRow.add(letterImage);
 		
 	var topicTitle = Ti.UI.createLabel({
 		text: '-',
@@ -58,7 +49,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 	
 	//ADD PHOTO SECTION
 	var photoView = Ti.UI.createTableViewRow({
-		top: 10,
+		top: 20,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		height: 'auto',
 		backgroundColor: 'transparent'
@@ -66,12 +57,13 @@ CommentHeaderTableViewRow = function(_topicId) {
 	
 	var photoOfTopic = Ti.UI.createImageView({
 		image: topic.photo,
-		top: 10,
+		top: 20,
 		left: 10,
 		right: 10,
 		width: 300,
 		height: 200
 	});
+	
 	
 	//ADD CONTENT SECTION
 	var contentView = Ti.UI.createTableViewRow({
@@ -174,7 +166,12 @@ CommentHeaderTableViewRow = function(_topicId) {
 		var topicWidth = topicTitle.toImage().width; 
 		var topicHeight = topicTitle.toImage().height; 
 		var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH);
-
+		
+		alert(topicWidth); 
+		alert(topicHeight);
+		alert(numLines);
+		alert('DateLabel '+dateLabel.toImage().height);
+		 
 		topicRow.height = numLines * topicHeight + dateLabel.toImage().height + 30;
 	};
 	

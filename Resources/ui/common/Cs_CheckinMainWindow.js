@@ -1,5 +1,13 @@
 CheckinMainWindow = function (_tvprogramData, _containingTab){
 	
+//	alert(_tvprogramData);
+	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
+	var start_time = _tvprogramData.programStarttime;
+	var end_time = _tvprogramData.programEndtime;
+	Ti.API.info('now: '+now);
+	Ti.API.info('start_time: '+start_time);
+	Ti.API.info('now: '+now);
+	
 	var CheckinACS = require('acs/checkinACS');
 	var PointACS = require('acs/pointACS');
 	var LeaderBoardACS = require('acs/leaderBoardACS');
@@ -264,6 +272,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			checkinData.program_id = _tvprogramData.programId;
 			
 			BadgeCondition.checkinEvent(checkinData);
+
 			Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 		});
 	}

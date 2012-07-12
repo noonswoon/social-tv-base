@@ -61,7 +61,7 @@ function PopularWindow(_parent) {
 	function tvprogramLoadedCompleteCallback(e) {
 		programListTable.data = [];	
 		var allPrograms = e.fetchedPrograms;
-		TVProgram.tvprogramsModel_insertAllPrograms(allPrograms);
+		TVProgram.TVProgramModel_insertAllPrograms(allPrograms);
 		Ti.App.fireEvent("tvprogramsTitlesLoaded");
 		// fetchProgramsAllCheckins(); 
 	}

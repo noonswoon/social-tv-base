@@ -8,17 +8,6 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
        		endPoint: { x: '0%', y: '100%' },
        		colors: [ { color: '#fff', offset: 0.0}, { color: '#D0D0D0', offset: 1.0 } ] };
 	
-	var detailButton = Ti.UI.createButton({
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		top: 5,
-		right: 5,
-		height: 30,
-		width: 30,
-		borderRadius:15,
-		image:'images/icon/detail_button.png'
-	});
-	row.add(detailButton);
-	
 	var programLabelName = Ti.UI.createLabel({
 		text: _curTVProgram.name,
 		textAlign: 'left',

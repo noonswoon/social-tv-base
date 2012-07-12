@@ -7,9 +7,9 @@ AddFriendsMainView = function(_parentWindow) {
 		title: 'Add Friends'
 	});		
 
-	var nav = Ti.UI.iPhone.createNavigationGroup({
-		window: self
-	});			
+	// var nav = Ti.UI.iPhone.createNavigationGroup({
+		// window: self
+	// });			
 
 //////////////////////////////////////////////////////////////////
 	var mainView = Ti.UI.createView({
@@ -212,7 +212,7 @@ AddFriendsMainView = function(_parentWindow) {
 	});
 
 	appFriend.addEventListener('click',function(e) {
-		if(String(e.source) ==="[object TiUIButton]") appFriend.deleteRow(e.index);
+		if(String(e.source) ==="[object TiUIImageView]") appFriend.deleteRow(e.index);
 	});
 
 	self.addEventListener('close',function(){

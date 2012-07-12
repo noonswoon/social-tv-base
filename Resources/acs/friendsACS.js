@@ -214,8 +214,6 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":{"$in":['+allProgramsIDStr+']},"user_id":{"$in":['+allFriendsIDStr+']}}';
 
-	//Ti.API.info(url);
-	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
@@ -229,7 +227,6 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 		          }
 		        allFriendsCheckins.push(friendsCheckins);
 			}  	
-			Ti.API.info('fireEvent: friendsCheckInLoaded');
 			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    onerror: function(e) {

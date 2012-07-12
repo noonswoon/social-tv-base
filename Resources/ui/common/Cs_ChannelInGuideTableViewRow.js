@@ -14,18 +14,6 @@ ChannelInGuideTableViewRow = function(_program){
 	var timeStart = timeStartFormat.format('HH:mm');
 	var timeEnd = timeEndFormat.format('HH:mm');
 	
-		
-	// var detailButton = Ti.UI.createButton({
-		// style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		// top: 5,
-		// right: 5,
-		// height: 30,
-		// width: 30,
-		// borderRadius:15,
-		// image:'images/icon/detailButton.png'
-	// });
-	// row.add(detailButton);
-	
 	var programName = Ti.UI.createLabel({
 		text: _program.name,
 		textAlign: 'left',

@@ -46,18 +46,45 @@ FriendsWindow = function(_parent){
 		programsList.push(programs);
 	}
 	
-	//Send allTVProgramID and allFriends to data from ACS then pull data
-	FriendsACS.friendsCheckins(friendsList,programsList);
+	var friendsCheckinsUpdate = function() {
+		//Send allTVProgramID and allFriends to data from ACS then pull data
+		FriendsACS.friendsCheckins(friendsList,programsList);
+	}
+	friendsCheckinsUpdate();
 	
-	//EventListener
-	Ti.App.addEventListener('friendsCheckInLoaded',function(e){
-		var checkinsOfFriends;
-		if(e.fetchedAllFriendsCheckins=== undefined)
-			checkinsOfFriends = 0;
-		else
-			checkinsOfFriends = e.fetchedAllFriendsCheckins;
+	Ti.App.addEventListener('friendsDbUpdated',friendsCheckinsUpdate);
+	
+	var createAddMoreFriendsRow = function(){
+		var viewRowData = [];
+		var row = Ti.UI.createTableViewRow({
+			selectedBackgroundColor: 'transparent',
+			height: 150
+		});
+		var addMoreFriendLabel = Ti.UI.createLabel({
+			color: '#333',
+			textAlign: 'center',
+			text: 'Your friends haven\'t checkin to any programs. Invite some more and enjoy the new TV experiences!',
+			font: {fontSize: 15},
+			width: 250,
+			top: 50
+		});
+		var goToProfileButton = Ti.UI.createImageView({
+			image: 'images/button/button_addFriends.png',
+			top: 120,
+		});
+		goToProfileButton.addEventListener('click',function() {
+			var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
+			var addFriendMainWindow = new AddFriendMainWindow(_parent);
+			_parent.containingTab.open(addFriendMainWindow);	
+		});
 		
-		var totalFriendCheckins = e.fetchedTotalFriendCheckins;
+		row.add(addMoreFriendLabel);
+		row.add(goToProfileButton);
+		viewRowData.push(row);
+		friendsTableView.setData(viewRowData);
+	}
+	
+	var createFriendCheckinRow = function(checkinsOfFriends,totalFriendCheckins) {		
 		var results = [];
 		
 		for(var i=0;i<checkinsOfFriends.length;i++){
@@ -98,7 +125,20 @@ FriendsWindow = function(_parent){
 				var row = new FriendsWindowTableViewRow(program,number_checkins);
 				viewRowData.push(row);
 			}
-		friendsTableView.setData(viewRowData);
+		friendsTableView.setData(viewRowData);		
+	}
+	//EventListener
+	Ti.App.addEventListener('friendsCheckInLoaded',function(e){
+		var checkinsOfFriends;
+		if(e.fetchedTotalFriendCheckins==0) {
+			checkinsOfFriends = 0;
+			createAddMoreFriendsRow();
+		}
+		else {
+			checkinsOfFriends = e.fetchedAllFriendsCheckins;
+			var totalFriendCheckins = e.fetchedTotalFriendCheckins;
+			createFriendCheckinRow(checkinsOfFriends,totalFriendCheckins);
+		};
 	});
 	
 	friendsTableView.addEventListener('click',function(e){

@@ -132,6 +132,12 @@ function ApplicationTabGroup() {
 		productwin._updatePageContent(_targetedProgramId);
 	};
 	
+	var addGuidelineWindowInAllModules = function() {
+		chatwin._addGuidelineWindow();
+		messageboardwin._addGuidelineWindow();	
+		productwin._addGuidelineWindow();	
+	};
+	
 	var removeGuidelineWindowInAllModules = function() {
 		chatwin._removeGuidelineWindow();
 		messageboardwin._removeGuidelineWindow();
@@ -208,9 +214,8 @@ function ApplicationTabGroup() {
 	Ti.App.addEventListener('changingCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
 	
 	var testingPlaygroundCallback = function(e) {
-		chatwin._addGuidelineWindow();
-		messageboardwin._addGuidelineWindow();	
-		productwin._addGuidelineWindow();		
+		messageboardwin._removeAllPickerData();	
+		productwin._removeAllPickerData();		
 	};
 	Ti.App.addEventListener('testingPlayground', testingPlaygroundCallback);
 	

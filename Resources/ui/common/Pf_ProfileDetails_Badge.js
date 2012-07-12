@@ -31,7 +31,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	var animateNegativeLeft = Ti.UI.createAnimation({
 		left: 63,
 		duration: 500,
-		curve: Ti.UI.iOS.ANIMATION_CURVE_EASE_OUT,
+		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
 	});
 
 	badgeView.badgedetailwin = new BadgeDetailWindow({

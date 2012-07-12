@@ -61,7 +61,7 @@ BadgeDetailWindow = function (_badge){
 	
 	var animateRight = Ti.UI.createAnimation({
 		left: 320,
-		curve: Ti.UI.iOS.ANIMATION_CURVE_EASE_OUT,
+		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
 		duration: 500
 	});
 	

@@ -146,6 +146,16 @@ function ProductMainWindow(_programId) {
 		picker.setSelectedRow(0,selectedRow,false);
 	};
 	
+	self._removeAllPickerData = function() {
+		var pickerColumn = picker.columns[0];
+    	var numRows = pickerColumn.rowCount;
+    	for(var i = numRows-1; i >= 0; i-- ){
+        	var curRow = pickerColumn.rows[i]
+        	pickerColumn.removeRow(curRow);
+    	}
+    	picker.reloadColumn(pickerColumn);
+	};
+	
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);

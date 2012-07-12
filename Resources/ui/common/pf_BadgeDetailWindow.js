@@ -76,13 +76,13 @@ BadgeDetailWindow = function (_badge){
 	};
 	self._setBadgeDesc = function(_newDesc,_unlock) {
 		if(_unlock===1){
-			badgeDesc.text = _newDesc;
 			badgeCons.text = 'Congratulations on Your Badge!';
+			badgeDesc.text = _newDesc;
 			badgeCons.left = 5;	
 		}
 		else{
 			badgeCons.text = 'You have not unlock this badge yet';
-			badgeDesc.text = '';
+			badgeDesc.text = _newDesc;
 		}
 	};
 	return self;

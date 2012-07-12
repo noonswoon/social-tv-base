@@ -59,7 +59,8 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 		var index = e.index;
 		badgeView.badgedetailwin._setBadgeTitle(badgesCollection[index].title,myUnlockedBadges[index]);
 		badgeView.badgedetailwin._setBadgeImage(badgeIndex[index].image,myUnlockedBadges[index]);
-		badgeView.badgedetailwin._setBadgeDesc(badgesCollection[index].desc,myUnlockedBadges[index]);
+		if(myUnlockedBadges[index]) badgeView.badgedetailwin._setBadgeDesc(badgesCollection[index].desc,myUnlockedBadges[index]);
+		else badgeView.badgedetailwin._setBadgeDesc(badgesCollection[index].hint,myUnlockedBadges[index]);
 		badgeView.badgedetailwin.open();
 		badgeView.badgedetailwin.animate(animateNegativeLeft);
 	}

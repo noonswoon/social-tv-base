@@ -16,11 +16,8 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		//able to check in
 		Ti.API.info('Checkin enable');
 		checkinEnable = true;
-	} else {
-		//cannot checkin bcoz show hasn't started or show already finished
-		Ti.API.info('You can\'t checkin');
-	}
-		
+	} else Ti.API.info('You can\'t checkin');
+		//cannot checkin bcoz show hasn't started or show already finished	
 	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/back_button.png',
@@ -239,45 +236,48 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		productView.touchEnabled = false;
 		
 		checkinView.addEventListener('touchstart',function(){
-			remote.backgroundImage = 'images/checkin/checkin_remote.png';
+			//remote.backgroundImage = 'images/checkin/checkin_remote.png';
 		});
+		
 		checkinView.addEventListener('touchend',function(){
-			remote.backgroundImage = 'images/checkin/checkin_remote.png';
 			
-			checkinView.touchEnabled = false;
-			messageboardView.touchEnabled = true;
-			chatView.touchEnabled = true;
-			productView.touchEnabled = true;
+			if(checkinEnable) {	
+				remote.backgroundImage = 'images/checkin/checkin_remote.png';
+				checkinView.touchEnabled = false;
+				messageboardView.touchEnabled = true;
+				chatView.touchEnabled = true;
+				productView.touchEnabled = true;
+				
+				var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_tvprogramData);
 			
-			var ActivityDataIdForACS = updateActivity.updateActivity_myDatabase('checkin',_tvprogramData);
-		
-			var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
-			//checkinData / leaderboardData / activityData	
-			var checkinData = allActivityDataForACS[0];
-			var leaderboardData = allActivityDataForACS[1];
-			var activityData = allActivityDataForACS[2];
-		
-			var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
-			// checkinId / leaderboardId / activityId
-			var checkinId = allIdDataForACS[0]; 					//local id
-			var leaderboardId = allIdDataForACS[1];			 		//acs id
-			var activityId = allIdDataForACS[2]; 					//local id
-
-			//require callback from acs
-//			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
-//			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+				var allActivityDataForACS =  ActivityDataIdForACS[0];	//resultArray
+				//checkinData / leaderboardData / activityData	
+				var checkinData = allActivityDataForACS[0];
+				var leaderboardData = allActivityDataForACS[1];
+				var activityData = allActivityDataForACS[2];
 			
-			//done after adding to acs
-//			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
-//			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
-			
-			//check badge condition from checkin
-			checkinData.program_type = _tvprogramData.programType;
-			checkinData.program_id = _tvprogramData.programId;
-			
-			BadgeCondition.checkinEvent(checkinData);
-
-			Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
+				var allIdDataForACS = ActivityDataIdForACS[1];			//idArray
+				// checkinId / leaderboardId / activityId
+				var checkinId = allIdDataForACS[0]; 					//local id
+				var leaderboardId = allIdDataForACS[1];			 		//acs id
+				var activityId = allIdDataForACS[2]; 					//local id
+	
+				//require callback from acs
+	//			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+	//			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+				
+				//done after adding to acs
+	//			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
+	//			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+				
+				//check badge condition from checkin
+				checkinData.program_type = _tvprogramData.programType;
+				checkinData.program_id = _tvprogramData.programId;
+				
+				BadgeCondition.checkinEvent(checkinData);
+	
+				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
+			} else alert('You can\'t checkin now, sorry.');
 		});
 	}
 	else{

@@ -30,7 +30,6 @@ function ProductMainWindow(_programId) {
 	}
 	
 	var dataForTab = [];
-	var hasLoadedPicker = false;
 	var pickerSelectedIndex = 0;
 
 	var callPicker = Ti.UI.createButton({
@@ -39,7 +38,7 @@ function ProductMainWindow(_programId) {
 		backgroundImage: 'images/messageboard/optionbutton.png'
 	});
 	
-	self.rightNavButton = callPicker
+	self.rightNavButton = callPicker;
 	
 	var productSelectProgramToolbar = Ti.UI.createView({
 		top: 0,
@@ -73,7 +72,7 @@ function ProductMainWindow(_programId) {
 	});
 
 	//Picker
-	var picker_view = Titanium.UI.createView({
+	var pickerView = Titanium.UI.createView({
 		height:251,
 		bottom:-251,
 		zIndex: 2
@@ -104,70 +103,89 @@ function ProductMainWindow(_programId) {
 	});
 		
 	picker.selectionIndicator=true;	
-	picker_view.add(toolbar);
+	pickerView.add(toolbar);
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 
-	self._removeGuidelineWindow = function() {
-		self.remove(checkinguidelinewin);
+	self._initializePicker = function() {
+		var dataForPicker = [];
+		var preSelectedRow = 0;
+		for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+			var programId = myCurrentCheckinPrograms[i];
+			if(myCurrentSelectedProgram === programId) 
+				preSelectedRow = i;
+					
+			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+			var programName = programInfo[0].name;
+			dataForPicker.push({title:programName, programId:programId});
+		}
+		picker.setSelectedRow(0,preSelectedRow,false);
+		picker.add(dataForPicker);
+		pickerView.add(picker);
+	};
+	
+	self._addNewPickerData = function(checkinProgramId, checkinProgramName) {
+		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
+		picker.add(newPickerRow);
 		
-		//do something		
+		var latestRow = picker.columns[0].rowCount - 1; 
+		picker.setSelectedRow(0,latestRow,false);
+	};
+	
+	self._updateSelectedPicker = function(newSelectedProgram) {
+		var numRows = picker.columns[0].rowCount; 
+		var selectedRow = 0;
+		for(var i = 0; i < numRows; i++){
+			var curProgramId = picker.columns[0].rows[i].programId; 
+			if(curProgramId === newSelectedProgram) {
+				selectedRow = i;
+				break;
+			}		
+		}
+		picker.setSelectedRow(0,selectedRow,false);
+	};
+	
+	self._updatePageContent = function(_newProgramId) {
+		currentProgramId = _newProgramId;
+		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		programName = programData[0].name;
+		selectProgramLabel.text = programName;
+		
+		ProductACS.productACS_fetchedAllProducts(currentProgramId);	
+	};
+	
+	self._removeGuidelineWindow = function(checkinProgramId) {
+		self.remove(checkinguidelinewin);
 	};
 	
 	callPicker.addEventListener('click',function() {
-		if(!hasLoadedPicker) {
-			var dataForPicker = [];
-			var preSelectedRow = 0;
-			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-				var programId = myCurrentCheckinPrograms[i];
-				if(myCurrentSelectedProgram === programId) 
-					preSelectedRow = i;
-					
-				if(programId === 'CTB_PUBLIC') {
-					dataForPicker.push({title:'Chatterbox Souvenirs', programId:'CTB_PUBLIC'});
-				} else {
-					var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-					var programName = programInfo[0].name;
-					var program_id = programInfo[0].program_id;
-					dataForPicker.push({title:programName, programId:programId});
-				}
-			}
-			picker.setSelectedRow(0,preSelectedRow,false);
-			picker.add(dataForPicker);
-			picker_view.add(picker);
-			hasLoadedPicker = true;
-		}
-		picker_view.animate(slide_in);
+		pickerView.animate(slide_in);
 		self.add(opacityView);
 	});
 
 	cancel.addEventListener('click',function() {
-		picker_view.animate(slide_out);
+		pickerView.animate(slide_out);
 		self.remove(opacityView);
 	});
 
 	done.addEventListener('click',function() {
-		picker_view.animate(slide_out);
+		pickerView.animate(slide_out);
 		self.remove(opacityView);
 		
-		selectProgramLabel.text = picker.getSelectedRow(0).title;
-		var idOfProgram = picker.getSelectedRow(0).programId;
-		ProductACS.productACS_fetchedAllProducts(idOfProgram);
-	});
-
-	done.addEventListener('click',function() {
-		picker_view.animate(slide_out);
-		self.remove(opacityView);
-		currentProgramId = picker.getSelectedRow(0).programId;
-		alert('selecting new programId: '+currentProgramId);
+		if(currentProgramId !== picker.getSelectedRow(0).programId) {
+			selectProgramLabel.text = picker.getSelectedRow(0).title;
+			currentProgramId = picker.getSelectedRow(0).programId;
+			ProductACS.productACS_fetchedAllProducts(currentProgramId);
+			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
+		}
 	});
 
 	picker.addEventListener('change',function(e) {
 		pickerSelectedIndex = e.rowIndex;
 	});
 
-	self.add(picker_view);
+	self.add(pickerView);
 ///////////////////////////////////////////////////////////////
 
 	var unavailable = Ti.UI.createLabel({
@@ -183,7 +201,7 @@ function ProductMainWindow(_programId) {
 		var viewRowData = [];
 		var totalProducts = e.fetchedAllProduct.length;
 		var numRows = Math.ceil(totalProducts/2);
-		
+
 		if(totalProducts == 0){
 			self.add(unavailable);
 		} else {

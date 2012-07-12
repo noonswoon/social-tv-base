@@ -1,17 +1,19 @@
 //create for user in the first time log in
 var chatterboxPNBackendAccess = 'chatterbox:d1srupt'
+var pnServer = 'http://morning-cloud-6017.herokuapp.com/';
+
 exports.pushNotificationCTB_createUserInfo = function(_userid,_username,_pnDeviceToken) {
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			Ti.API.info(this.responseText);
 		},
 		onerror:function(e) {
-			Ti.API.info('cannot register pn to ctb server: '+e);
+			Ti.API.info('cannot register pn to ctb server: '+JSON.stringify(e));
 		}
 	}); 
 	
 	// Register device token with UA
-	xhr.open('POST', 'http://localhost:3000/push_notification_details/create.json', true);
+	xhr.open('POST', pnServer+'push_notification_details/create.json', true);
 	xhr.setRequestHeader("Content-Type","application/json");
 	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxPNBackendAccess));
 	
@@ -24,7 +26,7 @@ exports.pushNotificationCTB_createUserInfo = function(_userid,_username,_pnDevic
 };
 
 exports.pushNotificationCTB_getPNPermissions = function(_userid){
-	var url = 'http://localhost:3000/push_notification_details/get_pn_permissions/'+_userid+'.json';
+	var url = pnServer+'push_notification_details/get_pn_permissions/'+_userid+'.json';
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			var responseJSON = JSON.parse(this.responseText); 
@@ -33,7 +35,7 @@ exports.pushNotificationCTB_getPNPermissions = function(_userid){
 			Ti.App.fireEvent('fetchedUserPNPermissions',{userPNPermissions:userPNPermissions});
 		},
 		onerror:function(e) {
-			Ti.API.info('cannot get comment permission pn to ctb server: '+e);
+			Ti.API.info('cannot get comment permission pn to ctb server: '+JSON.stringify(e));
 		}
 	}); 
 
@@ -44,7 +46,7 @@ exports.pushNotificationCTB_getPNPermissions = function(_userid){
 };
 
 exports.pushNotificationCTB_updatePNPermission = function(_userid,_permissionValue,_permissionType) {
-	var url = 'http://localhost:3000/push_notification_details/update_notify_permission/'+_userid+'.json';
+	var url = pnServer+'push_notification_details/update_notify_permission/'+_userid+'.json';
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			Ti.API.info('update pnPermission (type='+_permissionType+') success for '+_userid);
@@ -78,7 +80,7 @@ exports.pushNotificationCTB_sendPN = function(_userid,_pnSendingType,_messageToS
 	}); 
 	
 	// Register device token with UA
-	xhr.open('POST', 'http://localhost:3000/push_notification_details/send_notification.json', true);
+	xhr.open('POST', pnServer+'push_notification_details/send_notification.json', true);
 	xhr.setRequestHeader("Content-Type","application/json");
 	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxPNBackendAccess));
 	

@@ -8,12 +8,12 @@ function showRequestResult(e) {
 		if (e.data) s += "; " + e.data;
 		if (!e.result && !e.data) s = '"success", but no data from FB.  I am guessing you cancelled the dialog.';
 	} else
-	if (e.cancelled) s = "CANCELLED";
+	if (e.cancelled) s = "fb cancel dialog";
 	else {
-		s = "FAIL";
+		s = "fb FAIL dialog";
 		if (e.error) s += "; " + e.error;	
 	}
-	alert(s);
+	Ti.API.info(s);
 }	
 	
 

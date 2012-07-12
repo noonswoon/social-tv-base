@@ -105,7 +105,7 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 		var photoUrl = null;
 		if(curTopic.user.custom_fields !== undefined && curTopic.user.custom_fields.device_token_id !== undefined)
 			deviceToken = curTopic.user.custom_fields.device_token_id;
-		if(curTopic.photo !== undefined)
+		if(curTopic.photo !== undefined && curTopic.photo.urls !== undefined && curTopic.photo.urls.original !== undefined)
 			photoUrl = curTopic.photo.urls.original;
 			
 		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,content,photo,comments_count,user_id,username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)", 

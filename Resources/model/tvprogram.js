@@ -11,7 +11,6 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 	db.execute('DELETE FROM tvprograms');
 	
 	for(var i =0;i<_allPrograms.length;i++) {
-		Ti.API.info('subname: '+_allPrograms[i].subname+', cn id: '+_allPrograms[i].channel_id+', pgId: '+_allPrograms[i].program_id+', programType: '+_allPrograms[i].program_type);
 		db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type) VALUES(?,?,?,?,?,?,?,?,?)',
 			_allPrograms[i].id, _allPrograms[i].name, _allPrograms[i].subname, _allPrograms[i].photo,
 			_allPrograms[i].start_time, _allPrograms[i].recurring_until, _allPrograms[i].channel_id,

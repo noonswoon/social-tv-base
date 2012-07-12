@@ -111,6 +111,12 @@ MessageboardHeader = function(_showName,_showSubName) {
 		header.programChannel.text = _headerChannel;
 	};
 
+	//for testing purposes
+/*	header.programImage.addEventListener('click', function() {
+		var PushNotificationCTB = require('ctb/pushnotificationCTB');
+		PushNotificationCTB.pushNotificationCTB_createUserInfo('USERID2',"USERNAME2",'123456');		
+	});
+*/
 	
 	//ADDING UI COMPONENTS
 	header.add(header.programTitle);

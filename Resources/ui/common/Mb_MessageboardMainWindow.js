@@ -40,7 +40,6 @@ function MessageboardMainWindow(_programId) {
 	var photoOfProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);	
 	var addWindow = new MessageboardAddWindow(currentProgramId,photoOfProgram[0].photo);	
 	var usingPull2Refresh = false;
-	var hasLoadedPicker = false;
 	var pickerSelectedIndex = 0;
 	
 	//UI STUFF
@@ -93,7 +92,7 @@ function MessageboardMainWindow(_programId) {
 	});
 
 	//Picker
-	var picker_view = Titanium.UI.createView({
+	var pickerView = Titanium.UI.createView({
 		height:251,
 		bottom:-251,
 		zIndex: 2
@@ -124,54 +123,44 @@ function MessageboardMainWindow(_programId) {
 	});
 		
 	picker.selectionIndicator=true;	
-	picker_view.add(toolbar);
+	pickerView.add(toolbar);
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
 	
 	callPicker.addEventListener('click',function() {
-		if(!hasLoadedPicker) {
-			var dataForPicker = [];
-			for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-				var programId = myCurrentCheckinPrograms[i];
-				var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-				Ti.API.info('programId: '+programId+', programInfo: '+JSON.stringify(programInfo));
-				var programName = programInfo[0].name;
-				dataForPicker.push({title:programName, programId:programId});
-			}
-			picker.add(dataForPicker);
-			picker_view.add(picker);
-			hasLoadedPicker = true;
-		}
-		picker_view.animate(slide_in);
+		pickerView.animate(slide_in);
 		self.add(opacityView);
 	});
 
 	cancel.addEventListener('click',function() {
-		picker_view.animate(slide_out);
+		pickerView.animate(slide_out);
 		self.remove(opacityView);
 	});
 
 	done.addEventListener('click',function() {
-		picker_view.animate(slide_out);
+		pickerView.animate(slide_out);
 		self.remove(opacityView);
 		
-		currentProgramId = picker.getSelectedRow(0).programId;
-		var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-		messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
+		if(currentProgramId !== picker.getSelectedRow(0).programId) { //only change if user selected a new programId
+			currentProgramId = picker.getSelectedRow(0).programId;
+			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+			messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
 		
-		//reset programId for addWindow
-		addWindow._setProgramId(currentProgramId);
+			//reset programId for addWindow
+			addWindow._setProgramId(currentProgramId);
 		
-		//reset data in the tableview
-		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+			//reset data in the tableview
+			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
+		}
 	});
 
 	picker.addEventListener('change',function(e) {
 		pickerSelectedIndex = e.rowIndex;
 	});
 	
-	self.add(picker_view);
+	self.add(pickerView);
 //////////////////
 
 	var allTopicTable = Ti.UI.createTableView({
@@ -192,10 +181,55 @@ function MessageboardMainWindow(_programId) {
 	self.add(searchView);
 	self.add(allTopicTable);
 
-	self._removeGuidelineWindow = function() {
-		self.remove(checkinguidelinewin);
+	self._initializePicker = function() {
+		var dataForPicker = [];
+		var preSelectedRow = 0;
+		for(var i=0;i<myCurrentCheckinPrograms.length;i++){
+			var programId = myCurrentCheckinPrograms[i];
+			if(myCurrentSelectedProgram === programId) 
+				preSelectedRow = i;
+					
+			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
+			var programName = programInfo[0].name;
+			dataForPicker.push({title:programName, programId:programId});
+		}
+		picker.setSelectedRow(0,preSelectedRow,false);
+		picker.add(dataForPicker);
+		pickerView.add(picker);
+	};
+	
+	self._addNewPickerData = function(checkinProgramId, checkinProgramName) {
+		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
+		picker.add(newPickerRow);
 		
-		//do something		
+		var latestRow = picker.columns[0].rowCount - 1; 
+		picker.setSelectedRow(0,latestRow,false);
+	};
+	
+	self._updateSelectedPicker = function(newSelectedProgram) {
+		var numRows = picker.columns[0].rowCount; 
+		var selectedRow = 0;
+		for(var i = 0; i < numRows; i++){
+			var curProgramId = picker.columns[0].rows[i].programId; 
+			if(curProgramId === newSelectedProgram) {
+				selectedRow = i;
+				break;
+			}		
+		}
+		picker.setSelectedRow(0,selectedRow,false);
+	};
+	
+	self._updatePageContent = function(_newProgramId) {
+		currentProgramId = _newProgramId;
+		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
+										programData[0].number_checkins,programData[0].channel_id);
+		
+		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	
+	};
+	
+	self._removeGuidelineWindow = function(checkinProgramId) {
+		self.remove(checkinguidelinewin);	
 	};
 	
 	//CALLBACK FUNCTIONS

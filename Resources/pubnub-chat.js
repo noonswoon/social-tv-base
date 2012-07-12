@@ -239,15 +239,6 @@ Ti.App.Chat = function(_chatParams) {
 		pickerSelectedIndex = e.rowIndex;
 	});
 	
-	var checkinToProgramCallback = function(e) {
-		if(hasLoadedPicker) { //only add a new one if it already loaded, if it isn't, the loading will take care of itself
-			var checkinProgramId = e.checkinProgramId; 
-			var checkinProgramName = e.checkinProgramName;
-			var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, progId:checkinProgramId});
-			picker.add(newPickerRow);
-		}
-	};
-	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);
 	//////
 
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({

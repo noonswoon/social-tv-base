@@ -16,7 +16,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 		scrollable: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		separatorColor: 'transparent',
-		backgroundColor: 'green'
+		backgroundColor: 'transparent'
 	});
 	
 	// COMMENT TOPIC SECTION
@@ -35,8 +35,8 @@ CommentHeaderTableViewRow = function(_topicId) {
 		right: 10,
 		top: 5,
 		bottom: 20, 
-		width: 'auto',
-		height: 'auto',
+		// width: 'auto',
+		// height: 'auto',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 	})
 	
@@ -52,7 +52,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 		top: 20,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		height: 'auto',
-		backgroundColor: 'orange'
+		backgroundColor: 'transparent'
 	});
 	
 	var photoOfTopic = Ti.UI.createImageView({
@@ -89,7 +89,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 		top: commentTopIndent,
 		height: 70,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		backgroundColor: 'yellow'
+		backgroundColor: 'transparent'
 	});
 	
 	var replyButton = Titanium.UI.createButton({
@@ -163,10 +163,16 @@ CommentHeaderTableViewRow = function(_topicId) {
 	headerMainRow._setTitle = function(_title) {
 		topicTitle.text = _title;
 		
-		var topicWidth = topicRow.toImage().width; 
-		var topicHeight = topicRow.toImage().height; 
-		var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH); 
-		topicRow.height = numLines * topicHeight + dateLabel.toImage().height + textAreaRow.toImage().height + 5;
+		var topicWidth = topicTitle.toImage().width; 
+		var topicHeight = topicTitle.toImage().height; 
+		var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH);
+		
+		alert(topicWidth); 
+		alert(topicHeight);
+		alert(numLines);
+		alert('DateLabel '+dateLabel.toImage().height);
+		 
+		topicRow.height = numLines * topicHeight + dateLabel.toImage().height + 30;
 	};
 	
 	headerMainRow._setSubmissionTime = function(_submissionTime) {

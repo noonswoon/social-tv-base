@@ -36,16 +36,16 @@ function CommentWindow(_topicId) {
 		scrollable: true,
 		height:'auto',
 		selectedToCommentRow: null,
-		separatorColor: 'black',
+		separatorColor: 'transparent',
 		backgroundColor: 'transparent'
 	});
 	
-	// commentsTable.backgroundGradient = {
-      	// type: 'linear',
-       	// startPoint: { x: '0%', y: '100%' },
-       	// endPoint: { x: '0%', y: '0%' },
-       	// colors: [ { color: '#d1d1d1', offset: 0.0}, { color: '#ffffff', offset: 1.0 } ]
- 	// };
+	commentsTable.backgroundGradient = {
+      	type: 'linear',
+       	startPoint: { x: '0%', y: '100%' },
+       	endPoint: { x: '0%', y: '0%' },
+       	colors: [ { color: '#d1d1d1', offset: 0.0}, { color: '#ffffff', offset: 1.0 } ]
+ 	};
 	
 	//ADDING UI COMPONENTS
 	self.add(commentsTable);

@@ -19,7 +19,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		className: "CommentRow",
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		separatorColor: 'transparent',
-		backgroundColor: 'blue'
+		backgroundColor: 'transparent'
 	});
 
 	row.index = -1;

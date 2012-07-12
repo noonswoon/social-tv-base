@@ -1,13 +1,5 @@
 CheckinMainWindow = function (_tvprogramData, _containingTab){
-	
-//	alert(_tvprogramData);
-	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
-	var start_time = _tvprogramData.programStarttime;
-	var end_time = _tvprogramData.programEndtime;
-	Ti.API.info('now: '+now);
-	Ti.API.info('start_time: '+start_time);
-	Ti.API.info('now: '+now);
-	
+		
 	var CheckinACS = require('acs/checkinACS');
 	var PointACS = require('acs/pointACS');
 	var LeaderBoardACS = require('acs/leaderBoardACS');
@@ -17,6 +9,18 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var CheckinModel = require('model/checkin');		
 	var TVProgram = require('model/tvprogram');
 	var userID = acs.getUserId();
+	var checkinEnable = false;
+	
+	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
+	if(now >= _tvprogramData.programStarttime && now <= _tvprogramData.programEndtime) {
+		//able to check in
+		Ti.API.info('Checkin enable');
+		checkinEnable = true;
+	} else {
+		//cannot checkin bcoz show hasn't started or show already finished
+		Ti.API.info('You can\'t checkin');
+	}
+		
 	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/back_button.png',
@@ -260,12 +264,12 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			var activityId = allIdDataForACS[2]; 					//local id
 
 			//require callback from acs
-			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
-			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+//			CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+//			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 			
 			//done after adding to acs
-			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
-			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+//			PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
+//			LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 			
 			//check badge condition from checkin
 			checkinData.program_type = _tvprogramData.programType;

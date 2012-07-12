@@ -26,7 +26,8 @@ function MessageboardMainWindow(_programId) {
 	var messageboardHeader = new MessageboardHeader('Chatterbox','Chatterbox Message Board');	
 	
 	//Check whether user has checkin to any program
-
+	var programPhoto = DEFAULT_CTB_IMAGE_URL;	
+	
 	if(currentProgramId === '') { //have not checkedin to any program yet
 		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 		checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
@@ -35,10 +36,10 @@ function MessageboardMainWindow(_programId) {
 		messageboardHeader._setHeader('Chatterbox','CTB subname','ctbdummy.png',0,'ch3');
 	} else {
 		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		programPhoto = program[0].photo;
 		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);	
 	}
-	var photoOfProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);	
-	var addWindow = new MessageboardAddWindow(currentProgramId,photoOfProgram[0].photo);	
+	var addWindow = new MessageboardAddWindow(currentProgramId,programPhoto);	
 	var usingPull2Refresh = false;
 	var pickerSelectedIndex = 0;
 	

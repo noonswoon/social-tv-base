@@ -28,7 +28,7 @@ var CACHE_TIMEOUT_IN_MINUTES = 1;
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 
 var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
-
+var DEFAULT_CTB_IMAGE_URL = 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png';
 	
 var myCurrentCheckinPrograms = []; //should be reset every hour to empty array
 var myCurrentSelectedProgram = ''; //dummy value

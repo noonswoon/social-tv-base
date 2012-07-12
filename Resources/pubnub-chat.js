@@ -31,7 +31,7 @@ Ti.App.Chat = function(_chatParams) {
 	
 	//dummy userobject
 	var userObject = {id:acs.getUserId(),fbId: acs.getUserFbId(),imageUrl: acs.getUserImage()};
-	var adminUserObject = {id: '', imageUrl: 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png'}; //for the greet message
+	var adminUserObject = {id: '', imageUrl: DEFAULT_CTB_IMAGE_URL}; //for the greet message
 	var historyMessages = [];
 	var lastHistoryLoadedIndex = 0;
 	var totalHistoryMessages = 0;

@@ -179,7 +179,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		if(filename !== null) {
 			fileNamePath = filename.nativePath
 		}
-		var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
+		var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().id,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 
 		//2. insert into topics table view [first record]
 		var topicDetailForNewTableViewRow = {

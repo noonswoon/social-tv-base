@@ -20,15 +20,15 @@ exports.getCurrentSelectedProgram = function() {
 	var lastCheckinTime = getLatestCheckinTime();
 	if(lastCheckinTime <= startOfToday) { //checkin already expired
 		Ti.App.Properties.setString('currentSelectedProgram','');
-		Ti.API.info('run getCurrentSelectedProgram, expire program, return empty str');
+		//Ti.API.info('run getCurrentSelectedProgram, expire program, return empty str');
 		return '';
 	} else {
 		if(Ti.App.Properties.hasProperty('currentSelectedProgram')) {
-			Ti.API.info('run getCurrentSelectedProgram: valid time: '+Ti.App.Properties.getString('currentSelectedProgram'));
+			//Ti.API.info('run getCurrentSelectedProgram: valid time: '+Ti.App.Properties.getString('currentSelectedProgram'));
 			return Ti.App.Properties.getString('currentSelectedProgram');
 		}
 		else {
-			Ti.API.info('run getCurrentSelectedProgram: valid time, no property');
+			//Ti.API.info('run getCurrentSelectedProgram: valid time, no property');
 			Ti.App.Properties.setString('currentSelectedProgram','');
 			return '';
 		}
@@ -36,7 +36,7 @@ exports.getCurrentSelectedProgram = function() {
 };
 
 exports.setCurrentSelectedProgram = function(newSelectedProgram) {
-	Ti.API.info('run setCurrentSelectedProgram: '+newSelectedProgram);
+	//Ti.API.info('run setCurrentSelectedProgram: '+newSelectedProgram);
 	Ti.App.Properties.setString('currentSelectedProgram',newSelectedProgram);
 	setLatestCheckinTime();
 };
@@ -46,15 +46,15 @@ exports.getCurrentCheckinPrograms = function() {
 	var lastCheckinTime = getLatestCheckinTime();
 	if(lastCheckinTime <= startOfToday) { //checkin already expired
 		Ti.App.Properties.setList('currentCheckinPrograms',[]);
-		Ti.API.info('run getCurrentCheckinPrograms, expire programData, return []');
+		//Ti.API.info('run getCurrentCheckinPrograms, expire programData, return []');
 		return [];
 	} else {
 		if(Ti.App.Properties.hasProperty('currentCheckinPrograms')) {
-			Ti.API.info('run getCurrentCheckinPrograms: valid time: '+JSON.stringify(Ti.App.Properties.getList('currentCheckinPrograms')));
+			//Ti.API.info('run getCurrentCheckinPrograms: valid time: '+JSON.stringify(Ti.App.Properties.getList('currentCheckinPrograms')));
 			return Ti.App.Properties.getList('currentCheckinPrograms');
 		}
 		else {
-			Ti.API.info('run getCurrentCheckinPrograms: valid time, no property');
+			//Ti.API.info('run getCurrentCheckinPrograms: valid time, no property');
 			Ti.App.Properties.setList('currentCheckinPrograms',[]);
 			return [];
 		}

@@ -201,7 +201,7 @@ function ApplicationTabGroup() {
 		currentCheckinPrograms.push(checkinProgramId);
 		UserCheckinTracking.setCurrentCheckinPrograms(currentCheckinPrograms);
 		
-		if(chatwin._numRowsInPicker() === 0 || messageboardwin._numRowsInPicker() === 0) { //picker hasn't loaded yet
+		if(productwin._getNumRowsInPicker() === 0 || messageboardwin._getNumRowsInPicker() === 0) { //picker hasn't loaded yet
 			removeGuidelineWindowInAllModules();
 			updateContentInAllModules(checkinProgramId);
 			
@@ -229,7 +229,7 @@ function ApplicationTabGroup() {
 	Ti.App.addEventListener('changingCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
 	
 	var testingPlaygroundCallback = function(e) {
-		/* some fn to test here */		
+		/* some fn to test here */
 	};
 	Ti.App.addEventListener('testingPlayground', testingPlaygroundCallback);
 	

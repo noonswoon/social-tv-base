@@ -182,35 +182,47 @@ function MessageboardMainWindow(_programId) {
 	self.add(searchView);
 	self.add(allTopicTable);
 
-	self._numRowsInPicker = function() {
+	self._getNumRowsInPicker = function() {
 		if(picker.columns === null) return 0;
-		else if(picker.columns[0] !== null) return picker.columns[0].rowCount;
+		else if(picker.columns.length > 0) return picker.columns[0].rowCount;
 		else return 0;
 	};
 	
 	self._initializePicker = function() {
 		var dataForPicker = [];
-		var preSelectedRow = 0;
+		var selectedProgramId = "";
+		var selectedProgramName = "";
 		var currentCheckinPrograms = UserCheckinTracking.getCurrentCheckinPrograms();
 		for(var i = 0; i < currentCheckinPrograms.length; i++){
 			var programId = currentCheckinPrograms[i];
-			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) 
-				preSelectedRow = i;
-					
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 			var programName = programInfo[0].name;
-			dataForPicker.push({title:programName, programId:programId});
+			
+			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) {
+				//skip, not adding to array, will add it to the top of array at the end
+				selectedProgramId = programId;	
+				selectedProgramName = programName;
+			}
+			else dataForPicker.push({title:programName, programId:programId});
 		}
-		picker.setSelectedRow(0,preSelectedRow,false);
+		//for some reason, the fn picker.setSelectedRow doesn't work here (it keeps setting to picker index 0), 
+		//need ad-hoc fix by setting the current selected program to be at the top of the picker
+		dataForPicker.unshift({title:selectedProgramName, programId:selectedProgramId})
+
 		picker.add(dataForPicker);
 		pickerView.add(picker);
 	};
+	
+	if(self._getNumRowsInPicker() === 0 && currentProgramId !== '') {
+		self._initializePicker();
+	}
 	
 	self._addNewPickerData = function(checkinProgramId, checkinProgramName) {
 		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
 		picker.add(newPickerRow);
 		
 		var latestRow = picker.columns[0].rowCount - 1; 
+		alert('calling setSelectedRow: addNewP')
 		picker.setSelectedRow(0,latestRow,false);
 	};
 	
@@ -224,6 +236,7 @@ function MessageboardMainWindow(_programId) {
 				break;
 			}		
 		}
+		alert('calling setSelectedRow');
 		picker.setSelectedRow(0,selectedRow,false);
 	};
 	

@@ -34,6 +34,14 @@ var myCurrentCheckinPrograms = []; //should be reset every hour to empty array
 var myCurrentSelectedProgram = ''; //dummy value
 var friendRequests = [];
 
+
+Ti.App.addEventListener('pause', function(){
+	Ti.API.info('pause..suspend the program');
+});
+
+Ti.App.addEventListener('resume', function(){
+	Ti.API.info('program resume..');
+});
 // This is a single context application with mutliple windows in a stack
 (function() {
 	//determine platform and form factor and render approproate components

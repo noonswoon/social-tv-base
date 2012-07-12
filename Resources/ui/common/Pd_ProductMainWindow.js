@@ -154,7 +154,13 @@ function ProductMainWindow(_programId) {
 		
 		ProductACS.productACS_fetchedAllProducts(currentProgramId);	
 	};
-	
+
+	self._addGuidelineWindow = function() {
+		if(checkinguidelinewin === null)
+			checkinguidelinewin = new CheckinGuidelineWindow('product');
+		self.add(checkinguidelinewin);
+	};
+		
 	self._removeGuidelineWindow = function() {
 		self.remove(checkinguidelinewin);
 	};

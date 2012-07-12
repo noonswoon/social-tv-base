@@ -112,11 +112,9 @@ MessageboardHeader = function(_showName,_showSubName) {
 	};
 
 	//for testing purposes
-/*	header.programImage.addEventListener('click', function() {
-		var PushNotificationCTB = require('ctb/pushnotificationCTB');
-		PushNotificationCTB.pushNotificationCTB_createUserInfo('USERID2',"USERNAME2",'123456');		
+	header.programImage.addEventListener('click', function() {
+		Ti.App.fireEvent('testingPlayground');		
 	});
-*/
 	
 	//ADDING UI COMPONENTS
 	header.add(header.programTitle);

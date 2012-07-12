@@ -229,6 +229,12 @@ function MessageboardMainWindow(_programId) {
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	
 	};
 	
+	self._addGuidelineWindow = function() {
+		if(checkinguidelinewin === null)
+			checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
+		self.add(checkinguidelinewin);
+	};
+	
 	self._removeGuidelineWindow = function() {
 		self.remove(checkinguidelinewin);	
 	};

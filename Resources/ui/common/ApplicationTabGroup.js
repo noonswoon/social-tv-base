@@ -207,6 +207,14 @@ function ApplicationTabGroup() {
 	};
 	Ti.App.addEventListener('changingCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
 	
+	var testingPlaygroundCallback = function(e) {
+		chatwin._addGuidelineWindow();
+		messageboardwin._addGuidelineWindow();	
+		productwin._addGuidelineWindow();		
+	};
+	Ti.App.addEventListener('testingPlayground', testingPlaygroundCallback);
+	
+	
    	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');
    		Ti.App.removeEventListener('checkinDbLoaded',checkinDbLoadedCallBack);

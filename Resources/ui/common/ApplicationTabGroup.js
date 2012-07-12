@@ -11,7 +11,7 @@ function ApplicationTabGroup() {
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
-        
+
 	Ti.include('lib/customTabBar.js');
     
     var myUserId = acs.getUserId();
@@ -21,9 +21,9 @@ function ApplicationTabGroup() {
 	}
 	
 	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
-	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
-	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
+	var chatwin = new ChatMainWindow(UserCheckinTracking.getCurrentSelectedProgram(),{height:426, tabBarHidden: true});
+	var messageboardwin = new MessageboardMainWindow(UserCheckinTracking.getCurrentSelectedProgram(),{height:426, tabBarHidden: true});				
+	var productwin = new ProductMainWindow(UserCheckinTracking.getCurrentSelectedProgram(),{height:426, tabBarHidden: true});
 	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
 	var blankwin = new BlankWindow();
 	
@@ -139,6 +139,7 @@ function ApplicationTabGroup() {
 	};
 	
 	var removeGuidelineWindowInAllModules = function() {
+		alert('removing guidelinewin');
 		chatwin._removeGuidelineWindow();
 		messageboardwin._removeGuidelineWindow();
 		productwin._removeGuidelineWindow();
@@ -147,12 +148,17 @@ function ApplicationTabGroup() {
 	var initializePickerInAllModules = function() {
 		messageboardwin._initializePicker();
 		productwin._initializePicker();
-	}
+	};
 	
-	var addPickerInAllModules = function(newCheckinProgramId, newCheckinProgramName) {
+	var addNewPickerRowInAllModules = function(newCheckinProgramId, newCheckinProgramName) {
 		messageboardwin._addNewPickerData(newCheckinProgramId,newCheckinProgramName);			
 		productwin._addNewPickerData(newCheckinProgramId,newCheckinProgramName);
-	}		
+	};
+	
+	var clearPickerDataInAllModules = function() {
+		messageboardwin._removeAllPickerData();	
+		productwin._removeAllPickerData();
+	};
 	
 	function checkinDbLoadedCallBack(e) {			
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
@@ -160,18 +166,24 @@ function ApplicationTabGroup() {
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
 		//if checkin to at least 1 program, enable the chat/board/product bar
 		
+		var todayCheckinPrograms = [];
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id;
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
-			myCurrentCheckinPrograms.push(programId);
+			todayCheckinPrograms.push(programId);
 		}
+		//reset currentCheckinPrograms when loadedup data from ACS
+		UserCheckinTracking.setCurrentCheckinPrograms(todayCheckinPrograms);
 		
 		//first load, and the user already checkin in some program
-		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length > 0) {
-			myCurrentSelectedProgram = myCurrentCheckinPrograms[0];
-
+		Ti.API.info('getCurrentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+		Ti.API.info('currentCheckinProgramsLength: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
+		
+		if(UserCheckinTracking.getCurrentSelectedProgram() === '' && currentCheckinPrograms.length > 0) { 
+			//handle rare situation, when user checkin and deleted the app halfway, then reinstall it again on the same day
+			UserCheckinTracking.setCurrentSelectedProgram(currentCheckinPrograms[0]);
 			removeGuidelineWindowInAllModules();
-			updateContentInAllModules(myCurrentSelectedProgram);
+			updateContentInAllModules(UserCheckinTracking.getCurrentSelectedProgram());
 			initializePickerInAllModules();
 		}
 	}	
@@ -185,24 +197,27 @@ function ApplicationTabGroup() {
 	var checkinToProgramCallback = function(e) {
 		var checkinProgramId = e.checkinProgramId; 
 		var checkinProgramName = e.checkinProgramName;
-		myCurrentCheckinPrograms.push(checkinProgramId);
-		if(myCurrentSelectedProgram === '') { //haven't checkin before, picker hasn't loaded yet
+		var currentCheckinPrograms = UserCheckinTracking.getCurrentCheckinPrograms();
+		currentCheckinPrograms.push(checkinProgramId);
+		UserCheckinTracking.setCurrentCheckinPrograms(currentCheckinPrograms);
+		
+		if(chatwin._numRowsInPicker() === 0 || messageboardwin._numRowsInPicker() === 0) { //picker hasn't loaded yet
 			removeGuidelineWindowInAllModules();
 			updateContentInAllModules(checkinProgramId);
 			
-			myCurrentSelectedProgram = checkinProgramId; //after comparison, assign new value to myCurrentSelectedProgram
+			UserCheckinTracking.setCurrentSelectedProgram(checkinProgramId); //after comparison, assign new value to UserCheckinTracking.currentSelectedProgram
 			initializePickerInAllModules();
 		} else { //already have at least 1 checkin and picker is already loaded, load the picker automatically, add new item to picker
-			myCurrentSelectedProgram = checkinProgramId;
+			UserCheckinTracking.setCurrentSelectedProgram(checkinProgramId);
 			updateContentInAllModules(checkinProgramId);
-			addPickerInAllModules(checkinProgramId,checkinProgramName);
+			addNewPickerRowInAllModules(checkinProgramId,checkinProgramName);
 		}
 	};
 	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);
 	
 	var changingCurrentSelectedProgramCallback = function(e) {
 		var newSelectedProgram = e.newSelectedProgram; 
-		myCurrentSelectedProgram = newSelectedProgram;
+		UserCheckinTracking.setCurrentSelectedProgram(newSelectedProgram);
 		
 		////update program content
 		updateContentInAllModules(newSelectedProgram);
@@ -214,8 +229,7 @@ function ApplicationTabGroup() {
 	Ti.App.addEventListener('changingCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
 	
 	var testingPlaygroundCallback = function(e) {
-		messageboardwin._removeAllPickerData();	
-		productwin._removeAllPickerData();		
+		/* some fn to test here */		
 	};
 	Ti.App.addEventListener('testingPlayground', testingPlaygroundCallback);
 	

@@ -31,7 +31,8 @@ function ChatMainWindow(_programId) {
 		programsTableView.data = []; //reset programsTableView data
 		
 		//pull data from tvprogram where mycurentcheckinprograms are
-		var todayCheckinPrograms = TVProgram.TVProgramModel_getPrograms(myCurrentCheckinPrograms);
+		var currentCheckinPrograms = UserCheckinTracking.getCurrentCheckinPrograms();
+		var todayCheckinPrograms = TVProgram.TVProgramModel_getPrograms(currentCheckinPrograms);
 		var programsTableViewData = [];
 		var ChatTableViewRow = require('ui/common/Ct_ChatTableViewRow');
 		for(var i = 0; i < todayCheckinPrograms.length; i++) {

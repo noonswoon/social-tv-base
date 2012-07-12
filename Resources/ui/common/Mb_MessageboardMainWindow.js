@@ -182,12 +182,19 @@ function MessageboardMainWindow(_programId) {
 	self.add(searchView);
 	self.add(allTopicTable);
 
+	self._numRowsInPicker = function() {
+		if(picker.columns === null) return 0;
+		else if(picker.columns[0] !== null) return picker.columns[0].rowCount;
+		else return 0;
+	};
+	
 	self._initializePicker = function() {
 		var dataForPicker = [];
 		var preSelectedRow = 0;
-		for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-			var programId = myCurrentCheckinPrograms[i];
-			if(myCurrentSelectedProgram === programId) 
+		var currentCheckinPrograms = UserCheckinTracking.getCurrentCheckinPrograms();
+		for(var i = 0; i < currentCheckinPrograms.length; i++){
+			var programId = currentCheckinPrograms[i];
+			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) 
 				preSelectedRow = i;
 					
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);

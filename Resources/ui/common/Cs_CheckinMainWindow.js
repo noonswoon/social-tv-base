@@ -277,7 +277,20 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				BadgeCondition.checkinEvent(checkinData);
 	
 				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
-			} else alert('You can\'t checkin now, sorry.');
+			} else {
+			var checkinWarningMessage = "";
+				if(now < _tvprogramData.programStarttime)
+					checkinWarningMessage = "You cannot checkin. The show hasn't started yet!";
+				else if(now > _tvprogramData.programEndtime)
+					checkinWarningMessage = "You cannot checkin. The show is already finished!"
+				else checkinWarningMessage = "You cannot checkin at this time";
+				
+				var checkinWarningDialog = Titanium.UI.createAlertDialog({
+		       		title:'Chatterbox',
+		         	message:checkinWarningMessage
+		       	});
+		       	checkinWarningDialog.show();
+			}
 		});
 	}
 	else{

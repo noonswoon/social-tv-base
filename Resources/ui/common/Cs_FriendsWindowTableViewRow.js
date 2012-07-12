@@ -21,7 +21,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		text: tabledata.programName,
 		textAlign: 'left',
 		color: '#333',
-		left: 155,
+		left: 145,
 		height: 30,
 		width: 142,
 		font:{fontWeight:'bold',fontSize:17},
@@ -29,27 +29,29 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	});
 	row.add(programLabelName);
 
-	var programLabelSubname = Ti.UI.createLabel({
-		text: tabledata.programSubname,
-		color: '#333',
-		textAlign:'left',
-		font:{fontWeight:'bold',fontSize:13},
-		top: 35,
-		left:155
-	});
-	row.add(programLabelSubname);
+//TODO:no program subname
+	 var programLabelSubname = Ti.UI.createLabel({
+		 text: 'tabledata.programSubName',//tabledata.programSubName,
+		 color: '#333',
+		 textAlign:'left',
+		 font:{fontWeight:'bold',fontSize:13},
+		 top: 35,
+		 left:140
+	 });
+	Ti.API.info(tabledata);
+	 row.add(programLabelSubname);
 	
 	var programImage = Ti.UI.createImageView({
 		image: tabledata.programImage,
-		width:120,
-		height:90
+		width:110,
+		height:80
 	});
 	var programImageView = Ti.UI.createView({
-		width: 133,
-		height: 104,
+		width: 123,
+		height: 94,
 		backgroundImage: 'images/ProgramImageBorder.png',
-		top: 10,
-		left:10,
+		top: 5,
+		left: 5,
 		bottom:10
 	});
 	programImageView.add(programImage);
@@ -57,9 +59,8 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 
 	var checkinView = Ti.UI.createView({
 		width: 52,
-		//bottom:5,
-		top:65,
-		left: 150,
+		top:55,
+		left: 125,
 		height: 47
 	});
 	var programNumCheckinImage = Ti.UI.createImageView({
@@ -79,9 +80,8 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	
 	var programFriendCheckinView = Ti.UI.createView({
 		width: 52,
-		//bottom:5,
-		top:65,
-		left: 202,
+		top:55,
+		left: 177,
 		height: 47
 	});
 	
@@ -90,7 +90,6 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		top: 0
 	});
 	var programFriendTotalCheckin = Ti.UI.createLabel({
-		//text: _totalFriendCheckins,
 		text: friendCheckIns,
 		textAlign: 'left',
 		color: '#898687',
@@ -103,9 +102,8 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 
 	var channelView = Ti.UI.createView({
 		width: 52,
-		//bottom:5,
-		top:65,
-		right: 13,
+		top:55,
+		right: 38,
 		height: 47,
 	});
 	var ChannelImage = Ti.UI.createImageView({
@@ -132,9 +130,9 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	
 	var friendsScrollView = Ti.UI.createScrollView({
 		contentWidth:400,
-		contentHeight:20,
+		contentHeight:45,
 		bottom:3,
-		height:30,
+		height:45,
 		width:320,
 	});
 
@@ -152,11 +150,11 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		 }	
 		var friendsProfileImage = Ti.UI.createImageView({
 			image: 'images/kuma100x100.png',
-			width: 27,
-			height: 27,
+			width: 40,
+			height: 40,
 			borderWidth: 2,
 			borderColor: 'white',
-			left: (i*35)+15,
+			left: (i*45)+10,
 		});
 		
 		if(fbId!==0) friendsProfileImage.image = acs.getUserImageNormalOfFbId(fbId);

@@ -1,4 +1,4 @@
-function ChatMainWindow(_programId,_tabBar) {
+function ChatMainWindow(_programId) {
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var checkinguidelinewin = null;
 		

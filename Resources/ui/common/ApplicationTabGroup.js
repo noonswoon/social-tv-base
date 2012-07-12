@@ -21,7 +21,7 @@ function ApplicationTabGroup() {
 	}
 	
 	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
-	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,myCustomTabBar,{height:426, tabBarHidden: true});
+	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
 	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
 	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
@@ -144,7 +144,7 @@ function ApplicationTabGroup() {
 			chatwin.containingTab = chatTab;
 //			messageboardwin._removeGuidelineWindow();
 //			productwin._removeGuidelineWindow();
-			Ti.App.fireEvent('myCurrentCheckinProgramsReady');			//fire event to update chatroom in ChatMainWindow
+			Ti.App.fireEvent('myCurrentCheckinProgramsReady');	//fire event to update chatroom in ChatMainWindow
 		}
 		Ti.API.info('myCurrentCheckinPrograms: '+JSON.stringify(myCurrentCheckinPrograms));
 	}	

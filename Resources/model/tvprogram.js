@@ -21,12 +21,12 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 };
 
 //chat window used: pull data from currentCheckin
-exports.tvprogramsModel_getProgramData = function(_program_ids) {
+exports.tvprogramsModel_getProgramData = function(_programIds) {
 	var programData = [];
 	var db = Ti.Database.open('Chatterbox');
-	for(var i=0;i<_program_ids.length;i++) {
-		var curProgram_id = _program_ids[i];
-		var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ?',curProgram_id);
+	for(var i=0;i<_programIds.length;i++) {
+		var curProgramId = _programIds[i];
+		var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ?',curProgramId);
 		while(result.isValidRow()) {
 			programData.push({
 				id: result.fieldByName('id'),

@@ -18,7 +18,7 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 			hasChild:true,
 			color: '#fff',
 			commentsCount: Number(result.fieldByName('comments_count')),
-			user_id: result.fieldByName('user_id'),
+			userId: result.fieldByName('user_id'),
 			username: result.fieldByName('username'),
 			updatedAt: result.fieldByName('updated_at')
 		});
@@ -40,7 +40,7 @@ exports.topicModel_fetchWithKeywords = function(_keywordsStr,_programId) {
 			acsObjectId: result.fieldByName('acs_object_id'),
 			hasChild:true,
 			color: '#fff',
-			user_id: result.fieldByName('user_id'),
+			userId: result.fieldByName('user_id'),
 			username: result.fieldByName('username'),
 			updatedAt: result.fieldByName('updated_at')
 		});
@@ -63,7 +63,7 @@ exports.topicModel_getTopicById = function(_topicACSObjectId) {
 		topic.title = result.fieldByName('title');
 		topic.content = result.fieldByName('content');
 		topic.photo = result.fieldByName('photo');
-		topic.user_id = result.fieldByName('user_id'),
+		topic.userId = result.fieldByName('user_id'),
 		topic.username = result.fieldByName('username');
 		topic.deviceTokenId = result.fieldByName('device_token_id');
 		topic.updatedAt = result.fieldByName('updated_at')

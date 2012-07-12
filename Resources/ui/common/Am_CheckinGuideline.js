@@ -3,7 +3,7 @@ var CheckinGuideline = function(_tab) {
 	var self = Ti.UI.createView({
 		top: 0,
 		width: 320,
-		height: 365,
+		height: 370,
 		zIndex:40
 	});
 

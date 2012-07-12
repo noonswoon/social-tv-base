@@ -1,7 +1,6 @@
 function ApplicationTabGroup() {
     // create tab group, create module instance
     var self = Titanium.UI.createTabGroup({
-    	backgroundColor: '#fff',
     });
 		
 	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');
@@ -11,70 +10,53 @@ function ApplicationTabGroup() {
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
-        
-	Ti.include('lib/customTabBar.js');
-    
+       
     var myUserId = acs.getUserId();
 	
-	var updateCustomTabBar = function(_tab) {
-		myCustomTabBar.back(_tab);
-	}
-	
-	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
-	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});				
-	var productwin = new ProductMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-	var profilewin =  new ProfileMainWindow(myUserId,"me",{height:426, tabBarHidden: true});
+	var selectionwin = new ChannelSelectionMainWindow();
+	var chatwin = new ChatMainWindow(myCurrentSelectedProgram);
+	var messageboardwin = new MessageboardMainWindow(myCurrentSelectedProgram);				
+	var productwin = new ProductMainWindow(myCurrentSelectedProgram);
+	var profilewin =  new ProfileMainWindow(myUserId,"me");
 	var blankwin = new BlankWindow();
 	
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
+		title: 'Discover',
+		icon: '/images/discover.png',
 		window: selectionwin
 	});
 	selectionwin.containingTab = selectionTab;
 	selectionTab.tabGroup = self; 
-	selectionTab.addEventListener('focus',function(){
-		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
-		updateCustomTabBar(tabIndexToComeBack);
-	});
-		
+	
     var chatTab = Titanium.UI.createTab({  
-     	window: chatwin,
+    	title: 'Chat',
+    	icon: '/images/chat-2.png',
+     	window: chatwin
 	});
     chatwin.containingTab = chatTab;
-	chatTab.addEventListener('focus',function(){
-		tabIndexToComeBack = 1;	 //for redirecting when chat window is close
-		updateCustomTabBar(tabIndexToComeBack);
-	});   
-   
-    var messageboardTab = Titanium.UI.createTab({  
-        window: messageboardwin,
+  
+    var messageboardTab = Titanium.UI.createTab({
+    	title: 'Board',
+    	icon: '/images/messageboard.png',
+    	window: messageboardwin
     });
     messageboardwin.containingTab = messageboardTab;
-	messageboardTab.addEventListener('focus',function(){
-		tabIndexToComeBack = 2;	 //for redirecting when chat window is close
-		updateCustomTabBar(tabIndexToComeBack);
-	});
-	
+
 	var productTab = Ti.UI.createTab({
-		window: productwin,
+		title: 'Product',
+		icon: '/images/product.png',
+		window: productwin
 	});
 	productwin.containingTab = productTab;
-	productTab.addEventListener('focus',function(){
-		tabIndexToComeBack = 3;	 //for redirecting when chat window is close
-		updateCustomTabBar(tabIndexToComeBack);
-	});
 	
 	var profileTab = Ti.UI.createTab({
+		title: 'Me',
+		icon: '/images/me.png',
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;
-	profileTab.addEventListener('focus',function(){
-		tabIndexToComeBack = 4;	 //for redirecting when chat window is close
-		updateCustomTabBar(tabIndexToComeBack);
-	});
-	
-	//////////////////////
+
 	self.addTab(selectionTab);
     self.addTab(chatTab);  
     self.addTab(messageboardTab);  
@@ -87,20 +69,6 @@ function ApplicationTabGroup() {
     //save 1-clcik, direct to message board functionality
    	self.setActiveTab(self.tabs[0]);
 	self.open();
-	
-	var myCustomTabBar = new CustomTabBar({
-		tabBar: self,
-		imagePath: 'images/tabgroup/',
-		width: 64,
-		height: 54,
-		items: [
-			{ image: 'discover.png', selected: 'discover_over.png' },
-			{ image: 'chat.png', selected: 'chat_over.png' },
-			{ image: 'board.png', selected: 'board_over.png' },
-			{ image: 'shop.png', selected: 'shop_over.png' },
-			{ image: 'me.png', selected: 'me_over.png' }
-		]
-	});
 	
 	//PROFILE: CALLING ACS
 	var LevelACS = require('acs/levelACS');	

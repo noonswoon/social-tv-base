@@ -35,8 +35,8 @@ Ti.App.Chat = function(_chatParams) {
 	var totalHistoryMessages = 0;
 	
 	var chatMessagesTableView = Ti.UI.createTableView({
-		top:5,
-		height:320,
+		top:0,
+		height:370,
 		backgroundColor: 'transparent',
 		separatorColor: 'transparent',
 		scrollable: true
@@ -99,7 +99,8 @@ Ti.App.Chat = function(_chatParams) {
 		barImage: 'images/nav_bg_w_pattern.png',
 		backgroundImage: 'images/bg.png',
 		barColor:'#489ec3',
-		leftNavButton: backButton
+		leftNavButton: backButton,
+		tabBarHidden: true
 	});
 	
 	backButton.addEventListener('click', function(){
@@ -107,7 +108,7 @@ Ti.App.Chat = function(_chatParams) {
 	});
 
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
-		top: 0,
+		top: 7,
 		height: 30,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
 	});
@@ -120,8 +121,8 @@ Ti.App.Chat = function(_chatParams) {
 	loadHistoryMessagesRow.add(loadHistoryButton);
 	
 	var chatInputView = Ti.UI.createView({
-		//bottom: 0,
-		top: 325,
+		bottom: 0,
+	//	top: 325,
 		height: 40,
 		width: '100%',
 		zIndex: 2,
@@ -220,7 +221,7 @@ Ti.App.Chat = function(_chatParams) {
 	});
 	
 	chatInputTextField.addEventListener('blur', function() {
-		chatInputView.top = 325;
+		chatInputView.top = 370;
 		chatInputView.height = 40;
 		chatInputTextField.height = 30;
 	});

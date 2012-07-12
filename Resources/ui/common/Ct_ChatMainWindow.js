@@ -1,39 +1,68 @@
 function ChatMainWindow(_programId) {
+
+	var TVProgram = require('model/tvprogram');
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var checkinguidelinewin = null;
 		
-    // -------------------------------------------------------------------------
-	// INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
-	// -------------------------------------------------------------------------
-	 Ti.include('./pubnub-chat.js'); 
-	 //Google Analytics
-	 Titanium.App.Analytics.trackPageview('/Chat');
-	
-	// -------------------------------------------------------------------------
-	// CREATE PUBNUB CHAT WINDOW
-	// -------------------------------------------------------------------------
-	//
-	// Returns an Object with Titanium Window Inside
-	//
+    // INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
+	Ti.include('./pubnub-chat.js'); 
+	Titanium.App.Analytics.trackPageview('/Chat'); //Google Analytics
+	 
 	var currentProgramId = _programId;
-	
-//	var pubnub_chat_window = Ti.App.Chat({
-//	    "chat-room" : _programId,
-//	    "window"    : {
-//			backgroundColor:'transparent'
-//	    },
-//	    "programId" : _programId
-//	});
-		
-
-//	return pubnub_chat_window.chat_window;
 	
 	var self = Titanium.UI.createWindow({
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: 'Group Chat',
-		backgroundColor: 'red'
-	});		
+		title: 'Group Chat'
+	});	
 	
+	var programsTableView = Ti.UI.createTableView({
+		backgroundColor: 'transparent',
+		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE
+	});
+		
+	programsTableView.backgroundGradient = {
+		type: 'linear',
+		startPoint: { x: '0%', y: '0%' },
+		endPoint: { x: '0%', y: '100%' },
+		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
+	};	
+	
+	self._updatePageContent = function(_newProgramId /* unused variable but for consistency sake */) {
+		programsTableView.data = []; //reset programsTableView data
+		
+		//pull data from tvprogram where mycurentcheckinprograms are
+		var todayCheckinPrograms = TVProgram.TVProgramModel_getPrograms(myCurrentCheckinPrograms);
+		var programsTableViewData = [];
+		var ChatTableViewRow = require('ui/common/Ct_ChatTableViewRow');
+		for(var i = 0; i < todayCheckinPrograms.length; i++) {
+			var programRow = new ChatTableViewRow(todayCheckinPrograms[i]);
+			programsTableViewData.push(programRow);					
+		}
+		programsTableView.data = programsTableViewData;
+		self.add(programsTableView);
+	};
+	
+	self._removeGuidelineWindow = function() {
+		self.remove(checkinguidelinewin);			
+	};
+	
+	if(currentProgramId === '') { //have not checkedin to any program yet
+		checkinguidelinewin = new CheckinGuidelineWindow('chat');
+		self.add(checkinguidelinewin);
+		currentProgramId = 'CTB_PUBLIC';
+	} else {
+		self._updatePageContent();
+	}
+	
+	programsTableView.addEventListener('click',function(e){
+		var pubnub_chat_window = Ti.App.Chat({
+		    "chat-room" : e.row.program_id,
+		    "window"    : {backgroundColor:'transparent'},
+		    "programId" : e.row.program_id
+		});
+		self.containingTab.open(pubnub_chat_window.chat_window);
+	});
+
 	return self;
 }
 

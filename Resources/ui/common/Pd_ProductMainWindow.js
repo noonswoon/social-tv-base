@@ -155,7 +155,7 @@ function ProductMainWindow(_programId) {
 		ProductACS.productACS_fetchedAllProducts(currentProgramId);	
 	};
 	
-	self._removeGuidelineWindow = function(checkinProgramId) {
+	self._removeGuidelineWindow = function() {
 		self.remove(checkinguidelinewin);
 	};
 	

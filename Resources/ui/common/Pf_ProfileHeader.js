@@ -201,7 +201,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		alert('You have approved the request');
 		Ti.API.info(_response);
 		var FriendACS = require('acs/friendsACS');
-	//	FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		var approveFriendActivityData = createFriendActivity("approvefriend");
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		ActivityACS.activityACS_createMyActivity(approveFriendActivityData);

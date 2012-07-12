@@ -4,7 +4,7 @@ var db = Ti.Database.open('Chatterbox');
 db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, subname TEXT, photo TEXT, start_time TEXT, recurring_until TEXT, number_checkins INTEGER, channel_id TEXT, program_id TEXT, program_type TEXT);');
 db.close();
 
-exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
+exports.TVProgramModel_insertAllPrograms = function(_allPrograms) {
 	var fetchedPrograms = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	
@@ -19,6 +19,37 @@ exports.tvprogramsModel_insertAllPrograms = function(_allPrograms) {
 	db.close();
 };
 
+//chat window used: pull data from currentCheckin
+exports.TVProgramModel_getPrograms = function(_programIds) {
+	var programData = [];
+	var db = Ti.Database.open('Chatterbox');
+	for(var i=0;i<_programIds.length;i++) {
+		var curProgramId = _programIds[i];
+		var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ?',curProgramId);
+		while(result.isValidRow()) {
+			programData.push({
+				id: result.fieldByName('id'),
+				name: result.fieldByName('name'),
+				subname: result.fieldByName('subname'),
+				photo: result.fieldByName('photo'),
+				start_time: result.fieldByName('start_time'),
+				recurring_until: result.fieldByName('recurring_until'),
+				number_checkins: result.fieldByName('number_checkins'),
+				channel_id: result.fieldByName('channel_id'),
+				program_id: result.fieldByName('program_id'),
+				program_type: result.fieldByName('program_type'),
+				hasChild:true				
+			});
+			result.next();
+		}
+		result.close();
+		db.close;
+	}
+	return programData;
+}
+//id TEXT PRIMARY KEY, name TEXT, subname TEXT, photo TEXT, 
+//start_time TEXT, recurring_until TEXT, number_checkins INTEGER, 
+//channel_id TEXT, program_id TEXT, program_type TEXT
 
 exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins) {	
 	var db = Ti.Database.open('Chatterbox'); 

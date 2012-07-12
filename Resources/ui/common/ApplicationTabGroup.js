@@ -2,9 +2,7 @@ function ApplicationTabGroup() {
     // create tab group, create module instance
     var self = Titanium.UI.createTabGroup({
     	backgroundColor: '#fff',
-    	
     });
-	Ti.include('lib/customTabBar.js');
 		
 	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
@@ -13,8 +11,14 @@ function ApplicationTabGroup() {
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
+        
+	Ti.include('lib/customTabBar.js');
     
     var myUserId = acs.getUserId();
+	
+	var updateCustomTabBar = function(_tab) {
+		myCustomTabBar.back(_tab);
+	}
 	
 	var selectionwin = new ChannelSelectionMainWindow({height:426, tabBarHidden: true});
 	var chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
@@ -29,26 +33,46 @@ function ApplicationTabGroup() {
 	});
 	selectionwin.containingTab = selectionTab;
 	selectionTab.tabGroup = self; 
-	
+	selectionTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 0;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
+		
     var chatTab = Titanium.UI.createTab({  
      	window: chatwin,
 	});
     chatwin.containingTab = chatTab;
+	chatTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 1;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});   
    
     var messageboardTab = Titanium.UI.createTab({  
         window: messageboardwin,
     });
     messageboardwin.containingTab = messageboardTab;
+	messageboardTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 2;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
 	
 	var productTab = Ti.UI.createTab({
 		window: productwin,
 	});
 	productwin.containingTab = productTab;
+	productTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 3;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
 	
 	var profileTab = Ti.UI.createTab({
 		window: profilewin
  	});
 	profilewin.containingTab = profileTab;
+	profileTab.addEventListener('focus',function(){
+		tabIndexToComeBack = 4;	 //for redirecting when chat window is close
+		updateCustomTabBar(tabIndexToComeBack);
+	});
 	
 	//////////////////////
 	self.addTab(selectionTab);
@@ -77,8 +101,7 @@ function ApplicationTabGroup() {
 			{ image: 'me.png', selected: 'me_over.png' }
 		]
 	});
-	myCustomTabBar.show();
-   	
+	
 	//PROFILE: CALLING ACS
 	var LevelACS = require('acs/levelACS');	
 	var BadgesACS = require('acs/badgesACS');
@@ -103,7 +126,29 @@ function ApplicationTabGroup() {
 	}
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
 	
-	function checkinDbLoadedCallBack(e){			
+	var updateContentInAllModules = function(_targetedProgramId) {
+		chatwin._updatePageContent(_targetedProgramId);
+		messageboardwin._updatePageContent(_targetedProgramId);
+		productwin._updatePageContent(_targetedProgramId);
+	};
+	
+	var removeGuidelineWindowInAllModules = function() {
+		chatwin._removeGuidelineWindow();
+		messageboardwin._removeGuidelineWindow();
+		productwin._removeGuidelineWindow();
+	};
+	
+	var initializePickerInAllModules = function() {
+		messageboardwin._initializePicker();
+		productwin._initializePicker();
+	}
+	
+	var addPickerInAllModules = function(newCheckinProgramId, newCheckinProgramName) {
+		messageboardwin._addNewPickerData(newCheckinProgramId,newCheckinProgramName);			
+		productwin._addNewPickerData(newCheckinProgramId,newCheckinProgramName);
+	}		
+	
+	function checkinDbLoadedCallBack(e) {			
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
@@ -118,17 +163,10 @@ function ApplicationTabGroup() {
 		//first load, and the user already checkin in some program
 		if(myCurrentSelectedProgram === '' && myCurrentCheckinPrograms.length > 0) {
 			myCurrentSelectedProgram = myCurrentCheckinPrograms[0];
-			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});			
-			//chatwin.containingTab = chatTab;
-			//alert('calling _removeGuidelineWindow: AppTabGroup ln 122: currentSelectedProgram: '+myCurrentSelectedProgram);
-			messageboardwin._removeGuidelineWindow(myCurrentSelectedProgram);
-			productwin._removeGuidelineWindow(myCurrentSelectedProgram);
-			
-			messageboardwin._updatePageContent(myCurrentSelectedProgram);
-			productwin._updatePageContent(myCurrentSelectedProgram);
-			
-			messageboardwin._initializePicker();
-			productwin._initializePicker();
+
+			removeGuidelineWindowInAllModules();
+			updateContentInAllModules(myCurrentSelectedProgram);
+			initializePickerInAllModules();
 		}
 	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
@@ -138,41 +176,30 @@ function ApplicationTabGroup() {
 	}
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
 	
-	var checkinToProgramCallbackInAppTabGroup = function(e) {
+	var checkinToProgramCallback = function(e) {
 		var checkinProgramId = e.checkinProgramId; 
 		var checkinProgramName = e.checkinProgramName;
 		myCurrentCheckinPrograms.push(checkinProgramId);
 		if(myCurrentSelectedProgram === '') { //haven't checkin before, picker hasn't loaded yet
-			
-			//chatwin = new ChatMainWindow(myCurrentSelectedProgram,{height:426, tabBarHidden: true});
-			messageboardwin._removeGuidelineWindow(checkinProgramId);
-			productwin._removeGuidelineWindow(checkinProgramId);
-			
-			messageboardwin._updatePageContent(checkinProgramId);
-			productwin._updatePageContent(checkinProgramId);
+			removeGuidelineWindowInAllModules();
+			updateContentInAllModules(checkinProgramId);
 			
 			myCurrentSelectedProgram = checkinProgramId; //after comparison, assign new value to myCurrentSelectedProgram
-			messageboardwin._initializePicker();
-			productwin._initializePicker();
+			initializePickerInAllModules();
 		} else { //already have at least 1 checkin and picker is already loaded, load the picker automatically, add new item to picker
 			myCurrentSelectedProgram = checkinProgramId;
-
-			messageboardwin._updatePageContent(checkinProgramId);
-			productwin._updatePageContent(checkinProgramId);
-			
-			messageboardwin._addNewPickerData(checkinProgramId,checkinProgramName);			
-			productwin._addNewPickerData(checkinProgramId,checkinProgramName);
+			updateContentInAllModules(checkinProgramId);
+			addPickerInAllModules(checkinProgramId,checkinProgramName);
 		}
 	};
-	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
+	Ti.App.addEventListener('checkinToProgram',checkinToProgramCallback);
 	
 	var changingCurrentSelectedProgramCallback = function(e) {
 		var newSelectedProgram = e.newSelectedProgram; 
 		myCurrentSelectedProgram = newSelectedProgram;
 		
 		////update program content
-		messageboardwin._updatePageContent(newSelectedProgram);
-		productwin._updatePageContent(newSelectedProgram);
+		updateContentInAllModules(newSelectedProgram);
 
 		//update picker
 		messageboardwin._updateSelectedPicker(newSelectedProgram);
@@ -185,13 +212,13 @@ function ApplicationTabGroup() {
    		Ti.App.removeEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
    		Ti.App.removeEventListener('levelLoaded',levelLoadedCallBack);
    		Ti.App.removeEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
-   		Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallbackInAppTabGroup);
+   		Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallback);
    		Ti.App.removeEventListener('changingOfCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}
   	Ti.App.addEventListener('closeApplicationTabGroup', closeApplicationTabGroupCallback);
-   	   	
+
     return self;
 };
 

@@ -33,7 +33,8 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 			picture: badge.url,
 			description: badge.desc
 		};
-		Titanium.Facebook.dialog("feed", data, showRequestResult);
+		//Titanium.Facebook.dialog("feed", data, showRequestResult);
+		Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult)
 	}
 }
 
@@ -52,21 +53,30 @@ exports.sendRequestOnFacebook = function(_fbId) {
 		Titanium.Facebook.dialog("apprequests", data, showRequestResult);
 	}
 }
-
+//checkin automatically post on wall!
 exports.checkinPopUpOnFacebook = function(_checkin) {
 	Ti.API.info(_checkin);	
 	var SettingHelper = require('helpers/settingHelper');
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
+		// var data = {
+			// link: "http://chatterbox.mobi/",
+			// name: user.first_name+" "+user.last_name+" has checked in to "+_checkin.event.name,
+			// message: "",
+			// caption: "Chatterbox",
+			// picture: "http://storage.cloud.appcelerator.com/Za6GkEHPsBrL0y22LT1XibgwazZTVhnE/photos/f1/ca/4fe154d9b685535c7a00fce9/photo_thumb_100.png",
+			// description:""
+		// };
+//		Titanium.Facebook.dialog("feed", data, showRequestResult);
 		var data = {
-			link: "http://chatterbox.mobi/",
-			name: user.first_name+" "+user.last_name+" has checked in to "+_checkin.event.name,
-			message: "",
-			caption: "Chatterbox",
-			picture: "http://storage.cloud.appcelerator.com/Za6GkEHPsBrL0y22LT1XibgwazZTVhnE/photos/f1/ca/4fe154d9b685535c7a00fce9/photo_thumb_100.png",
-			description:""
+		link: "http://chatterbox.mobi/",
+		name: user.first_name+" "+user.last_name+" has checked in to "+_checkin.event.name,
+		message: "",
+		caption: "Chatterbox",
+		picture: "http://storage.cloud.appcelerator.com/Za6GkEHPsBrL0y22LT1XibgwazZTVhnE/photos/f1/ca/4fe154d9b685535c7a00fce9/photo_thumb_100.png",
+		description: ""
 		};
-		Titanium.Facebook.dialog("feed", data, showRequestResult);
+		Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
 	}
 }
 

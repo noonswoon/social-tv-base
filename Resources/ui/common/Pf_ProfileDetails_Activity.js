@@ -3,8 +3,7 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	var FriendsModel = require('model/friend');
 	var ActivityModel = require('model/activity');
 
-	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
-	var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
+//	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
 	
 	var curId = _userProfile.id;
 	
@@ -73,6 +72,7 @@ if(_status==="me") {
 	 }
 	 
 	requestNoticeView.addEventListener('click', function(){
+		var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
 		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"stranger"));
 	});
 	
@@ -231,8 +231,7 @@ if(_status==="me") {
 	}
 			
 	userActivity.addEventListener('click',function(e) {
-		var userStatus = checkFriend();		// add friend / approve friend
-		alert('_parent: '+_parentWindow);
+		var userStatus = checkFriend();	// add friend / approve friend
 		if(e.rowData.target_id !== acs.getUserId() && (e.rowData.category === 'addfriend' || e.rowData.category === 'approvefriend')) {
 			Ti.API.info('userStatus = '+userStatus);
 			Ti.API.info('e.rowData.target_id = '+e.rowData.target_id);

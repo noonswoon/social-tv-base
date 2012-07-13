@@ -53,6 +53,13 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		height: 88,
 		backgroundColor: 'transparent'
 	});
+//test push notification
+	profilePicture.addEventListener('click',function(){
+		var PushNotificationCTB = require('ctb/pushnotificationCTB');
+		jaew_userId = '4fcecb5300204462690160a7';
+		
+		PushNotificationCTB.pushNotificationCTB_sendPN(jaew_userId,"2","Bwahhhhhhhhhhhh");
+	});
 
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,

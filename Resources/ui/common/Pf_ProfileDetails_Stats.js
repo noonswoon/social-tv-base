@@ -228,12 +228,9 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 				var CacheHelper = require('helpers/cacheHelper');
 				CacheHelper.levelUpCache("level"+acs.getUserId(),myLevel);
 			}	
-	    	
-	    	
 		}
-		
 		var addMoreFriend = function(_data) {
-			if(_data.length<=10) {
+			if(_data.length<=10 &&_data.length>=0) {
 				var addFriendLabel = Ti.UI.createLabel({
 					text: ' + add friends...',
 					top: 0,

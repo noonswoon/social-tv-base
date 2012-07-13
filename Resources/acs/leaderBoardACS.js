@@ -57,9 +57,9 @@ exports.leaderACS_updateUserInfo = function(_id,_point){
 	}, function (e) {
 	    if (e.success) {
 	        var leaderBoard = e.LeaderBoard[0];
-	        Ti.API.info('Success:\\n' + 'totalPoint: ' + leaderBoard.totalPoint);
+//	        Ti.API.info('Success: ' + 'totalPoint: ' + leaderBoard.totalPoint);
 	    } else {
-	        alert('leaderboardACS 65 Error:\\n' +
+	        Debug.debug_print('leaderboardACS 65 Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

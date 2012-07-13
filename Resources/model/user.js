@@ -19,10 +19,10 @@ exports.userModel_updateUserFromACS = function(_userProfile) {
 		break;
 	};
 	db.execute('INSERT INTO users(acs_user_id,username,fb_id,first_name,last_name) VALUES (?,?,?,?,?)',curUser.id,curUser.username,curUser.external_accounts[0].external_id,curUser.first_name,curUser.last_name);
-	Ti.API.info('Insert User Profile in to database, User: ' + curUser.first_name+ ' '+curUser.last_name);
+	//Ti.API.info('Insert User Profile in to database, User: ' + curUser.first_name+ ' '+curUser.last_name);
 	result.close();
 	db.close();
-	Ti.API.info('Users database has been updated: ' + db.lastInsertRowId);
+	//Ti.API.info('Users database has been updated: ' + db.lastInsertRowId);
 	//Ti.App.fireEvent("userDbUpdated");
 };
 

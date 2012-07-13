@@ -213,16 +213,18 @@ function MessageboardMainWindow(_programId) {
 		pickerView.add(picker);
 	};
 	
-	if(self._getNumRowsInPicker() === 0 && currentProgramId !== '') {
+	if(self._getNumRowsInPicker() === 0 && currentProgramId !== 'CTB_PUBLIC') {
 		self._initializePicker();
 	}
 	
 	self._addNewPickerData = function(checkinProgramId, checkinProgramName) {
 		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
 		picker.add(newPickerRow);
-		
-		var latestRow = picker.columns[0].rowCount - 1; 
-		picker.setSelectedRow(0,latestRow,false);
+		setTimeout(function(e) {
+			var latestRow = picker.columns[0].rowCount - 1; 
+			Ti.API.info('productwin: set picker to the last row: '+latestRow);
+			picker.setSelectedRow(0,latestRow,false);
+		}, 500); //wait half-a-sec
 	};
 	
 	self._updateSelectedPicker = function(newSelectedProgram) {

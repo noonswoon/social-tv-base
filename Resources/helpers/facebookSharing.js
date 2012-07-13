@@ -19,6 +19,8 @@ function showRequestResult(e) {
 
 exports.badgePopUpOnFacebook = function(_badgeId) {
 	var SettingHelper = require('helpers/settingHelper');
+	
+	if(_badgeId === 0 || _badgeId === '0') return; //not do the popup for the first badge, crash with the checkin popup
 
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();

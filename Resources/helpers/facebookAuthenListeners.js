@@ -61,7 +61,7 @@ function facebookAuthenCallback(e) {
 				    		enterusernamewin.open();
 				    	}
 				    } else {
-				       Debug.debug_print('Users.query Error: ' +((e.error && e.message) || JSON.stringify(e)));
+				    	Debug.debug_print('Users.query Error: ' +((e.error && e.message) || JSON.stringify(e)));
 				    }
 				});
 			} else if (e.error) {

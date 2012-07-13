@@ -57,8 +57,8 @@ exports.checkin_updateOne = function(_checkin){
 	var db = Ti.Database.open('Chatterbox'); 
 	var curCheckin = _checkin;
 	db.execute("UPDATE checkins SET checkin_acs_id = ? WHERE id= ?",curCheckin.id,curCheckin.custom_fields.local_id);
-	Ti.API.info("checkin_updateOne success");
-	Ti.API.info("checkin database row: " + curCheckin.custom_fields.local_id + " checkin acs id: " + curCheckin.id);
+	//Ti.API.info("checkin_updateOne success");
+	//Ti.API.info("checkin database row: " + curCheckin.custom_fields.local_id + " checkin acs id: " + curCheckin.id);
 	db.close();
 };
 

@@ -31,7 +31,8 @@ function ChatMainWindow(_programId) {
 		programsTableView.data = []; //reset programsTableView data
 		
 		//pull data from tvprogram where mycurentcheckinprograms are
-		var todayCheckinPrograms = TVProgram.TVProgramModel_getPrograms(myCurrentCheckinPrograms);
+		var currentCheckinPrograms = UserCheckinTracking.getCurrentCheckinPrograms();
+		var todayCheckinPrograms = TVProgram.TVProgramModel_getPrograms(currentCheckinPrograms);
 		var programsTableViewData = [];
 		var ChatTableViewRow = require('ui/common/Ct_ChatTableViewRow');
 		for(var i = 0; i < todayCheckinPrograms.length; i++) {
@@ -42,10 +43,6 @@ function ChatMainWindow(_programId) {
 		self.add(programsTableView);
 	};
 	
-	self._removeGuidelineWindow = function() {
-		self.remove(checkinguidelinewin);			
-	};
-	
 	if(currentProgramId === '') { //have not checkedin to any program yet
 		checkinguidelinewin = new CheckinGuidelineWindow('chat');
 		self.add(checkinguidelinewin);
@@ -53,6 +50,16 @@ function ChatMainWindow(_programId) {
 	} else {
 		self._updatePageContent();
 	}
+	
+	self._addGuidelineWindow = function() {
+		if(checkinguidelinewin === null)
+			checkinguidelinewin = new CheckinGuidelineWindow('chat');
+		self.add(checkinguidelinewin);
+	};
+	
+	self._removeGuidelineWindow = function() {
+		self.remove(checkinguidelinewin);			
+	};	
 	
 	programsTableView.addEventListener('click',function(e){
 		var pubnub_chat_window = Ti.App.Chat({

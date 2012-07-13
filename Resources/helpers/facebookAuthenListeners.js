@@ -61,20 +61,20 @@ function facebookAuthenCallback(e) {
 				    		enterusernamewin.open();
 				    	}
 				    } else {
-				        debug_print('Users.query Error: ' +((e.error && e.message) || JSON.stringify(e)));
+				       Debug.debug_print('Users.query Error: ' +((e.error && e.message) || JSON.stringify(e)));
 				    }
 				});
 			} else if (e.error) {
-				debug_print('cannot request GraphPath: '+ JSON.stringify(e));		
+				Debug.debug_print('cannot request GraphPath: '+ JSON.stringify(e));		
 			} else {
-				debug_print("what the hell is going on_2? " + JSON.stringify(e));
+				Debug.debug_print("what the hell is going on_2? " + JSON.stringify(e));
 			}
 		});
 	} else if (e.error) {
-		debug_print("fb login error: ");
+		Debug.debug_print("fb login error: ");
 	} else if (e.cancelled) {
-		debug_print("fb login Canceled");
+		Debug.debug_print("fb login Canceled");
 	} else {
-		debug_print("what the hell is going on?" + JSON.stringify(e));
+		Debug.debug_print("what the hell is going on?" + JSON.stringify(e));
 	}
 }

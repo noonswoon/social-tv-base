@@ -107,23 +107,40 @@ function ProductMainWindow(_programId) {
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+	
+	self._getNumRowsInPicker = function() {
+		if(picker.columns === null) return 0;
+		else if(picker.columns.length > 0) return picker.columns[0].rowCount;
+		else return 0;
+	};
 
 	self._initializePicker = function() {
 		var dataForPicker = [];
-		var preSelectedRow = 0;
-		for(var i=0;i<myCurrentCheckinPrograms.length;i++){
-			var programId = myCurrentCheckinPrograms[i];
-			if(myCurrentSelectedProgram === programId) 
-				preSelectedRow = i;
-					
+		var selectedProgramId = "";
+		var selectedProgramName = "";
+		var currentCheckinPrograms = UserCheckinTracking.getCurrentCheckinPrograms();
+		for(var i = 0; i < currentCheckinPrograms.length; i++){
+			var programId = currentCheckinPrograms[i];
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 			var programName = programInfo[0].name;
-			dataForPicker.push({title:programName, programId:programId});
+			
+			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) {
+				//skip, not adding to array, will add it to the top of array at the end
+				selectedProgramId = programId;	
+				selectedProgramName = programName;
+			} else {
+				dataForPicker.push({title:programName, programId:programId});				
+			}
 		}
-		picker.setSelectedRow(0,preSelectedRow,false);
+		//for some reason, the fn picker.setSelectedRow doesn't work here (it keeps setting to picker index 0), 
+		//need ad-hoc fix by setting the current selected program to be at the top of the picker
+		dataForPicker.unshift({title:selectedProgramName, programId:selectedProgramId})
 		picker.add(dataForPicker);
 		pickerView.add(picker);
 	};
+	if(self._getNumRowsInPicker() === 0 && currentProgramId !== '') {
+		self._initializePicker();
+	}
 	
 	self._addNewPickerData = function(checkinProgramId, checkinProgramName) {
 		var newPickerRow = Ti.UI.createPickerRow({title:checkinProgramName, programId: checkinProgramId});
@@ -146,6 +163,16 @@ function ProductMainWindow(_programId) {
 		picker.setSelectedRow(0,selectedRow,false);
 	};
 	
+	self._removeAllPickerData = function() {
+		var pickerColumn = picker.columns[0];
+    	var numRows = pickerColumn.rowCount;
+    	for(var i = numRows-1; i >= 0; i-- ){
+        	var curRow = pickerColumn.rows[i]
+        	pickerColumn.removeRow(curRow);
+    	}
+    	picker.reloadColumn(pickerColumn);
+	};
+	
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
@@ -154,7 +181,13 @@ function ProductMainWindow(_programId) {
 		
 		ProductACS.productACS_fetchedAllProducts(currentProgramId);	
 	};
-	
+
+	self._addGuidelineWindow = function() {
+		if(checkinguidelinewin === null)
+			checkinguidelinewin = new CheckinGuidelineWindow('product');
+		self.add(checkinguidelinewin);
+	};
+		
 	self._removeGuidelineWindow = function() {
 		self.remove(checkinguidelinewin);
 	};

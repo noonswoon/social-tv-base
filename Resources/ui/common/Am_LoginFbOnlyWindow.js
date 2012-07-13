@@ -61,13 +61,13 @@ var LoginFbOnlyWindow = function() {
 		backgroundColor: 'white'
 	});
 	
-	var urbanAirshipUnregisterDeviceBtn = Ti.UI.createButton({
+/*	var urbanAirshipUnregisterDeviceBtn = Ti.UI.createButton({
 		title:'Unregister device from UA',
 		top:0,
 		width:200,
 		height:20
 	});
-	
+*/	
 	//ADDING UI COMPONENTS TO WINDOW
 	self.add(cbLogo);
 	self.add(cbLabel);
@@ -83,9 +83,9 @@ var LoginFbOnlyWindow = function() {
 	function successNotifCallback(e) {
 		var deviceToken = e.deviceToken;
 		label.text = "Device registered. Device token: "+deviceToken;
-		alert("Push notification device token is: "+deviceToken);
-		alert("Push notification types: "+Titanium.Network.remoteNotificationTypes);
-		alert("Push notification enabled: "+Titanium.Network.remoteNotificationsEnabled);
+		debug_print("Push notification device token is: "+deviceToken);
+		debug_print("Push notification types: "+Titanium.Network.remoteNotificationTypes);
+		debug_print("Push notification enabled: "+Titanium.Network.remoteNotificationsEnabled);
 		
 		UrbanAirship.registerDeviceToken(deviceToken);   
 	}
@@ -96,22 +96,22 @@ var LoginFbOnlyWindow = function() {
 	
 	function messageNotifCallback(e) {
 		// called when a push notification is received.
-		alert("Received a push notification\n\nPayload:\n\n"+JSON.stringify(e.data));
+		Debug.debug_print("Received a push notification\n\nPayload:\n\n"+JSON.stringify(e.data));
 		var message;
 		if(e['aps'] != undefined) {
 			if(e['aps']['alert'] != undefined){
 				if(e['aps']['alert']['body'] != undefined){
-					message = 'mickey: '+e['aps']['alert']['body'];
+					message = e['aps']['alert']['body'];
 				} else {
-					message = 'minnie: '+e['aps']['alert'];
+					message = e['aps']['alert'];
 				}
 			} else {
-				message = 'mary: No Alert content';
+				message = 'No Alert content';
 			}
 		} else {
-			message = 'mack: No APS content';
+			message = 'No APS content';
 		}
-		alert(message);	
+		Debug.debug_print(message);	
 	}	
 		
 	// register for push notifications
@@ -141,12 +141,10 @@ var LoginFbOnlyWindow = function() {
 	Ti.Facebook.addEventListener('login', facebookAuthenCallback); //facebookAuthenCallback def is in helpers/facebookAuthenListeners.js
 	//do Ti.Facebook.removeEventListener('login', xxx) in Am_LoginTabGroup file (when the tab is about to close)
 	
-	
-	
-	urbanAirshipUnregisterDeviceBtn.addEventListener('click', function() {
+	/* urbanAirshipUnregisterDeviceBtn.addEventListener('click', function() {
 		UrbanAirship.unRegisterDeviceToken();
-	});
-	
+	}); */
+		
 	return self;
 };
 

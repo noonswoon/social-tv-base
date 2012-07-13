@@ -35,7 +35,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	lWin.add(enterUsername);
 
 	//EVENTS REGISTERING
-	enterUsername.addEventListener('click', function() {ะ
+	enterUsername.addEventListener('click', function() {
 		var providedUsername = usernameTextField.value;
 		Debug.debug_print("Creating new user");
 		Cloud.Users.create({

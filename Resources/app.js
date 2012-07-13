@@ -14,9 +14,8 @@ var UrbanAirship = require('lib/UrbanAirship');
 var Debug = require('lib/debug');
 var PullToRefresh = require('nl.icept.pull2refresh');
 var Cloud = require('ti.cloud');
+var UserCheckinTracking = require('lib/userCheckinTracking');
 
-//include xxxACS.js here
-//include xxx models here
 
 //GLOBAL VARIABLES DECARATION
 Ti.Facebook.appid = "197422093706392";
@@ -29,11 +28,17 @@ var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in 
 
 var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
 var DEFAULT_CTB_IMAGE_URL = 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png';
-	
-var myCurrentCheckinPrograms = []; //should be reset every hour to empty array
-var myCurrentSelectedProgram = ''; //dummy value
+
 var friendRequests = [];
 
+
+Ti.App.addEventListener('pause', function(){
+	Ti.API.info('pause..suspend the program');
+});
+
+Ti.App.addEventListener('resume', function(){
+	Ti.API.info('program resume..');
+});
 // This is a single context application with mutliple windows in a stack
 (function() {
 	//determine platform and form factor and render approproate components

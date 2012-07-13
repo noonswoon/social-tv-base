@@ -163,7 +163,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	});
 	
 	titleTextFieldInput.addEventListener('change', function(e){
-		e.source.value = e.source.value.slice(0,120);
+		e.source.value = e.source.value.slice(0,90);
 	});
 	
 	//ADDING UI COMPONENTS TO THE WINDOW

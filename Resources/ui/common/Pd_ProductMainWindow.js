@@ -122,7 +122,9 @@ function ProductMainWindow(_programId) {
 		for(var i = 0; i < currentCheckinPrograms.length; i++){
 			var programId = currentCheckinPrograms[i];
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-			var programName = programInfo[0].name;
+			if(programInfo === undefined || programInfo[0] === undefined)
+				Ti.API.info('bad time...cannot find info for programId: '+programId);
+			else programName = programInfo[0].name;
 			
 			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) {
 				//skip, not adding to array, will add it to the top of array at the end
@@ -177,7 +179,8 @@ function ProductMainWindow(_programId) {
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-		if(programData === undefined) Ti.API.info('bad time man..productwin cannot find data');
+		if(programData === undefined || programData[0] === undefined) 
+			Ti.API.info('bad time man..productwin cannot find data for '+currentProgramId);
 		else programName = programData[0].name;
 		selectProgramLabel.text = programName;
 		

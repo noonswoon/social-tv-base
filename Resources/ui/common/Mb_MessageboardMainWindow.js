@@ -198,7 +198,10 @@ function MessageboardMainWindow(_programId) {
 		for(var i = 0; i < currentCheckinPrograms.length; i++){
 			var programId = currentCheckinPrograms[i];
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-			var programName = programInfo[0].name;
+			var programName = "Chatterbox";
+			if(programInfo === undefined || programInfo[0] === undefined)
+				Ti.API.info('bad time...cannot find info for programId: '+programId);
+			else programName = programInfo[0].name;
 			
 			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) {
 				//skip, not adding to array, will add it to the top of array at the end
@@ -255,8 +258,10 @@ function MessageboardMainWindow(_programId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		//TODO: something wrong here, programData is undefined!
-		if(programData === undefined) Ti.API.info('bad time man..msgboardwin cannot find data');
-		else messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
+		if(programData === undefined || programData[0]===undefined)
+			Ti.API.info('bad time man..msgboardwin cannot find data for '+currentProgramId);
+		else 
+			messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
 										programData[0].number_checkins,programData[0].channel_id);
 		
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	

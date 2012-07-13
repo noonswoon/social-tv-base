@@ -11,6 +11,7 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	for(var i=0;i < _checkinsCollection.length; i++) {
 		var curCheckin = _checkinsCollection[i];
 		curCheckin.updated_at = convertACSTimeToLocalTime(curCheckin.updated_at);
+		//Ti.API.info('insert updateCheckinsFromACS: '+curCheckin.event.id+', eventName is: '+curCheckin.event.name);
 		db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at) VALUES(NULL,?,?,?,?,?)",curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
 	}
 	db.close();
@@ -23,6 +24,8 @@ exports.checkin_fetchCheckinToday = function() {
 	var startOfDay = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
 	var result = db.execute('SELECT * FROM checkins where updated_at >= ?',startOfDay);
 	while(result.isValidRow()) {
+		Ti.API.info('fetchCheckinToday: '+result.fieldByName('event_id'));
+	
 		fetchedCheckin.push({
 			id: result.fieldByName('id'),
 			checkin_acs_id: result.fieldByName('checkin_acs_id'),

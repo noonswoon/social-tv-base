@@ -38,18 +38,7 @@ Ti.App.addEventListener('pause', function(){
 */
 
 // This is a single context application with mutliple windows in a stack
-(function() {
-	//determine platform and form factor and render approproate components
-	var osname = Ti.Platform.osname,
-		version = Ti.Platform.version,
-		height = Ti.Platform.displayCaps.platformHeight,
-		width = Ti.Platform.displayCaps.platformWidth;
-	Ti.API.info('Welcome to Chatterbox for ' + osname);
-	
-	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
-	//yourself what you consider a tablet form factor for android
-	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
-		
+var launchTheApp = function() {
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
 			Debug.debug_print("should go to maintab screen");
@@ -88,4 +77,43 @@ Ti.App.addEventListener('pause', function(){
 			logintabgroup.open();
    		}
     });
+};
+
+var launchTheAppWrapper = function() {
+	Ti.API.info('resuming the app from appjs..');
+	if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {
+		var connectivityWarningDialog = Titanium.UI.createAlertDialog({
+			title:'No Internet Connection',
+			message:'Please come online and join the Chatterbox experience.'
+		});
+		connectivityWarningDialog.show();
+	} else {
+		//remove the event listener
+		Ti.App.removeEventListener('resume', launchTheAppWrapper);
+		launchTheApp();
+	}
+};
+
+(function() {
+	//determine platform and form factor and render approproate components
+	var osname = Ti.Platform.osname,
+		version = Ti.Platform.version,
+		height = Ti.Platform.displayCaps.platformHeight,
+		width = Ti.Platform.displayCaps.platformWidth;
+	Ti.API.info('Welcome to Chatterbox for ' + osname);
+	
+	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
+	//yourself what you consider a tablet form factor for android
+	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
+	
+	if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {
+		var connectivityWarningDialog = Titanium.UI.createAlertDialog({
+			title:'No Internet Connection',
+			message:'Please come online and join the Chatterbox experience.'
+		});
+		connectivityWarningDialog.show();
+		Ti.App.addEventListener('resume', launchTheAppWrapper);
+	} else {
+		launchTheApp();
+	} 
 })();

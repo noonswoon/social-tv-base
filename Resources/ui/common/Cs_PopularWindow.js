@@ -15,6 +15,9 @@ function PopularWindow(_parent) {
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Popular');
+	function sortByNumberCheckins(a,b) {
+		return b.number_checkins - a.number_checkins;	//if a has bigger checkins value, a should come before b
+	}
 	
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0)) {
@@ -92,6 +95,7 @@ function PopularWindow(_parent) {
 	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var timeIndex = e.timeIndex;
 		var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex); 
+		selectedShowtime.sort(sortByNumberCheckins);
 		Ti.API.info('update PopularProgramAtTime');
 		var viewRowsData = [];
 		for (var i=0;i<selectedShowtime.length;i++) {
@@ -101,9 +105,10 @@ function PopularWindow(_parent) {
 		}
 		programListTable.setData(viewRowsData);		
 	});
-	
+	 
 	Ti.App.addEventListener('showDiscoveryPage', function(){
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
+		currentTVPrograms.sort(sortByNumberCheckins);
 		var viewRowsData = [];
 		for (var i=0;i<currentTVPrograms.length;i++) {
 			var curTVProgram = currentTVPrograms[i];

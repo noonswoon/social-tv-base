@@ -69,8 +69,8 @@ exports.activity_updateOne = function(_activity){
 	var db = Ti.Database.open('Chatterbox'); 
 	var curActivity = _activity;
 	db.execute("UPDATE activity SET activity_acs_id = ? WHERE id= ?", curActivity.id,curActivity.custom_fields.local_id);
-	Ti.API.info("activity_updateOne success");
-	Ti.API.info("activity database row: " + curActivity.custom_fields.local_id + " activity acs id: " + curActivity.id);
+	//Ti.API.info("activity_updateOne success");
+	//Ti.API.info("activity database row: " + curActivity.custom_fields.local_id + " activity acs id: " + curActivity.id);
 	//Ti.API.fireEvent('activityDbUpdated');
 	db.close();
 };

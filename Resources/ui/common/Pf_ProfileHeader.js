@@ -28,9 +28,9 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		height:20,
 		width:20
 	});
+	
 	refreshButton.addEventListener('click', function(){
 		var FriendACS = require('acs/friendsACS');
-
 		myBadgeACS.myBadgeACS_fetchedBadge(curId);
 		ActivityACS.activityACS_fetchedMyActivity(curId,curUserName);
 		CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
@@ -53,7 +53,11 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		height: 88,
 		backgroundColor: 'transparent'
 	});
-
+/*
+	profilePicture.addEventListener('click', function() {
+		//for testing stuff when msgboard is hidden
+	});
+*/
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,
 		width:103, height:104,

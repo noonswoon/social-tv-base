@@ -213,7 +213,7 @@ function MessageboardMainWindow(_programId) {
 		pickerView.add(picker);
 	};
 	
-	if(self._getNumRowsInPicker() === 0 && currentProgramId !== '') {
+	if(self._getNumRowsInPicker() === 0 && currentProgramId !== 'CTB_PUBLIC') {
 		self._initializePicker();
 	}
 	

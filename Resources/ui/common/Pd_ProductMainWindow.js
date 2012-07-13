@@ -138,7 +138,7 @@ function ProductMainWindow(_programId) {
 		picker.add(dataForPicker);
 		pickerView.add(picker);
 	};
-	if(self._getNumRowsInPicker() === 0 && currentProgramId !== '') {
+	if(self._getNumRowsInPicker() === 0 && currentProgramId !== 'CTB_PUBLIC') {
 		self._initializePicker();
 	}
 	

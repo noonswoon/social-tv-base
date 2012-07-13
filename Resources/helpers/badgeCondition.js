@@ -83,7 +83,6 @@ var checkTypeCondition = function(_type) {
 		
 var checkTimeCondition = function() {
 	var now = moment().format('HH');
-	Ti.API.info('checkTimeCondition: '+now);
 	//badge desc: early bird	
 	//condition: checkin 5.00-7.59 am
 	//badge id: 7
@@ -234,7 +233,7 @@ Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCo
 
 exports.checkinEvent = function(_checkinData){
 	checkTimeCondition();
-	Ti.API.info('checkinEvent//_checkinData.program_type: '+_checkinData.program_type);
+	//Ti.API.info('checkinEvent: _checkinData.program_type: '+_checkinData.program_type);
 	checkTypeCondition(_checkinData.program_type);
 	checkProgramCondition(_checkinData.program_id);
 }
@@ -242,6 +241,6 @@ exports.checkinEvent = function(_checkinData){
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	var myBadgeACS = require('acs/myBadgeACS');
 	var my_id = acs.getUserId();
-	Ti.API.info('badgeCondition_createBadgeUnlocked: '+ _badgeID);
+	//Ti.API.info('badgeCondition_createBadgeUnlocked: '+ _badgeID);
 	myBadgeACS.myBadgeACS_createNewBadge(my_id,_badgeID);
 };

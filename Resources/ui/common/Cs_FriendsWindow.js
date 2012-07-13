@@ -54,6 +54,7 @@ FriendsWindow = function(_parent){
 	
 	Ti.App.addEventListener('friendsDbUpdated',friendsCheckinsUpdate);
 	
+	
 	var createAddMoreFriendsRow = function(){
 		var viewRowData = [];
 		var row = Ti.UI.createTableViewRow({
@@ -112,11 +113,13 @@ FriendsWindow = function(_parent){
 		
 		//loop results array, and each element of result array, create tableviewrow to add to table view
 		var viewRowData = [];
+		allTVPrograms = tvprogram.TVProgramModel_fetchPrograms(); //update number_checkins after the user checkin
 			for(var i=0;i<results.length;i++) {
 				var program = results[i];
 				var number_checkins = 0;
 					for(var j=0;j<allTVPrograms.length;j++){
 						if(program.programId === allTVPrograms[j].id) {
+							Ti.API.info('number_checkin for '+program.programName+' = '+allTVPrograms[j].number_checkins);
 							number_checkins = allTVPrograms[j].number_checkins;
 							break;
 						}
@@ -140,7 +143,7 @@ FriendsWindow = function(_parent){
 			createFriendCheckinRow(checkinsOfFriends,totalFriendCheckins);
 		};
 	});
-	
+		
 	friendsTableView.addEventListener('click',function(e){
  		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.programId,
@@ -148,12 +151,15 @@ FriendsWindow = function(_parent){
 			programSubname: e.row.tvprogram.programSubname,
 			programImage: e.row.tvprogram.programImage,
 			programChannel: e.row.tvprogram.programChannel,
-			programNumCheckin: e.row.checkin
+			programNumCheckin: e.row.checkin,
+			programStarttime: e.row.tvprogram.programStarttime,
+			programEndtime: e.row.tvprogram.programEndtime
 		}, _parent.containingTab);	
 		_parent.containingTab.open(checkinmainwin);
 	})
 	
 	self.add(friendsTableView);
+	
 	return self;
 }
 module.exports = FriendsWindow;

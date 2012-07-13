@@ -356,6 +356,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');
 		Ti.App.fireEvent('leaderDbUpdated');
+		Ti.App.fireEvent('friendsDbUpdated'); //update friend channel selection
 	};
 	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
 

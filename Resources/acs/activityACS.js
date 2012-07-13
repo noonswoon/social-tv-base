@@ -26,7 +26,7 @@ exports.activityACS_fetchedMyActivity = function(_id,_username) {
 		
 };
 
-exports.activityACS_createMyActivity = function(_activity,local_id) {
+exports.activityACS_createMyActivity  = function(_activity,local_id) {
 	Cloud.Objects.create({
 	    classname: 'Activity',
 		fields: {

@@ -192,6 +192,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 			color: '#fff',
 			commentsCount: 0,
 			username: acs.getUserLoggedIn().username,
+			userId: acs.getUserId(),
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
 		};
 		

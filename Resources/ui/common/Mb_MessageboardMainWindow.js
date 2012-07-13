@@ -222,7 +222,6 @@ function MessageboardMainWindow(_programId) {
 		picker.add(newPickerRow);
 		
 		var latestRow = picker.columns[0].rowCount - 1; 
-		alert('calling setSelectedRow: addNewP')
 		picker.setSelectedRow(0,latestRow,false);
 	};
 	
@@ -236,7 +235,6 @@ function MessageboardMainWindow(_programId) {
 				break;
 			}		
 		}
-		alert('calling setSelectedRow');
 		picker.setSelectedRow(0,selectedRow,false);
 	};
 	

@@ -179,9 +179,9 @@ function ApplicationTabGroup() {
 		Ti.API.info('getCurrentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
 		Ti.API.info('currentCheckinProgramsLength: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
 		
-		if(UserCheckinTracking.getCurrentSelectedProgram() === '' && currentCheckinPrograms.length > 0) { 
+		if(UserCheckinTracking.getCurrentSelectedProgram() === '' && todayCheckinPrograms.length > 0) { 
 			//handle rare situation, when user checkin and deleted the app halfway, then reinstall it again on the same day
-			UserCheckinTracking.setCurrentSelectedProgram(currentCheckinPrograms[0]);
+			UserCheckinTracking.setCurrentSelectedProgram(todayCheckinPrograms[0]);
 			removeGuidelineWindowInAllModules();
 			updateContentInAllModules(UserCheckinTracking.getCurrentSelectedProgram());
 			initializePickerInAllModules();

@@ -83,9 +83,9 @@ var LoginFbOnlyWindow = function() {
 	function successNotifCallback(e) {
 		var deviceToken = e.deviceToken;
 		label.text = "Device registered. Device token: "+deviceToken;
-		alert("Push notification device token is: "+deviceToken);
-		alert("Push notification types: "+Titanium.Network.remoteNotificationTypes);
-		alert("Push notification enabled: "+Titanium.Network.remoteNotificationsEnabled);
+		debug_print("Push notification device token is: "+deviceToken);
+		debug_print("Push notification types: "+Titanium.Network.remoteNotificationTypes);
+		debug_print("Push notification enabled: "+Titanium.Network.remoteNotificationsEnabled);
 		
 		UrbanAirship.registerDeviceToken(deviceToken);   
 	}

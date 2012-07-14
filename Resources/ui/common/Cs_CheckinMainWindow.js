@@ -9,16 +9,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var CheckinModel = require('model/checkin');		
 	var TVProgram = require('model/tvprogram');
 	var userID = acs.getUserId();
-	var checkinEnable = false;
-	
-	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
-	if(now >= _tvprogramData.programStarttime && now <= _tvprogramData.programEndtime) {
-		//able to check in
-		Ti.API.info('Checkin enable');
-		checkinEnable = true;
-	} else Ti.API.info('You can\'t checkin');
-		//cannot checkin bcoz show hasn't started or show already finished	
-	
+		
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/back_button.png',
         width:57,height:34
@@ -240,6 +231,11 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		});
 		
 		checkinView.addEventListener('touchend',function(){
+			var checkinEnable = false;
+			var now = moment().format('YYYY-MM-DDTHH:mm:ss');
+			if(now >= _tvprogramData.programStarttime && now <= _tvprogramData.programEndtime) {
+				checkinEnable = true;
+			} 
 			
 			if(checkinEnable) {	
 				remote.backgroundImage = 'images/checkin/checkin_remote.png';
@@ -283,7 +279,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 					checkinWarningMessage = "You cannot checkin. The show hasn't started yet!";
 				else if(now > _tvprogramData.programEndtime)
 					checkinWarningMessage = "You cannot checkin. The show is already finished!"
-				else checkinWarningMessage = "You cannot checkin at this time";
+				else checkinWarningMessage = "You cannot checkin at this time.";
 				
 				var checkinWarningDialog = Titanium.UI.createAlertDialog({
 		       		title:'Chatterbox',
@@ -292,8 +288,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		       	checkinWarningDialog.show();
 			}
 		});
-	}
-	else{
+	} else{
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
 		checkinView.touchEnabled = false;
 	}

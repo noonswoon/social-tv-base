@@ -254,6 +254,7 @@ function MessageboardMainWindow(_programId) {
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		//TODO: something wrong here, programData is undefined!
 		messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
 										programData[0].number_checkins,programData[0].channel_id);
 		

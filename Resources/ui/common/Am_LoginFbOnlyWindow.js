@@ -72,7 +72,7 @@ var LoginFbOnlyWindow = function() {
 	self.add(cbLogo);
 	self.add(cbLabel);
 	self.add(fbLoginButton);
-	self.add(fbLoginStatuslbl);
+//	self.add(fbLoginStatuslbl);
 	self.add(whyFbBtn);
 	
 //	self.add(registerPushNotifBtn);

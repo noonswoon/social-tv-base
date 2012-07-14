@@ -92,6 +92,7 @@ function PopularWindow(_parent) {
 	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var timeIndex = e.timeIndex;
 		var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex); 
+		Ti.API.info('update...'+JSON.stringify(selectedShowtime));
 		var viewRowsData = [];
 		for (var i=0;i<selectedShowtime.length;i++) {
 			var curTVProgram = selectedShowtime[i];
@@ -147,6 +148,7 @@ function PopularWindow(_parent) {
 	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
 		usingPull2Refresh = true;
 		TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+		CacheHelper.getTimeLastFetchedTVProgramACS();
 	}, {
 		backgroundColor: '#959595', 
 		statusLabel: {
@@ -158,6 +160,7 @@ function PopularWindow(_parent) {
 	});	
 	
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+	CacheHelper.setTimeLastFetchedTVProgramACS();
 	BadgeShowPermissionACS.badgeShowPermissionACS_fetchedPermission();
 	
 	return self;

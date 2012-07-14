@@ -201,6 +201,37 @@ function ApplicationTabGroup() {
 	};
 	Ti.App.addEventListener('testingPlayground', testingPlaygroundCallback);
 	
+	Ti.App.addEventListener('resume', function(){
+		Ti.API.info('resume from ApplicationGroup');	
+		//when app resumes, need to do the following: 
+		//1. set appBadge to zero if there is some notification
+		//2. check if the user checkin data has already expired (if the day already passed)
+		//3. check if we need to load new tvprogram (if it is a new day)
+		
+		//1.
+		Ti.UI.iPhone.appBadge = null;
+		var startOfToday = moment().sod().format("YYYY-MM-DDTHH:mm:ss");
+		
+		//2.
+		var lastCheckinTime = UserCheckinTracking.getLatestCheckinTime();
+		if(lastCheckinTime < startOfToday) { //checkin already expired
+			UserCheckinTracking.setCurrentSelectedProgram('');
+			UserCheckinTracking.setCurrentCheckinPrograms([]);
+			clearPickerDataInAllModules();
+			addGuidelineWindowInAllModules();
+			Ti.API.info('run getCurrentSelectedProgram, expire program, return empty str');
+		}
+		//3.
+		var CacheHelper = require('helpers/cacheHelper');
+		var timeLastFetchedTVProgramACS = CacheHelper.getTimeLastFetchedTVProgramACS();
+		Ti.API.info('timeLastFetchedTVProgramACS: '+timeLastFetchedTVProgramACS);
+		Ti.API.info('startOfToday: '+startOfToday);
+		if(timeLastFetchedTVProgramACS < startOfToday) {
+			//need to reload all tvprogram data
+			var TVProgramACS = require('acs/tvprogramACS');
+			TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+		}
+	});
 	
    	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');

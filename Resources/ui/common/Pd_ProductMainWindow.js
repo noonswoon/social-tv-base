@@ -147,7 +147,6 @@ function ProductMainWindow(_programId) {
 		picker.add(newPickerRow);
 		setTimeout(function(e) {
 			var latestRow = picker.columns[0].rowCount - 1; 
-			Ti.API.info('productwin: set picker to the last row: '+latestRow);
 			picker.setSelectedRow(0,latestRow,false);
 		}, 500); //wait half-a-sec
 	};

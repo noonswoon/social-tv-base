@@ -36,6 +36,8 @@ function MessageboardMainWindow(_programId) {
 		messageboardHeader._setHeader('Chatterbox','CTB subname','ctbdummy.png',0,'ch3');
 	} else {
 		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		//race condition..do not have data for currentProgramId...?
+		if(program === undefined) alert('bad stuff...from: '+currentProgramId);
 		programPhoto = program[0].photo;
 		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);	
 	}
@@ -222,7 +224,6 @@ function MessageboardMainWindow(_programId) {
 		picker.add(newPickerRow);
 		setTimeout(function(e) {
 			var latestRow = picker.columns[0].rowCount - 1; 
-			Ti.API.info('productwin: set picker to the last row: '+latestRow);
 			picker.setSelectedRow(0,latestRow,false);
 		}, 500); //wait half-a-sec
 	};

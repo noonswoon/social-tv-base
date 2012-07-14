@@ -344,18 +344,29 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		curTabGroup.setActiveTab(3)
 	});
 	
-	function update1checkinCallBack(e) {
+	var pushNotification = function(){
+		var currentUser = acs.getUserLoggedIn();
+		var PushNotificationCTB = require('ctb/pushnotificationCTB');
+		var FriendModel = require('model/friend');
+		var friendsList = FriendModel.friendModel_fetchFriend(userID);
+		for(var i=0; i<friendsList.length; i++) {
+			var textPn = currentUser.first_name+' just checkin to a TV program. Let watch together!';
+			PushNotificationCTB.pushNotificationCTB_sendPN(friendsList[i].friend_id,"2",textPn);
+		}
+	}
+	
+	var update1checkinCallBack = function(e) {
 		var num = TVProgram.TVProgramModel_countCheckins(_tvprogramData.eventId);
 		var FacebookSharing = require('helpers/facebookSharing');		
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
 		FacebookSharing.checkinPopUpOnFacebook(e.fetchedACheckin,_tvprogramData.programImage);
-		
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
-		
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');
 		Ti.App.fireEvent('leaderDbUpdated');
+		Ti.App.fireEvent('friendsDbUpdated'); //update friend channel selection
+		pushNotification();
 	};
 	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
 
@@ -364,7 +375,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 
 	self.showNavBar();
-
 	return self;
 }
 module.exports = CheckinMainWindow;

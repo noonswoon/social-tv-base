@@ -1,5 +1,4 @@
 FriendsWindowTableViewRow = function(tabledata,_checkins){
-
 	var BadgeCondition = require('helpers/badgeCondition');	
 	var friendData = [];	
 	var friendCheckIns = tabledata.friends.length;
@@ -29,16 +28,15 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	});
 	row.add(programLabelName);
 
-//TODO:no program subname
 	 var programLabelSubname = Ti.UI.createLabel({
-		 text: 'tabledata.programSubName',//tabledata.programSubName,
+		 text: tabledata.subName,
 		 color: '#333',
 		 textAlign:'left',
 		 font:{fontWeight:'bold',fontSize:13},
 		 top: 35,
-		 left:140
+		 left:145
 	 });
-	Ti.API.info(tabledata);
+
 	 row.add(programLabelSubname);
 	
 	var programImage = Ti.UI.createImageView({
@@ -60,13 +58,14 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	var checkinView = Ti.UI.createView({
 		width: 52,
 		top:55,
-		left: 125,
+		left: 135,
 		height: 47
 	});
 	var programNumCheckinImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_watch.png',
 		top: 0
-	});
+	});	
+	
 	var programNumCheckin = Ti.UI.createLabel({
 		text: _checkins,
 		textAlign: 'left',
@@ -81,7 +80,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	var programFriendCheckinView = Ti.UI.createView({
 		width: 52,
 		top:55,
-		left: 177,
+		left: 187,
 		height: 47
 	});
 	
@@ -103,7 +102,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	var channelView = Ti.UI.createView({
 		width: 52,
 		top:55,
-		right: 38,
+		right: 28,
 		height: 47,
 	});
 	var ChannelImage = Ti.UI.createImageView({
@@ -162,12 +161,9 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		friendsScrollView.add(friendsProfileImage);
 	}
 
-/////////////////////////////////////////////////////////////////////////////
-//badge condition check!
 	Ti.API.info('friendCheckIn = '+friendCheckIns);
 	if(friendCheckIns > 0) BadgeCondition.checkFriendCondition(friendCheckIns);
-//////////////////////////////////////////////////////////////////////////////
-	
+
 	row.add(friendsScrollView);
 	row.tvprogram = tabledata;
 	row.checkin = _checkins;

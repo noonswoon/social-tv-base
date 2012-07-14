@@ -2,10 +2,8 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
 	var ActivityModel = require('model/activity');
-	
-	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');	
-	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
-	var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
+
+//	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
 	
 	var curId = _userProfile.id;
 	
@@ -74,6 +72,7 @@ if(_status==="me") {
 	 }
 	 
 	requestNoticeView.addEventListener('click', function(){
+		var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
 		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"stranger"));
 	});
 	
@@ -181,8 +180,8 @@ if(_status==="me") {
 				activityInfo.text = myActivity[i].additionalData + ' approved '+_name+' as a friend';
 			} else
 			if (myActivity[i].category==='comment') {
-				activityType.image= 'images/icon/act_chat_color.png'
-				activityInfo.text = name+' has commented on '+myActivity[i].additionalData;
+				activityType.image= 'images/icon/act_chat.png'
+				activityInfo.text = name+' posted a comment on '+myActivity[i].additionalData;
 			} else
 			if (myActivity[i].category==='getbadge') {
 				activityType.image= 'images/icon/act_badge.png';
@@ -230,12 +229,23 @@ if(_status==="me") {
 		ActivityModel.activity_updateOne(e.fetchedAnActivity);
 		Ti.App.fireEvent('activityDbUpdated');
 	}
-		
+			
 	userActivity.addEventListener('click',function(e) {
-		var userStatus = checkFriend();		// add friend / approve friend
+		var userStatus = checkFriend();	// add friend / approve friend
 		if(e.rowData.target_id !== acs.getUserId() && (e.rowData.category === 'addfriend' || e.rowData.category === 'approvefriend')) {
-			_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.target_id,userStatus));
-		}	
+			Ti.API.info('userStatus = '+userStatus);
+			Ti.API.info('e.rowData.target_id = '+e.rowData.target_id);
+			//TODO: open containing tab not working
+			var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');	
+			var profilewin = new ProfileMainWindow(e.rowData.target_id,userStatus);
+			_parentWindow.containingTab.open(profilewin);
+		}
+		if(e.rowData.category === 'comment') {
+			var CommentWindow = require('ui/common/Mb_CommentWindow');
+			var commentwin = new CommentWindow(e.rowData.target_id);			
+			_parentWindow.containingTab.open(commentwin);
+		}
+			
 	});
 
 	Ti.App.addEventListener('activityDbUpdated',function() {

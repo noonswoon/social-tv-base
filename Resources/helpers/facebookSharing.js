@@ -35,7 +35,8 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 			picture: badge.url,
 			description: badge.desc
 		};
-		Titanium.Facebook.dialog("feed", data, showRequestResult);
+		//Titanium.Facebook.dialog("feed", data, showRequestResult);
+		Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult)
 	}
 }
 
@@ -56,7 +57,6 @@ exports.sendRequestOnFacebook = function(_fbId) {
 }
 
 exports.checkinPopUpOnFacebook = function(_checkin,_programPhoto) {
-	Ti.API.info(_checkin);	
 	var SettingHelper = require('helpers/settingHelper');
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
@@ -66,9 +66,9 @@ exports.checkinPopUpOnFacebook = function(_checkin,_programPhoto) {
 			message: "",
 			caption: "Chatterbox",
 			picture: _programPhoto,
-			description:""
+			description: ""
 		};
-		Titanium.Facebook.dialog("feed", data, showRequestResult);
+		Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
 	}
 }
 

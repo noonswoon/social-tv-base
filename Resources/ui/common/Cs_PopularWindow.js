@@ -6,7 +6,8 @@ function PopularWindow(_parent) {
 	var TVProgram = require('model/tvprogram');
 	var CacheHelper = require('helpers/cacheHelper');
 	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
-	
+	var TimeSelectionScrollView = require('ui/common/Cs_PopularWindowTimeSelectionScrollView');
+		
 	var areAllProgramsTitlesLoaded = false;
 	var areBadgeShowPermissionReady = false;
 	var numProgramsToLoadCheckins = 0;
@@ -14,6 +15,9 @@ function PopularWindow(_parent) {
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Popular');
+	function sortByNumberCheckins(a,b) {
+		return b.number_checkins - a.number_checkins;	//if a has bigger checkins value, a should come before b
+	}
 	
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0)) {
@@ -36,14 +40,14 @@ function PopularWindow(_parent) {
 		backgroundColor: 'orange'
 	});
 	
-	var TimeSelection = require('ui/common/Cs_PopularWindowScrollviewTimeSelection');	
-	var timeSelection = new TimeSelection();
+	
+	var timeSelectionScrollView = new TimeSelectionScrollView();
 	var timeSelectionView = Ti.UI.createView({
 		height: 43,
 		top:0,
 		backgroundColor: 'transparent'
 	});	
-	timeSelectionView.add(timeSelection);
+	timeSelectionView.add(timeSelectionScrollView);
 	
 	var programListTable = Ti.UI.createTableView({
 		top: 42,
@@ -63,9 +67,8 @@ function PopularWindow(_parent) {
 		var allPrograms = e.fetchedPrograms;
 		TVProgram.TVProgramModel_insertAllPrograms(allPrograms);
 		Ti.App.fireEvent("tvprogramsTitlesLoaded");
-		// fetchProgramsAllCheckins(); 
 	}
-	Ti.App.addEventListener('tvprogramsLoaded',tvprogramLoadedCompleteCallback);
+	Ti.App.addEventListener('tvprogramsLoadedComplete',tvprogramLoadedCompleteCallback);
 	
 	function fetchProgramsAllCheckins() {
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
@@ -92,6 +95,8 @@ function PopularWindow(_parent) {
 	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var timeIndex = e.timeIndex;
 		var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex); 
+		selectedShowtime.sort(sortByNumberCheckins);
+		Ti.API.info('update PopularProgramAtTime');
 		var viewRowsData = [];
 		for (var i=0;i<selectedShowtime.length;i++) {
 			var curTVProgram = selectedShowtime[i];
@@ -100,9 +105,10 @@ function PopularWindow(_parent) {
 		}
 		programListTable.setData(viewRowsData);		
 	});
-	
+	 
 	Ti.App.addEventListener('showDiscoveryPage', function(){
 		var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
+		currentTVPrograms.sort(sortByNumberCheckins);
 		var viewRowsData = [];
 		for (var i=0;i<currentTVPrograms.length;i++) {
 			var curTVProgram = currentTVPrograms[i];
@@ -110,6 +116,9 @@ function PopularWindow(_parent) {
 			viewRowsData.push(row);
 		}
 		programListTable.setData(viewRowsData);
+		
+		//set timeSelectionScrollView to make sure it sync too
+		timeSelectionScrollView.syncTimeSelection();
 		
 		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
 		if(usingPull2Refresh) {
@@ -146,7 +155,8 @@ function PopularWindow(_parent) {
 	
 	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
 		usingPull2Refresh = true;
-		TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+		TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
+		CacheHelper.getTimeLastFetchedTVProgramACS();
 	}, {
 		backgroundColor: '#959595', 
 		statusLabel: {
@@ -157,7 +167,8 @@ function PopularWindow(_parent) {
 		}
 	});	
 	
-	TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+	TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
+	CacheHelper.setTimeLastFetchedTVProgramACS();
 	BadgeShowPermissionACS.badgeShowPermissionACS_fetchedPermission();
 	
 	return self;

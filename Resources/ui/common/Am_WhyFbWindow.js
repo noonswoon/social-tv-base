@@ -57,7 +57,7 @@ var WhyFbWindow = function() {
 		left: 5,
 		color: '#fff',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'We really want to earn your trust and we will not auto-post to your account or misuse your personal information in any way.'
+		text: 	'We really want to earn your trust and we will not misuse your personal information in any way.'
 	});
 	
 	var fbExplContact = Ti.UI.createLabel({

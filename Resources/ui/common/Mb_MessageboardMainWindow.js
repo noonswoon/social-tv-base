@@ -36,6 +36,8 @@ function MessageboardMainWindow(_programId) {
 		messageboardHeader._setHeader('Chatterbox','CTB subname','ctbdummy.png',0,'ch3');
 	} else {
 		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+		//race condition..do not have data for currentProgramId...?
+		if(program === undefined) alert('bad stuff...from: '+currentProgramId);
 		programPhoto = program[0].photo;
 		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);	
 	}
@@ -196,7 +198,10 @@ function MessageboardMainWindow(_programId) {
 		for(var i = 0; i < currentCheckinPrograms.length; i++){
 			var programId = currentCheckinPrograms[i];
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
-			var programName = programInfo[0].name;
+			var programName = "Chatterbox";
+			if(programInfo === undefined || programInfo[0] === undefined)
+				Ti.API.info('bad time...cannot find info for programId: '+programId);
+			else programName = programInfo[0].name;
 			
 			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) {
 				//skip, not adding to array, will add it to the top of array at the end
@@ -222,7 +227,6 @@ function MessageboardMainWindow(_programId) {
 		picker.add(newPickerRow);
 		setTimeout(function(e) {
 			var latestRow = picker.columns[0].rowCount - 1; 
-			Ti.API.info('productwin: set picker to the last row: '+latestRow);
 			picker.setSelectedRow(0,latestRow,false);
 		}, 500); //wait half-a-sec
 	};
@@ -253,7 +257,11 @@ function MessageboardMainWindow(_programId) {
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-		messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
+		//TODO: something wrong here, programData is undefined!
+		if(programData === undefined || programData[0]===undefined)
+			Ti.API.info('bad time man..msgboardwin cannot find data for '+currentProgramId);
+		else 
+			messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
 										programData[0].number_checkins,programData[0].channel_id);
 		
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	

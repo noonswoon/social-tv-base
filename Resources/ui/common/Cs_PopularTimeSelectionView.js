@@ -21,6 +21,15 @@ PopularTimeSelectionView = function(_timeIndex){
 		textAlign:'center',
 		timeIndex: this.timeIndex
 	});	
+	
+	timeView._selectView = function() {
+		timeView.timeLabel.color = 'red';
+	};
+	
+	timeView._deselectView = function() {
+		timeView.timeLabel.color = 'black';
+	};
+	
 
 	timeView.add(timeView.timeLabel);
 	

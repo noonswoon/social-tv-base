@@ -13,6 +13,7 @@ function ApplicationTabGroup() {
 
     var myUserId = acs.getUserId();
 	
+	Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(UserCheckinTracking.getCurrentSelectedProgram());
 	var messageboardwin = new MessageboardMainWindow(UserCheckinTracking.getCurrentSelectedProgram());				
@@ -201,6 +202,56 @@ function ApplicationTabGroup() {
 	};
 	Ti.App.addEventListener('testingPlayground', testingPlaygroundCallback);
 	
+	var resumeCallback = function() {
+		Ti.API.info('resume from ApplicationGroup');	
+		//when app resumes, need to do the following: 
+		//0. check internet connectivity
+		//1. set appBadge to zero if there is some notification
+		//2. update time-related stuff, scroll time index on popular page, is the checking in 
+		// behavior still work correctly?, popular page shows correctly?
+		//3. check if the user checkin data has already expired (if the day already passed)
+		//4. check if we need to load new tvprogram (if it is a new day)
+		
+		//0.
+		if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {
+			var connectivityWarningDialog = Titanium.UI.createAlertDialog({
+				title:'No Internet Connection',
+				message:'Please come online and join the Chatterbox experience.'
+			});
+			connectivityWarningDialog.show();
+			
+			//TODO: add no connectivity window that block everything
+		} else {
+			//if the no connectivity window present, remove it from the view
+		}
+		
+		//1.
+		Ti.UI.iPhone.appBadge = null;
+		var startOfToday = moment().sod().format("YYYY-MM-DDTHH:mm:ss");
+		
+		//3.
+		var lastCheckinTime = UserCheckinTracking.getLatestCheckinTime();
+		if(lastCheckinTime < startOfToday) { //checkin already expired
+			UserCheckinTracking.setCurrentSelectedProgram('');
+			UserCheckinTracking.setCurrentCheckinPrograms([]);
+			clearPickerDataInAllModules();
+			addGuidelineWindowInAllModules();
+		}
+		
+		//4.
+		var CacheHelper = require('helpers/cacheHelper');
+		var timeLastFetchedTVProgramACS = CacheHelper.getTimeLastFetchedTVProgramACS();
+		if(timeLastFetchedTVProgramACS < startOfToday) {
+			//need to reload all tvprogram data
+			var TVProgramACS = require('acs/tvprogramACS');
+			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
+			CacheHelper.setTimeLastFetchedTVProgramACS();
+		} else { //if still using the same tvprogram data, reset the popular tvprogram data by calling 'showDiscoveryPage' event
+			Ti.API.info('updating data in popular tab...')
+			Ti.App.fireEvent('showDiscoveryPage');
+		}
+	};
+	Ti.App.addEventListener('resume', resumeCallback);
 	
    	function closeApplicationTabGroupCallback() {
    		Ti.API.info('closing applicationTabGroup');
@@ -209,6 +260,7 @@ function ApplicationTabGroup() {
    		Ti.App.removeEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
    		Ti.App.removeEventListener('checkinToProgram',checkinToProgramCallback);
    		Ti.App.removeEventListener('changingOfCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
+   		Ti.App.removeEventListener('resume',resumeCallback);
    		Ti.App.removeEventListener('closeApplicationTabGroup',closeApplicationTabGroupCallback);
    		self.close();
    	}

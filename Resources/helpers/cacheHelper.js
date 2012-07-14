@@ -17,14 +17,29 @@ exports.fetchACSDataOrCache = function(key, acsCallback, acsParam, eventToFire) 
 			Ti.App.Properties.setString(key,nowStr);
 		}
 	}	
-}
+};
+
+exports.getTimeLastFetchedTVProgramACS = function() {
+	if(Ti.App.Properties.hasProperty('timeLastFetchedTVProgramACS')) {
+		return Ti.App.Properties.getString('timeLastFetchedTVProgramACS');
+	} else {
+		var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 
+		Ti.App.Properties.setString('timeLastFetchedTVProgramACS',nowStr);
+		return nowStr;
+	}
+};
+
+exports.setTimeLastFetchedTVProgramACS = function() {
+	var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 
+	Ti.App.Properties.setString('timeLastFetchedTVProgramACS',nowStr);
+};
 
 exports.resetCacheTime = function(key) {
 	if(Ti.App.Properties.hasProperty(key)) {
 		var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 
 		Ti.App.Properties.setString(key,nowStr);
 	}
-}
+};
 
 exports.getCacheTime = function(key) {
 	if(Ti.App.Properties.hasProperty(key)) { //do some caching
@@ -32,7 +47,7 @@ exports.getCacheTime = function(key) {
 		var cacheDate = moment(cacheDateStr,"YYYY-MM-DDTHH:mm:ss");
 		return cacheDate;
 	}
-}
+};
 
 
 exports.levelUpCache = function(_user,_title) {
@@ -47,4 +62,4 @@ exports.levelUpCache = function(_user,_title) {
 			FacebookSharing.levelUpPopUpOnFacebook(_title);
 		}
 	}
-}
+};

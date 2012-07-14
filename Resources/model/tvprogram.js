@@ -182,7 +182,6 @@ exports.TVProgramModel_fetchPopularPrograms = function() {
 	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', now,now);
 	
 	while(result.isValidRow()) {
-		
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
 			name: result.fieldByName('name'),
@@ -208,22 +207,29 @@ exports.TVProgramModel_fetchPopularPrograms = function() {
 	return fetchedPrograms;
 };
 
-exports.TVProgramModel_fetchShowtimeSelection = function(_start){
+exports.TVProgramModel_fetchShowtimeSelection = function(_startTimeIndex){
 	var fetchedPrograms = [];
 	var now = moment(); 
 	var year = now.year();
 	var month = now.month();
 	month+=1;
 	var day = now.date();
-	var timeStr = year+'-0'+month+'-'+day+'T'+_start+':00:00+0000';
-	_start+=1;
-	var endStr = year+'-0'+month+'-'+day+'T'+_start+':00:00+0000';
+	var endTimeIndex = _startTimeIndex + 1;
+	var startTimeIndexStr = _startTimeIndex.toString();
+	var endTimeIndexStr = endTimeIndex.toString();
 	
-	//Ti.API.info('timeStr: '+timeStr);
-	//Ti.API.info('endStr: '+endStr);
+	if(_startTimeIndex < 10) startTimeIndexStr = '0' + startTimeIndexStr;
+	if(endTimeIndex < 10) endTimeIndexStr = '0' + endTimeIndexStr;
+	
+	var startTimeStr = year+'-0'+month+'-'+day+'T'+startTimeIndexStr+':00:00+0000';
+	var endTimeStr = year+'-0'+month+'-'+day+'T'+endTimeIndexStr+':00:00+0000';
+	if(endTimeIndex > 23) endTimeStr = startTimeStr; //special case for program after 11pm
+	
+	// Ti.API.info('startTimeStr: '+startTimeStr);
+	// Ti.API.info('endTimeStr: '+endTimeStr);
 	
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', timeStr,endStr);
+	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', startTimeStr,endTimeStr);
 	while(result.isValidRow()) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
@@ -238,9 +244,9 @@ exports.TVProgramModel_fetchShowtimeSelection = function(_start){
 			program_type: result.fieldByName('program_type'),
 			hasChild:true
 		});
-		Ti.API.info('Name: '+result.fieldByName('name'));
-		Ti.API.info('Start: '+result.fieldByName('start_time'));
-		Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
+		// Ti.API.info('Name: '+result.fieldByName('name'));
+		// Ti.API.info('Start: '+result.fieldByName('start_time'));
+		// Ti.API.info('Recurring: '+result.fieldByName('recurring_until'));
 		result.next();
 	}	
 	result.close();

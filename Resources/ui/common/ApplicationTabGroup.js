@@ -206,7 +206,7 @@ function ApplicationTabGroup() {
 		//when app resumes, need to do the following: 
 		//1. set appBadge to zero if there is some notification
 		//2. update time-related stuff, scroll time index on popular page, is the checking in 
-		// behavior still work correctly?
+		// behavior still work correctly?, popular page shows correctly?
 		//3. check if the user checkin data has already expired (if the day already passed)
 		//4. check if we need to load new tvprogram (if it is a new day)
 		
@@ -229,8 +229,11 @@ function ApplicationTabGroup() {
 		if(timeLastFetchedTVProgramACS < startOfToday) {
 			//need to reload all tvprogram data
 			var TVProgramACS = require('acs/tvprogramACS');
-			TVProgramACS.tvprogramACS_fetchAllProgramShowingNow();
+			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
 			CacheHelper.setTimeLastFetchedTVProgramACS();
+		} else { //if still using the same tvprogram data, reset the popular tvprogram data by calling 'showDiscoveryPage' event
+			Ti.API.info('updating data in popular tab...')
+			Ti.App.fireEvent('showDiscoveryPage');
 		}
 	});
 	

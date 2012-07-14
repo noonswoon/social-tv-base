@@ -1,4 +1,4 @@
-exports.tvprogramACS_fetchAllProgramShowingNow = function() {
+exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	var programs = [];
 	var now_full = moment().format('YYYY-MM-DD, HH:mm:ss');
 	var currentDate = moment().format('YYYY-MM-DD');
@@ -51,10 +51,10 @@ exports.tvprogramACS_fetchAllProgramShowingNow = function() {
 	            }
 				programs.push(curProgram);
 			}
-			Ti.App.fireEvent("tvprogramsLoaded",{fetchedPrograms:programs});
+			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('tvprogramACS_fetchAllProgramShowingNow error: '+e.error);
+	        alert('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

@@ -255,7 +255,8 @@ function MessageboardMainWindow(_programId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		//TODO: something wrong here, programData is undefined!
-		messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
+		if(programData === undefined) Ti.API.info('bad time man..msgboardwin cannot find data');
+		else messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
 										programData[0].number_checkins,programData[0].channel_id);
 		
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	

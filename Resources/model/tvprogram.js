@@ -182,7 +182,6 @@ exports.TVProgramModel_fetchPopularPrograms = function() {
 	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', now,now);
 	
 	while(result.isValidRow()) {
-		
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),
 			name: result.fieldByName('name'),

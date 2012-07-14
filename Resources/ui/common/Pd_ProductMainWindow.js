@@ -177,7 +177,8 @@ function ProductMainWindow(_programId) {
 	self._updatePageContent = function(_newProgramId) {
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-		programName = programData[0].name;
+		if(programData === undefined) Ti.API.info('bad time man..productwin cannot find data');
+		else programName = programData[0].name;
 		selectProgramLabel.text = programName;
 		
 		ProductACS.productACS_fetchedAllProducts(currentProgramId);	

@@ -162,6 +162,9 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		}
 	});
 	
+	titleTextFieldInput.addEventListener('change', function(e){
+		e.source.value = e.source.value.slice(0,90);
+	});
 	
 	//ADDING UI COMPONENTS TO THE WINDOW
 	self.add(titleTextFieldInput);
@@ -179,6 +182,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		if(filename !== null) {
 			fileNamePath = filename.nativePath
 		}
+
 		var newId = Topic.topicModel_add(programId, 0,titleTextFieldInput.value,contentTextAreaInput.value,fileNamePath,acs.getUserLoggedIn().id,acs.getUserLoggedIn().username, UrbanAirship.getDeviceToken());
 
 		//2. insert into topics table view [first record]

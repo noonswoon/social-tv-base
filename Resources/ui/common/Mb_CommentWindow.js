@@ -37,7 +37,7 @@ function CommentWindow(_topicId) {
 		height:'auto',
 		selectedToCommentRow: null,
 		separatorColor: 'transparent',
-		backgroundColor: 'transparent',
+		backgroundColor: 'transparent'
 	});
 	
 	commentsTable.backgroundGradient = {

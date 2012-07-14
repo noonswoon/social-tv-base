@@ -19,8 +19,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		className: "CommentRow",
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		separatorColor: 'transparent',
-		backgroundColor: 'transparent',
-		zIndex: 10
+		backgroundColor: 'transparent'
 	});
 
 	row.index = -1;
@@ -145,17 +144,17 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var reportButton = Ti.UI.createButton({
 		left: nestedOffset + 130,
 		top: 35,
-		width: 59,
-		height: 18,
+		width: 70,
+		height: 23,
 		backgroundImage: 'images/messageboard/comment/flag.png'
 	});
 	
 	var deleteButton = Ti.UI.createButton({
 		left: nestedOffset + 130,
 		top: 35,
-		width: 59,
-		height: 18,
-		backgroundImage: 'images/messageboard/comment/flag.png'
+		width: 73,
+		height: 23,
+		backgroundImage: 'images/messageboard/comment/delete.png'
 	});
 
 	var replyButton = Ti.UI.createButton({

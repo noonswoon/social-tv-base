@@ -349,7 +349,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		var FacebookSharing = require('helpers/facebookSharing');		
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
-		FacebookSharing.checkinPopUpOnFacebook(e.fetchedACheckin);
+		FacebookSharing.checkinPopUpOnFacebook(e.fetchedACheckin,_tvprogramData.programImage);
 		
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
 		

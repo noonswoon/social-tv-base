@@ -55,7 +55,7 @@ exports.sendRequestOnFacebook = function(_fbId) {
 	}
 }
 
-exports.checkinPopUpOnFacebook = function(_checkin) {
+exports.checkinPopUpOnFacebook = function(_checkin,_programPhoto) {
 	Ti.API.info(_checkin);	
 	var SettingHelper = require('helpers/settingHelper');
 	if(SettingHelper.getFacebookShare()) {
@@ -65,7 +65,7 @@ exports.checkinPopUpOnFacebook = function(_checkin) {
 			name: user.first_name+" "+user.last_name+" has checked in to "+_checkin.event.name,
 			message: "",
 			caption: "Chatterbox",
-			picture: "http://storage.cloud.appcelerator.com/Za6GkEHPsBrL0y22LT1XibgwazZTVhnE/photos/f1/ca/4fe154d9b685535c7a00fce9/photo_thumb_100.png",
+			picture: _programPhoto,
 			description:""
 		};
 		Titanium.Facebook.dialog("feed", data, showRequestResult);

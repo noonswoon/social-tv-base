@@ -12,56 +12,65 @@ CommentHeaderTableViewRow = function(_topicId) {
 	//tableview inside tableviewrow	
 	var headerTable = Ti.UI.createTableView({
 		top: 0,
-		height: 'auto',
 		scrollable: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		separatorColor: 'transparent',
 		backgroundColor: 'transparent'
 	});
-	
+
 	// COMMENT TOPIC SECTION
 	// DATE SUBMISSION SECTION
 	var topicRow = Ti.UI.createTableViewRow({
-		height: 52,
+		height: 80,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		className: "DetailedTopicTableViewRow",
 		backgroundImage: 'images/messageboard/comment/topictitletoolbar.png',
 	});
+	
+	var letterImage = Ti.UI.createImageView({
+		image: 'images/messageboard/messageboardIcon.png',
+		top: 15,
+		left: 10,
+		width: 30,
+		height: 30
+	});
+	topicRow.add(letterImage);
 		
 	var topicTitle = Ti.UI.createLabel({
 		text: '-',
 		textAlign: 'left',
 		left: 50,
-		top: 7,
-		width: 260,
-		height: 20,
-		font: { fontSize: 16, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
+		right: 10,
+		top: 5,
+		bottom: 20, 
+		// width: 'auto',
+		// height: 'auto',
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 	})
 	
 	var dateLabel = Ti.UI.createLabel({
 		text: '--',
-		top: 23,
+		bottom: 5,
 		left: 50,
-		height: 20,
-		width: 'auto',
 		font: { fontSize: 10, fontFamily: 'Helvetica Neue' },
 	});
 	
 	//ADD PHOTO SECTION
 	var photoView = Ti.UI.createTableViewRow({
-		top: 20,
+		top: 10,
 		selectionStyle: Titanium.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		height: 'auto'
+		height: 200,
+		backgroundColor: 'transparent'
 	});
 	
 	var photoOfTopic = Ti.UI.createImageView({
 		image: topic.photo,
+		top: 10,
 		left: 10,
 		right: 10,
 		width: 300,
 		height: 200
 	});
-	
 	
 	//ADD CONTENT SECTION
 	var contentView = Ti.UI.createTableViewRow({
@@ -80,13 +89,42 @@ CommentHeaderTableViewRow = function(_topicId) {
 	var contentHeight = content.toImage().height; 
 	var numLines = Math.ceil(contentWidth / ONE_LINE_LENGTH); 
 	var commentTopIndent = numLines * contentHeight;
-	
+
 	// ADD NEW COMMENT SECTION
 	var textAreaRow = Ti.UI.createTableViewRow({
 		top: commentTopIndent,
 		height: 70,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: 'transparent'
 	});
+	
+	//text.length = 42 is one line
+	
+	var lengthOfText = content.text.length;
+	var line = Math.ceil(lengthOfText/40);
+
+	var heightOfContent = null; 
+	
+	if(line <= 12){
+		heightOfContent = CONTENT_LENGTH + (line*10) + 20;
+	}
+	else if(line <= 24){
+		heightOfContent = CONTENT_LENGTH + (line*11) + 25;
+	}
+	else heightOfContent = CONTENT_LENGTH + (line*12) + 30;
+
+	
+	if(topic.photo !== 'null' && line <=12){
+		heightOfContent = CONTENT_LENGTH + (line*10) + 30 + 200;
+	}
+	else if(topic.photo !== 'null' && line <= 24){
+		heightOfContent = CONTENT_LENGTH + (line*11) + 35 + 200;
+	}
+	else if(topic.photo !== 'null' && line > 24){
+		 heightOfContent = CONTENT_LENGTH + (line*12) + 40 + 200;
+	}
+
+	headerTable.height = heightOfContent;
 	
 	var replyButton = Titanium.UI.createButton({
 	    title : 'Reply',

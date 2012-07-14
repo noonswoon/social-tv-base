@@ -14,7 +14,7 @@ MessageboardTableViewRow = function(_topic) {
 		top:5,
 		textAlign: 'left',
 		left: 50,
-		width: '200',
+		right: 65,
 		height: '37',
 		font: { fontSize: 16, fontFamily: 'Helvetica Neue' }
 	})

@@ -102,30 +102,28 @@ CommentHeaderTableViewRow = function(_topicId) {
 	
 	var lengthOfText = content.text.length;
 	var line = Math.ceil(lengthOfText/40);
-	alert('line: '+line);
-	
-	var heightOfContent = null; //12
+
+	var heightOfContent = null; 
 	
 	if(line <= 12){
-		heightOfContent = 160 + (line*10) + 20;
+		heightOfContent = CONTENT_LENGTH + (line*10) + 20;
 	}
 	else if(line <= 24){
-		heightOfContent = 160 + (line*11) + 25;
+		heightOfContent = CONTENT_LENGTH + (line*11) + 25;
 	}
-	else heightOfContent = 160 + (line*12) + 30;
+	else heightOfContent = CONTENT_LENGTH + (line*12) + 30;
 
 	
 	if(topic.photo !== 'null' && line <=12){
-		heightOfContent = 160 + (line*10) + 30 + 200;
+		heightOfContent = CONTENT_LENGTH + (line*10) + 30 + 200;
 	}
 	else if(topic.photo !== 'null' && line <= 24){
-		heightOfContent = 160 + (line*11) + 35 + 200;
+		heightOfContent = CONTENT_LENGTH + (line*11) + 35 + 200;
 	}
 	else if(topic.photo !== 'null' && line > 24){
-		 heightOfContent = 160 + (line*12) + 40 + 200;
+		 heightOfContent = CONTENT_LENGTH + (line*12) + 40 + 200;
 	}
-		
-	alert(heightOfContent);
+
 	headerTable.height = heightOfContent;
 	
 	var replyButton = Titanium.UI.createButton({
@@ -198,12 +196,6 @@ CommentHeaderTableViewRow = function(_topicId) {
 	
 	headerMainRow._setTitle = function(_title) {
 		topicTitle.text = _title;
-		
-		// var topicWidth = topicTitle.toImage().width; 
-		// var topicHeight = topicTitle.toImage().height; 
-		// var numLines = Math.ceil(topicWidth / ONE_LINE_LENGTH);
-
-		// topicRow.height = numLines * topicHeight + dateLabel.toImage().height + 30;
 	};
 	
 	headerMainRow._setSubmissionTime = function(_submissionTime) {

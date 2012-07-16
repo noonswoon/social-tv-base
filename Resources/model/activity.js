@@ -21,7 +21,7 @@ exports.activityModel_fetchedActivityFromACS = function(_activityCollection,_id)
 	db.execute('DELETE FROM activity WHERE targetedUserID = ?', _id);
 	for(var i=0;i < _activityCollection.length; i++) {
 		var curActivity = _activityCollection[i];
-		var name = curActivity.user.first_name + ' ' + curActivity.user.last_name; 
+		var name = curActivity.user.username; 
 		db.execute("INSERT INTO activity(id,activity_acs_id,user_id,user_name,targetedUserID,category,targetedObjectID,additionalData,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?)", curActivity.id,curActivity.user.id,name,curActivity.targetedUserID,curActivity.category,curActivity.targetedObjectID,curActivity.additionalData,curActivity.updated_at);
 	}
 	db.close();

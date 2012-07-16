@@ -33,11 +33,11 @@ exports.leaderACS_createUserInfo = function(_user){
 	}, function (e) {
 	    if (e.success) {
 	        var user = e.LeaderBoard[0];
-	      alert('Success:\\n' +
-	            'username: ' + LeaderBoard[0].user.username + '\\n' +
-	            'totalPoint: ' + LeaderBoard[0].totalPoint + '\\n' +
-	            'created_at: ' + LeaderBoard[0].created_at + '\\n' +
-	            'facebookid: ' + LeaderBoard[0].user.external_accounts.external_id);
+	      Ti.API.info('Success:\\n' +
+	            'username: ' + e.LeaderBoard[0].user.username + '\\n' +
+	            'totalPoint: ' + e.LeaderBoard[0].totalPoint + '\\n' +
+	            'created_at: ' + e.LeaderBoard[0].created_at + '\\n' +
+	            'facebookid: ' + e.LeaderBoard[0].user.external_accounts.external_id);
 			Ti.App.fireEvent("createLeaderBoardUser",{fetchedUser: user});
 	    } else {
 	        alert('leaderboardACS 45 Error:\\n' +

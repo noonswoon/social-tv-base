@@ -356,7 +356,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		programNumCheckin.text = programNumCheckin.text + 1;
 		CheckinModel.checkin_updateOne(e.fetchedACheckin);
 		FacebookSharing.checkinPopUpOnFacebook(e.fetchedACheckin,_tvprogramData.programImage);
-		CheckinACS.checkinACS_fetchedUserTotalCheckIns(userID);
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');
 		Ti.App.fireEvent('leaderDbUpdated');

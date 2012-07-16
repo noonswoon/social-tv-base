@@ -98,7 +98,8 @@ if(_status==="me") {
 		font: {fontSize: 14},
 		color: '#fff',
 		height: 30,
-		top: 10
+		top: 10,
+		zIndex: -10,
 	});
 	
 	var userActivity = Ti.UI.createTableView({
@@ -117,13 +118,15 @@ if(_status==="me") {
 		var numLoops = 5;
 		
 		if(_status==="me") name = "You";
-		else name = _userProfile.first_name;		
-
-		if(myActivity.length < numLoops) numLoops = myActivity.length;
+		else name = _userProfile.first_name;
+		
+		if(myActivity.length < numLoops) {
+			numLoops = myActivity.length;
+			emptyActivity.visible = false;
+			}
 		
 		if(numLoops===0) {
-			userActivityView.add(emptyActivity);
-			activityView.add(userActivityView);
+			emptyActivity.visible = true;
 		}		
 
 		for(var i =0;i< numLoops;i++){	// if numLoops = 0, it won't get into 'for' loop
@@ -160,8 +163,7 @@ if(_status==="me") {
 				left: 50,
 				height:20,
 				bottom: 5
-			});	
-
+			});
 			userActivityRow.target_id = myActivity[i].targetedObjectID;
 			userActivityRow.category = myActivity[i].category;			
 
@@ -169,7 +171,7 @@ if(_status==="me") {
 				if(name ==="You") _name = "you";
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png'
-				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' you a friend request';
+				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' a friend request';
 			} else
 			if (myActivity[i].category==='approvefriend') {
 				if(name ==="You") _name = "you";
@@ -179,7 +181,7 @@ if(_status==="me") {
 			} else
 			if (myActivity[i].category==='comment') {
 				activityType.image= 'images/icon/act_chat.png'
-				activityInfo.text = name+' posted a comment on '+myActivity[i].additionalData;
+				activityInfo.text = 'Someone commented on your post: '+myActivity[i].additionalData;
 			} else
 			if (myActivity[i].category==='getbadge') {
 				activityType.image= 'images/icon/act_badge.png';
@@ -233,7 +235,6 @@ if(_status==="me") {
 		if(e.rowData.target_id !== acs.getUserId() && (e.rowData.category === 'addfriend' || e.rowData.category === 'approvefriend')) {
 			Ti.API.info('userStatus = '+userStatus);
 			Ti.API.info('e.rowData.target_id = '+e.rowData.target_id);
-			//TODO: open containing tab not working
 			var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');	
 			var profilewin = new ProfileMainWindow(e.rowData.target_id,userStatus);
 			_parentWindow.containingTab.open(profilewin);
@@ -260,7 +261,8 @@ if(_status==="me") {
 		Ti.App.removeEventListener('profileMainWindowClosing'+curId,clearListeners);
 	}
 	Ti.App.addEventListener('profileMainWindowClosing'+curId, clearListeners);
-	
+			
+	userActivityView.add(emptyActivity);
 	return activityView;
 }
 

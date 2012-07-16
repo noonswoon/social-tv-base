@@ -7,6 +7,7 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
+//	var ProductMainWindow = require('ui/common/Am_NoInternetConnect');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');

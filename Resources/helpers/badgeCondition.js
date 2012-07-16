@@ -186,7 +186,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 		//badge desc: Iron Chef Thailand Fan LV1; condition: 3 checkins in  Iron Chef Thailand; badge id: 36
 		if(_numCheckins >= 3) return 36;
 	}
-	return 0;
+	return undefined;
 }
 
 var checkProgramCondition = function(_programId) {
@@ -197,7 +197,7 @@ var checkProgramCondition = function(_programId) {
 		var badgeId = determineShowBadgeId(_programId,checkinCount);
 		Ti.API.info('badgeId: '+badgeId);		
 	}
-	if(badgeId !== 0 || badgeId !== undefined) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: badgeId});
+	if(badgeId !== undefined) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: badgeId});
 }
 
 var newBadgeUnlockCallback = function(e){
@@ -233,7 +233,6 @@ Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCo
 
 exports.checkinEvent = function(_checkinData){
 	checkTimeCondition();
-	//Ti.API.info('checkinEvent: _checkinData.program_type: '+_checkinData.program_type);
 	checkTypeCondition(_checkinData.program_type);
 	checkProgramCondition(_checkinData.program_id);
 }

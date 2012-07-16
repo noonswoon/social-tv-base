@@ -217,6 +217,8 @@ function ProductMainWindow(_programId) {
 			ProductACS.productACS_fetchedAllProducts(currentProgramId);
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
+		
+		
 	});
 
 	picker.addEventListener('change',function(e) {

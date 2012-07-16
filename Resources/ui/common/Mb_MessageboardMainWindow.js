@@ -260,10 +260,11 @@ function MessageboardMainWindow(_programId) {
 		//TODO: something wrong here, programData is undefined!
 		if(programData === undefined || programData[0]===undefined)
 			Ti.API.info('bad time man..msgboardwin cannot find data for '+currentProgramId);
-		else 
+		else {
 			messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
 										programData[0].number_checkins,programData[0].channel_id);
-		
+			addWindow._setProgramId(_newProgramId);
+		}
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	
 	};
 	
@@ -331,7 +332,7 @@ function MessageboardMainWindow(_programId) {
 		};
 		var topicRow = new MessageboardTableViewRow(topicForTableViewRow);
 		allTopicTable.updateRow(0,topicRow);
-
+	Ti.API.info('New postID from ACS: '+newTopic.id);
 		Topic.topicModel_updateACSObjectIdField(e.newTopic);
 	}
 

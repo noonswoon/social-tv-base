@@ -199,11 +199,11 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 			userId: acs.getUserId(),
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
 		};
-		
-		alert(topicDetailForNewTableViewRow.photo);
+
 		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
 		//3 call TopicACS.topicACS_create(titleTextFieldInput.value,programId,newId);
+
 		TopicACS.topicACS_create(titleTextFieldInput.value,contentTextAreaInput.value,filename,programId,newId);
 		
 		//4 use the return object from ACS to update db and row in the table [update the acsObjectId]
@@ -215,11 +215,12 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		titleTextFieldInput.value = '';	
    		contentTextAreaInput.value = '';
    		thumbnailLabel.show();
-   		uploadedImage = null;
+   		filename = null;
    		thumbnail.backgroundImage = '';	
-		self.close();
-
-
+		
+		setTimeout(function(e) {
+			self.close();
+		}, 2000); //wait 2 seconds before closing the add topic window
 	});
 
 	self._setProgramId = function(_newProgramId) {
@@ -230,7 +231,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		titleTextFieldInput.value = '';
    		contentTextAreaInput.value = '';
    		thumbnailLabel.show();
-   		uploadedImage = null;
+   		filename = null;
    		thumbnail.backgroundImage = '';
    		self.close();
 	});

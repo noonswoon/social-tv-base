@@ -108,6 +108,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var replyToolbar = Ti.UI.createView({
 		left: 0,
 		top: heightOfContent+5,
+		bottom: 10,
 		width: '100%',
 		height: 60,
 		visible: true,

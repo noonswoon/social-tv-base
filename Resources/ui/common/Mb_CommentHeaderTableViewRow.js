@@ -103,9 +103,6 @@ CommentHeaderTableViewRow = function(_topicId) {
 	var line = Math.ceil(lengthOfText/40);
 
 	var heightOfContent = null; 
-	
-	alert(line);
-	
 
 	if(topic.photo !== null){
 		messageboardIcon.image = 'images/messageboard/cameraIcon.png';

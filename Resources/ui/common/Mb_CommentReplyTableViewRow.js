@@ -126,43 +126,43 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' }
 	});
 
-	var upButton = Ti.UI.createButton({
+	var upButton = Ti.UI.createImageView({
 		left: nestedOffset,
 		top: 35,
-		width: 50,
-		height: 23,
-		backgroundImage: 'images/messageboard/comment/up.png'
+		width: 55,
+		height: 25,
+		image: 'images/messageboard/comment/up.png'
 	});
 
 	var downButton = Ti.UI.createButton({
-		left: nestedOffset + 55,
+		left: nestedOffset + 60,
 		top: 35,
-		width: 70,
-		height: 23,
+		width: 76,
+		height: 25,
 		backgroundImage: 'images/messageboard/comment/down.png'
 	});
 	
 	var reportButton = Ti.UI.createButton({
-		left: nestedOffset + 130,
+		left: nestedOffset + 140,
 		top: 35,
-		width: 70,
-		height: 23,
+		width: 63,
+		height: 25,
 		backgroundImage: 'images/messageboard/comment/flag.png'
 	});
 	
 	var deleteButton = Ti.UI.createButton({
-		left: nestedOffset + 130,
+		left: nestedOffset + 140,
 		top: 35,
-		width: 73,
-		height: 23,
+		width: 84,
+		height: 25,
 		backgroundImage: 'images/messageboard/comment/delete.png'
 	});
 
 	var replyButton = Ti.UI.createButton({
 		right: 10,
 		top: 35,
-		width: 50,
-		height: 23,
+		width: 56,
+		height: 25,
 		backgroundImage: 'images/messageboard/comment/reply.png'
 	});
 	
@@ -171,7 +171,6 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		left: nestedOffset,
 		right: 10,
 		height: heightOfContent,
-		// backgroundColor: 'orange',
 		backgroundImage: 'images/messageboard/comment/reply_onclick.png',
 		zIndex: 1
 	});

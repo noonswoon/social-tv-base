@@ -30,13 +30,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 	
 	refreshButton.addEventListener('click', function(){
-		var FriendACS = require('acs/friendsACS');
-		myBadgeACS.myBadgeACS_fetchedBadge(curId);
-		ActivityACS.activityACS_fetchedMyActivity(curId,curUserName);
-		CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
-		FriendACS.showFriendsRequest();	
-		FriendACS.searchFriend(myUserId);
-		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
+		//nothing
 	});
 
 	var headerView = Ti.UI.createView();

@@ -39,7 +39,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 	}		
 		
 	inviteButton.addEventListener('click', function(){
-			alert('Invite '+_user.name);
+			//alert('Invite '+_user.name);
 			inviteFriend(_user.uid);
 		})
 		tableRow.add(inviteButton);
@@ -72,14 +72,14 @@ AddFriendsTableViewRow = function(_user,_category) {
 		
 		var addFriend = function(_response){
 			Ti.API.info(_response);
-			alert('Your friend has been added');
+			//alert('Your friend has been added');
 		}
 		addButton.addEventListener('click', function(){
 			var FriendACS = require('acs/friendsACS');
 			var ActivityACS = require('acs/activityACS');
 			var FriendsModel = require('model/friend');
 			var addFriendActivityData = createFriendActivity("addfriend");
-			alert(addFriendActivityData);
+			//alert(addFriendActivityData);
 		
 			FriendsModel.friend_create(_user,_user.fb_id);
 		 	FriendACS.addFriendwithNoApprove(_user.id,addFriend);

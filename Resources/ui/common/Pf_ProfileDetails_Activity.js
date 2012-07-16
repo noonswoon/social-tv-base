@@ -168,7 +168,7 @@ if(_status==="me") {
 				if(name ==="You") _name = "you";
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png'
-				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' you a friend request';
+				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' a friend request';
 			} else
 			if (myActivity[i].category==='approvefriend') {
 				if(name ==="You") _name = "you";

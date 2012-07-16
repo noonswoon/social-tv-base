@@ -2,7 +2,7 @@ function showRequestResult(e) {
 	
 	var s = '';
 	if (e.success) {
-		alert(e);
+		Ti.API.info(e);
 		s = "SUCCESS";
 		if (e.result) s += "; " + e.result;
 		if (e.data) s += "; " + e.data;
@@ -20,7 +20,8 @@ function showRequestResult(e) {
 exports.badgePopUpOnFacebook = function(_badgeId) {
 	var SettingHelper = require('helpers/settingHelper');
 	
-	if(_badgeId === 0 || _badgeId === '0') return; //not do the popup for the first badge, crash with the checkin popup
+	if(_badgeId === 0 || _badgeId === '0') return; //DONT post the first badge, since the checkin already did the fb posting
+	if(_badgeId === 1 || _badgeId === '1') return; //DONT post the second badge, since the checkin already did the fb posting
 
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();

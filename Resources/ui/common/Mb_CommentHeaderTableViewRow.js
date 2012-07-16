@@ -105,23 +105,24 @@ CommentHeaderTableViewRow = function(_topicId) {
 
 	var heightOfContent = null; 
 	
-	if(line <= 12){
-		heightOfContent = CONTENT_LENGTH + (line*10) + 20;
-	}
-	else if(line <= 24){
-		heightOfContent = CONTENT_LENGTH + (line*11) + 25;
-	}
-	else heightOfContent = CONTENT_LENGTH + (line*12) + 30;
 
-	
-	if(topic.photo !== 'null' && line <=12){
-		heightOfContent = CONTENT_LENGTH + (line*10) + 30 + 200;
+	if(topic.photo !== null){
+		if(line <= 12){
+			heightOfContent = CONTENT_LENGTH + (line*10) + 30 + 200;
+		}
+		else if(line <= 24){
+			heightOfContent = CONTENT_LENGTH + (line*11) + 35 + 200;
+		}
+		else heightOfContent = CONTENT_LENGTH + (line*12) + 40 + 200;
 	}
-	else if(topic.photo !== 'null' && line <= 24){
-		heightOfContent = CONTENT_LENGTH + (line*11) + 35 + 200;
-	}
-	else if(topic.photo !== 'null' && line > 24){
-		 heightOfContent = CONTENT_LENGTH + (line*12) + 40 + 200;
+	else{
+		if(line <= 12){
+			heightOfContent = CONTENT_LENGTH + (line*10) + 20;
+		}
+		else if(line <= 24){
+			heightOfContent = CONTENT_LENGTH + (line*11) + 25;
+		}
+		else heightOfContent = CONTENT_LENGTH + (line*12) + 30;	
 	}
 
 	headerTable.height = heightOfContent;

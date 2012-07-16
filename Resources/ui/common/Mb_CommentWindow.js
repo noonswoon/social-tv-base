@@ -251,7 +251,6 @@ function CommentWindow(_topicId) {
 		//activity on comment
 		//update to activity feed to the thread's owner
 		//1. insert to activity db 
-		alert(curTopic);
 		var commentActivityData = {
 			user_id: acs.getUserId(),
 			targetedUserID: curTopic.userId, //owner of the thread

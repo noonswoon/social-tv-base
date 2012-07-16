@@ -216,6 +216,10 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		
 	replyButton.addEventListener('click',function(e) {
 		//insert to db-->update UI-->then call acs to save data -->get callback then update the acs_object_id field
+		if(replyTextField.value === '') {
+			return;
+		}
+		
 		var responseText = replyTextField.value;
 		var newId = Comment.commentModel_addCommentOrRating(_comment.topicId,responseText,0,username,_comment.acsObjectId,0); 
 		

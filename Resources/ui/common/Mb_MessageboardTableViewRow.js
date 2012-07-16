@@ -5,8 +5,7 @@ MessageboardTableViewRow = function(_topic) {
 		height:50,
 		backgroundColor: '#eeeeee',
 		allowsSelection: true,
-		className: "TopicRow",
-		leftImage: 'images/messageboard/messageboardIcon.png'
+		className: "TopicRow"
 	});
 	
 	row.topicLabel = Ti.UI.createLabel({
@@ -35,6 +34,11 @@ MessageboardTableViewRow = function(_topic) {
 		top: 10,
 		right: 10
 	});
+	
+	if(_topic.photo !== null && _topic.photo !== undefined){
+		row.leftImage = 'images/messageboard/cameraIcon.png';
+	}
+	else row.leftImage = 'images/messageboard/messageboardIcon.png';
 	
 	if(_topic.commentsCount>9){
 		row.numComments.right = 10;

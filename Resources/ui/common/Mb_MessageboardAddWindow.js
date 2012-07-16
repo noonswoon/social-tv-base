@@ -88,7 +88,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	});
 	textAndButtonView.add(thumbnailLabel);
 	
-	var thumbnail = Ti.UI.createImageView({
+	var thumbnail = Ti.UI.createView({
 		top: 200,
 		width: 40,
 		height: 40,
@@ -121,7 +121,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 				success:function(event){
 					uploadedImage = event.media;
 					if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO){
-						thumbnail.image = uploadedImage;
+						thumbnail.backgroundImage = uploadedImage;
 						thumbnailLabel.hide();
 						filename = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory,_programId+'.png');
 	 	 	  			filename.write(uploadedImage);		
@@ -134,7 +134,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 				success:function(event){
 					uploadedImage = event.media;
 					if(event.mediaType == Ti.Media.MEDIA_TYPE_PHOTO){
-						thumbnail.image = uploadedImage;
+						thumbnail.backgroundImage = uploadedImage;
 						thumbnailLabel.hide();
 						filename = Ti.Filesystem.getFile(Ti.Filesystem.tempDirectory,_programId+'.png');
 	 	 	  			filename.write(uploadedImage);	
@@ -200,6 +200,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 			updatedAt: moment().format("YYYY-MM-DDTHH:mm:ss")
 		};
 		
+		alert(topicDetailForNewTableViewRow.photo);
 		Ti.App.fireEvent('insertingTopicTableViewRow', {topicDetailForNewTableViewRow:topicDetailForNewTableViewRow});
 		
 		//3 call TopicACS.topicACS_create(titleTextFieldInput.value,programId,newId);
@@ -210,13 +211,15 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		
 		//Post appear on Facebook
 		FacebookSharing.postAppearOnFaceBook(titleTextFieldInput.value,contentTextAreaInput.value,_programPhoto);
-		
-		self.close();
+
 		titleTextFieldInput.value = '';	
    		contentTextAreaInput.value = '';
    		thumbnailLabel.show();
    		uploadedImage = null;
-   		thumbnail.image = '';	
+   		thumbnail.backgroundImage = '';	
+		self.close();
+
+
 	});
 
 	self._setProgramId = function(_newProgramId) {
@@ -224,12 +227,12 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	};
 	
 	backButton.addEventListener('click', function(){
-   		self.close();
-   		titleTextFieldInput.value = '';
+		titleTextFieldInput.value = '';
    		contentTextAreaInput.value = '';
    		thumbnailLabel.show();
    		uploadedImage = null;
-   		thumbnail.image = '';
+   		thumbnail.backgroundImage = '';
+   		self.close();
 	});
 	
 	return self;

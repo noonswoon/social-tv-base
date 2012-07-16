@@ -319,7 +319,7 @@ function MessageboardMainWindow(_programId) {
 		var newTopic = e.newTopic;	
 		var topicForTableViewRow = {
 			title: newTopic.title,
-			// photo: newTopic.photo,
+			photo: newTopic.photo,
 			content: newTopic.content,
 			id: newTopic.custom_fields.local_id,
 			acsObjectId:newTopic.id,

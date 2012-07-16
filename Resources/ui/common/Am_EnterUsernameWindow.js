@@ -60,6 +60,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 				var pointModel = require('model/point');
 				
 				leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
+				alert('createUserPN details, id: '+e.users[0].id +', username: '+e.users[0].username+', dvToken: '+UrbanAirship.getDeviceToken());
 				PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());
 				
 				var leaderboardCallBack = function(e) {

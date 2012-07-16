@@ -12,7 +12,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	var BadgeModel = require('model/badge');
 	var BadgeCondition = require('helpers/badgeCondition');
 	var FacebookSharing = require('helpers/facebookSharing');
-	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
+	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailsWindow');
 
 	var badgeImagesReady = false;
 	var myUnlockBadgesReady = false;	

@@ -122,6 +122,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	var columnFriendCount = Ti.UI.createLabel({
 		font: {fontSize: 20, fontStyle: 'bold'},
+		text: '0',
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,

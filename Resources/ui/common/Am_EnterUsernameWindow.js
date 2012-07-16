@@ -4,26 +4,39 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	var lWin = Ti.UI.createWindow({
 		title: "Signup",
 		backgroundColor: 'gray',
-		backgroundImage: '/images/admin/cb_back.png',
+		backgroundImage: '/images/bg.png',
 		barColor: '#6d0a0c',
 		layout: 'vertical',
 		tabBarHidden: false,
 		navBarHidden: false
 	});
+
+	var cbLogo = Ti.UI.createImageView({
+		image: '/images/admin/chatterbox_logo.png',
+		top: 60,
+		width: 173, height: 56,
+	});	
 		
+	var newUserLabel = Ti.UI.createLabel({
+		text: 'CHOOSE YOUR USERNAME',
+		font: { fontSize: 14, fontFamily: 'Helvetica Neue', fontWeight: 'bold' },
+		color: 'white',
+		shadowColor: '#999',
+		top: 15,
+		left: 50
+	});	
 	var usernameTextField = Ti.UI.createTextField({
-		hintText: 'Choose your username',
+	//	hintText: 'Choose your username',
 		width: 220,
 		height: 35,
-		top: 30,
-		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
-		color: '#666',
+		top: 5,
+		font: { fontSize: 14},
+	//	color: '#333',
 		borderRadius: 5,
 		backgroundColor: '#d0d0d0'
 	})
 	
 	var enterUsername = Ti.UI.createButton({
-		//title:'Register',
 		backgroundImage: '/images/admin/button/buttons_register.png',
 		top: 10,
 		width: 161,
@@ -31,6 +44,8 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	});
 	
 	//ADDING UI COMPONENTS TO WINDOW
+	lWin.add(cbLogo);
+	lWin.add(newUserLabel);
 	lWin.add(usernameTextField);
 	lWin.add(enterUsername);
 
@@ -58,15 +73,8 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 				var leaderBoardACS = require('acs/leaderBoardACS');
 				var PushNotificationCTB = require('ctb/pushnotificationCTB');
 				var pointModel = require('model/point');
-				
 				leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
-				PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());
-				
-				var leaderboardCallBack = function(e) {
-					pointModel.pointModel_updateLeadersFromACS(e.fetchedUser);
-				};
-				Ti.App.addEventListener("createLeaderBoardUser",leaderboardCallBack);
-				
+				PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());				
 				//
 				Cloud.SocialIntegrations.externalAccountLink({
 				    type: 'facebook',
@@ -96,6 +104,12 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		    }
 		});
 	});		
+					
+	var leaderboardCallBack = function(e) {
+		pointModel.pointModel_updateLeadersFromACS(e.fetchedUser);
+	};
+	Ti.App.addEventListener("createLeaderBoardUser",leaderboardCallBack);
+	
 	return lWin;
 };
 module.exports = EnterUsernameWindow;

@@ -2,8 +2,6 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
 	var ActivityModel = require('model/activity');
-
-//	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
 	
 	var curId = _userProfile.id;
 	

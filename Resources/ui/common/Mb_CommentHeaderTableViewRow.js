@@ -27,14 +27,13 @@ CommentHeaderTableViewRow = function(_topicId) {
 		backgroundImage: 'images/messageboard/comment/topictitletoolbar.png',
 	});
 	
-	var letterImage = Ti.UI.createImageView({
-		image: 'images/messageboard/messageboardIcon.png',
+	var messageboardIcon = Ti.UI.createImageView({
 		top: 15,
 		left: 10,
 		width: 30,
 		height: 30
 	});
-	topicRow.add(letterImage);
+	topicRow.add(messageboardIcon);
 		
 	var topicTitle = Ti.UI.createLabel({
 		text: '-',
@@ -105,8 +104,11 @@ CommentHeaderTableViewRow = function(_topicId) {
 
 	var heightOfContent = null; 
 	
+	alert(line);
+	
 
 	if(topic.photo !== null){
+		messageboardIcon.image = 'images/messageboard/cameraIcon.png';
 		if(line <= 12){
 			heightOfContent = CONTENT_LENGTH + (line*10) + 30 + 200;
 		}
@@ -116,6 +118,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 		else heightOfContent = CONTENT_LENGTH + (line*12) + 40 + 200;
 	}
 	else{
+		messageboardIcon.image = 'images/messageboard/messageboardIcon.png';
 		if(line <= 12){
 			heightOfContent = CONTENT_LENGTH + (line*10) + 20;
 		}

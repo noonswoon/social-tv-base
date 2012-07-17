@@ -11,7 +11,9 @@ function MessageboardMainWindow(_programId) {
 	var CacheHelper = require('helpers/cacheHelper');
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var checkinguidelinewin = null;
-		
+	var messageboardACSPageIndex = 1;
+	var hasMoreTopics = true; 
+	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Messageboard');
 	
@@ -154,7 +156,7 @@ function MessageboardMainWindow(_programId) {
 			addWindow._setProgramId(currentProgramId);
 		
 			//reset data in the tableview
-			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
 	});
@@ -265,7 +267,7 @@ function MessageboardMainWindow(_programId) {
 										programData[0].number_checkins,programData[0].channel_id);
 			addWindow._setProgramId(_newProgramId);
 		}
-		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	
+		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');	
 	};
 	
 	self._addGuidelineWindow = function() {
@@ -281,7 +283,11 @@ function MessageboardMainWindow(_programId) {
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db
-		Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,currentProgramId); 
+		var isTableChanged = Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,currentProgramId); 
+		if(!isTableChanged && messageboardACSPageIndex > 1) {
+			hasMoreTopics = false; //insert nothing new to the table, thus, no more topics to load
+			Ti.API.info('set hasMoreTopics to false');
+		}
 		
 		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
 		if(usingPull2Refresh) {
@@ -303,6 +309,17 @@ function MessageboardMainWindow(_programId) {
 			var row = new MessageboardTableViewRow(allTopics[i]);
 			viewRowsData.push(row);
 		}
+		
+		//row for fetch more topics
+		var fetchMoreTopicsRow = Ti.UI.createTableViewRow({
+			top:0,
+			height:50,
+			backgroundColor: '#eeeeee',
+			allowsSelection: true,
+			title: '                  Load more...',
+			color: 'gray'
+		});
+		viewRowsData.push(fetchMoreTopicsRow);
 		allTopicTable.setData(viewRowsData);
 	}
 
@@ -332,7 +349,6 @@ function MessageboardMainWindow(_programId) {
 		};
 		var topicRow = new MessageboardTableViewRow(topicForTableViewRow);
 		allTopicTable.updateRow(0,topicRow);
-	Ti.API.info('New postID from ACS: '+newTopic.id);
 		Topic.topicModel_updateACSObjectIdField(e.newTopic);
 	}
 
@@ -341,10 +357,23 @@ function MessageboardMainWindow(_programId) {
 		self.containingTab.open(addWindow);
 	});
 
-
 	allTopicTable.addEventListener('click', function(e){
-		var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
-		self.containingTab.open(commentwin);
+		//check if it is the last row, if so, fetch data from the next messageboardACSPageIndex
+		if(e.row.topic !== undefined) {
+			var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
+			self.containingTab.open(commentwin);
+		} else { //if click on Load More...
+			if(hasMoreTopics) {
+				TopicACS.topicACS_fetchAllTopicsOfProgramId([currentProgramId,messageboardACSPageIndex+1])
+				messageboardACSPageIndex++; 
+			} else {
+				var noMoreDialog = Titanium.UI.createAlertDialog({
+					title:'Nothing more to load',
+					message:'You have seen all the topics. Create a new one!'
+				});
+				noMoreDialog.show();	
+			}
+		}
 	});		
 
 	Ti.App.addEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);
@@ -355,6 +384,7 @@ function MessageboardMainWindow(_programId) {
 	searchTextField.addEventListener('return', function(e) {
 		searchTextField.blur();
 	});
+	
 	searchTextField.addEventListener('cancel', function(e) {
 		searchTextField.blur();
 	});
@@ -375,6 +405,7 @@ function MessageboardMainWindow(_programId) {
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
 	}
+	
 	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
 		Ti.API.info('using pull to refresh');
 		usingPull2Refresh = true;
@@ -391,7 +422,7 @@ function MessageboardMainWindow(_programId) {
 	});	
 
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
-	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');
 
 	return self;
 }

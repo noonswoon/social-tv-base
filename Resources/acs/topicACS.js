@@ -1,12 +1,13 @@
-exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
+exports.topicACS_fetchAllTopicsOfProgramId = function(_paramsArray) {
 
+	var programId = _paramsArray[0];
+	var messageboardACSPageIndex = _paramsArray[1];
 	var topicsOfProgram = [];
-
 	Cloud.Posts.query({
-	    page: 1,
-	    per_page: 20,
+	    page: messageboardACSPageIndex,
+	    per_page: 10,
 	    where: {
-	        program_id: _programId
+	        program_id: programId
 	    }, 
 	    order: '-created_at'
 	}, function (e) {
@@ -18,7 +19,7 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_programId) {
 	            	numComments = post.reviews_count;
 	            var curTopic = {
 	            	id: post.id,
-	            	programId: _programId,
+	            	programId: programId,
 	            	title: post.title,
 	            	content: post.content,
 	            	photo: post.photo,

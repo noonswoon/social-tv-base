@@ -9,6 +9,7 @@ exports.topicModel_fetchFromProgramId = function(_programId) {
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM topics WHERE program_id = ? AND is_deleted = 0 ORDER BY updated_at DESC',_programId);
 	while(result.isValidRow()) {
+		//Ti.API.info('topic title: '+result.fieldByName('title'));
 		fetchedTopics.push({
 			title: result.fieldByName('title'),
 			content: result.fieldByName('content'),
@@ -94,11 +95,13 @@ exports.topicModel_add = function(_programId,_acsObjectId,_title,_content,_photo
 
 
 exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId) {
+	var isTableChanged = false;
 	var db = Ti.Database.open('Chatterbox'); 
+	//need to clear records with the given programId ** don't delete anymore..just adding new ones
+	//db.execute('DELETE FROM topics WHERE program_id = ?',_programId);
+	//
 	
-	//need to clear records with the given programId
-	db.execute('DELETE FROM topics WHERE program_id = ?',_programId);
-	
+	var result = null;
 	for(var i=0;i < _topicsCollection.length; i++) {
 		var curTopic = _topicsCollection[i];
 		var deviceToken = "UNDEFINED";
@@ -107,10 +110,18 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 			deviceToken = curTopic.user.custom_fields.device_token_id;
 		if(curTopic.photo !== undefined && curTopic.photo.urls !== undefined && curTopic.photo.urls.original !== undefined)
 			photoUrl = curTopic.photo.urls.original;
-			
-		db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,content,photo,comments_count,user_id,username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)", 
+		
+		//check whether the inserting curTopic.id already existed in the db, if it is, do not add
+		result = db.execute('SELECT id FROM topics WHERE acs_object_id = ?',curTopic.id);
+		if(result.rowCount === 0) {
+			//only insert new topics that db doesn't have
+			db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,content,photo,comments_count,user_id,username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)", 
 					curTopic.id,_programId,curTopic.title,curTopic.content,photoUrl,curTopic.commentsCount,curTopic.user.id, curTopic.user.username,deviceToken,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
+			isTableChanged = true;
+		}	
 	}
+	if(result !== null) result.close();
 	db.close();
 	Ti.App.fireEvent("topicsDbUpdated");
+	return isTableChanged;
 };

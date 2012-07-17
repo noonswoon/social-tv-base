@@ -13,8 +13,8 @@ function ApplicationTabGroup() {
 
     var myUserId = acs.getUserId();
 	
-	Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
-	Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
+	//Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+	//Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
 	
 	//facebook autopost acs call
 	var fbAutoPostACS = require('acs/fbAutoPostACS');
@@ -150,8 +150,8 @@ function ApplicationTabGroup() {
 		UserCheckinTracking.setCurrentCheckinPrograms(todayCheckinPrograms);
 		
 		//first load, and the user already checkin in some program
-		Ti.API.info('getCurrentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
-		Ti.API.info('currentCheckinProgramsLength: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
+		//Ti.API.info('getCurrentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+		//Ti.API.info('currentCheckinProgramsLength: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
 		
 		if(UserCheckinTracking.getCurrentSelectedProgram() === '' && todayCheckinPrograms.length > 0) { 
 			//handle rare situation, when user checkin and deleted the app halfway, then reinstall it again on the same day
@@ -225,10 +225,14 @@ function ApplicationTabGroup() {
 				message:'Please come online and join the Chatterbox experience.'
 			});
 			connectivityWarningDialog.show();
-			
-			//TODO: add no connectivity window that block everything
+			nointernetwin = new NoInternetWindow();
+			nointernetwin.open();
 		} else {
-			//if the no connectivity window present, remove it from the view
+			if(nointernetwin !== null) {
+				nointernetwin.close();
+				nointernetwin = null;
+				Ti.API.info('closing no internet window: ApplicationTabGroup');
+			}
 		}
 		
 		//1.

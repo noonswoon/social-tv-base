@@ -24,7 +24,7 @@ exports.checkin_fetchCheckinToday = function() {
 	var startOfDay = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
 	var result = db.execute('SELECT * FROM checkins where updated_at >= ?',startOfDay);
 	while(result.isValidRow()) {
-		Ti.API.info('fetchCheckinToday: '+result.fieldByName('event_id'));
+		//Ti.API.info('fetchCheckinToday: '+result.fieldByName('event_id'));
 	
 		fetchedCheckin.push({
 			id: result.fieldByName('id'),

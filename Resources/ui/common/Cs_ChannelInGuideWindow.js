@@ -35,6 +35,7 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 	programsOfChannelTableView.addEventListener('click',function(e){
  		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.id,
+			programId: e.row.tvprogram.program_id,
 			programTitle: e.row.tvprogram.name,
 			programSubname: e.row.tvprogram.subname,
 			programImage: e.row.tvprogram.photo,

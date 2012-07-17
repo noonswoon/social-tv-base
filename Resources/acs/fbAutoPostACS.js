@@ -11,7 +11,6 @@ exports.fbAutoPostACS_AutoPostValue = function() {
 	    } else {
 	        Ti.API.info('Error: Cannot fetch from the server. ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
-	    	 }
-				});
-		
+	    }
+	});	
 };

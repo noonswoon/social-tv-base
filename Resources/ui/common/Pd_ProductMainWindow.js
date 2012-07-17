@@ -1,5 +1,4 @@
 function ProductMainWindow(_programId) {
-	
 	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
 	var ProductACS = require('acs/productACS');
 	var Checkin = require('model/checkin');

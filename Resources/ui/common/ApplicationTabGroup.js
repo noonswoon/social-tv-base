@@ -7,6 +7,7 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
+//	var ProductMainWindow = require('ui/common/Am_NoInternetConnectivity');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
@@ -15,10 +16,6 @@ function ApplicationTabGroup() {
 	
 	//Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
 	//Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
-	
-	//facebook autopost acs call
-	var fbAutoPostACS = require('acs/fbAutoPostACS');
-	fbAutoPostACS.fbAutoPostACS_AutoPostValue();
 	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(UserCheckinTracking.getCurrentSelectedProgram());
@@ -228,11 +225,13 @@ function ApplicationTabGroup() {
 			nointernetwin = new NoInternetWindow();
 			nointernetwin.open();
 		} else {
+			//if the no connectivity window present, remove it from the view
 			if(nointernetwin !== null) {
 				nointernetwin.close();
 				nointernetwin = null;
 				Ti.API.info('closing no internet window: ApplicationTabGroup');
 			}
+			FbAutoPostACS.fbAutoPostACS_AutoPostValue();
 		}
 		
 		//1.

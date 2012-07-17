@@ -56,6 +56,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		image: 'images/icon/cs_watch.png',
 		top: 0
 	});
+
 	var programNumCheckin = Ti.UI.createLabel({
 		text: _curTVProgram.number_checkins,
 		textAlign: 'left',
@@ -110,14 +111,14 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 	channelView.add(programChannelImage);	
 	row.add(channelView);
 
-		row.tvprogram = _curTVProgram;
+	row.tvprogram = _curTVProgram;
 			
-		Ti.App.addEventListener('updateNumCheckinAtDiscovery'+_curTVProgram.id,function(e){
-			_curTVProgram.number_checkins = _curTVProgram.number_checkins + e.numCheckin;
-			row.tvprogram = _curTVProgram;  //need to reset to make it update the row.tvprogram
-			programNumCheckin.text = _curTVProgram.number_checkins;
-		});	
+	Ti.App.addEventListener('updateNumCheckinAtDiscovery'+_curTVProgram.id,function(e){
+		_curTVProgram.number_checkins = _curTVProgram.number_checkins + e.numCheckin;
+		row.tvprogram = _curTVProgram;  //need to reset to make it update the row.tvprogram
+		programNumCheckin.text = _curTVProgram.number_checkins;
+	});	
 		
-		return row;
+	return row;
 }
 module.exports = Cs_PopularWindowTableViewRow;

@@ -75,8 +75,9 @@ function PopularWindow(_parent) {
 		numProgramsToLoadCheckins = currentTVPrograms.length;
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id;
+			var curChannelId = currentTVPrograms[i].channel_id;
 			//CheckinACS.checkinACS_fetchedCheckInOfProgram(curTVProgramId);
-			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId);
+			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId,curChannelId);
 		}
 	};
 	
@@ -86,8 +87,9 @@ function PopularWindow(_parent) {
 	
 	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
 		var targetedProgramId = e.targetedProgramId; 
-		var numCheckins = e.numCheckins; 
-		TVProgram.TVProgramModel_updateCheckins(targetedProgramId, numCheckins);
+		var numCheckins = e.numCheckins;
+		var channelId = e.channelId;
+		TVProgram.TVProgramModel_updateCheckins(targetedProgramId, numCheckins,channelId);
 		numProgramsToLoadCheckins--;
 		isEverythingReady();
 	});

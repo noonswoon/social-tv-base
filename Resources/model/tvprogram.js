@@ -51,9 +51,41 @@ exports.TVProgramModel_getPrograms = function(_programIds) {
 //start_time TEXT, recurring_until TEXT, number_checkins INTEGER, 
 //channel_id TEXT, program_id TEXT, program_type TEXT
 
-exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins) {	
+exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins,channelId) {	
 	var db = Ti.Database.open('Chatterbox'); 
-	db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckins,targetedProgramId);
+	var mockCheckin = 0;
+	var numCheckinsAndMockup = null;
+
+	var uniqueNum = 0;
+	for(var i=0;i<targetedProgramId.length;i++){
+		var character = targetedProgramId[i];
+		if(character >= '0' && character <= '9'){
+			var num = parseInt(character);
+			uniqueNum += num;
+		}
+	}
+	
+	if(channelId === 'ch3'){
+		 mockCheckin = 534+uniqueNum;
+	}
+	else if(channelId === 'ch5'){
+		mockCheckin = 346+uniqueNum;
+	}
+	else if(channelId === 'ch7'){
+		mockCheckin = 489+uniqueNum;
+	}
+	else if(channelId === 'ch9'){
+		mockCheckin = 367+uniqueNum;
+	}
+	else if(channelId === 'ch11'){
+		mockCheckin = 289+uniqueNum;
+	}
+	else if(channelId === 'chThaipbs'){
+		mockCheckin = 224+uniqueNum;
+	}
+	numCheckinsAndMockup = numCheckins + mockCheckin;
+
+	db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckinsAndMockup,targetedProgramId);
 	db.close();
 }; 
 

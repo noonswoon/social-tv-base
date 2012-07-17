@@ -283,7 +283,11 @@ function MessageboardMainWindow(_programId) {
 	//CALLBACK FUNCTIONS
 	function topicsLoadedCompleteCallback(e) {
 		//add to local db
-		Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,currentProgramId); 
+		var isTableChanged = Topic.topicModel_updateTopicsFromACS(e.topicsOfProgram,currentProgramId); 
+		if(!isTableChanged && messageboardACSPageIndex > 1) {
+			hasMoreTopics = false; //insert nothing new to the table, thus, no more topics to load
+			Ti.API.info('set hasMoreTopics to false');
+		}
 		
 		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
 		if(usingPull2Refresh) {
@@ -360,12 +364,14 @@ function MessageboardMainWindow(_programId) {
 			self.containingTab.open(commentwin);
 		} else { //if click on Load More...
 			if(hasMoreTopics) {
-				//xxx
 				TopicACS.topicACS_fetchAllTopicsOfProgramId([currentProgramId,messageboardACSPageIndex+1])
 				messageboardACSPageIndex++; 
-				Ti.API.info('load more stuff by fetching at '+(messageboardACSPageIndex+1));
 			} else {
-				
+				var noMoreDialog = Titanium.UI.createAlertDialog({
+					title:'Nothing more to load',
+					message:'You have seen all the topics. Create a new one!'
+				});
+				noMoreDialog.show();	
 			}
 		}
 	});		

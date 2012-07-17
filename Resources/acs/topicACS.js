@@ -5,7 +5,7 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_paramsArray) {
 	var topicsOfProgram = [];
 	Cloud.Posts.query({
 	    page: messageboardACSPageIndex,
-	    per_page: 20,
+	    per_page: 10,
 	    where: {
 	        program_id: programId
 	    }, 

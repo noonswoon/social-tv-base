@@ -21,7 +21,7 @@ exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
 //this function give only total results for checkins
 exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	var id = _id;
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"user_id":"'+id+'"}';	
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&where={"user_id":"'+id+'"}';	
 	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
@@ -94,7 +94,7 @@ exports.checkinACS_createCheckin = function(checkinData,local_id){
 exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId,_channelId) {
 	var programs = [];
 	var eventId = _eventId;
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":"'+eventId+'"}&per_page=1';	
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&where={"event_id":"'+eventId+'"}&per_page=1';	
 	
 	//Ti.API.info(url)
 	

@@ -7,6 +7,7 @@ function PopularWindow(_parent) {
 	var CheckinModel = require('model/checkin');
 	var TVProgramModel = require('model/tvprogram');
 	var FriendModel = require('model/friend');
+	var UserModel = require('model/user')
 	
 	var CacheHelper = require('helpers/cacheHelper');
 	
@@ -164,8 +165,25 @@ function PopularWindow(_parent) {
 		
 		Ti.App.addEventListener('friendsCheckInLoaded',function(e){
 			var friendsCheckinWithPrograms = e.fetchedAllFriendsCheckins;
-			//Ti.API.info(JSON.stringify(friendsCheckinWithPrograms));
+			Ti.API.info('friendsCheckinWithPrograms data: '+JSON.stringify(friendsCheckinWithPrograms));
 			CheckinModel.checkin_insertFriendsCheckinsToday(friendsCheckinWithPrograms, myUserId);
+			
+			//will also need need to add friend user data to the user table!
+			for(var i=0; i < friendsCheckinWithPrograms.length; i++) {
+				var curFriendUser = friendsCheckinWithPrograms[i].friend;
+				var fbId = "0";
+				if(curFriendUser.external_accounts !== undefined) {
+					var numExternalAccounts = curFriendUser.external_accounts.length;		
+					for(var j=0;j < numExternalAccounts; j++) {
+						if(curFriendUser.external_accounts[j].external_type === "facebook") {
+							fbId = curFriendUser.external_accounts[j].external_id;
+							break;
+						}
+					}
+				}
+				UserModel.userModel_addUser(curFriendUser.id, curFriendUser.username, fbId, curFriendUser.first_name, curFriendUser.last_name)
+			}
+			
 			areFriendCheckinsReady = true; 
 			Ti.API.info('friendCheckinsReady..isEverythingReady? ');
 			isEverythingReady();

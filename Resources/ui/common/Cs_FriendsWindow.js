@@ -1,24 +1,26 @@
 FriendsWindow = function(_parent){
 	
 	var FriendsACS = require('acs/friendsACS');
-	var friend = require('model/friend');
-	var tvprogram = require('model/tvprogram');
+	var TVProgramModel = require('model/tvprogram');
+	var CheckinModel = require('model/checkin');
+	
 	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
 	var ProgramWithFriends = require('helpers/ProgramWithFriends');
 	var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
+	
+	var myUserId = acs.getUserId();
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Friends');
 	
 	var self = Ti.UI.createWindow({
-		backgroundColor: 'orange'
+		backgroundColor: 'transparent'
 	});
 	
 	var friendsTableView = Ti.UI.createTableView({
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		backgroundColor: 'transparent',
 	});
-	
 	friendsTableView.backgroundGradient = {
 		type: 'linear',
 		startPoint: { x: '0%', y: '0%' },
@@ -35,7 +37,7 @@ FriendsWindow = function(_parent){
 		var addMoreFriendLabel = Ti.UI.createLabel({
 			color: '#333',
 			textAlign: 'center',
-			text: 'Your friends haven\'t checkin to any programs. Invite some more and enjoy the new TV experiences!',
+			text: 'Your friends haven\'t checkin to any programs. Invite friends and start the new TV experiences!',
 			font: {fontSize: 15},
 			width: 250,
 			top: 50
@@ -56,17 +58,18 @@ FriendsWindow = function(_parent){
 		friendsTableView.setData(viewRowData);
 	}
 	
-	var createFriendCheckinRow = function(checkinsOfFriends,totalFriendCheckins) {		
-		var results = [];
+	var createFriendCheckinRow = function(checkinsOfFriends) {		
+/* still working on it
+		var programsThatFriendsCheckin = [];
 		
-		for(var i=0;i<checkinsOfFriends.length;i++){
-			var programObj = checkinsOfFriends[i].program;
-			var friendObj = checkinsOfFriends[i].friend; //check here if it is just an id or a whole user object
-	
+		for(var i = 0; i < checkinsOfFriends.length; i++){
+			//var programObj = checkinsOfFriends[i].program;
+			//var friendObj = checkinsOfFriends[i].friend; 
+			var curFriendCheckin = checkinsOfFriends[i];
 			var isExisted = false;
 			var indexFound = -1;
-			for(var j=0;j < results.length;j++) {
-				if(programObj.id === results[j].programId) {
+			for(var j = 0; j < programsThatFriendsCheckin.length; j++) {
+				if(programObj.id === programsThatFriendsCheckin[j].programId) {
 					indexFound = j;
 					isExisted = true;
 					break;
@@ -76,44 +79,32 @@ FriendsWindow = function(_parent){
 				//create a new ProgramWithFriends
 				var newProgramWithFriends = new ProgramWithFriends(programObj); 
 				newProgramWithFriends.friends.push(friendObj);
-				results.push(newProgramWithFriends);
+				programsThatFriendsCheckin.push(newProgramWithFriends);
 			} else {
-				results[indexFound].friends.push(friendObj);
+				programsThatFriendsCheckin[indexFound].friends.push(friendObj);
 			}
 		}
 		
-		//loop results array, and each element of result array, create tableviewrow to add to table view
+		//loop programsThatFriendsCheckin array, and each element of result array, create tableviewrow to add to table view
 		var viewRowData = [];
-		allTVPrograms = tvprogram.TVProgramModel_fetchPrograms(); //update number_checkins after the user checkin
-			for(var i=0;i<results.length;i++) {
-				var program = results[i];
-				var number_checkins = 0;
-					for(var j=0;j<allTVPrograms.length;j++){
-						if(program.programId === allTVPrograms[j].id) {
-							Ti.API.info('number_checkin for '+program.programName+' = '+allTVPrograms[j].number_checkins);
-							number_checkins = allTVPrograms[j].number_checkins;
-							break;
-						}
-					}
-
-				var row = new FriendsWindowTableViewRow(program,number_checkins);
-				viewRowData.push(row);
+		allTVPrograms = TVProgramModel.TVProgramModel_fetchPrograms(); //update number_checkins after the user checkin
+		
+		for(var i = 0; i < programsThatFriendsCheckin.length; i++) {
+			var program = programsThatFriendsCheckin[i];
+			var number_checkins = 0;
+			for(var j = 0; j < allTVPrograms.length; j++){
+				if(program.programId === allTVPrograms[j].id) {
+					Ti.API.info('number_checkin for '+program.programName+' = '+allTVPrograms[j].number_checkins);
+					number_checkins = allTVPrograms[j].number_checkins;
+					break;
+				}
 			}
-		friendsTableView.setData(viewRowData);		
-	}
-	//EventListener
-	Ti.App.addEventListener('friendsCheckInLoaded',function(e){
-		var checkinsOfFriends;
-		if(e.fetchedTotalFriendCheckins==0) {
-			checkinsOfFriends = 0;
-			createAddMoreFriendsRow();
+			var row = new FriendsWindowTableViewRow(program,number_checkins);
+			viewRowData.push(row);
 		}
-		else {
-			checkinsOfFriends = e.fetchedAllFriendsCheckins;
-			var totalFriendCheckins = e.fetchedTotalFriendCheckins;
-			createFriendCheckinRow(checkinsOfFriends,totalFriendCheckins);
-		};
-	});
+		friendsTableView.setData(viewRowData);	
+*/	
+	}
 		
 	friendsTableView.addEventListener('click',function(e){
  		checkinmainwin = new CheckinMainWindow({
@@ -127,7 +118,16 @@ FriendsWindow = function(_parent){
 			programEndtime: e.row.tvprogram.programEndtime
 		}, _parent.containingTab);	
 		_parent.containingTab.open(checkinmainwin);
-	})
+	});
+	
+	//1. get checkins of friends
+	var friendsCheckins = CheckinModel.checkin_fetchFriendsCheckins(myUserId);
+	//if(friendsCheckins.length === 0) {
+	if(true) {
+		createAddMoreFriendsRow();
+	} else {
+		createFriendCheckinRow(friendsCheckins);
+	}
 	
 	self.add(friendsTableView);
 	

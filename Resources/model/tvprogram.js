@@ -75,7 +75,7 @@ exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins,c
 		mockCheckin = 367+uniqueNum;
 	} else if(channelId === 'ch11'){
 		mockCheckin = 289+uniqueNum;
-	} else if(channelId === 'PBS'){
+	} else if(channelId === 'pbs'){
 		mockCheckin = 224+uniqueNum;
 	}
 	numCheckinsAndMockup = numCheckins + mockCheckin;

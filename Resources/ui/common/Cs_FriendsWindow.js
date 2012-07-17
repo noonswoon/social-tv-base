@@ -117,14 +117,14 @@ FriendsWindow = function(_parent){
 			for(var i=0;i<results.length;i++) {
 				var program = results[i];
 				var number_checkins = 0;
-					for(var j=0;j<allTVPrograms.length;j++){
-						if(program.programId === allTVPrograms[j].id) {
-							Ti.API.info('number_checkin for '+program.programName+' = '+allTVPrograms[j].number_checkins);
-							number_checkins = allTVPrograms[j].number_checkins;
-							break;
-						}
+				for(var j=0;j<allTVPrograms.length;j++){
+					//alert('in allTVPrograms loop');
+					if(program.eventId === allTVPrograms[j].id) {
+						Ti.API.info('number_checkin for '+program.programName+' = '+allTVPrograms[j].number_checkins);
+						number_checkins = allTVPrograms[j].number_checkins;
+						break;
 					}
-
+				}
 				var row = new FriendsWindowTableViewRow(program,number_checkins);
 				viewRowData.push(row);
 			}
@@ -146,7 +146,8 @@ FriendsWindow = function(_parent){
 		
 	friendsTableView.addEventListener('click',function(e){
  		checkinmainwin = new CheckinMainWindow({
-			eventId: e.row.tvprogram.programId,
+			eventId: e.row.tvprogram.eventId,
+			programId: e.row.tvprogram.programId,
 			programTitle: e.row.tvprogram.programName,
 			programSubname: e.row.tvprogram.programSubname,
 			programImage: e.row.tvprogram.programImage,

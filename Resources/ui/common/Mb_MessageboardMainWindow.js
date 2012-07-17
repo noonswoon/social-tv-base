@@ -12,6 +12,7 @@ function MessageboardMainWindow(_programId) {
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var checkinguidelinewin = null;
 	var messageboardACSPageIndex = 1;
+	var hasNoMoreTopic = false; 
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Messageboard');
@@ -304,6 +305,17 @@ function MessageboardMainWindow(_programId) {
 			var row = new MessageboardTableViewRow(allTopics[i]);
 			viewRowsData.push(row);
 		}
+		
+		//row for fetch more topics
+		var fetchMoreTopicsRow = Ti.UI.createTableViewRow({
+			top:0,
+			height:50,
+			backgroundColor: '#eeeeee',
+			allowsSelection: true,
+			title: '                  Load more...',
+			color: 'gray'
+		});
+		viewRowsData.push(fetchMoreTopicsRow);
 		allTopicTable.setData(viewRowsData);
 	}
 
@@ -342,8 +354,17 @@ function MessageboardMainWindow(_programId) {
 	});
 
 	allTopicTable.addEventListener('click', function(e){
-		var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
-		self.containingTab.open(commentwin);
+		//check if it is the last row, if so, fetch data from the next messageboardACSPageIndex
+		if(e.row.topic !== undefined) {
+			var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
+			self.containingTab.open(commentwin);
+		} else { //if click on Load More...
+			if(!hasNoMoreTopic) {
+				Ti.API.info('load more stuff by fetching at '+(messageboardACSPageIndex+1));
+			} else {
+				
+			}
+		}
 	});		
 
 	Ti.App.addEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);

@@ -94,7 +94,7 @@ ProductBuyWindow = function(_product){
 	productDetailView.add(buyNowButton);
 	
 	buyNowButton.addEventListener('click',function(){
-		Ti.Platform.openURL('http://www.google.com');		
+		Ti.Platform.openURL(_product.link);		
 	});
 
 	

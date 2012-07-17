@@ -13,8 +13,8 @@ function ApplicationTabGroup() {
 
     var myUserId = acs.getUserId();
 	
-	Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
-	Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
+	//Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+	//Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
 	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(UserCheckinTracking.getCurrentSelectedProgram());
@@ -146,8 +146,8 @@ function ApplicationTabGroup() {
 		UserCheckinTracking.setCurrentCheckinPrograms(todayCheckinPrograms);
 		
 		//first load, and the user already checkin in some program
-		Ti.API.info('getCurrentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
-		Ti.API.info('currentCheckinProgramsLength: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
+		//Ti.API.info('getCurrentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+		//Ti.API.info('currentCheckinProgramsLength: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
 		
 		if(UserCheckinTracking.getCurrentSelectedProgram() === '' && todayCheckinPrograms.length > 0) { 
 			//handle rare situation, when user checkin and deleted the app halfway, then reinstall it again on the same day

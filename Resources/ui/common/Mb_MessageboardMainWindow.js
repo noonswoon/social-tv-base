@@ -12,7 +12,7 @@ function MessageboardMainWindow(_programId) {
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var checkinguidelinewin = null;
 	var messageboardACSPageIndex = 1;
-	var hasNoMoreTopic = false; 
+	var hasMoreTopics = true; 
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Messageboard');
@@ -359,7 +359,10 @@ function MessageboardMainWindow(_programId) {
 			var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
 			self.containingTab.open(commentwin);
 		} else { //if click on Load More...
-			if(!hasNoMoreTopic) {
+			if(hasMoreTopics) {
+				//xxx
+				TopicACS.topicACS_fetchAllTopicsOfProgramId([currentProgramId,messageboardACSPageIndex+1])
+				messageboardACSPageIndex++; 
 				Ti.API.info('load more stuff by fetching at '+(messageboardACSPageIndex+1));
 			} else {
 				
@@ -375,6 +378,7 @@ function MessageboardMainWindow(_programId) {
 	searchTextField.addEventListener('return', function(e) {
 		searchTextField.blur();
 	});
+	
 	searchTextField.addEventListener('cancel', function(e) {
 		searchTextField.blur();
 	});

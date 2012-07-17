@@ -1,4 +1,5 @@
 Cs_PopularWindowTableViewRow = function(_curTVProgram){	
+	
 	var TVProgram = require('model/tvprogram');
 	var row = Ti.UI.createTableViewRow({
 		height: 121,

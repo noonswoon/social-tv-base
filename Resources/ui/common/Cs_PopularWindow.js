@@ -1,12 +1,14 @@
 function PopularWindow(_parent) {
 	var TVProgramACS = require('acs/tvprogramACS');
 	var CheckinACS = require('acs/checkinACS');
+	var FriendsACS = require('acs/friendsACS');
 	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
 	var CheckinModel = require('model/checkin');
 	var TVProgram = require('model/tvprogram');
 	var CacheHelper = require('helpers/cacheHelper');
 	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
 	var TimeSelectionScrollView = require('ui/common/Cs_PopularWindowTimeSelectionScrollView');
+	var FriendModel = require('model/friend');
 		
 	var areAllProgramsTitlesLoaded = false;
 	var areBadgeShowPermissionReady = false;
@@ -130,6 +132,42 @@ function PopularWindow(_parent) {
 			//CacheHelper.resetCacheTime('cachesomething here'+_programId);
 		}
 	});
+
+	var friendsDbUpdatedCallback = function() {
+		//Send allTVProgramID and allFriends to data from ACS then pull data
+
+		var user_id = acs.getUserId();
+
+		//Get all friends from DB
+		var friendsList = [];
+		allMyFriends = FriendModel.friendModel_fetchFriend(user_id);
+		for(var i = 0; i<allMyFriends.length;i++){
+			var friends = allMyFriends[i].friend_id;
+			friendsList.push(friends);
+		}
+	
+		//Get All TVProgram id
+		var programsList = [];
+		allTVPrograms = TVProgram.TVProgramModel_fetchPrograms();
+		for(var i = 0; i<allTVPrograms.length;i++){
+			var programs = allTVPrograms[i].id;
+			programsList.push(programs);
+		}
+		
+		FriendsACS.friendsCheckins(friendsList,programsList);
+		
+		Ti.App.addEventListener('friendsCheckInLoaded',function(e){
+			var friendsCheckinWithPrograms = e.fetchedAllFriendsCheckins;
+			//Ti.API.info(JSON.stringify(friendsCheckinWithPrograms));
+			for(var i=0;i<friendsCheckinWithPrograms.length;i++){
+				var friendObj = friendsCheckinWithPrograms[i].friend;
+				var programObj = friendsCheckinWithPrograms[i].program;
+				CheckinModel.checkin_insertFriendsCheckinsToday(programObj, friendObj.id);
+			}
+		});	
+	}
+	
+	Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallback); //event fire from ApplicationTabGroup
 
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');

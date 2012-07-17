@@ -217,8 +217,9 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	self.add(productView);
 	
+	var user_id = acs.getUserId();
 	var eventId = _tvprogramData.eventId;
-	var checkin = CheckinModel.checkin_isCheckin(eventId);
+	var checkin = CheckinModel.checkin_isCheckin(eventId,user_id);
 	
 	//Checkin Button
 	if(checkin === false){

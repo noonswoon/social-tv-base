@@ -66,21 +66,16 @@ exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins,c
 	}
 	
 	if(channelId === 'ch3'){
-		 mockCheckin = 534+uniqueNum;
-	}
-	else if(channelId === 'ch5'){
+		mockCheckin = 534+uniqueNum;
+	} else if(channelId === 'ch5'){
 		mockCheckin = 346+uniqueNum;
-	}
-	else if(channelId === 'ch7'){
+	} else if(channelId === 'ch7'){
 		mockCheckin = 489+uniqueNum;
-	}
-	else if(channelId === 'ch9'){
+	} else if(channelId === 'ch9'){
 		mockCheckin = 367+uniqueNum;
-	}
-	else if(channelId === 'ch11'){
+	} else if(channelId === 'ch11'){
 		mockCheckin = 289+uniqueNum;
-	}
-	else if(channelId === 'chThaipbs'){
+	} else if(channelId === 'chThaipbs'){
 		mockCheckin = 224+uniqueNum;
 	}
 	numCheckinsAndMockup = numCheckins + mockCheckin;

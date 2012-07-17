@@ -25,35 +25,15 @@ FriendsWindow = function(_parent){
 		endPoint: { x: '0%', y: '100%' },
 		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
 	};	
-
-	//Get all friends from DB
-	//with mock user_id	
-	var user_id = acs.getUserId();
-	var friendsList = [];
-
-	allMyFriends = friend.friendModel_fetchFriend(user_id);
-	for(var i = 0; i<allMyFriends.length;i++){
-		var friends = allMyFriends[i].friend_id;
-		friendsList.push(friends);
-	}
 	
-	//Get All TVProgram id
-	var programsList = [];
-	
-	allTVPrograms = tvprogram.TVProgramModel_fetchPrograms();
-	for(var i = 0; i<allTVPrograms.length;i++){
-		var programs = allTVPrograms[i].id;
-		programsList.push(programs);
-	}
-	
+	/*
 	var friendsCheckinsUpdate = function() {
 		//Send allTVProgramID and allFriends to data from ACS then pull data
 		FriendsACS.friendsCheckins(friendsList,programsList);
 	}
-	friendsCheckinsUpdate();
 	
 	Ti.App.addEventListener('friendsDbUpdated',friendsCheckinsUpdate);
-	
+	*/
 	
 	var createAddMoreFriendsRow = function(){
 		var viewRowData = [];

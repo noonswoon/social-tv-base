@@ -132,9 +132,10 @@ function ApplicationTabGroup() {
 	};
 	
 	function checkinDbLoadedCallBack(e) {			
+		var user_id = acs.getUserId();
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		//populate the current checkins of user
-		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
+		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday(user_id);
 		//if checkin to at least 1 program, enable the chat/board/product bar
 		
 		var todayCheckinPrograms = [];

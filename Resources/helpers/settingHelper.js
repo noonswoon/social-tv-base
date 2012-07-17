@@ -1,3 +1,17 @@
+exports.setFacebookAutoPost = function(_postSetting) {
+	Ti.App.Properties.setBool('facebookAutoPost',_postSetting);
+	Ti.API.info('facebookAutoPost: '+_postSetting);
+}
+
+exports.getFacebookAutoPost = function() {
+	if(Ti.App.Properties.hasProperty('facebookAutoPost'))
+		return Ti.App.Properties.getBool('facebookAutoPost');
+	else {
+		Ti.App.Properties.setBool('facebookAutoPost',true);
+		return true;
+	}
+}
+
 exports.setFacebookShare = function(_shareSetting) {
 	Ti.App.Properties.setInt('facebookShare',_shareSetting);
 }

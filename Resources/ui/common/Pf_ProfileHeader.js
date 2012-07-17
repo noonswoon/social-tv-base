@@ -15,11 +15,10 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 
 	var currentUser = acs.getUserLoggedIn();
 	var curId = _userProfile.id;
-	var curUserName = _userProfile.username;
 	var totalCheckins = 0;
 	
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
-	ActivityACS.activityACS_fetchedMyActivity(curId,curUserName);
+	ActivityACS.activityACS_fetchedMyActivity(curId);
 
 	var refreshButton = Ti.UI.createImageView({
 		image: 'images/icon/refresh.png',

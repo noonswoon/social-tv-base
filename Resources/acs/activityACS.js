@@ -1,8 +1,6 @@
-exports.activityACS_fetchedMyActivity = function(_id,_username) {
-	//TODO: id & user where clause
+exports.activityACS_fetchedMyActivity = function(_id) {
 	var targetUser = [];
 	targetUser.push(_id);
-	targetUser.push(_username);
 	Cloud.Objects.query({
 		classname: 'Activity',	
 	    page: 1,

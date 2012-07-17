@@ -36,8 +36,8 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 			picture: badge.url,
 			description: badge.desc
 		};
-		//Titanium.Facebook.dialog("feed", data, showRequestResult);
-		Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult)
+		if(SettingHelper.getFacebookAutoPost()) Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
+		else Titanium.Facebook.dialog("feed", data, showRequestResult);
 	}
 }
 
@@ -69,7 +69,8 @@ exports.checkinPopUpOnFacebook = function(_checkin,_programPhoto) {
 			picture: _programPhoto,
 			description: ""
 		};
-		Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
+		if(SettingHelper.getFacebookAutoPost()) Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
+		else Titanium.Facebook.dialog("feed", data, showRequestResult);
 	}
 }
 

@@ -137,7 +137,7 @@ function ApplicationTabGroup() {
 	function checkinDbLoadedCallBack(e) {			
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		//populate the current checkins of user
-		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday();
+		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday(myUserId);
 		//if checkin to at least 1 program, enable the chat/board/product bar
 		
 		var todayCheckinPrograms = [];
@@ -150,8 +150,6 @@ function ApplicationTabGroup() {
 		UserCheckinTracking.setCurrentCheckinPrograms(todayCheckinPrograms);
 		
 		//first load, and the user already checkin in some program
-		//Ti.API.info('getCurrentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
-		//Ti.API.info('currentCheckinProgramsLength: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
 		
 		if(UserCheckinTracking.getCurrentSelectedProgram() === '' && todayCheckinPrograms.length > 0) { 
 			//handle rare situation, when user checkin and deleted the app halfway, then reinstall it again on the same day

@@ -51,9 +51,36 @@ exports.TVProgramModel_getPrograms = function(_programIds) {
 //start_time TEXT, recurring_until TEXT, number_checkins INTEGER, 
 //channel_id TEXT, program_id TEXT, program_type TEXT
 
-exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins) {	
+exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins,channelId) {	
 	var db = Ti.Database.open('Chatterbox'); 
-	db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckins,targetedProgramId);
+	var mockCheckin = 0;
+	var numCheckinsAndMockup = null;
+
+	var uniqueNum = 0;
+	for(var i=0;i<targetedProgramId.length;i++){
+		var character = targetedProgramId[i];
+		if(character >= '0' && character <= '9'){
+			var num = parseInt(character);
+			uniqueNum += num;
+		}
+	}
+	
+	if(channelId === 'ch3'){
+		mockCheckin = 534+uniqueNum;
+	} else if(channelId === 'ch5'){
+		mockCheckin = 346+uniqueNum;
+	} else if(channelId === 'ch7'){
+		mockCheckin = 489+uniqueNum;
+	} else if(channelId === 'ch9'){
+		mockCheckin = 367+uniqueNum;
+	} else if(channelId === 'ch11'){
+		mockCheckin = 289+uniqueNum;
+	} else if(channelId === 'pbs'){
+		mockCheckin = 224+uniqueNum;
+	}
+	numCheckinsAndMockup = numCheckins + mockCheckin;
+
+	db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckinsAndMockup,targetedProgramId);
 	db.close();
 }; 
 
@@ -157,6 +184,29 @@ exports.TVProgramModel_fetchProgramIdOfEventId = function(_eventId) {
 	result.close();
 	db.close();
 	return programId;
+};
+
+exports.TVProgramModel_fetchProgramOfEventId = function(_eventId) {
+	var programEvent = null;
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM tvprograms WHERE id = ?',_eventId);
+	if(result.isValidRow()) {
+		programEvent = {
+			eventId: _eventId, 
+			programName: result.fieldByName('name'),
+			programSubName: result.fieldByName('subname'),
+			programImage: result.fieldByName('photo'),
+			programStartTime: result.fieldByName('start_time'),
+			programEndTime: result.fieldByName('recurring_until'),
+			numberCheckins: result.fieldByName('number_checkins'),
+			programChannelId: result.fieldByName('channel_id'),
+			programId: result.fieldByName('program_id'),
+			programType: result.fieldByName('program_type')
+		};
+	}
+	result.close();
+	db.close();
+	return programEvent;
 };
 
 

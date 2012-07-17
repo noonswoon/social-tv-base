@@ -37,7 +37,7 @@ function ChannelSelectionMainWindow(){
 		for (var i in mainView.children){
 			if (mainView.children.hasOwnProperty(i)) {
 				mainView.remove(mainView.children[i]);
-				Ti.API.info('removing window...');
+				//Ti.API.info('removing window...');
 			}
 		}		
 

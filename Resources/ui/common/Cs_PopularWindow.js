@@ -1,15 +1,23 @@
 function PopularWindow(_parent) {
 	var TVProgramACS = require('acs/tvprogramACS');
 	var CheckinACS = require('acs/checkinACS');
+	var FriendsACS = require('acs/friendsACS');
 	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
+	
 	var CheckinModel = require('model/checkin');
-	var TVProgram = require('model/tvprogram');
+	var TVProgramModel = require('model/tvprogram');
+	var FriendModel = require('model/friend');
+	var UserModel = require('model/user')
+	
 	var CacheHelper = require('helpers/cacheHelper');
+	
 	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
 	var TimeSelectionScrollView = require('ui/common/Cs_PopularWindowTimeSelectionScrollView');
+	
 		
 	var areAllProgramsTitlesLoaded = false;
 	var areBadgeShowPermissionReady = false;
+	var areFriendCheckinsReady = false;
 	var numProgramsToLoadCheckins = 0;
 	var usingPull2Refresh = false;
 	
@@ -20,10 +28,11 @@ function PopularWindow(_parent) {
 	}
 	
 	function isEverythingReady() {
-		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0)) {
+		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0) && areFriendCheckinsReady) {
+			//Ti.API.info('everything is ready');
 			Ti.App.fireEvent("showDiscoveryPage");
 			hidePreloader(self);
-		}
+		} //else Ti.API.info('thing is NOT ready yet..missing');
 	}
 	
 	Ti.App.addEventListener('tvprogramsTitlesLoaded',function() {
@@ -39,7 +48,6 @@ function PopularWindow(_parent) {
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'orange'
 	});
-	
 	
 	var timeSelectionScrollView = new TimeSelectionScrollView();
 	var timeSelectionView = Ti.UI.createView({
@@ -65,18 +73,19 @@ function PopularWindow(_parent) {
 	function tvprogramLoadedCompleteCallback(e) {
 		programListTable.data = [];	
 		var allPrograms = e.fetchedPrograms;
-		TVProgram.TVProgramModel_insertAllPrograms(allPrograms);
+		TVProgramModel.TVProgramModel_insertAllPrograms(allPrograms);
 		Ti.App.fireEvent("tvprogramsTitlesLoaded");
 	}
 	Ti.App.addEventListener('tvprogramsLoadedComplete',tvprogramLoadedCompleteCallback);
 	
 	function fetchProgramsAllCheckins() {
-		var currentTVPrograms = TVProgram.TVProgramModel_fetchPrograms(); 
+		var currentTVPrograms = TVProgramModel.TVProgramModel_fetchPrograms(); 
 		numProgramsToLoadCheckins = currentTVPrograms.length;
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id;
+			var curChannelId = currentTVPrograms[i].channel_id;
 			//CheckinACS.checkinACS_fetchedCheckInOfProgram(curTVProgramId);
-			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId);
+			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId,curChannelId);
 		}
 	};
 	
@@ -86,15 +95,16 @@ function PopularWindow(_parent) {
 	
 	Ti.App.addEventListener('doneGettingNumCheckinsOfProgramId', function(e) {
 		var targetedProgramId = e.targetedProgramId; 
-		var numCheckins = e.numCheckins; 
-		TVProgram.TVProgramModel_updateCheckins(targetedProgramId, numCheckins);
+		var numCheckins = e.numCheckins;
+		var channelId = e.channelId;
+		TVProgramModel.TVProgramModel_updateCheckins(targetedProgramId, numCheckins,channelId);
 		numProgramsToLoadCheckins--;
 		isEverythingReady();
 	});
 	
 	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var timeIndex = e.timeIndex;
-		var selectedShowtime = TVProgram.TVProgramModel_fetchShowtimeSelection(timeIndex); 
+		var selectedShowtime = TVProgramModel.TVProgramModel_fetchShowtimeSelection(timeIndex); 
 		selectedShowtime.sort(sortByNumberCheckins);
 		Ti.API.info('update PopularProgramAtTime');
 		var viewRowsData = [];
@@ -107,12 +117,14 @@ function PopularWindow(_parent) {
 	});
 	 
 	Ti.App.addEventListener('showDiscoveryPage', function(){
-		var currentTVPrograms = TVProgram.TVProgramModel_fetchPopularPrograms(); 
+		var myUserId = acs.getUserId();
+		var currentTVPrograms = TVProgramModel.TVProgramModel_fetchPopularPrograms(); 
 		currentTVPrograms.sort(sortByNumberCheckins);
 		var viewRowsData = [];
 		for (var i=0;i<currentTVPrograms.length;i++) {
 			var curTVProgram = currentTVPrograms[i];
-			var row = new PopularWindowTableViewRow(curTVProgram);
+			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(curTVProgram.id, myUserId);
+			var row = new PopularWindowTableViewRow(curTVProgram, numFriendsCheckins);
 			viewRowsData.push(row);
 		}
 		programListTable.setData(viewRowsData);
@@ -128,6 +140,57 @@ function PopularWindow(_parent) {
 			//CacheHelper.resetCacheTime('cachesomething here'+_programId);
 		}
 	});
+
+	var friendsDbUpdatedCallback = function() {
+		//Send allTVProgramID and allFriends to data from ACS then pull data
+
+		var myUserId = acs.getUserId();
+
+		//Get all friends from DB
+		var friendsList = [];
+		allMyFriends = FriendModel.friendModel_fetchFriend(myUserId);
+		for(var i = 0; i < allMyFriends.length; i++){
+			var friends = allMyFriends[i].friend_id;
+			friendsList.push(friends);
+		}
+	
+		//Get All TVProgram id
+		var programsList = [];
+		allTVPrograms = TVProgramModel.TVProgramModel_fetchPrograms();
+		for(var i = 0; i<allTVPrograms.length;i++){
+			var programs = allTVPrograms[i].id;
+			programsList.push(programs);
+		}
+		
+		FriendsACS.friendsCheckins(friendsList,programsList);
+		
+		Ti.App.addEventListener('friendsCheckInLoaded',function(e){
+			var friendsCheckinWithPrograms = e.fetchedAllFriendsCheckins;
+			Ti.API.info('friendsCheckinWithPrograms data: '+JSON.stringify(friendsCheckinWithPrograms));
+			CheckinModel.checkin_insertFriendsCheckinsToday(friendsCheckinWithPrograms, myUserId);
+			
+			//will also need need to add friend user data to the user table!
+			for(var i=0; i < friendsCheckinWithPrograms.length; i++) {
+				var curFriendUser = friendsCheckinWithPrograms[i].friend;
+				var fbId = "0";
+				if(curFriendUser.external_accounts !== undefined) {
+					var numExternalAccounts = curFriendUser.external_accounts.length;		
+					for(var j=0;j < numExternalAccounts; j++) {
+						if(curFriendUser.external_accounts[j].external_type === "facebook") {
+							fbId = curFriendUser.external_accounts[j].external_id;
+							break;
+						}
+					}
+				}
+				UserModel.userModel_addUser(curFriendUser.id, curFriendUser.username, fbId, curFriendUser.first_name, curFriendUser.last_name)
+			}
+			
+			areFriendCheckinsReady = true; 
+			//Ti.API.info('friendCheckinsReady..isEverythingReady? ');
+			isEverythingReady();
+		});	
+	}
+	Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallback); //event fire from ApplicationTabGroup
 
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');

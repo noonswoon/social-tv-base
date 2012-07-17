@@ -1,10 +1,8 @@
-FriendsWindowTableViewRow = function(tabledata,_checkins){
+FriendsWindowTableViewRow = function(_checkinProgram){
+	var UserModel = require('model/user')
+	
 	var BadgeCondition = require('helpers/badgeCondition');	
-	var friendData = [];	
-	var friendCheckIns = tabledata.friends.length;
-	for(var i=0;i<friendCheckIns;i++){
-		friendData.push(tabledata.friends[i].username);
-	}	
+	var numFriendsCheckin = _checkinProgram.friends.length;
 
 	var row = Ti.UI.createTableViewRow({
 		height: 150,
@@ -15,9 +13,9 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		endPoint: {x: '0%', y: '100%'},
 		colors: [{color: '#fff', offset: 0.0}, {color: '#D0D0D0', offset: 1.0}]};
     	
-//Program
+	//Program
 	var programLabelName = Ti.UI.createLabel({
-		text: tabledata.programName,
+		text: _checkinProgram.programName,
 		textAlign: 'left',
 		color: '#333',
 		left: 145,
@@ -29,21 +27,21 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	row.add(programLabelName);
 
 	 var programLabelSubname = Ti.UI.createLabel({
-		 text: tabledata.subName,
+		 text: _checkinProgram.programSubName,
 		 color: '#333',
 		 textAlign:'left',
 		 font:{fontWeight:'bold',fontSize:13},
 		 top: 35,
 		 left:145
 	 });
-
 	 row.add(programLabelSubname);
 	
 	var programImage = Ti.UI.createImageView({
-		image: tabledata.programImage,
+		image: _checkinProgram.programImage,
 		width:110,
 		height:80
 	});
+	
 	var programImageView = Ti.UI.createView({
 		width: 123,
 		height: 94,
@@ -61,13 +59,14 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		left: 135,
 		height: 47
 	});
+	
 	var programNumCheckinImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_watch.png',
 		top: 0
 	});	
 	
 	var programNumCheckin = Ti.UI.createLabel({
-		text: _checkins,
+		text: _checkinProgram.numberCheckins,
 		textAlign: 'left',
 		color: '#898687',
 		font: {fontSize: 14},
@@ -89,7 +88,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		top: 0
 	});
 	var programFriendTotalCheckin = Ti.UI.createLabel({
-		text: friendCheckIns,
+		text: numFriendsCheckin,
 		textAlign: 'left',
 		color: '#898687',
 		bottom: 0,
@@ -105,12 +104,14 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		right: 28,
 		height: 47,
 	});
+	
 	var ChannelImage = Ti.UI.createImageView({
 		image: 'images/icon/cs_tvchannel.png',
 		top: 3
 	});
+	
 	var Channel = Ti.UI.createLabel({
-		text: tabledata.programChannel,
+		text: _checkinProgram.programChannelId,
 		textAlign: 'left',
 		color: '#898687',
 		height: 20,
@@ -121,12 +122,7 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 	channelView.add(ChannelImage);	
 	row.add(channelView);
 	
-//Friend
-	var dummyFriendsStr = "";
-	for(var i=0;i<friendData.length;i++) {
-		dummyFriendsStr += friendData[i]+',';
-	}
-	
+	//Friend
 	var friendsScrollView = Ti.UI.createScrollView({
 		contentWidth:400,
 		contentHeight:45,
@@ -135,18 +131,9 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 		width:320,
 	});
 
-	for(var i=0;i<friendCheckIns;i++) {
-		var friends = tabledata.friends;
-		var fbId = 0;
-		var numExternalAccounts = friends[i].external_accounts;
-	 					
-		for(var j=0;j < numExternalAccounts.length; j++) {
-			 var curExternalAccount = friends[i].external_accounts[j];
-			 if(curExternalAccount.external_type === "facebook") {
-				 fbId = curExternalAccount.external_id;
-				 break;
-			}
-		 }	
+	for(var i = 0; i < numFriendsCheckin; i++) {
+		var friendUserObj = UserModel.userModel_fetchUserProfile(_checkinProgram.friends[i]);
+		var fbId = friendUserObj.fb_id;
 		var friendsProfileImage = Ti.UI.createImageView({
 			image: 'images/kuma100x100.png',
 			width: 40,
@@ -156,18 +143,16 @@ FriendsWindowTableViewRow = function(tabledata,_checkins){
 			left: (i*45)+10,
 		});
 		
-		if(fbId!==0) friendsProfileImage.image = acs.getUserImageNormalOfFbId(fbId);
+		if(fbId !== 0 || fbId !== "0")
+			friendsProfileImage.image = acs.getUserImageNormalOfFbId(fbId);
 		
 		friendsScrollView.add(friendsProfileImage);
 	}
 
-	Ti.API.info('friendCheckIn = '+friendCheckIns);
-	if(friendCheckIns > 0) BadgeCondition.checkFriendCondition(friendCheckIns);
+	if(numFriendsCheckin > 0) BadgeCondition.checkFriendCondition(numFriendsCheckin);
 
 	row.add(friendsScrollView);
-	row.tvprogram = tabledata;
-	row.checkin = _checkins;
-	row.frdCheckin = friendCheckIns;
+	row.tvprogram = _checkinProgram;
 	return row;
 }
 module.exports = FriendsWindowTableViewRow;

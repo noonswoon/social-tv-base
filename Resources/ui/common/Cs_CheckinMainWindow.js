@@ -8,7 +8,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var updateActivity = require('helpers/updateActivity');
 	var CheckinModel = require('model/checkin');		
 	var TVProgram = require('model/tvprogram');
-	var userID = acs.getUserId();
+	var myUserId = acs.getUserId();
 		
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/back_button.png',
@@ -217,8 +217,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	self.add(productView);
 	
-	var eventId = _tvprogramData.eventId;
-	var checkin = CheckinModel.checkin_isCheckin(eventId);
+	var checkin = CheckinModel.checkin_isCheckin(_tvprogramData.eventId,myUserId);
 	
 	//Checkin Button
 	if(checkin === false){
@@ -343,7 +342,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		var currentUser = acs.getUserLoggedIn();
 		var PushNotificationCTB = require('ctb/pushnotificationCTB');
 		var FriendModel = require('model/friend');
-		var friendsList = FriendModel.friendModel_fetchFriend(userID);
+		var friendsList = FriendModel.friendModel_fetchFriend(myUserId);
 		for(var i=0; i<friendsList.length; i++) {
 			var textPn = currentUser.first_name+' just checkin to a TV program. Let watch together!';
 			PushNotificationCTB.pushNotificationCTB_sendPN(friendsList[i].friend_id,"2",textPn);
@@ -354,7 +353,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		var num = TVProgram.TVProgramModel_countCheckins(_tvprogramData.eventId);
 		var FacebookSharing = require('helpers/facebookSharing');		
 		programNumCheckin.text = programNumCheckin.text + 1;
-		CheckinModel.checkin_updateOne(e.fetchedACheckin);
+		CheckinModel.checkin_updateOne(e.fetchedACheckin, myUserId);
 		FacebookSharing.checkinPopUpOnFacebook(e.fetchedACheckin,_tvprogramData.programImage);
 		Ti.App.fireEvent('updateNumCheckinAtDiscovery'+_tvprogramData.eventId,{numCheckin:num});
 		Ti.App.fireEvent('updateHeaderCheckin');

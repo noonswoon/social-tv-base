@@ -1,7 +1,7 @@
 
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
 exports.searchFriend = function(_userID){
-	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' +
+	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +
 				'&user_id='+_userID;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
@@ -48,7 +48,7 @@ exports.searchFriend = function(_userID){
 //return total friends ///////////////////////////////////////////////////////////////////////////////////////
 //this function give only total results
 exports.friendACS_fetchedUserTotalFriends = function(_id) {
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/search.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr' + '&user_id='+ _id;
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +'&user_id='+ _id;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 			responseJSON = JSON.parse(this.responseText);
@@ -67,7 +67,7 @@ exports.friendACS_fetchedUserTotalFriends = function(_id) {
 };
 //add friend /////////////////////////////////////////////////////////////////////////////////////////////////
 exports.addFriend = function(_userID,_callbackFn){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
 	    	Ti.API.info("Your request has been sent.");
@@ -81,14 +81,14 @@ exports.addFriend = function(_userID,_callbackFn){
 	});
 	xhr.open("POST", url);
 	var postParameters = {
-		key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
+		key: ACS_API_KEY,
 		user_ids: String(_userID),
 	};
 	xhr.send(postParameters);  // request is actually sent with this statement
 };
 
 exports.addFriendwithNoApprove = function(_userID,_callbackFn){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
 	    	var response = _callbackFn(this.responseText);
@@ -101,7 +101,7 @@ exports.addFriendwithNoApprove = function(_userID,_callbackFn){
 	});
 	xhr.open("POST", url);
 	var postParameters = {
-		key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
+		key: ACS_API_KEY,
 		user_ids: String(_userID),
 		approval_required: false
 	};
@@ -111,7 +111,7 @@ exports.addFriendwithNoApprove = function(_userID,_callbackFn){
 
 //approve friend /////////////////////////////////////////////////////////////////////////////////////////////
 exports.approveFriend = function(_userID,_callbackFn){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/approve.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/approve.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
 	    	//responseJSON = JSON.parse(this.responseText);
@@ -126,7 +126,7 @@ exports.approveFriend = function(_userID,_callbackFn){
 	});
 	xhr.open("PUT", url);
 	var putParameters = {
-		key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
+		key: ACS_API_KEY,
 		user_ids: _userID,
 	};
 	xhr.send(putParameters);  // request is actually sent with this statement
@@ -134,7 +134,7 @@ exports.approveFriend = function(_userID,_callbackFn){
 //show friend request ////////////////////////////////////////////////////////////////////////////////////////
 exports.showFriendsRequest = function(){
 	var requests = [];
-	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
+	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
@@ -175,48 +175,26 @@ exports.showFriendsRequest = function(){
 	xhr.send();
 };
 
-// //remove friend ////////////////////////////////////////////
-// exports.removedFriendFromACS = function(user_id){
-	// var url = 'https://api.cloud.appcelerator.com/v1/friends/remove.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
-	// var xhr = Ti.Network.createHTTPClient({
-	    // onload: function(e) {
-	    	// //responseJSON = JSON.parse(this.responseText);
-	    	// var response = _callbackFn(this.responseText);
-	    // },
-	    // onerror: function(e) {
-			// // this function is called when an error occurs, including a timeout
-			 // alert('friendsACS->removedFriendFromACS: Error= '+e.error);
-	    // },
-	    // timeout:5000  /* in milliseconds */
-	// });
-	// xhr.open("DELETE", url);
-	 // var parameters = {
-	 	// //key: '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr',
-		// user_ids: user_id
-	 // };
-	// xhr.send(parameters);  // request is actually sent with this statement
-// };
-
 exports.friendsCheckins = function(_friendsList,_programsList){
 	var programsCheckins = [];
 	var friendsCheckins = [];
 	var allFriendsCheckins = [];
 
-	var allProgramsID = _programsList;
-	var allProgramsIDStr = '';
-	for(var i=0;i<allProgramsID.length;i++) {
-		allProgramsIDStr += '"'+allProgramsID[i]+'",';
+	var allProgramsId = _programsList;
+	var allProgramsIdStr = '';
+	for(var i=0; i<allProgramsId.length; i++) {
+		allProgramsIdStr += '"'+allProgramsId[i]+'",';
 	}
-	allProgramsIDStr = allProgramsIDStr.substr(0,allProgramsIDStr.length-1);
+	allProgramsIdStr = allProgramsIdStr.substr(0,allProgramsIdStr.length-1);
 	
-	var allFriendsID = _friendsList;
-	var allFriendsIDStr = '';
-		for(var i=0;i<allFriendsID.length;i++) {
-		allFriendsIDStr += '"'+allFriendsID[i]+'",';
+	var allFriendsId = _friendsList;
+	var allFriendsIdStr = '';
+	for(var i=0; i<allFriendsId.length; i++) {
+		allFriendsIdStr += '"'+allFriendsId[i]+'",';
 	}
-	allFriendsIDStr = allFriendsIDStr.substr(0,allFriendsIDStr.length-1);
+	allFriendsIdStr = allFriendsIdStr.substr(0,allFriendsIdStr.length-1);
 	
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":{"$in":['+allProgramsIDStr+']},"user_id":{"$in":['+allFriendsIDStr+']}}';
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&where={"event_id":{"$in":['+allProgramsIdStr+']},"user_id":{"$in":['+allFriendsIdStr+']}}';
 
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {

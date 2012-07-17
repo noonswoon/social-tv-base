@@ -22,6 +22,9 @@ Ti.Facebook.permissions = ['publish_stream','publish_actions', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
 var IS_ON_DEVICE = true;
+var IS_PRODUCTION_BUILD = false;
+
+var ACS_API_KEY = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 var CACHE_TIMEOUT_IN_MINUTES = 1; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 var CONTENT_LENGTH = 160;
@@ -30,6 +33,8 @@ var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
 var DEFAULT_CTB_IMAGE_URL = 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png';
 
 var friendRequests = [];
+
+if(IS_PRODUCTION_BUILD) ACS_API_KEY = '5va2XsGjknLebugvozPZfZr9xhSVEZl1';
 
 /*
 Ti.App.addEventListener('pause', function(){

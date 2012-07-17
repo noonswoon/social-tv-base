@@ -39,6 +39,9 @@ Ti.App.addEventListener('pause', function(){
 */
 
 // This is a single context application with mutliple windows in a stack
+var NoInternetWindow = require('ui/common/Am_NoInternetConnectivity');
+var nointernetwin = null;
+
 var launchTheApp = function() {
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
@@ -87,8 +90,15 @@ var launchTheAppWrapper = function() {
 			title:'No Internet Connection',
 			message:'Please come online and join the Chatterbox experience.'
 		});
+		nointernetwin = new NoInternetWindow();
+		nointernetwin.open();
 		connectivityWarningDialog.show();
 	} else {
+		if(nointernetwin !== null) {
+			nointernetwin.close();
+			nointernetwin = null;
+			Ti.API.info('closing no internet window: appjs');
+		}
 		//remove the event listener
 		Ti.App.removeEventListener('resume', launchTheAppWrapper);
 		launchTheApp();

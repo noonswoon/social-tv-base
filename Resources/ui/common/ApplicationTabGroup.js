@@ -7,7 +7,6 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
-//	var ProductMainWindow = require('ui/common/Am_NoInternetConnect');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
@@ -222,10 +221,14 @@ function ApplicationTabGroup() {
 				message:'Please come online and join the Chatterbox experience.'
 			});
 			connectivityWarningDialog.show();
-			
-			//TODO: add no connectivity window that block everything
+			nointernetwin = new NoInternetWindow();
+			nointernetwin.open();
 		} else {
-			//if the no connectivity window present, remove it from the view
+			if(nointernetwin !== null) {
+				nointernetwin.close();
+				nointernetwin = null;
+				Ti.API.info('closing no internet window: ApplicationTabGroup');
+			}
 		}
 		
 		//1.

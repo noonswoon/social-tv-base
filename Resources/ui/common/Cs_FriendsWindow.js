@@ -26,15 +26,6 @@ FriendsWindow = function(_parent){
 		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
 	};	
 	
-	/*
-	var friendsCheckinsUpdate = function() {
-		//Send allTVProgramID and allFriends to data from ACS then pull data
-		FriendsACS.friendsCheckins(friendsList,programsList);
-	}
-	
-	Ti.App.addEventListener('friendsDbUpdated',friendsCheckinsUpdate);
-	*/
-	
 	var createAddMoreFriendsRow = function(){
 		var viewRowData = [];
 		var row = Ti.UI.createTableViewRow({

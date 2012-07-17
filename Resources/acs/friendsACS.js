@@ -202,21 +202,21 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	var friendsCheckins = [];
 	var allFriendsCheckins = [];
 
-	var allProgramsID = _programsList;
-	var allProgramsIDStr = '';
-	for(var i=0;i<allProgramsID.length;i++) {
-		allProgramsIDStr += '"'+allProgramsID[i]+'",';
+	var allProgramsId = _programsList;
+	var allProgramsIdStr = '';
+	for(var i=0; i<allProgramsId.length; i++) {
+		allProgramsIdStr += '"'+allProgramsId[i]+'",';
 	}
-	allProgramsIDStr = allProgramsIDStr.substr(0,allProgramsIDStr.length-1);
+	allProgramsIdStr = allProgramsIdStr.substr(0,allProgramsIdStr.length-1);
 	
-	var allFriendsID = _friendsList;
-	var allFriendsIDStr = '';
-		for(var i=0;i<allFriendsID.length;i++) {
-		allFriendsIDStr += '"'+allFriendsID[i]+'",';
+	var allFriendsId = _friendsList;
+	var allFriendsIdStr = '';
+	for(var i=0; i<allFriendsId.length; i++) {
+		allFriendsIdStr += '"'+allFriendsId[i]+'",';
 	}
-	allFriendsIDStr = allFriendsIDStr.substr(0,allFriendsIDStr.length-1);
+	allFriendsIdStr = allFriendsIdStr.substr(0,allFriendsIdStr.length-1);
 	
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":{"$in":['+allProgramsIDStr+']},"user_id":{"$in":['+allFriendsIDStr+']}}';
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key=8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr&where={"event_id":{"$in":['+allProgramsIdStr+']},"user_id":{"$in":['+allFriendsIdStr+']}}';
 
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {

@@ -1,4 +1,4 @@
-Cs_PopularWindowTableViewRow = function(_curTVProgram){	
+Cs_PopularWindowTableViewRow = function(_curTVProgram,_numFriendsCheckins){	
 	
 	var TVProgram = require('model/tvprogram');
 	var row = Ti.UI.createTableViewRow({
@@ -80,7 +80,7 @@ Cs_PopularWindowTableViewRow = function(_curTVProgram){
 		top: 0
 	});
 	var programNumFriend = Ti.UI.createLabel({
-		text: _curTVProgram.number_checkins,
+		text: _numFriendsCheckins,
 		textAlign: 'left',
 		color: '#898687',
 		bottom: 0,

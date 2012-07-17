@@ -17,14 +17,13 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 	db.close();
 };
 
-
 exports.checkin_fetchCheckinToday = function(_userId) { 
 	var fetchedCheckin = [];
 	var db = Ti.Database.open('Chatterbox'); 
 	var startOfDay = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
 	var result = db.execute('SELECT * FROM checkins where updated_at >= ? AND user_id = ?',startOfDay,_userId); 
 	while(result.isValidRow()) {
-		Ti.API.info('fetchCheckinToday: '+result.fieldByName('event_id'));
+		//Ti.API.info('fetchCheckinToday: '+result.fieldByName('event_id'));
 	
 		fetchedCheckin.push({
 			id: result.fieldByName('id'),
@@ -42,38 +41,51 @@ exports.checkin_fetchCheckinToday = function(_userId) {
 };
 
 //create checkin into database:)
-exports.checkin_create = function(_newCheckin,_userId){
-	var userId = _userId.id;
+exports.checkin_create = function(_newCheckin){
 	var userScore = _newCheckin.score;
 	var db = Ti.Database.open('Chatterbox'); 
 	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
 	
 	db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at) VALUES(NULL,NULL,?,?,?,?)",_newCheckin.event_id,userScore,_newCheckin.user_id,now);
 	var newId = db.lastInsertRowId;
-	//Ti.API.info('checkin_create / db.lastInsertRowId: '+ newId);
 	db.close();
-	//return to helpers/updateActivity.js to continue updating
-	//Ti.App.fireEvent("oneCheckinUpdated");
-	//,{id: curCheckin.id}
-	return newId;
+	return newId; //return to helpers/updateActivity.js to continue updating
+};
+
+exports.checkin_insertFriendsCheckinsToday = function(_friendCheckinsCollection, _userId){
+	var db = Ti.Database.open('Chatterbox'); 
+	db.execute('DELETE FROM checkins WHERE user_id <> ?', _userId);
+	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
+	var dummyACSId = '0';
+	
+	for(var i=0;i<_friendCheckinsCollection.length;i++) {
+		var friendObj = _friendCheckinsCollection[i].friend;
+		var programObj = _friendCheckinsCollection[i].program;
+	
+		db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at) VALUES(NULL,?,?,0,?,?)",dummyACSId, programObj.id,friendObj.id,now);
+		//Ti.API.info('insert friend checkin: friendId '+ friendObj.id+', on event name: '+ programObj.id);
+	}
+	db.close();
 };
 
 //create checkin into database:)
-exports.checkin_insertFriendsCheckinsToday = function(_checkinInfo,_friendId){
+exports.checkin_fetchNumFriendsCheckinsOfProgram = function(_eventId, _userId){
+	var numFriendsCheckins = 0;
 	var db = Ti.Database.open('Chatterbox'); 
-	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
-	
-	db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at) VALUES(NULL,0,?,0,?,?)",_checkinInfo.id,userScore,_friendId,now);
-	Ti.API.info('adding checkin of friend: friendId '+ _friendId+', on eventId: '+_checkinInfo.id);
+	var result = db.execute('SELECT * FROM checkins where event_id = ? AND user_id <> ?',_eventId, _userId); 
+	while(result.isValidRow()) {
+		numFriendsCheckins++;
+		result.next();
+	}
+	result.close();
 	db.close();
+	return numFriendsCheckins;
 };
-
 
 exports.checkin_updateOne = function(_checkin, _userId){ //need userId
 	var db = Ti.Database.open('Chatterbox'); 
 	var curCheckin = _checkin;
 	db.execute("UPDATE checkins SET checkin_acs_id = ? WHERE id= ? AND user_id = ?",curCheckin.id,curCheckin.custom_fields.local_id,_userId);
-	//Ti.API.info("checkin_updateOne success");
 	//Ti.API.info("checkin database row: " + curCheckin.custom_fields.local_id + " checkin acs id: " + curCheckin.id);
 	db.close();
 };

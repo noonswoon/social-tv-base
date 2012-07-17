@@ -7,35 +7,38 @@ exports.searchFriend = function(_userID){
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
 		    var friends = [];
-		    for (var i = 0; i < responseJSON.response.users.length; i++) {
-				var friend = responseJSON.response.users[i];     
-		        var fbId = 0;
-				var numExternalAccounts = friend.external_accounts.length;
-					
-				for(var j=0;j < numExternalAccounts; j++) {
-					var curExternalAccount = friend.external_accounts[j];
-					if(curExternalAccount.external_type === "facebook") {
-						fbId = curExternalAccount.external_id;
-						break;
+		    if(responseJSON.response.users.length){
+			    for (var i = 0; i < responseJSON.response.users.length; i++) {
+					var friend = responseJSON.response.users[i];     
+			        var fbId = 0;
+					var numExternalAccounts = friend.external_accounts.length;
+						
+					for(var j=0;j < numExternalAccounts; j++) {
+						var curExternalAccount = friend.external_accounts[j];
+						if(curExternalAccount.external_type === "facebook") {
+							fbId = curExternalAccount.external_id;
+							break;
+						}
 					}
+					
+					var curFriend = {
+						my_id: _userID,
+						friend_id: friend.id,
+						fb_id: fbId,
+						username: friend.username,
+						first_name: friend.first_name,
+						last_name: friend.last_name,
+						email: friend.email
+					};
+					friends.push(curFriend);
 				}
-				
-				var curFriend = {
-					my_id: _userID,
-					friend_id: friend.id,
-					fb_id: fbId,
-					username: friend.username,
-					first_name: friend.first_name,
-					last_name: friend.last_name,
-					email: friend.email
-				};
-				friends.push(curFriend);
 			}
 
 			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 		}, onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('friendsACS->searchFriend: Error= '+e.error);
+	        Ti.API.info('friendsACS->searchFriend: Error= '+e.error);
+	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:[]});
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -163,7 +166,8 @@ exports.showFriendsRequest = function(){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('friendsACS->showFriendsRequest: Error= '+e.error);
+			Ti.API.info('friendsACS->showFriendsRequest: Error= '+e.error);
+			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:[]});
 	    },
 	    timeout:5000  /* in milliseconds */
 	});

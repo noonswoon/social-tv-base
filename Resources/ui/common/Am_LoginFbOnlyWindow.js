@@ -3,7 +3,7 @@ var LoginFbOnlyWindow = function() {
 	//UI STUFF
 	var self = Ti.UI.createWindow({
 		backgroundColor:'transparent',
-		backgroundImage: '/images/admin/cb_back.png',
+		backgroundImage: '/images/bg.png',
 		title: "Login",
 		barColor: '#398bb0',
 		layout: 'vertical',
@@ -41,7 +41,7 @@ var LoginFbOnlyWindow = function() {
 	
 	var whyFbBtn = Ti.UI.createButton({
 		backgroundImage: '/images/admin/button/button_whyfb.png',
-		top:7,
+		top:177,
 		width:145,
 		height:27,
 		visible:true

@@ -30,7 +30,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 	
 	refreshButton.addEventListener('click', function(){
-		//nothing
+		//do nothing
 	});
 
 	var headerView = Ti.UI.createView();
@@ -92,6 +92,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 	
 	var columnCheckInCount = Ti.UI.createLabel({
+		text: '0',
 		font: {fontSize: 20, fontStyle: 'bold'},
 		shadowColor: '#999',
 		color: '#fff',
@@ -117,6 +118,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	var columnFriendCount = Ti.UI.createLabel({
 		font: {fontSize: 20, fontStyle: 'bold'},
+		text: '0',
 		color: '#fff',
 		shadowColor: '#999',
 		height: 30,
@@ -251,11 +253,13 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		headerView.add(profileName);
 
 		if(status === "friend") {
+			CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 			columnIsFriend.add(columnIsFriendImage);
 			columnIsFriend.add(columnIsFriendLabel);
 			headerView.add(columnIsFriend);
 		} else 
 		if(status === "stranger") {
+			CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 			columnNotFriend.add(columnNotFriendImage);
 			columnNotFriend.add(columnNotFriendLabel);
 			headerView.add(columnNotFriend);
@@ -279,10 +283,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	//only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
 	Ti.App.addEventListener('UserTotalFriendsFromACS', function(e){ 
 		columnFriendCount.text = e.result;
-	});
-
-	refreshButton.addEventListener('click',function(){
-		alert('refresh');
 	});
 	
 	columnFriend.addEventListener('click',function(){
@@ -309,7 +309,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	*/
 	
 	
-	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+	// CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);
 
 	return headerView;

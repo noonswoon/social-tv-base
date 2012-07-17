@@ -103,7 +103,8 @@ FriendsWindow = function(_parent){
 			programChannel: e.row.tvprogram.programChannelId,
 			programNumCheckin: e.row.tvprogram.numberCheckins,
 			programStarttime: e.row.tvprogram.programStartTime,
-			programEndtime: e.row.tvprogram.programEndTime
+			programEndtime: e.row.tvprogram.programEndTime,
+			programId: e.row.tvprogram.programId,
 		}, _parent.containingTab);	
 		_parent.containingTab.open(checkinmainwin);
 	});

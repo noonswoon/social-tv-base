@@ -252,13 +252,13 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		headerView.add(profileName);
 
 		if(status === "friend") {
-			CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+			//CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 			columnIsFriend.add(columnIsFriendImage);
 			columnIsFriend.add(columnIsFriendLabel);
 			headerView.add(columnIsFriend);
 		} else 
 		if(status === "stranger") {
-			CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+			//CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 			columnNotFriend.add(columnNotFriendImage);
 			columnNotFriend.add(columnNotFriendLabel);
 			headerView.add(columnNotFriend);
@@ -308,7 +308,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	*/
 	
 	
-	// CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);
 
 	return headerView;

@@ -1,6 +1,7 @@
 ProgramWithFriends = function(_checkin){
 	var TVProgramModel = require('model/tvprogram');
 	var photoImage = 'http://storage.cloud.appcelerator.com/Za6GkEHPsBrL0y22LT1XibgwazZTVhnE/photos/ee/ca/4fc858ac0020443e8c003d9a/Screen%20Shot%202555-06-01%20at%2012.49.59%20PM_original.png';
+
 	
 	var checkinProgram = TVProgramModel.TVProgramModel_fetchProgramOfEventId(_checkin.event_id);
 	

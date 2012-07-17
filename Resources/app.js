@@ -15,6 +15,7 @@ var Debug = require('lib/debug');
 var PullToRefresh = require('nl.icept.pull2refresh');
 var Cloud = require('ti.cloud');
 var UserCheckinTracking = require('lib/userCheckinTracking');
+var FbAutoPostACS = require('acs/fbAutoPostACS');
 
 //GLOBAL VARIABLES DECARATION
 Ti.Facebook.appid = "197422093706392";
@@ -39,6 +40,7 @@ Ti.App.addEventListener('pause', function(){
 
 // This is a single context application with mutliple windows in a stack
 var launchTheApp = function() {
+	FbAutoPostACS.fbAutoPostACS_AutoPostValue();
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
 			Debug.debug_print("should go to maintab screen");

@@ -17,10 +17,6 @@ function ApplicationTabGroup() {
 	Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
 	Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
 	
-	//facebook autopost acs call
-	var fbAutoPostACS = require('acs/fbAutoPostACS');
-	fbAutoPostACS.fbAutoPostACS_AutoPostValue();
-	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(UserCheckinTracking.getCurrentSelectedProgram());
 	var messageboardwin = new MessageboardMainWindow(UserCheckinTracking.getCurrentSelectedProgram());				
@@ -230,6 +226,7 @@ function ApplicationTabGroup() {
 			//TODO: add no connectivity window that block everything
 		} else {
 			//if the no connectivity window present, remove it from the view
+			FbAutoPostACS.fbAutoPostACS_AutoPostValue();
 		}
 		
 		//1.

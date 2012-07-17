@@ -49,15 +49,16 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 
 //test push notification
-/*
+
 	profilePicture.addEventListener('click',function(){
 		//for testing stuff
 		var PushNotificationCTB = require('ctb/pushnotificationCTB');
-		jaew_userId = '4fcecb5300204462690160a7';
+//		jaew_userId = '4fcecb5300204462690160a7';
 		
-		PushNotificationCTB.pushNotificationCTB_sendPN(jaew_userId,"2","Bwahhhhhhhhhhhh");
+//		PushNotificationCTB.pushNotificationCTB_sendPN(jaew_userId,"2","Bwahhhhhhhhhhhh");
+		PushNotificationCTB.pushNotificationCTB_createUserInfo('123','dummyUser','heyheyhey');
 	});
-*/
+
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,
 		width:103, height:104,

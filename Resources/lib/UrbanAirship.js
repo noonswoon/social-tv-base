@@ -12,7 +12,7 @@ var getDeviceToken = function() {
 		var deviceToken = "";
 		if(Ti.App.Properties.hasProperty(MY_DEVICE_TOKEN_SYM)) {
 			deviceToken =  Ti.App.Properties.getString(MY_DEVICE_TOKEN_SYM);
-		} else deviceToken = "";
+		} else deviceToken = "NO_TOKEN_DEVICE";
 		//alert('deviceToken: '+deviceToken);
 		return deviceToken;
 	}

@@ -2,9 +2,6 @@ var ProfileActivityView = function(_parentWindow,_userProfile,_status){
 	var FriendACS = require('acs/friendsACS');
 	var FriendsModel = require('model/friend');
 	var ActivityModel = require('model/activity');
-
-//	var BadgeDetailWindow = require('ui/common/Pf_BadgeDetailWindow');
-	
 	var curId = _userProfile.id;
 	
 	var activityView = Ti.UI.createView({	//main view
@@ -171,7 +168,7 @@ if(_status==="me") {
 				if(name ==="You") _name = "you";
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png'
-				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' you a friend request';
+				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' a friend request';
 			} else
 			if (myActivity[i].category==='approvefriend') {
 				if(name ==="You") _name = "you";

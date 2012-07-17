@@ -101,7 +101,7 @@ exports.checkin_fetchNumFriendsCheckinsOfProgram = function(_eventId, _userId){
 	}
 	result.close();
 	db.close();
-//	Ti.API.info('eventId: '+_eventId+', userId: '+_userId+', numFriendsCheckinsOfProgram: '+numFriendsCheckins);
+	//Ti.API.info('eventId: '+_eventId+', userId: '+_userId+', numFriendsCheckinsOfProgram: '+numFriendsCheckins);
 	return numFriendsCheckins;
 };
 

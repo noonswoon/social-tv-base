@@ -94,7 +94,7 @@ FriendsWindow = function(_parent){
 	}
 		
 	friendsTableView.addEventListener('click',function(e){
-		Ti.API.info('click on row: '+JSON.stringify(e));
+		//Ti.API.info('click on row: '+JSON.stringify(e));
  		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.eventId,
 			programTitle: e.row.tvprogram.programName,

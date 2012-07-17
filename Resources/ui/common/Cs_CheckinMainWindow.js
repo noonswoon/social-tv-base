@@ -6,10 +6,14 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var ActivityACS = require('acs/activityACS');
 	var BadgeCondition = require('helpers/badgeCondition');
 	var updateActivity = require('helpers/updateActivity');
+
 	var CheckinModel = require('model/checkin');		
 	var TVProgram = require('model/tvprogram');
 	var myUserId = acs.getUserId();
-		
+	
+//	Ti.API.info('tvprogramData: '+JSON.stringify(_tvprogramData));
+	var numFriendsCheckin = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(_tvprogramData.eventId,myUserId);
+	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/back_button.png',
         width:57,height:34
@@ -132,7 +136,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		top: 0
 	});
 	var programNumFriend = Ti.UI.createLabel({
-		text: _tvprogramData.programNumCheckin,
+		text: numFriendsCheckin,
 		textAlign: 'left',
 		color: '#898687',
 		bottom: 0,

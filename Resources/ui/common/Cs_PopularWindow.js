@@ -166,7 +166,7 @@ function PopularWindow(_parent) {
 		
 		Ti.App.addEventListener('friendsCheckInLoaded',function(e){
 			var friendsCheckinWithPrograms = e.fetchedAllFriendsCheckins;
-			Ti.API.info('friendsCheckinWithPrograms data: '+JSON.stringify(friendsCheckinWithPrograms));
+			//Ti.API.info('friendsCheckinWithPrograms data: '+JSON.stringify(friendsCheckinWithPrograms));
 			CheckinModel.checkin_insertFriendsCheckinsToday(friendsCheckinWithPrograms, myUserId);
 			
 			//will also need need to add friend user data to the user table!

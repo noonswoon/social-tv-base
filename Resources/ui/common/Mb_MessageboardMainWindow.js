@@ -11,7 +11,8 @@ function MessageboardMainWindow(_programId) {
 	var CacheHelper = require('helpers/cacheHelper');
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var checkinguidelinewin = null;
-		
+	var messageboardACSPageIndex = 1;
+	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Messageboard');
 	
@@ -154,7 +155,7 @@ function MessageboardMainWindow(_programId) {
 			addWindow._setProgramId(currentProgramId);
 		
 			//reset data in the tableview
-			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
 	});
@@ -265,7 +266,7 @@ function MessageboardMainWindow(_programId) {
 										programData[0].number_checkins,programData[0].channel_id);
 			addWindow._setProgramId(_newProgramId);
 		}
-		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');	
+		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');	
 	};
 	
 	self._addGuidelineWindow = function() {
@@ -332,7 +333,6 @@ function MessageboardMainWindow(_programId) {
 		};
 		var topicRow = new MessageboardTableViewRow(topicForTableViewRow);
 		allTopicTable.updateRow(0,topicRow);
-	Ti.API.info('New postID from ACS: '+newTopic.id);
 		Topic.topicModel_updateACSObjectIdField(e.newTopic);
 	}
 
@@ -340,7 +340,6 @@ function MessageboardMainWindow(_programId) {
 	addButton.addEventListener('click', function(e) {
 		self.containingTab.open(addWindow);
 	});
-
 
 	allTopicTable.addEventListener('click', function(e){
 		var commentwin = new CommentWindow(e.row.topic.acsObjectId);			
@@ -375,6 +374,7 @@ function MessageboardMainWindow(_programId) {
 	if(lastUpdatedDateObj != null) {
 		lastUpdatedStr = lastUpdatedDateObj.format("DD-MM-YYYY HH:mm"); 
 	}
+	
 	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
 		Ti.API.info('using pull to refresh');
 		usingPull2Refresh = true;
@@ -391,7 +391,7 @@ function MessageboardMainWindow(_programId) {
 	});	
 
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
-	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, currentProgramId, 'topicsDbUpdated');
+	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');
 
 	return self;
 }

@@ -1,18 +1,19 @@
-exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
+exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
+	topicId = _paramsArray[0];
 	var commentsInThisTopic = [];
 	var numWaits = 0;
 	
-	function queryReviewsOfCommentsDoneCallback() {
+	var queryReviewsOfCommentsDoneCallback = function () {
 		numWaits--;
 		if(numWaits==0) {
 			Ti.App.fireEvent("commentsLoadedComplete",{fetchedComments:commentsInThisTopic});
 			//remove the callback when successfully joined
 			Ti.App.removeEventListener('queryReviewsOfCommentsDone',queryReviewsOfCommentsDoneCallback);
 		}
-	}
+	};
 	Ti.App.addEventListener('queryReviewsOfCommentsDone',queryReviewsOfCommentsDoneCallback);
 		
-	function queryCommentsOfComment(commentIdsArrayToQuery) {
+	var queryCommentsOfComment = function(commentIdsArrayToQuery) { //recursion function
 		//getting comments/rating of comment
 		// commentIdsWithRatingsOrComments.length, cwroc --> number of Cloud.Reviews.query calls
 		//need to fork cwroc times and wait til all the events are done before calling commentsLoadedComplete
@@ -32,7 +33,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
             			var review = e.reviews[j];
 				        var curComment = {
 			            	id: review.id,
-			            	topicId: _topicId,
+			            	topicId: topicId,
 			            	content: review.content,
 			            	rating: review.rating,
 			            	user:review.user,
@@ -59,11 +60,11 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 			    }
 			});
 		}
-	}
+	};
 	
 	//getting comments on the topic --> need to recursively call the Cloud service
 	Cloud.Reviews.query({
-	    post_id: _topicId,
+	    post_id: topicId,
 	    page: 1,
 	    per_page: 20, 
 	    order: '-created_at'
@@ -75,7 +76,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_topicId) {
 				var review = e.reviews[i];
 	            var curComment = {
 	            	id: review.id,
-	            	topicId: _topicId,
+	            	topicId: topicId,
 	            	content: review.content,
 	            	rating: review.rating,
 	            	user:review.user,

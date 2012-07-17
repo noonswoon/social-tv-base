@@ -70,7 +70,7 @@ FriendsWindow = function(_parent){
 			top: 50
 		});
 		var goToProfileButton = Ti.UI.createImageView({
-			image: 'images/button/button_addFriends.png',
+			image: 'images/button/button_addFriend.png',
 			top: 120,
 		});
 		goToProfileButton.addEventListener('click',function() {

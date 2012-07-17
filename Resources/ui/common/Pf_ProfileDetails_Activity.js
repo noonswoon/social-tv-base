@@ -117,12 +117,13 @@ if(_status==="me") {
 		var name;
 		var numLoops = 5;
 		
+		emptyActivity.visible = false;
+		
 		if(_status==="me") name = "You";
 		else name = _userProfile.first_name;
 		
 		if(myActivity.length < numLoops) {
 			numLoops = myActivity.length;
-			emptyActivity.visible = false;
 			}
 		
 		if(numLoops===0) {

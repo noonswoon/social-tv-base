@@ -186,6 +186,29 @@ exports.TVProgramModel_fetchProgramIdOfEventId = function(_eventId) {
 	return programId;
 };
 
+exports.TVProgramModel_fetchProgramOfEventId = function(_eventId) {
+	var programEvent = null;
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = db.execute('SELECT * FROM tvprograms WHERE id = ?',_eventId);
+	if(result.isValidRow()) {
+		programEvent = {
+			eventId: _eventId, 
+			programName: result.fieldByName('name'),
+			programSubName: result.fieldByName('subname'),
+			programImage: result.fieldByName('photo'),
+			programStartTime: result.fieldByName('start_time'),
+			programEndTime: result.fieldByName('recurring_until'),
+			numberCheckins: result.fieldByName('number_checkins'),
+			programChannelId: result.fieldByName('channel_id'),
+			programId: result.fieldByName('program_id'),
+			programType: result.fieldByName('program_type')
+		};
+	}
+	result.close();
+	db.close();
+	return programEvent;
+};
+
 
 exports.TVProgramModel_getProgramNameWithProgramId = function(_programId) {
 	//select some stuff from the local db..based on the future filtering

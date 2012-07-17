@@ -101,6 +101,7 @@ exports.checkin_fetchNumFriendsCheckinsOfProgram = function(_eventId, _userId){
 	}
 	result.close();
 	db.close();
+//	Ti.API.info('eventId: '+_eventId+', userId: '+_userId+', numFriendsCheckinsOfProgram: '+numFriendsCheckins);
 	return numFriendsCheckins;
 };
 
@@ -109,8 +110,6 @@ exports.checkin_fetchFriendsCheckins = function(_userId){
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM checkins where user_id <> ?',_userId); 
 	while(result.isValidRow()) {
-		//Ti.API.info('fetchCheckinToday: '+result.fieldByName('event_id'));
-	
 		friendsCheckins.push({
 			id: result.fieldByName('id'),
 			checkin_acs_id: result.fieldByName('checkin_acs_id'),

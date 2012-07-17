@@ -59,17 +59,16 @@ FriendsWindow = function(_parent){
 	}
 	
 	var createFriendCheckinRow = function(checkinsOfFriends) {		
-/* still working on it
 		var programsThatFriendsCheckin = [];
 		
+		//build up data for the program that friends checkin
+		//the inner forloop iterate through what already added to the programsThatFriendsCheckin array
 		for(var i = 0; i < checkinsOfFriends.length; i++){
-			//var programObj = checkinsOfFriends[i].program;
-			//var friendObj = checkinsOfFriends[i].friend; 
 			var curFriendCheckin = checkinsOfFriends[i];
 			var isExisted = false;
 			var indexFound = -1;
 			for(var j = 0; j < programsThatFriendsCheckin.length; j++) {
-				if(programObj.id === programsThatFriendsCheckin[j].programId) {
+				if(curFriendCheckin.event_id === programsThatFriendsCheckin[j].eventId) {
 					indexFound = j;
 					isExisted = true;
 					break;
@@ -77,53 +76,41 @@ FriendsWindow = function(_parent){
 			}
 			if(!isExisted) {
 				//create a new ProgramWithFriends
-				var newProgramWithFriends = new ProgramWithFriends(programObj); 
-				newProgramWithFriends.friends.push(friendObj);
+				var newProgramWithFriends = new ProgramWithFriends(curFriendCheckin); 
+				newProgramWithFriends.friends.push(curFriendCheckin.user_id); //friends array is an array of string that represents user_id of friends
 				programsThatFriendsCheckin.push(newProgramWithFriends);
-			} else {
-				programsThatFriendsCheckin[indexFound].friends.push(friendObj);
+			} else { //add friend's user_id to the existing element
+				programsThatFriendsCheckin[indexFound].friends.push(curFriendCheckin.user_id);
 			}
 		}
 		
 		//loop programsThatFriendsCheckin array, and each element of result array, create tableviewrow to add to table view
 		var viewRowData = [];
-		allTVPrograms = TVProgramModel.TVProgramModel_fetchPrograms(); //update number_checkins after the user checkin
-		
 		for(var i = 0; i < programsThatFriendsCheckin.length; i++) {
-			var program = programsThatFriendsCheckin[i];
-			var number_checkins = 0;
-			for(var j = 0; j < allTVPrograms.length; j++){
-				if(program.programId === allTVPrograms[j].id) {
-					Ti.API.info('number_checkin for '+program.programName+' = '+allTVPrograms[j].number_checkins);
-					number_checkins = allTVPrograms[j].number_checkins;
-					break;
-				}
-			}
-			var row = new FriendsWindowTableViewRow(program,number_checkins);
+			var row = new FriendsWindowTableViewRow(programsThatFriendsCheckin[i]);
 			viewRowData.push(row);
 		}
 		friendsTableView.setData(viewRowData);	
-*/	
 	}
 		
 	friendsTableView.addEventListener('click',function(e){
+		Ti.API.info('click on row: '+JSON.stringify(e));
  		checkinmainwin = new CheckinMainWindow({
-			eventId: e.row.tvprogram.programId,
+			eventId: e.row.tvprogram.eventId,
 			programTitle: e.row.tvprogram.programName,
 			programSubname: e.row.tvprogram.programSubname,
 			programImage: e.row.tvprogram.programImage,
-			programChannel: e.row.tvprogram.programChannel,
-			programNumCheckin: e.row.checkin,
-			programStarttime: e.row.tvprogram.programStarttime,
-			programEndtime: e.row.tvprogram.programEndtime
+			programChannel: e.row.tvprogram.programChannelId,
+			programNumCheckin: e.row.tvprogram.numberCheckins,
+			programStarttime: e.row.tvprogram.programStartTime,
+			programEndtime: e.row.tvprogram.programEndTime
 		}, _parent.containingTab);	
 		_parent.containingTab.open(checkinmainwin);
 	});
 	
 	//1. get checkins of friends
 	var friendsCheckins = CheckinModel.checkin_fetchFriendsCheckins(myUserId);
-	//if(friendsCheckins.length === 0) {
-	if(true) {
+	if(friendsCheckins.length === 0) {
 		createAddMoreFriendsRow();
 	} else {
 		createFriendCheckinRow(friendsCheckins);

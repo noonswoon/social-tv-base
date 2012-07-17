@@ -117,12 +117,13 @@ function PopularWindow(_parent) {
 	});
 	 
 	Ti.App.addEventListener('showDiscoveryPage', function(){
+		var myUserId = acs.getUserId();
 		var currentTVPrograms = TVProgramModel.TVProgramModel_fetchPopularPrograms(); 
 		currentTVPrograms.sort(sortByNumberCheckins);
 		var viewRowsData = [];
 		for (var i=0;i<currentTVPrograms.length;i++) {
 			var curTVProgram = currentTVPrograms[i];
-			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(curTVProgram.id);
+			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(curTVProgram.id, myUserId);
 			var row = new PopularWindowTableViewRow(curTVProgram, numFriendsCheckins);
 			viewRowsData.push(row);
 		}
@@ -185,7 +186,7 @@ function PopularWindow(_parent) {
 			}
 			
 			areFriendCheckinsReady = true; 
-			Ti.API.info('friendCheckinsReady..isEverythingReady? ');
+			//Ti.API.info('friendCheckinsReady..isEverythingReady? ');
 			isEverythingReady();
 		});	
 	}

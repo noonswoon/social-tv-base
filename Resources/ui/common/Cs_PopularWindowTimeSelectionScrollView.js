@@ -39,7 +39,7 @@ var PopularWindowScrollviewTimeSelection = function(){
 	}
 
 	self.syncTimeSelection = function() {
-		Ti.API.info('syncing TimeSelection');
+		//Ti.API.info('syncing TimeSelection');
 		currentHour = moment().hours();
 		if(selectedTimeIndex !== currentHour) {	//only do it if it is different time
 			hoursArray[selectedTimeIndex]._deselectView();

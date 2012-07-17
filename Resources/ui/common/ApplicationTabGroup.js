@@ -14,7 +14,9 @@ function ApplicationTabGroup() {
 
     var myUserId = acs.getUserId();
 	
-	Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+	Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+	Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
+	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(UserCheckinTracking.getCurrentSelectedProgram());
 	var messageboardwin = new MessageboardMainWindow(UserCheckinTracking.getCurrentSelectedProgram());				

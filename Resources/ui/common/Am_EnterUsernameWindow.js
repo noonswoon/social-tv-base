@@ -51,7 +51,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 		color: 'white',
 		width: 220,
 		font: { fontSize: 12},
-		text: 'Your username will be appear on the messageboard and it couldn\'t be changed later'
+		text: 'Choose a username that you want to show it to the world!'
 	});
 	
 	//ADDING UI COMPONENTS TO WINDOW
@@ -88,7 +88,6 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 					//link with third party account
 					var leaderBoardACS = require('acs/leaderBoardACS');
 					var PushNotificationCTB = require('ctb/pushnotificationCTB');
-					var pointModel = require('model/point');
 					leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
 					PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());				
 					//
@@ -123,6 +122,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	});		
 					
 	var leaderboardCallBack = function(e) {
+		var pointModel = require('model/point');
 		pointModel.pointModel_updateLeadersFromACS(e.fetchedUser);
 	};
 	Ti.App.addEventListener("createLeaderBoardUser",leaderboardCallBack);

@@ -16,9 +16,10 @@ function ProfileMainWindow(_id,_status) {
 	
 	var self = Titanium.UI.createWindow({
 		barImage: 'images/nav_bg_w_pattern.png',
-		rightNavButton: settingButton,
+	//	rightNavButton: settingButton,
 		barColor:'#489ec3'
 	});			
+	if(_status==='me') self.rightNavButton = settingButton;
 	
 	var nav = Ti.UI.iPhone.createNavigationGroup({
 		window: self

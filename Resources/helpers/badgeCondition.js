@@ -240,6 +240,5 @@ exports.checkinEvent = function(_checkinData){
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID){
 	var myBadgeACS = require('acs/myBadgeACS');
 	var my_id = acs.getUserId();
-	//Ti.API.info('badgeCondition_createBadgeUnlocked: '+ _badgeID);
 	myBadgeACS.myBadgeACS_createNewBadge(my_id,_badgeID);
 };

@@ -7,15 +7,14 @@ function ApplicationTabGroup() {
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 
 	var MessageboardMainWindow = require('ui/common/Mb_MessageboardMainWindow');
 	var ProductMainWindow = require('ui/common/Pd_ProductMainWindow');
-//	var ProductMainWindow = require('ui/common/Am_NoInternetConnectivity');
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var SettingWindow = require('ui/common/Am_SettingWindow');
     var BlankWindow = require('ui/common/BlankWindow');
 
     var myUserId = acs.getUserId();
 	
-	//Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
-	//Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms());
+	Ti.API.info('currentSelectedProgram: '+UserCheckinTracking.getCurrentSelectedProgram());
+	Ti.API.info('setOfSelectedProgram: '+UserCheckinTracking.getCurrentCheckinPrograms()+', length: '+UserCheckinTracking.getCurrentCheckinPrograms().length);
 	
 	var selectionwin = new ChannelSelectionMainWindow();
 	var chatwin = new ChatMainWindow(UserCheckinTracking.getCurrentSelectedProgram());
@@ -141,6 +140,7 @@ function ApplicationTabGroup() {
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id;
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
+			//Ti.API.info('from ACS..eventId: ' + eventId + ', programId: ' + programId);
 			todayCheckinPrograms.push(programId);
 		}
 		//reset currentCheckinPrograms when loadedup data from ACS

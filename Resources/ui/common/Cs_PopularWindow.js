@@ -102,7 +102,8 @@ function PopularWindow(_parent) {
 		isEverythingReady();
 	});
 	
-	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
+	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){ //xxx
+		var myUserId = acs.getUserId();
 		var timeIndex = e.timeIndex;
 		var selectedShowtime = TVProgramModel.TVProgramModel_fetchShowtimeSelection(timeIndex); 
 		selectedShowtime.sort(sortByNumberCheckins);
@@ -110,7 +111,8 @@ function PopularWindow(_parent) {
 		var viewRowsData = [];
 		for (var i=0;i<selectedShowtime.length;i++) {
 			var curTVProgram = selectedShowtime[i];
-			var row = new PopularWindowTableViewRow(curTVProgram);
+			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(curTVProgram.id, myUserId);
+			var row = new PopularWindowTableViewRow(curTVProgram, numFriendsCheckins);
 			viewRowsData.push(row);
 		}
 		programListTable.setData(viewRowsData);		

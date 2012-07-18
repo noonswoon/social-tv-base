@@ -1,9 +1,10 @@
 function MessageboardMainWindow(_programId) {
 	//HEADERS
+	var CheckinModel = require('model/checkin');
 	var Topic = require('model/topic');
 	var TopicACS = require('acs/topicACS');
 	var TVProgram = require('model/tvprogram');
-
+	
 	var MessageboardHeader = require('ui/common/Mb_MessageboardHeader');
 	var MessageboardTableViewRow = require('ui/common/Mb_MessageboardTableViewRow');
 	var MessageboardAddWindow = require('ui/common/Mb_MessageboardAddWindow');
@@ -35,13 +36,15 @@ function MessageboardMainWindow(_programId) {
 		checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
 		self.add(checkinguidelinewin);
 		currentProgramId = 'CTB_PUBLIC';
-		messageboardHeader._setHeader('Chatterbox','CTB subname','ctbdummy.png',0,'ch3');
+		messageboardHeader._setHeader('Chatterbox','CTB subname','ctbdummy.png',435,2,'ch3');
 	} else {
+		var myUserId = acs.getUserId();
 		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		//race condition..do not have data for currentProgramId...?
 		if(program === undefined) alert('bad stuff...from: '+currentProgramId);
 		programPhoto = program[0].photo;
-		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,program[0].channel_id);	
+		var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(program[0].id, myUserId);
+		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,numFriendsCheckins, program[0].channel_id);	
 	}
 	var addWindow = new MessageboardAddWindow(currentProgramId,programPhoto);	
 	var usingPull2Refresh = false;
@@ -148,9 +151,11 @@ function MessageboardMainWindow(_programId) {
 		self.remove(opacityView);
 		
 		if(currentProgramId !== picker.getSelectedRow(0).programId) { //only change if user selected a new programId
+			var myUserId = acs.getUserId();
 			currentProgramId = picker.getSelectedRow(0).programId;
 			var selectedProgram = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
-			messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,selectedProgram[0].channel_id);	
+			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(selectedProgram[0].id, myUserId);
+			messageboardHeader._setHeader(selectedProgram[0].name,selectedProgram[0].subname,selectedProgram[0].photo,selectedProgram[0].number_checkins,numFriendsCheckins,selectedProgram[0].channel_id);	
 		
 			//reset programId for addWindow
 			addWindow._setProgramId(currentProgramId);
@@ -263,8 +268,10 @@ function MessageboardMainWindow(_programId) {
 		if(programData === undefined || programData[0]===undefined)
 			Ti.API.info('bad time man..msgboardwin cannot find data for '+currentProgramId);
 		else {
-			messageboardHeader._setHeader(	programData[0].name,programData[0].subname,programData[0].photo,
-										programData[0].number_checkins,programData[0].channel_id);
+			var myUserId = acs.getUserId();
+			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(programData[0].id, myUserId);
+			messageboardHeader._setHeader(programData[0].name,programData[0].subname,programData[0].photo,
+										programData[0].number_checkins,numFriendsCheckins,programData[0].channel_id);
 			addWindow._setProgramId(_newProgramId);
 		}
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');	

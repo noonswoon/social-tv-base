@@ -60,9 +60,11 @@ exports.friend_create = function(_friend,fb_id){
 	var db = Ti.Database.open('Chatterbox'); 
 	var curFriend = _friend;
 	var friend_id = curFriend.friend_id;
-	if(curFriend.friend_id) friendId = curFriend.friend_id;
-	else friend_id = curFriend.id;
-	alert(friend_id);
+	if(curFriend.friend_id)
+		friendId = curFriend.friend_id;
+	else
+		friend_id = curFriend.id;
+		
 	db.execute("INSERT INTO friends(id,my_id,friend_id,fb_id,username,first_name,last_name,email) VALUES(?,?,?,?,?,?,?,?)", null,String(acs.getUserLoggedIn().id),friend_id,fb_id,curFriend.username,String(curFriend.first_name),String(curFriend.last_name),curFriend.email);
 	db.close();
 	Ti.API.info('fireEvent friendsDbUpdated');

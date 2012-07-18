@@ -103,11 +103,12 @@ MessageboardHeader = function(_showName,_showSubName) {
 	});
 
 
-	header._setHeader = function(_headerTitle, _headerSubTitle, _headerPhoto, _headerNumCheckins, _headerChannel) {
+	header._setHeader = function(_headerTitle, _headerSubTitle, _headerPhoto, _headerNumCheckins, _headerNumFriendsCheckins, _headerChannel) {
 		header.programTitle.text = _headerTitle;
 		header.subNameTitle.text = _headerSubTitle;
 		header.programImage.image = _headerPhoto;
 		header.programNumCheckin.text = _headerNumCheckins;
+		header.programNumFriend.text  = _headerNumFriendsCheckins;
 		header.programChannel.text = _headerChannel;
 	};
 

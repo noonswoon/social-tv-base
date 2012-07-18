@@ -15,11 +15,11 @@ BadgeDetailWindow = function (_badge){
 	
 	var badgeImg = Ti.UI.createImageView({
 		height: 200, width: 200,
-		top: 35,
+		top: 25,
 	});
 	var badgeTitle = Ti.UI.createLabel({
 		font: {fontSize: 16, fontWeight: 'bold'},
-		top: 245,
+		top: 225,
 		textAlign: 'center',
 		height: 30,
 		width: 220,
@@ -27,22 +27,23 @@ BadgeDetailWindow = function (_badge){
 		shadowColor: '#026490'
 	});
 	var badgeCons = Ti.UI.createLabel({
-		top: 290, 
+		top: 250, 
 		height: 30,
 		width: 220,
 		color: '#999',
-		font: {fontSize: 12}
+		font: {fontSize: 13, fontWeight:'bold'},
+		textAlign: 'center'
 	});	
 	var badgeDesc = Ti.UI.createLabel({
-		top: 330, left: 5,
-		width: 220,
+		top: 285, left: 10,
+		width: 210,
 		height: 'auto',
-		color: '#999',
-		font: {fontSize: 12}
+		color: '#d0d0d0',
+		font: {fontSize: 14}
 	});	
 	
 	var badgeWinClose = Ti.UI.createButton({
-		bottom: 45,
+		bottom: 50,
 		width: 200,
 		height: 30,
 		title: 'close'
@@ -78,10 +79,9 @@ BadgeDetailWindow = function (_badge){
 		if(_unlock===1){
 			badgeCons.text = 'Congratulations on Your Badge!';
 			badgeDesc.text = _newDesc;
-			badgeCons.left = 5;	
 		}
 		else{
-			badgeCons.text = 'You have not unlock this badge yet';
+			badgeCons.text = 'You haven\'t unlock this badge.';
 			badgeDesc.text = _newDesc;
 		}
 	};

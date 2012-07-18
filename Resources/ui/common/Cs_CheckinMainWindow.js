@@ -223,6 +223,30 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	
 	var checkin = CheckinModel.checkin_isCheckin(_tvprogramData.eventId,myUserId);
 	
+	var checkinPopup = function(){
+		var popupView = Ti.UI.createView({
+			backgroundColor: 'transparent',
+			backgroundImage: 'images/checkin/checkin_success.png',
+			top: 100,
+			height: 96, width: 243,
+			zIndex: 500,
+		});
+		var popupMessage = Ti.UI.createLabel({
+			text: 'Checkin to '+_tvprogramData.programTitle+' completed. You just earned 5 points!',
+			color: '#262a21',
+			font: {fontSize: 14},
+			top: 2,
+			textAlign: 'center',
+			verticalAlign: 'top',
+			width: 225, height: 60,
+		});
+		popupView.add(popupMessage);
+		self.add(popupView);
+		 setTimeout(function() {
+			self.remove(popupView);
+		},5000);
+	}
+	
 	//Checkin Button
 	if(checkin === false){
 		messageboardView.touchEnabled = false;
@@ -241,6 +265,8 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			} 
 			
 			if(checkinEnable) {	
+				checkinPopup();
+				//changeImage of checkin here
 				remote.backgroundImage = 'images/checkin/checkin_remote.png';
 				checkinView.touchEnabled = false;
 				messageboardView.touchEnabled = true;
@@ -265,7 +291,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
 				ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 				
-				//done after adding to acs
+				// done after adding to acs
 				PointACS.pointACS_createPoint(leaderboardData,_tvprogramData.eventId,'checkin');
 				LeaderBoardACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 				

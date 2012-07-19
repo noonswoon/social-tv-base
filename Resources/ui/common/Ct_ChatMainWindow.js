@@ -58,7 +58,8 @@ function ChatMainWindow(_programId) {
 	};
 	
 	self._removeGuidelineWindow = function() {
-		self.remove(checkinguidelinewin);			
+		if(checkinguidelinewin !== null)
+			self.remove(checkinguidelinewin);			
 	};	
 	
 	programsTableView.addEventListener('click',function(e){

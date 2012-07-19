@@ -1,5 +1,6 @@
 CommentReplyTableViewRow = function(_comment, _level) {
 	//HEADER
+	Ti.API.info('commentMetaData: '+JSON.stringify(_comment));
 	var Topic = require('model/topic');
 	var ActivityModel = require('model/activity');
 	var Comment = require('model/comment');

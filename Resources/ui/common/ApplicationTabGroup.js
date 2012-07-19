@@ -143,12 +143,14 @@ function ApplicationTabGroup() {
 			//Ti.API.info('from ACS..eventId: ' + eventId + ', programId: ' + programId);
 			todayCheckinPrograms.push(programId);
 		}
-		//reset currentCheckinPrograms when loadedup data from ACS
+		//reset currentSelectedProgram, currentCheckinPrograms when loadedup data from ACS
+		Ti.API.info('get a chance to reset currentSelectedProgram');
+		UserCheckinTracking.setCurrentSelectedProgram('');
 		UserCheckinTracking.setCurrentCheckinPrograms(todayCheckinPrograms);
 		
 		//first load, and the user already checkin in some program
 		
-		if(UserCheckinTracking.getCurrentSelectedProgram() === '' && todayCheckinPrograms.length > 0) { 
+		if(todayCheckinPrograms.length > 0) { 
 			//handle rare situation, when user checkin and deleted the app halfway, then reinstall it again on the same day
 			UserCheckinTracking.setCurrentSelectedProgram(todayCheckinPrograms[0]);
 			removeGuidelineWindowInAllModules();
@@ -239,6 +241,7 @@ function ApplicationTabGroup() {
 		//3.
 		var lastCheckinTime = UserCheckinTracking.getLatestCheckinTime();
 		if(lastCheckinTime < startOfToday) { //checkin already expired
+			Ti.API.info('checkin already expired!');
 			UserCheckinTracking.setCurrentSelectedProgram('');
 			UserCheckinTracking.setCurrentCheckinPrograms([]);
 			clearPickerDataInAllModules();

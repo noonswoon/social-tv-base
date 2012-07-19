@@ -193,7 +193,8 @@ function ProductMainWindow(_programId) {
 	};
 		
 	self._removeGuidelineWindow = function() {
-		self.remove(checkinguidelinewin);
+		if(checkinguidelinewin !== null)
+			self.remove(checkinguidelinewin);
 	};
 	
 	callPicker.addEventListener('click',function() {

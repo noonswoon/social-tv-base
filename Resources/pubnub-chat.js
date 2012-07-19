@@ -59,6 +59,7 @@ Ti.App.Chat = function(_chatParams) {
 	        	//since pubnub is a broadcaster, sender will receive his own message as well
 	        	//prevent from having the user sees his own message when it got broadcasted
 	        	if(message.text !== curUserInput) {
+	            	Ti.Media.vibrate(); //i love things that shake!
 	            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
 	           		var newChatRow = new ChatMessageTableViewRow(message.text,senderObj,false);
 	           		chatMessagesTableView.appendRow(newChatRow);

@@ -211,16 +211,19 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		
 		//Post appear on Facebook
 		FacebookSharing.postAppearOnFaceBook(titleTextFieldInput.value,contentTextAreaInput.value,_programPhoto);
-
-		titleTextFieldInput.value = '';	
-   		contentTextAreaInput.value = '';
-   		thumbnailLabel.show();
-   		filename = null;
-   		thumbnail.backgroundImage = '';	
 		
+		var sleepTime = 2000;
+		showPreloader(self,'Loading...');
+		if(filename !== null)  sleepTime = 5000; //give more sleep time for photo uploaded
 		setTimeout(function(e) {
+			hidePreloader(self);
 			self.close();
-		}, 2000); //wait 2 seconds before closing the add topic window
+			titleTextFieldInput.value = '';	
+	   		contentTextAreaInput.value = '';
+   			thumbnailLabel.show();
+ 	  		filename = null;
+   			thumbnail.backgroundImage = '';	
+		}, sleepTime); //wait 5 seconds before closing the add topic window
 	});
 
 	self._setProgramId = function(_newProgramId) {

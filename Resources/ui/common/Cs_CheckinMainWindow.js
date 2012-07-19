@@ -222,7 +222,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	self.add(productView);
 	
 	var checkin = CheckinModel.checkin_isCheckin(_tvprogramData.eventId,myUserId);
-	
+
 	var checkinPopup = function(){
 		var popupView = Ti.UI.createView({
 			backgroundColor: 'transparent',
@@ -265,6 +265,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			} 
 			
 			if(checkinEnable) {	
+				Titanium.Media.vibrate();
 				checkinPopup();
 				//changeImage of checkin here
 				remote.backgroundImage = 'images/checkin/checkin_remote.png';

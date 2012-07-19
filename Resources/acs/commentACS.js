@@ -66,14 +66,15 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 	Cloud.Reviews.query({
 	    post_id: topicId,
 	    page: 1,
-	    per_page: 20, 
+	    per_page: 50, 
 	    order: '-created_at'
 	}, function (e) {
 	    if (e.success) {
-	        Ti.API.info('Reviews Count: ' + e.reviews.length);
+	       // Ti.API.info('Reviews Count: ' + e.reviews.length);
 	        var commentIdsWithRatingsOrComments = [];
 	        for (var i = 0; i < e.reviews.length; i++) {
 				var review = e.reviews[i];
+	            Ti.API.info('review.user: '+JSON.stringify(review)); //do have external_id and stuff
 	            var curComment = {
 	            	id: review.id,
 	            	topicId: topicId,

@@ -244,7 +244,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		self.add(popupView);
 		 setTimeout(function() {
 			self.remove(popupView);
-		},5000);
+		},4000);
 	}
 	
 	//Checkin Button
@@ -288,6 +288,9 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				var leaderboardId = allIdDataForACS[1];			 		//acs id
 				var activityId = allIdDataForACS[2]; 					//local id
 	
+				//increment number checkins by one
+				TVProgram.TVProgramModel_incrementCheckins(_tvprogramData.eventId);
+
 				//require callback from acs
 				CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
 				ActivityACS.activityACS_createMyActivity(activityData,activityId);		
@@ -301,10 +304,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				checkinData.program_id = _tvprogramData.programId;
 				
 				BadgeCondition.checkinEvent(checkinData);
-				
-				//increment number checkins by one
-				TVProgram.TVProgramModel_incrementCheckins(_tvprogramData.eventId);
-				
+								
 				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 			} else {
 			var checkinWarningMessage = "";
@@ -315,7 +315,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				else checkinWarningMessage = "Please try again later.";
 				
 				var checkinWarningDialog = Titanium.UI.createAlertDialog({
-		       		title:'You cannot checkin',
+		       		title:'You cannot Check In',
 		         	message:checkinWarningMessage
 		       	});
 		       	checkinWarningDialog.show();
@@ -374,13 +374,13 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:_tvprogramData.programId});
 	});
 	
-	var pushNotification = function(){
+	var notifyFriendsAboutCheckin = function(){
 		var currentUser = acs.getUserLoggedIn();
 		var PushNotificationCTB = require('ctb/pushnotificationCTB');
 		var FriendModel = require('model/friend');
 		var friendsList = FriendModel.friendModel_fetchFriend(myUserId);
 		for(var i=0; i<friendsList.length; i++) {
-			var textPn = currentUser.first_name+' just checkin to a TV program. Let watch together!';
+			var textPn = currentUser.first_name+' just checked in to a TV program. Let watch together!';
 			PushNotificationCTB.pushNotificationCTB_sendPN(friendsList[i].friend_id,"2",textPn);
 		}
 	}
@@ -395,7 +395,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		Ti.App.fireEvent('updateHeaderCheckin');
 		Ti.App.fireEvent('leaderDbUpdated');
 		Ti.App.fireEvent('friendsDbUpdated'); //update friend channel selection
-		pushNotification();
+		notifyFriendsAboutCheckin();
 	};
 	Ti.App.addEventListener('update1checkin', update1checkinCallBack);
 

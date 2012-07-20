@@ -168,7 +168,7 @@ function GuideWindow(_channelSelectionWin) {
 			selectChannelLabel.text = 'CH11';
 		}
 		else if(index === 5){
-			var thaiPBS = new ChannelInGuideWindow('chThaipbs',_channelSelectionWin);
+			var thaiPBS = new ChannelInGuideWindow('pbs',_channelSelectionWin);
 			self.add(thaiPBS);
 			selectChannelLabel.text = 'ThaiPBS';
 		}	

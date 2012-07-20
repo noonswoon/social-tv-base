@@ -54,29 +54,37 @@ exports.TVProgramModel_getPrograms = function(_programIds) {
 exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins,channelId) {	
 	var db = Ti.Database.open('Chatterbox'); 
 	var mockCheckin = 0;
-	var numCheckinsAndMockup = null;
-
-	var uniqueNum = 0;
-	for(var i=0;i<targetedProgramId.length;i++){
-		var character = targetedProgramId[i];
-		if(character >= '0' && character <= '9'){
-			var num = parseInt(character);
-			uniqueNum += num;
-		}
-	}
+	var numCheckinsAndMockup = 0;
 	
-	if(channelId === 'ch3'){
-		mockCheckin = 534+uniqueNum;
-	} else if(channelId === 'ch5'){
-		mockCheckin = 346+uniqueNum;
-	} else if(channelId === 'ch7'){
-		mockCheckin = 489+uniqueNum;
-	} else if(channelId === 'ch9'){
-		mockCheckin = 367+uniqueNum;
-	} else if(channelId === 'ch11'){
-		mockCheckin = 289+uniqueNum;
-	} else if(channelId === 'pbs'){
-		mockCheckin = 224+uniqueNum;
+	//getting start time
+	var tvprogramInfo = TVProgramModel_fetchProgramOfEventId(targetedProgramId); 
+	var now = moment().format('YYYY-MM-DDTHH:mm:ss');
+	//Ti.API.info('tvprogram start time: '+tvprogramInfo.programStartTime);
+	if(now >= tvprogramInfo.programStartTime) { //be evil smartly! will add mockNumber if the program is currently showing/already finished.
+		var uniqueNum = 0;
+		for(var i=0;i<targetedProgramId.length;i++){
+			var character = targetedProgramId[i];
+			if(character >= '0' && character <= '9'){
+				var num = parseInt(character);
+				uniqueNum += num;
+			}
+		}
+		
+		if(channelId === 'ch3'){
+			mockCheckin = 454 + uniqueNum;
+		} else if(channelId === 'ch5'){
+			mockCheckin = 346 + uniqueNum;
+		} else if(channelId === 'ch7'){
+			mockCheckin = 389 + uniqueNum;
+		} else if(channelId === 'ch9'){
+			mockCheckin = 367 + uniqueNum;
+		} else if(channelId === 'ch11'){
+			mockCheckin = 289 + uniqueNum;
+		} else if(channelId === 'pbs'){
+			mockCheckin = 224 + uniqueNum;
+		} else {
+			mockCheckin = 218 + uniqueNum;
+		}
 	}
 	numCheckinsAndMockup = numCheckins + mockCheckin;
 
@@ -186,7 +194,7 @@ exports.TVProgramModel_fetchProgramIdOfEventId = function(_eventId) {
 	return programId;
 };
 
-exports.TVProgramModel_fetchProgramOfEventId = function(_eventId) {
+var TVProgramModel_fetchProgramOfEventId = function(_eventId) {
 	var programEvent = null;
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM tvprograms WHERE id = ?',_eventId);
@@ -208,6 +216,7 @@ exports.TVProgramModel_fetchProgramOfEventId = function(_eventId) {
 	db.close();
 	return programEvent;
 };
+exports.TVProgramModel_fetchProgramOfEventId = TVProgramModel_fetchProgramOfEventId;
 
 
 exports.TVProgramModel_getProgramNameWithProgramId = function(_programId) {

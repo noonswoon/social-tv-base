@@ -111,6 +111,10 @@ MessageboardHeader = function(_showName,_showSubName) {
 		header.programNumFriend.text  = _headerNumFriendsCheckins;
 		header.programChannel.text = _headerChannel;
 	};
+	
+	header._setNumberCheckins = function(_headerNumCheckins) {
+		header.programNumCheckin.text = _headerNumCheckins;
+	};
 
 	//for testing purposes
 	header.programImage.addEventListener('click', function() {

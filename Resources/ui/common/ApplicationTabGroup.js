@@ -154,7 +154,11 @@ function ApplicationTabGroup() {
 			//handle rare situation, when user checkin and deleted the app halfway, then reinstall it again on the same day
 			UserCheckinTracking.setCurrentSelectedProgram(todayCheckinPrograms[0]);
 			removeGuidelineWindowInAllModules();
-			updateContentInAllModules(UserCheckinTracking.getCurrentSelectedProgram());
+			
+			//this will cause number_checkins to be null since checkinDbLoaded delete old checkin data and 
+			//insert new ones (the new ones will have the column number_checkins set to null initially)
+			//number_checkins column will get populated again by the fn TVProgramModel_updateCheckins
+			updateContentInAllModules(UserCheckinTracking.getCurrentSelectedProgram()); 
 			initializePickerInAllModules();
 		}
 	}	
@@ -171,7 +175,7 @@ function ApplicationTabGroup() {
 		var currentCheckinPrograms = UserCheckinTracking.getCurrentCheckinPrograms();
 		currentCheckinPrograms.push(checkinProgramId);
 		UserCheckinTracking.setCurrentCheckinPrograms(currentCheckinPrograms);
-		
+			
 		if(productwin._getNumRowsInPicker() === 0 || messageboardwin._getNumRowsInPicker() === 0) { //picker hasn't loaded yet
 			removeGuidelineWindowInAllModules();
 			updateContentInAllModules(checkinProgramId);

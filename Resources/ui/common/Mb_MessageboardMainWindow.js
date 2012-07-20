@@ -359,6 +359,18 @@ function MessageboardMainWindow(_programId) {
 		allTopicTable.updateRow(0,topicRow);
 		Topic.topicModel_updateACSObjectIdField(e.newTopic);
 	}
+	
+	function numberCheckinsUpdatedCallback(e) {	
+		//get the eventId of the currentProgramId
+		var updatedOfProgramId = TVProgram.TVProgramModel_fetchProgramIdOfEventId(e.eventId);
+		if(updatedOfProgramId !== "") {
+			//Ti.API.info('eventId: '+e.eventId+' ==> programId: '+updatedOfProgramId)
+			if(updatedOfProgramId === currentProgramId) {
+				messageboardHeader._setNumberCheckins(e.numberCheckins);
+				//Ti.API.info('updating header of '+updatedOfProgramId+', set to '+e.numberCheckins);
+			}
+		}
+	}
 
 	//BEGIN -- ADD EVENTLISTNERS
 	addButton.addEventListener('click', function(e) {
@@ -388,6 +400,7 @@ function MessageboardMainWindow(_programId) {
 	Ti.App.addEventListener("topicsDbUpdated", topicsDbUpdatedCallback);
 	Ti.App.addEventListener("insertingTopicTableViewRow", addNewTopicTableViewRowCallback);
 	Ti.App.addEventListener('topicCreatedACS', topicCreatedACSCallback);
+	Ti.App.addEventListener('numberCheckinsUpdated', numberCheckinsUpdatedCallback);
 
 	searchTextField.addEventListener('return', function(e) {
 		searchTextField.blur();
@@ -403,6 +416,7 @@ function MessageboardMainWindow(_programId) {
 		Ti.App.removeEventListener("topicsDbUpdated", topicsDbUpdatedCallback);
 		Ti.App.removeEventListener("insertingTopicTableViewRow", addNewTopicTableViewRowCallback);
 		Ti.App.removeEventListener('topicCreatedACS', topicCreatedACSCallback);
+		Ti.App.removeEventListener('numberCheckinsUpdated',numberCheckinsUpdatedCallback);
 	});	
 	//END -- ADD EVENTLISTNERS
 

@@ -148,11 +148,16 @@ FriendsWindowTableViewRow = function(_checkinProgram){
 		
 		friendsScrollView.add(friendsProfileImage);
 	}
-
-	if(numFriendsCheckin > 0) BadgeCondition.checkFriendCondition(numFriendsCheckin);
-
+	
 	row.add(friendsScrollView);
 	row.tvprogram = _checkinProgram;
+	
+	Ti.App.addEventListener('updateNumCheckinAtDiscovery'+_checkinProgram.eventId,function(e){
+		_checkinProgram.numberCheckins = _checkinProgram.numberCheckins + e.numCheckin;
+		row.tvprogram = _checkinProgram;  //need to reset to make it update the row.tvprogram
+		programNumCheckin.text = _checkinProgram.numberCheckins;
+	});	
+	
 	return row;
 }
 module.exports = FriendsWindowTableViewRow;

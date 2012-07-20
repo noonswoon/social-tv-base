@@ -92,6 +92,18 @@ exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins,c
 	Ti.App.fireEvent("numberCheckinsUpdated",{eventId: targetedProgramId, numberCheckins: numCheckinsAndMockup});
 }; 
 
+//add 1 to numbercheckins
+exports.TVProgramModel_incrementCheckins = function(_eventId) {	
+	var db = Ti.Database.open('Chatterbox'); 
+	
+	//getting start time
+	var tvprogramInfo = TVProgramModel_fetchProgramOfEventId(_eventId); 
+	if(tvprogramInfo !== null && tvprogramInfo !== undefined) {
+		var incrementNumberCheckins = tvprogramInfo.numberCheckins + 1;
+		db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",incrementNumberCheckins,_eventId);
+	}
+	db.close();
+}; 
 
 exports.TVProgramModel_countCheckins = function(_eventId){
 	var db = Ti.Database.open('Chatterbox');

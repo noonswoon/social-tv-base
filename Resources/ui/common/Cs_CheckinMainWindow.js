@@ -301,18 +301,21 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				checkinData.program_id = _tvprogramData.programId;
 				
 				BadgeCondition.checkinEvent(checkinData);
-	
+				
+				//increment number checkins by one
+				TVProgram.TVProgramModel_incrementCheckins(_tvprogramData.eventId);
+				
 				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 			} else {
 			var checkinWarningMessage = "";
 				if(now < _tvprogramData.programStarttime)
-					checkinWarningMessage = "You cannot checkin. The show hasn't started yet!";
+					checkinWarningMessage = "The program hasn't started yet!";
 				else if(now > _tvprogramData.programEndtime)
-					checkinWarningMessage = "You cannot checkin. The show is already finished!"
-				else checkinWarningMessage = "You cannot checkin at this time.";
+					checkinWarningMessage = "The program is already finished!"
+				else checkinWarningMessage = "Please try again later.";
 				
 				var checkinWarningDialog = Titanium.UI.createAlertDialog({
-		       		title:'Chatterbox',
+		       		title:'You cannot checkin',
 		         	message:checkinWarningMessage
 		       	});
 		       	checkinWarningDialog.show();

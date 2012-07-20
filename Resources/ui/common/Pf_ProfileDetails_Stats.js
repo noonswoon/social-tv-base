@@ -142,7 +142,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			userRank.user_id = leaderBoardData[i].user_id;
 							
 			if(leaderBoardData[i].fb_id) {
-				userRankPicture.image = acs.getUserImageNormalOfFbId(leaderBoardData[i].fb_id);
+				userRankPicture.image = acs.getUserImageSquareOfFbId(leaderBoardData[i].fb_id);
 			}
 			else userRankPicture.image = "images/kuma100x100.png";
 			

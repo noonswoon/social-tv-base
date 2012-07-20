@@ -144,7 +144,7 @@ FriendsWindowTableViewRow = function(_checkinProgram){
 		});
 		
 		if(fbId !== 0 || fbId !== "0")
-			friendsProfileImage.image = acs.getUserImageNormalOfFbId(fbId);
+			friendsProfileImage.image = acs.getUserImageSquareOfFbId(fbId);
 		
 		friendsScrollView.add(friendsProfileImage);
 	}

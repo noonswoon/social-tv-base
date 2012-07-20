@@ -20,7 +20,7 @@ AddFriendsMainView = function(_parentWindow) {
 	});
 //////////////////////////////////////////////////////////////////
 	var friendTab = Titanium.UI.iOS.createTabbedBar({
-		labels: ['Friend with App', 'Invite'],
+		labels: ['Already have Chatterbox', 'Send an Invite'],
 		backgroundColor: '#43a5cf',
 		style: Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		height: 40,

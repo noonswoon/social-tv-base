@@ -12,7 +12,7 @@ FriendsTableViewRow = function(_user,_source) {
 	});
 	
 	var friendPhoto = Ti.UI.createImageView({
-		image: acs.getUserImageNormalOfFbId(_user.fb_id),
+		image: acs.getUserImageSquareOfFbId(_user.fb_id),
 		left: 10,
 		height: 40,
 		width:40,

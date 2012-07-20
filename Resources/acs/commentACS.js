@@ -74,7 +74,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 	        var commentIdsWithRatingsOrComments = [];
 	        for (var i = 0; i < e.reviews.length; i++) {
 				var review = e.reviews[i];
-	            Ti.API.info('review.user: '+JSON.stringify(review)); //do have external_id and stuff
+	            //Ti.API.info('review.user: '+JSON.stringify(review)); //do have external_id and stuff
 	            var curComment = {
 	            	id: review.id,
 	            	topicId: topicId,

@@ -30,7 +30,7 @@ exports.getUserId = function() {
 function getUserFbId() {
 	if(currentUser.external_accounts === undefined) return -1;
 	
-	var fbId = 0;
+	var fbId = "0";
 	var numExternalAccounts = currentUser.external_accounts.length;
 	
 	for(var i=0;i < numExternalAccounts; i++) {
@@ -63,25 +63,30 @@ exports.getUserFbToken = function() {
 
 exports.getUserImage = function() {
 	var fbId = getUserFbId(); 
-	if(fbId == 0 || fbId == -1) return "";
+	if(fbId === -1 || fbId === 0 || fbId === "0") return "";
 	else return "https://graph.facebook.com/"+fbId+"/picture"
 }
 
 exports.getUserImageNormal = function() {
 	var fbId = getUserFbId(); 
-	if(fbId == 0 || fbId == -1) return "";
+	if(fbId === -1 || fbId === 0 || fbId === "0") return "";
 	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
 //	else return "https://graph.facebook.com/"+fbId+"/picture?type=square"
 }
 
+exports.getUserImageSquareOfFbId = function(fbId) {
+	if(fbId === -1 || fbId === 0 || fbId === "0") return "";
+	else return "https://graph.facebook.com/"+fbId+"/picture?type=square"
+}
+
 exports.getUserImageNormalOfFbId = function(fbId) {
-	if(!fbId) return "";
+	if(fbId === -1 || fbId === 0 || fbId === "0") return "";
 	else return "https://graph.facebook.com/"+fbId+"/picture?type=normal"
 }
 
 exports.getUserImageLarge = function() {
 	var fbId = getUserFbId(); 
-	if(fbId == 0 || fbId == -1) return "";
+	if(fbId === -1 || fbId === 0 || fbId === "0") return "";
 	else return "https://graph.facebook.com/"+fbId+"/picture?type=large"
 }
 

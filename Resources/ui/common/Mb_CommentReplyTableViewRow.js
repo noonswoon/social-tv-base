@@ -1,12 +1,14 @@
 CommentReplyTableViewRow = function(_comment, _level) {
 	//HEADER
-	Ti.API.info('commentMetaData: '+JSON.stringify(_comment));
+	//Ti.API.info('commentMetaData: '+JSON.stringify(_comment));
 	var Topic = require('model/topic');
 	var ActivityModel = require('model/activity');
 	var Comment = require('model/comment');
+	var UserModel = require('model/user');
+	
+	var ActivityACS = require('acs/activityACS');
 	var CommentACS = require('acs/commentACS');
 	var UserReportACS = require('acs/userReportACS');
-	var ActivityACS = require('acs/activityACS');
 	
 	var userId = acs.getUserId();
 	var username = acs.getUserLoggedIn().username;
@@ -63,8 +65,10 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		zIndex: 2
 	});
 	
+	var commenter = UserModel.userModel_fetchUserProfileFromUsername(_comment.username);
+	var commenterImage = acs.getUserImageSquareOfFbId(commenter.fb_id);
 	var userImage = Ti.UI.createImageView({
-		image: 'images/messageboard/comment/user_dummy.png',
+		image: commenterImage,
 		top: 6,
 		width:39,
 		height:39
@@ -299,7 +303,11 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			replyTextField.value = "";
 			row._hideToolbar(row.index);
 		} else {
-			alert("Sorry you already voted on this comment");	
+			var voteWarningDialog = Titanium.UI.createAlertDialog({
+				title:'Hold on!',
+				message:'You already voted on this comment.'
+			});
+			voteWarningDialog.show();
 		}
 	}
 	

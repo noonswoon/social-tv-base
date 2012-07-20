@@ -28,6 +28,7 @@ exports.getNumCheckinsOfProgramId = getNumCheckinsOfProgramId;
 
 ////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
+	alert('checkCountCondition');
 	var checkinCount = e.result;
 	//badge desc: nice to meet you
 	//condition: 1st check in
@@ -36,11 +37,12 @@ var checkCountCondition = function(e) {
 	//badge desc: fall for you	
 	//condition: 10th check in	
 	//badge id: 1
-	else if(checkinCount == 10) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
+	//TODO!!!! check this checkin count
+	else if(checkinCount == 2) Ti.App.fireEvent('badgeConditionUpdate',{badgeID: 1});	
 	//badge desc: i'm loving it		
 	//condition: 20th check in
 	//badge id: 2
-	else if(checkinCount == 20) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 3});
+	else if(checkinCount == 3) Ti.App.fireEvent('badgeConditionUpdate', {badgeID: 2});
 }
 
 exports.checkFriendCondition = function(_friendCheckIn) {
@@ -226,7 +228,8 @@ var newBadgeUnlockCallback = function(e){
 	LeaderACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
 }
 	
-Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);	
+Ti.App.addEventListener('newBadgeUnlock', newBadgeUnlockCallback);
+
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
 
 /////////////////////////////////////////////////////////////////////

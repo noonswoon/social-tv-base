@@ -27,12 +27,14 @@ if(_status==="me") {
 		height: 40, width: 290,
 		backgroundColor: '#48a8d0',
 		borderRadius: 10,
-		top: 0
+		top: 0,
+		visible: false
 	});
 	
 	var requestImage = Ti.UI.createImageView({
 		image: 'images/icon/act_add_white.png',
-		left: 10
+		left: 10,
+		visible: false
 	});
 	
 	var requestLabel = Ti.UI.createLabel({
@@ -41,10 +43,12 @@ if(_status==="me") {
 		height: 30,
 		shadowColor: '#999',
 		left: 50,
-		font: {fontSize: 13, fontWeight: 'bold'}
+		font: {fontSize: 13, fontWeight: 'bold'},
+		visible: false
 	});
 	
 	var setFriendRequestVisible = function(){
+		alert('friendRequests.length: '+friendRequests.length);
 		if (friendRequests.length == 0) userRequestView.visible = false;
 		else userRequestView.visible = true;
 	}	

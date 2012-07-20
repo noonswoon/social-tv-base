@@ -3,6 +3,7 @@ function PopularWindow(_parent) {
 	var CheckinACS = require('acs/checkinACS');
 	var FriendsACS = require('acs/friendsACS');
 	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
+	var UserACS = require('acs/userACS');
 	
 	var CheckinModel = require('model/checkin');
 	var TVProgramModel = require('model/tvprogram');
@@ -102,7 +103,7 @@ function PopularWindow(_parent) {
 		isEverythingReady();
 	});
 	
-	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){ //xxx
+	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var myUserId = acs.getUserId();
 		var timeIndex = e.timeIndex;
 		var selectedShowtime = TVProgramModel.TVProgramModel_fetchShowtimeSelection(timeIndex); 
@@ -174,17 +175,9 @@ function PopularWindow(_parent) {
 			//will also need need to add friend user data to the user table!
 			for(var i=0; i < friendsCheckinWithPrograms.length; i++) {
 				var curFriendUser = friendsCheckinWithPrograms[i].friend;
-				var fbId = "0";
-				if(curFriendUser.external_accounts !== undefined) {
-					var numExternalAccounts = curFriendUser.external_accounts.length;		
-					for(var j=0;j < numExternalAccounts; j++) {
-						if(curFriendUser.external_accounts[j].external_type === "facebook") {
-							fbId = curFriendUser.external_accounts[j].external_id;
-							break;
-						}
-					}
-				}
-				UserModel.userModel_addUser(curFriendUser.id, curFriendUser.username, fbId, curFriendUser.first_name, curFriendUser.last_name)
+				
+				var curFriendFbId = UserACS.userACS_extractUserFbId(curFriendUser);
+				UserModel.userModel_addUser(curFriendUser.id, curFriendUser.username, curFriendFbId, curFriendUser.first_name, curFriendUser.last_name)
 			}
 			
 			areFriendCheckinsReady = true; 

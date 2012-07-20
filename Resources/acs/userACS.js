@@ -14,24 +14,16 @@ exports.userACS_fetchCurrentUser = function(_id){
 };
 
 //i is for table row in friendsMainWindow
-exports.userACS_fetchUserFbId = function(_id){
-	Cloud.Users.show({
-    	user_id: _id
-	}, function (e) {
-    if (e.success) {
-		var fbId = 0;
-		var numExternalAccounts = e.users[0].external_accounts.length;		
-		for(var j=0;j < numExternalAccounts; j++) {
-			var curExternalAccount = e.users[0].external_accounts[j];
-			if(curExternalAccount.external_type === "facebook") {
-				fbId = curExternalAccount.external_id;
-				break;
-			}
+exports.userACS_extractUserFbId = function(_userObj){
+	var fbId = "0";
+	var numExternalAccounts = _userObj.external_accounts.length;		
+	for(var i=0;i < numExternalAccounts; i++) {
+		if( _userObj.external_accounts[i].external_type === "facebook") {
+			fbId =  _userObj.external_accounts[i].external_id;
+			break;
 		}
-    } else {
-        Ti.API.info('userACS_fetchUserFbId Error: ' + ((e.error && e.message) || JSON.stringify(e)));
-    }
-});
+	}
+	return fbId; 
 };
 
 exports.userACS_updatedUser = function(_firstname,_lastname){

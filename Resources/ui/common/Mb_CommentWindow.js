@@ -3,8 +3,11 @@ function CommentWindow(_topicId) {
 	var Topic = require('model/topic');
 	var ActivityModel = require('model/activity');
 	var Comment = require('model/comment');
+	var UserModel = require('model/user');
+	
 	var CommentACS = require('acs/commentACS');
 	var ActivityACS = require('acs/activityACS');
+	var UserACS = require('acs/userACS');
 	
 	var CommentHeaderTableViewRow = require('ui/common/Mb_CommentHeaderTableViewRow');
 	var CommentTableViewRow = require('ui/common/Mb_CommentReplyTableViewRow');
@@ -82,6 +85,13 @@ function CommentWindow(_topicId) {
 		//add to db
 		//Ti.API.info(e.fetchedComments);
 		Comment.commentModel_updateCommentsOnTopicFromACS(e.fetchedComments,_topicId); 
+		
+		//add user info of the commenters
+		for(var i=0;i < e.fetchedComments.length; i++) {
+			var curCommenter =e.fetchedComments[i].user;
+			var curCommenterFbId = UserACS.userACS_extractUserFbId(curCommenter);
+			UserModel.userModel_addUser(curCommenter.id, curCommenter.username, curCommenterFbId, curCommenter.first_name, curCommenter.last_name);
+		}
 		
 		//signify pull2refresh to be done [if it comes from Pull2Refresh] 
 		if(usingPull2Refresh) {

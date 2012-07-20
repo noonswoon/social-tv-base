@@ -173,22 +173,18 @@ if(_status==="me") {
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png'
 				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' a friend request';
-			} else
-			if (myActivity[i].category==='approvefriend') {
+			} else if (myActivity[i].category==='approvefriend') {
 				if(name ==="You") _name = "you";
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png';
 				activityInfo.text = myActivity[i].additionalData + ' approved '+_name+' as a friend';
-			} else
-			if (myActivity[i].category==='comment') {
+			} else if (myActivity[i].category==='comment') {
 				activityType.image= 'images/icon/act_chat.png'
 				activityInfo.text = 'Someone commented on your post: '+myActivity[i].additionalData;
-			} else
-			if (myActivity[i].category==='getbadge') {
+			} else if (myActivity[i].category==='getbadge') {
 				activityType.image= 'images/icon/act_badge.png';
 				activityInfo.text = name + ' have got a new badge: ' + myActivity[i].additionalData;
-			} else
-			if (myActivity[i].category==='checkin') {
+			} else if (myActivity[i].category==='checkin') {
 				activityType.image= 'images/icon/act_tv.png';
 				activityInfo.text = name + ' have checked in to ' + myActivity[i].additionalData;
 			};

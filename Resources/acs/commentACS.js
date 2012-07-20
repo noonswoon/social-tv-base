@@ -25,7 +25,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 			Cloud.Reviews.query({
 			    review_object_id:curCommentId,
 			    page: 1,
-			    per_page: 20
+			    per_page: 100
 			}, function (e) {
 			    if (e.success) {
 			    	var commentIdsWithRatingsOrComments = [];
@@ -66,7 +66,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 	Cloud.Reviews.query({
 	    post_id: topicId,
 	    page: 1,
-	    per_page: 50, 
+	    per_page: 100, 
 	    order: '-created_at'
 	}, function (e) {
 	    if (e.success) {

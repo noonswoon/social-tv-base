@@ -234,8 +234,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  			} 			
  		//condition 2: there's a request from this guy	
  		else {
- 			//alert(_userProfile.first_name+' '+ _userProfile.last_name +' has request you as a friend. Accept him/her?');
-			friendRequests.splice(i,1);
+ 			friendRequests.splice(i,1);
 			FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
 			FriendACS.approveFriend(curId,approveRequest);	
 		}	

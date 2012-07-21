@@ -223,7 +223,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	
 	var checkin = CheckinModel.checkin_isCheckin(_tvprogramData.eventId,myUserId);
 
-	var checkinPopup = function(){
+	var checkinPopup = function(_gotbadge){
 		var popupView = Ti.UI.createView({
 			backgroundColor: 'transparent',
 			backgroundImage: 'images/checkin/checkin_success.png',
@@ -232,7 +232,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			zIndex: 500,
 		});
 		var popupMessage = Ti.UI.createLabel({
-			text: 'Checkin to '+_tvprogramData.programTitle+' completed. You just earned 5 points!',
+			//text: 'Checkin to '+_tvprogramData.programTitle+' completed. You just earned 5 points!',
 			color: '#262a21',
 			font: {fontSize: 14},
 			top: 2,
@@ -240,6 +240,11 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			verticalAlign: 'top',
 			width: 225, height: 60,
 		});
+		if(_gotbadge) {
+			popupMessage.text = 'Congratulation! You\'ve got a new badge from checking in to'+_tvprogramData.programTitle;
+			popupView.backgroundImage = 'images/checkin/checkin_success_badge.png';
+		}
+		else popupMessage.text = 'Checkin to '+_tvprogramData.programTitle+' completed. You just earned 5 points!';
 		popupView.add(popupMessage);
 		self.add(popupView);
 		 setTimeout(function() {
@@ -266,7 +271,6 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			
 			if(checkinEnable) {	
 				Titanium.Media.vibrate();
-				checkinPopup();
 				//changeImage of checkin here
 				remote.backgroundImage = 'images/checkin/checkin_remote.png';
 				checkinView.touchEnabled = false;
@@ -302,8 +306,11 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				//check badge condition from checkin
 				checkinData.program_type = _tvprogramData.programType;
 				checkinData.program_id = _tvprogramData.programId;
+				//TODO
+				isGetBadge = BadgeCondition.checkinEvent(checkinData);
+				alert('isGetBadge = '+isGetBadge);
+				checkinPopup(isGetBadge);
 				
-				BadgeCondition.checkinEvent(checkinData);
 				BadgeCondition.checkFriendCondition(numFriendsCheckin);
 								
 				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});

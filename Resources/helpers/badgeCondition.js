@@ -29,11 +29,13 @@ exports.getNumCheckinsOfProgramId = getNumCheckinsOfProgramId;
 ////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
 	Ti.API.info('checkCountCondition');
+	var earnBadge = false; 
 	var checkinCount = e.result;
 	//badge desc: nice to meet you
 	//condition: 1st check in
 	//badge id: 0
-	if(checkinCount == 1) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 0});
+	if(checkinCount == 1)
+		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 0});
 	//badge desc: fall for you	
 	//condition: 10th check in	
 	//badge id: 1
@@ -55,14 +57,15 @@ exports.checkFriendCondition = function(_friendCheckIn) {
 var checkTypeCondition = function(_type) {
 	var checkinCount = getNumCheckinsOfType(_type);
 	Ti.API.info('checkinCount// '+_type+' = '+checkinCount);
-
 	if(checkinCount==5) {
+//	if(checkinCount>=5) {
 		switch (_type){
 			//badge desc: sports fan		
 			//condition: 5 checkins in sport
 			//badge id: 4
 			case 'sport': {
 				Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 4});
+				return true;
 				break;
 			};
 			//badge desc: drama queen		
@@ -70,6 +73,7 @@ var checkTypeCondition = function(_type) {
 			//badge id: 5
 			case 'drama': {
 				Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 5});
+				return true;
 				break;
 			};
 			//badge desc: game show addict		
@@ -77,6 +81,7 @@ var checkTypeCondition = function(_type) {
 			//badge id: 6
 			case 'gameshow': {
 				Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 6});
+				return true;
 				break;
 			};			
 		}
@@ -88,11 +93,17 @@ var checkTimeCondition = function() {
 	//badge desc: early bird	
 	//condition: checkin 5.00-7.59 am
 	//badge id: 7
-	if(now === '05' || now === '06' || now === '07') Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 7});
+	if(now === '05' || now === '06' || now === '07') {
+		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 7});
+		return true;
+	}
 	//badge desc: insomnia		
 	//condition: checkin 1.00 - 3.59 am
 	//badge id: 8
-	if(now === '01' || now === '02' || now === '03') Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 8});
+	if(now === '01' || now === '02' || now === '03') {
+		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 8});
+		return true;
+	}
 }
 
 var determineShowBadgeId = function(_programId,_numCheckins) {
@@ -199,7 +210,9 @@ var checkProgramCondition = function(_programId) {
 		var badgeId = determineShowBadgeId(_programId,checkinCount);
 		Ti.API.info('badgeId: '+badgeId);		
 	}
-	if(badgeId !== undefined) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: badgeId});
+	if(badgeId !== undefined) 
+	{Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: badgeId});
+	return true;}
 }
 
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);
@@ -207,9 +220,14 @@ Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCo
 /////////////////////////////////////////////////////////////////////
 
 exports.checkinEvent = function(_checkinData){
-	checkTimeCondition();
-	checkTypeCondition(_checkinData.program_type);
-	checkProgramCondition(_checkinData.program_id);
+	
+	var r1 = checkTimeCondition();
+	var r2 = checkTypeCondition(_checkinData.program_type);
+	var r3 = checkProgramCondition(_checkinData.program_id);
+	alert('r1 = '+r1);
+	alert('r2 = '+r2);
+	alert('r3 = '+r3);
+	return (r1 || r2 || r3);
 }
 
 exports.badgeCondition_createBadgeUnlocked = function(_badgeID,_userID){

@@ -71,7 +71,7 @@ AddFriendsTableViewRow = function(_user,_category) {
  		}		
 		
 		var addFriend = function(_response){
-			alert(_response);
+			Ti.API.info(_response);
 			//alert('Your friend has been added');
 		}
 		addButton.addEventListener('click', function(){

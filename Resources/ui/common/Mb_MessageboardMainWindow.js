@@ -431,7 +431,7 @@ function MessageboardMainWindow(_programId) {
 	PullToRefresh.addASyncPullRefreshToTableView(allTopicTable, function() {
 		Ti.API.info('using pull to refresh');
 		usingPull2Refresh = true;
-		TopicACS.topicACS_fetchAllTopicsOfProgramId(currentProgramId);
+		TopicACS.topicACS_fetchAllTopicsOfProgramId([currentProgramId,1]);
 	}, { //settings
 		backgroundColor: '#959595', 
 		statusLabel: {

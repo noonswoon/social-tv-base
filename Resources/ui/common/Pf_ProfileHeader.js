@@ -20,6 +20,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	ActivityACS.activityACS_fetchedMyActivity(curId);
 
+/*
 	var refreshButton = Ti.UI.createImageView({
 		image: 'images/icon/refresh.png',
 		right: 10,
@@ -29,9 +30,9 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 	
 	refreshButton.addEventListener('click', function(){
-		/* do nothing */
+		// do nothing
 	});
-
+*/
 	var headerView = Ti.UI.createView();
 	headerView.backgroundGradient = {
 		type: 'linear',
@@ -49,15 +50,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 
 //test push notification
 
+/*
 	profilePicture.addEventListener('click',function(){
 		//for testing stuff
-		var PushNotificationCTB = require('ctb/pushnotificationCTB');
-//		jaew_userId = '4fcecb5300204462690160a7';
-		
-//		PushNotificationCTB.pushNotificationCTB_sendPN(jaew_userId,"2","Bwahhhhhhhhhhhh");
-		PushNotificationCTB.pushNotificationCTB_createUserInfo('123','dummyUser','heyheyhey');
-	});
+		var PlaceholderWindow = require('ui/common/PlaceholderWindow'); 
+		var placeholderwin = new PlaceholderWindow();
+		_parentWindow.containingTab.open(placeholderwin);
 
+	});
+*/
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,
 		width:103, height:104,

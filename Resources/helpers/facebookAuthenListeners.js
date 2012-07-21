@@ -1,9 +1,6 @@
 function facebookAuthenCallback(e) {
 	Debug.debug_print("in fbAuthenCallback");
 	if (e.success) {
-		//alert('in cb login success');
-			
-		//alert('facebookAuthenListners.js FB login event cb');
 		//Successfully login to facebook
 		//1. check if this fb user already has an account >> need to do this just to make Friend Module works
 		//2. if so, get the email address and authtoken (as a password) and then login 
@@ -50,7 +47,7 @@ function facebookAuthenCallback(e) {
 									var maintabgroup = new ApplicationTabGroup();
 									maintabgroup.open();
 							    } else {
-							      	alert("Login failed: "+JSON.stringify(e));
+							      	Debug.debug_print("Login failed: "+JSON.stringify(e));
 							    }
 							});
 				    	} else {

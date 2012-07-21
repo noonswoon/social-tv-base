@@ -15,7 +15,7 @@ exports.leaderACS_fetchedRank = function(_ids){
 	         }
 			Ti.App.fireEvent('leaderBoardLoaded',{fetchedLeader:leaders});
 	    } else {
-			alert('leaderboardACS-> fetchedRank: Error:\\n' +
+			Debug.debug_print('leaderboardACS-> fetchedRank: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    	 }
 	});
@@ -40,7 +40,7 @@ exports.leaderACS_createUserInfo = function(_user){
 	            'facebookid: ' + e.LeaderBoard[0].user.external_accounts.external_id);
 			Ti.App.fireEvent("createLeaderBoardUser",{fetchedUser: user});
 	    } else {
-	        alert('leaderboardACS 45 Error:\\n' +
+	        Debug.debug_print('leaderboardACS 45 Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});

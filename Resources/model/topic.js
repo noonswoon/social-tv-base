@@ -56,7 +56,7 @@ exports.topicModel_getTopicById = function(_topicACSObjectId) {
 	var db = Ti.Database.open('Chatterbox'); 
 	var result = db.execute('SELECT * FROM topics WHERE acs_object_id = ?',_topicACSObjectId);
 	if(result.rowCount > 1) 
-		alert("something wrong with getTopic, should return just 1 [returning too many topics]");
+		Debug.debug_print("something wrong with getTopic, should return just 1 [returning too many topics]");
 	var topic = {};
 	while(result.isValidRow()) {
 		topic.id = result.fieldByName('id'); 

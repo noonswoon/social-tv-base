@@ -54,7 +54,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
+	        Debug.debug_print('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

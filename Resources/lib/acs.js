@@ -155,7 +155,7 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 	    if (e.success) {
 	    	Ti.API.info('user = '+JSON.stringify(e));
 	        if(e.BannedDevices.length > 0) {
-	        	alert("Sorry, your device has been banned.");
+	        	Debug.debug_print("Sorry, your device has been banned.");
 	        } else {
 	    		Cloud.Users.create({
 					email:email,
@@ -174,7 +174,7 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 							callback(currentUser);
 						} else {
 							Ti.API.info('Error'+JSON.stringify(e));
-							alert(e.message);
+							Debug.debug_print(e.message);
 							loggedIn = false;
 							currentUser = null;
 							callback(false);
@@ -183,7 +183,7 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 				);
 			}    	
 	    } else {
-	        alert('acs -> createUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        Debug.debug_print('acs -> createUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
 };

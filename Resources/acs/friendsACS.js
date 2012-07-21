@@ -75,7 +75,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('An error occured: you might already request this person or there is some problem on internet connection.');
+	       Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -96,7 +96,7 @@ exports.addFriendwithNoApprove = function(_userID,_callbackFn){
 	    onerror: function(e) {
 	    	Ti.API.info(e);
 			// this function is called when an error occurs, including a timeout
-	        alert('An error occured: you might already request this person or there is some problem on internet connection.');
+	        Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -121,7 +121,7 @@ exports.approveFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	         alert('friendsACS->approveFriend: Error= '+e.error);
+	         Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -216,7 +216,7 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-			alert('friendsACS->friendsCheckins: Error= '+e.error);
+			Debug.debug_print('friendsACS->friendsCheckins: Error= '+e.error);
 			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    timeout:5000  /* in milliseconds */

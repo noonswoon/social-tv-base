@@ -17,7 +17,7 @@ exports.productACS_fetchedAllProducts = function(_programId) {
         Ti.App.fireEvent('fetchedAllProduct',{fetchedAllProduct:product});
     } 
     else {
-        alert('productACS_fetchedAllProducts Error:\\n' +
+        Debug.debug_print('productACS_fetchedAllProducts Error:\\n' +
             ((e.error && e.message) || JSON.stringify(e)));
     	 }
 			});

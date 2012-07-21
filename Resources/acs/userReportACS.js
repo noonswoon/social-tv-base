@@ -10,7 +10,7 @@ exports.userReportACS_reportObject = function(_objectId,_objectType,_objectConte
 	    if (e.success) {
 	        alert("Thank you for helping us keep Chatterbox clean");
 	    } else {
-	        alert('userReportACS_reportObject Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        Debug.debug_print('userReportACS_reportObject Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
 };

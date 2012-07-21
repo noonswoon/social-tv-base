@@ -1,28 +1,9 @@
-exports.checkinACS_fetchedCheckInOfProgram = function(_eventId) {
-	Cloud.Checkins.query({
-    page: 1,
-    per_page: 100,
-    where: {event_id: _eventId},
-    order: '-updated_at'
-
-}, function (e) {
-    if (e.success) {
-    var checkin =[];	
-		var totalCheckinOfEvent = e.checkins.length;
-		Ti.App.fireEvent('doneGettingNumCheckinsOfProgramId',{targetedProgramId: _eventId, numCheckins:totalCheckinOfEvent});
-    } 
-    else {
-        Ti.API.info('checkin Error:\\n' +
-            ((e.error && e.message) || JSON.stringify(e)));
-    	 }
-	});
-};
 
 //this function give only total results for checkins
 exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	var id = _id;
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&where={"user_id":"'+id+'"}';	
-	
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&per_page=1&response_json_depth=1&where={"user_id":"'+id+'"}';	
+
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
@@ -94,10 +75,8 @@ exports.checkinACS_createCheckin = function(checkinData,local_id){
 exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId,_channelId) {
 	var programs = [];
 	var eventId = _eventId;
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&where={"event_id":"'+eventId+'"}&per_page=1';	
-	
-	//Ti.API.info(url)
-	
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&response_json_depth=2&where={"event_id":"'+eventId+'"}&per_page=1';	
+
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);

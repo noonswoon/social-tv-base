@@ -25,9 +25,11 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 			Cloud.Reviews.query({
 			    review_object_id:curCommentId,
 			    page: 1,
-			    per_page: 100
+			    per_page: 100,
+			    response_json_depth: 2
 			}, function (e) {
 			    if (e.success) {
+			    	Ti.API.info(JSON.stringify(e));
 			    	var commentIdsWithRatingsOrComments = [];
 			        for (var j = 0; j < e.reviews.length; j++) {
             			var review = e.reviews[j];
@@ -67,7 +69,8 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 	    post_id: topicId,
 	    page: 1,
 	    per_page: 100, 
-	    order: '-created_at'
+	    order: '-created_at',
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 	       // Ti.API.info('Reviews Count: ' + e.reviews.length);

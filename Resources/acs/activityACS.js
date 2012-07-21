@@ -7,6 +7,7 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 	    per_page: 10,
 	    order: '-created_at',
 	    where: {"targetedUserID": {"$in": targetUser}},
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 			recentActivity = [];

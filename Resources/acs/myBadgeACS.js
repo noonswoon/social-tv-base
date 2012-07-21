@@ -6,6 +6,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
     per_page: 20,
     order: 'badge_id',
     where: {user_id: _id},
+    response_json_depth: 1
 	}, function (e) {
 	    if (e.success) {
 	    	myBadges = [];

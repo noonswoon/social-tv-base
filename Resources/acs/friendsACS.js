@@ -2,7 +2,7 @@
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
 exports.searchFriend = function(_userID){
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +
-				'&user_id='+_userID;
+				'&user_id='+_userID;	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
@@ -194,8 +194,8 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	}
 	allFriendsIdStr = allFriendsIdStr.substr(0,allFriendsIdStr.length-1);
 	
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&where={"event_id":{"$in":['+allProgramsIdStr+']},"user_id":{"$in":['+allFriendsIdStr+']}}';
-
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&response_json_depth=2&where={"event_id":{"$in":['+allProgramsIdStr+']},"user_id":{"$in":['+allFriendsIdStr+']}}';
+	Ti.API.info(url);
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);

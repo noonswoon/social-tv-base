@@ -1,7 +1,8 @@
 
 exports.userACS_fetchCurrentUser = function(_id){
 	Cloud.Users.show({
-    	user_id: _id
+    	user_id: _id,
+    	response_json_depth: 1
 	}, function (e) {
     if (e.success) {
     	var user = e.users[0];
@@ -29,7 +30,8 @@ exports.userACS_extractUserFbId = function(_userObj){
 exports.userACS_updatedUser = function(_firstname,_lastname){
 	Cloud.Users.update({
     first_name: _firstname,
-    last_name: _lastname
+    last_name: _lastname,
+    response_json_depth: 1
 }, function (e) {
     if(e.success){
         var user = e.users[0];

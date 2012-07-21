@@ -5,7 +5,8 @@ exports.leaderACS_fetchedRank = function(_ids){
 	    page: 1,
 	    per_page: 100,
 	    where: {"user_id":{"$in":_ids}},
-	    //order: '-totalPoint'
+	    //order: '-totalPoint',
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 	    	var leaders = [];

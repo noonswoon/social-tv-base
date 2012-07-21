@@ -9,7 +9,8 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_paramsArray) {
 	    where: {
 	        program_id: programId
 	    }, 
-	    order: '-created_at'
+	    order: '-created_at',
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 	        for (var i = 0; i < e.posts.length; i++) {

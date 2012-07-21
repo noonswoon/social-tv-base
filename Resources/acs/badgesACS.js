@@ -6,7 +6,8 @@ exports.fetchedBadges = function() {
 	Cloud.Photos.query({
 	    page: 1,
 	    per_page: 100,
-	    where: {tag: "badge"}
+	    where: {tag: "badge"},
+	    response_json_depth: 1
 	}, function (e) {
 	    if (e.success) {
 	    	var badges = [];

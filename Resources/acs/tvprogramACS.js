@@ -6,9 +6,8 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	var end_of_the_day = moment().eod().format('YYYY-MM-DD,HH:mm:ss');
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query.json?key='+ACS_API_KEY+
-			  	'&per_page=20&where={"start_time":{"$gte":"'+start_of_the_day+'","$lte":"'+end_of_the_day+'"}}';	
+			  	'&per_page=20&response_json_depth=2&where={"start_time":{"$gte":"'+start_of_the_day+'","$lte":"'+end_of_the_day+'"}}';	
 			  			  	
-	//Ti.API.info('fetchAllProgramShowingNow: '+url);	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);

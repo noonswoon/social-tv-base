@@ -58,7 +58,7 @@ exports.riseRankAppearOnFacebook = riseRankAppearOnFacebook;4
 
 exports.badgePopUpOnFacebook = function(_badgeId) {
 	var SettingHelper = require('helpers/settingHelper');
-	
+	unlockBadgeAppearOnFacebook();
 	if(_badgeId === 0 || _badgeId === '0') return; //DONT post the first badge, since the checkin already did the fb posting
 	if(_badgeId === 1 || _badgeId === '1') return; //DONT post the second badge, since the checkin already did the fb posting
 
@@ -77,7 +77,6 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 		};
 		if(SettingHelper.getFacebookAutoPost()) Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
 		else Titanium.Facebook.dialog("feed", data, showRequestResult);
-		unlockBadgeAppearOnFacebook();
 	}
 }
 

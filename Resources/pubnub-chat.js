@@ -105,6 +105,9 @@ Ti.App.Chat = function(_chatParams) {
 	});
 	
 	backButton.addEventListener('click', function(){
+		//unsubscribe here...
+		Ti.API.info('unsubscribe from channel: '+currentChatRoom);
+		pubnub.unsubscribe({ channel : currentChatRoom });
    		chat_window.close();
 	});
 

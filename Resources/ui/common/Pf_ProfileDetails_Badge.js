@@ -73,6 +73,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 		alert('createBadgeView');
 		var count = 0;
 		
+		//TODO: got problem here
 		for (var k in badgeView.children) {
 			if (badgeView.children.hasOwnProperty(k)) {
 				badgeView.remove(badgeView.children[k]);

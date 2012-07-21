@@ -137,12 +137,18 @@ exports.postAppearOnFaceBook = function(_topicTitle,_topicContent,_programPhoto)
 	}
 }
 
+//ticker appears
 exports.checkinAppearOnFaceBook = function() {
 	 	var data = {
-		 tv_program: "http://chatterbox.mobi/opengraph/og_checkin_obj_dynamic.php",
+		 tv_program: "http://chatterbox.mobi/opengraph/og_tvprogram_obj.html",
 		 access_token: Titanium.Facebook.accessToken
 		  };
  
 		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:checkin",data,"POST",showRequestResult);
 
+}
+exports.newTopicAppearOnFacebook = function() {
+	var data = {
+		topic: "http://chatterbox.mobi/opengraph/og_topic_obj.html",
+	}
 }

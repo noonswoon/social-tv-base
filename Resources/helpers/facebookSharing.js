@@ -13,9 +13,48 @@ function showRequestResult(e) {
 		s = "fb FAIL dialog";
 		if (e.error) s += "; " + e.error;	
 	}
+	alert(s);
 	Ti.API.info(s);
 }	
 	
+
+//tickers
+var checkinAppearOnFaceBook = function() {
+	 	var data = {
+		 tv_program: "http://chatterbox.mobi/opengraph/og_tvprogram_obj.html",
+		 access_token: Titanium.Facebook.accessToken
+		  };
+		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:check_in",data,"POST",showRequestResult);
+
+}
+exports.checkinAppearOnFaceBook = checkinAppearOnFaceBook;
+
+var newTopicAppearOnFacebook = function() {
+	var data = {
+		topic: "http://chatterbox.mobi/opengraph/og_topic_obj.html",
+		access_token: Titanium.Facebook.accessToken
+	};
+	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:create",data,"POST",showRequestResult);
+}
+exports.newTopicAppearOnFacebook = newTopicAppearOnFacebook;
+
+var unlockBadgeAppearOnFacebook = function() {
+	var data = {
+		badge: "http://chatterbox.mobi/opengraph/og_badge_obj.html",
+		access_token: Titanium.Facebook.accessToken
+	};
+	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:unlock",data,"POST",showRequestResult);
+}
+exports.unlockBadgeAppearOnFacebook = unlockBadgeAppearOnFacebook;
+
+var riseRankAppearOnFacebook = function() {
+	var data = {
+		rank: "http://chatterbox.mobi/opengraph/og_rank_obj.html",
+		access_token: Titanium.Facebook.accessToken
+	};
+	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:rise",data,"POST",showRequestResult);
+}
+exports.riseRankAppearOnFacebook = riseRankAppearOnFacebook;4
 
 exports.badgePopUpOnFacebook = function(_badgeId) {
 	var SettingHelper = require('helpers/settingHelper');
@@ -125,41 +164,3 @@ exports.postAppearOnFaceBook = function(_topicTitle,_topicContent,_programPhoto)
 	}
 }
 
-//tickers
-var checkinAppearOnFaceBook = function() {
-	 	var data = {
-		 tv_program: "http://chatterbox.mobi/opengraph/og_tvprogram_obj.html",
-		 access_token: Titanium.Facebook.accessToken
-		  };
- 
-		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:checkin",data,"POST",showRequestResult);
-
-}
-exports.checkinAppearOnFaceBook = checkinAppearOnFaceBook;
-
-var newTopicAppearOnFacebook = function() {
-	var data = {
-		topic: "http://chatterbox.mobi/opengraph/og_topic_obj.html",
-		access_token: Titanium.Facebook.accessToken
-	};
-	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:create",data,"POST",showRequestResult);
-}
-exports.newTopicAppearOnFacebook = newTopicAppearOnFacebook;
-
-var unlockBadgeAppearOnFacebook = function() {
-	var data = {
-		topic: "http://chatterbox.mobi/opengraph/og_badge_obj.html",
-		access_token: Titanium.Facebook.accessToken
-	};
-	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:unlock",data,"POST",showRequestResult);
-}
-exports.unlockBadgeAppearOnFacebook = unlockBadgeAppearOnFacebook;
-
-var riseRankAppearOnFacebook = function() {
-	var data = {
-		topic: "http://chatterbox.mobi/opengraph/og_rank_obj.html",
-		access_token: Titanium.Facebook.accessToken
-	};
-	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:rise",data,"POST",showRequestResult);
-}
-exports.riseRankAppearOnFacebook = riseRankAppearOnFacebook;

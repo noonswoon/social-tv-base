@@ -224,9 +224,6 @@ exports.checkinEvent = function(_checkinData){
 	var r1 = checkTimeCondition();
 	var r2 = checkTypeCondition(_checkinData.program_type);
 	var r3 = checkProgramCondition(_checkinData.program_id);
-	alert('r1 = '+r1);
-	alert('r2 = '+r2);
-	alert('r3 = '+r3);
 	return (r1 || r2 || r3);
 }
 

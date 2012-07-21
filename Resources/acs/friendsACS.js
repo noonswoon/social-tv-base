@@ -94,6 +94,8 @@ exports.addFriendwithNoApprove = function(_userID,_callbackFn){
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
+	    	alert(e);
+	    	Ti.API.info(e);
 			// this function is called when an error occurs, including a timeout
 	        alert('An error occured: you might already request this person or there is some problem on internet connection.');
 	    },
@@ -162,11 +164,13 @@ exports.showFriendsRequest = function(){
 				};
 				requests.push(curRequest);
 			} 
+			Ti.API.info('requests.length: '+requests.length);
 			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:requests});
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 			Ti.API.info('friendsACS->showFriendsRequest: Error= '+e.error);
+			Ti.API.info('error: requests.length = '+requests.length);
 			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:[]});
 	    },
 	    timeout:5000  /* in milliseconds */
@@ -214,6 +218,7 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 			alert('friendsACS->friendsCheckins: Error= '+e.error);
+			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    timeout:5000  /* in milliseconds */
 	});

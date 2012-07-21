@@ -70,7 +70,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	}
 	
 	var createBadgeView = function() {
-		alert('createBadgeView');
+		Ti.API.info('createBadgeView');
 		var count = 0;
 		
 		//TODO: got problem here
@@ -94,7 +94,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 					var file = Titanium.Filesystem.getFile(badgesCollection[count].path);
 					if(file.exists()) badgeIndex[count].image = badgesCollection[count].path;
 					else badgeIndex[count].image = badgesCollection[count].url;
-					alert(badgeIndex[count].image);
+					Ti.API.info(badgeIndex[count].image);
 				} else badgeIndex[count].image = 'images/badge/lockedbadge.png';
 				
 				badgeIndex[count].top = (i*100)+5;
@@ -124,18 +124,51 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	});
 	
 	//check if the user already got this badge or not
-	Ti.App.addEventListener('badgeConditionUpdate',function(e) {
+	Ti.App.addEventListener('badgeConditionUpdate'+_userProfile.id,function(e) {
 		var checkBadge = e.badgeID;
 		if(myUnlockBadgesReady) {
-			if(myUnlockedBadges[checkBadge]===0) BadgeCondition.badgeCondition_createBadgeUnlocked(checkBadge);
+			if(myUnlockedBadges[checkBadge]===0 && _userProfile.id===acs.getUserId()) BadgeCondition.badgeCondition_createBadgeUnlocked(checkBadge,_userProfile.id);
 		};
 	});
 	
-	Ti.App.addEventListener('updatedMyBadge',function(e) {
+	
+	if(_status==='me'){
+		var newBadgeUnlockCallback = function(e){
+			Ti.API.info('newBadgeUnlockCallback');
+			var ActivityACS = require('acs/activityACS');
+			var PointACS = require('acs/pointACS');
+			var LeaderACS = require('acs/leaderBoardACS');
+			var BadgeModel = require('model/badge');
+			var UpdateActivity = require('helpers/updateActivity');
+			var badgeData = BadgeModel.fetchedBadgeSearch(e.badgeID);
+				
+			//if(_status==='me') 
+			Ti.App.fireEvent('updatedMyBadge'+acs.getUserId(),{badgeID: e.badgeID});
+			// getting data from update activity
+			var ActivityDataIdForACS = UpdateActivity.updateActivity_myDatabase('getbadge',badgeData);
+			// [0]=dataArray [1]=idArray
+			var allActivityDataForACS =  ActivityDataIdForACS[0];
+			var allIdDataForACS = ActivityDataIdForACS[1];
+			// data to create into ACS: [0]=leaderboard [1]=activity
+			var leaderboardData = allActivityDataForACS[0];
+			var activityData = allActivityDataForACS[1];
+			// local id to trackback: [0]=leaderboardId [1]=activityId
+			var leaderboardId = allIdDataForACS[0];
+			var activityId = allIdDataForACS[1];
+		
+			ActivityACS.activityACS_createMyActivity(activityData,activityId);		
+			PointACS.pointACS_createPoint(leaderboardData,e.badgeID,'getbadge');
+			LeaderACS.leaderACS_updateUserInfo(leaderboardId,leaderboardData.point);
+		}
+		Ti.App.addEventListener('newBadgeUnlock'+_userProfile.id, newBadgeUnlockCallback);
+	};
+	
+	Ti.App.addEventListener('updatedMyBadge'+_userProfile.id,function(e) {
 		myUnlockedBadges[e.badgeID] = 1;
 		FacebookSharing.badgePopUpOnFacebook(e.badgeID);
 		Ti.API.info('CONGRATS! You have unlock a new badge, check it out!');
 		Ti.App.fireEvent('updatedmyUnlockedBadges'+_userProfile.id);
+	//	createBadgeView();
 	});
 	Ti.App.addEventListener('myBadgesLoaded'+_userProfile.id,myBadgesLoadedCallback);
 	Ti.App.addEventListener('addBadgeDataReady'+_userProfile.id,addBadgeDataReadyCallback);

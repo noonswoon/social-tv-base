@@ -13,7 +13,6 @@ function showRequestResult(e) {
 		s = "fb FAIL dialog";
 		if (e.error) s += "; " + e.error;	
 	}
-	alert(s);
 	Ti.API.info(s);
 }	
 	

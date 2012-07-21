@@ -29,7 +29,6 @@ exports.getNumCheckinsOfProgramId = getNumCheckinsOfProgramId;
 ////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
 	Ti.API.info('checkCountCondition');
-	var earnBadge = false; 
 	var checkinCount = e.result;
 	//badge desc: nice to meet you
 	//condition: 1st check in
@@ -39,12 +38,11 @@ var checkCountCondition = function(e) {
 	//badge desc: fall for you	
 	//condition: 10th check in	
 	//badge id: 1
-	//TODO!!!! check this checkin count
-	else if(checkinCount == 2) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 1});	
+	else if(checkinCount == 10) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 1});	
 	//badge desc: i'm loving it		
 	//condition: 20th check in
 	//badge id: 2
-	else if(checkinCount == 3) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 2});
+	else if(checkinCount == 20) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 2});
 }
 
 exports.checkFriendCondition = function(_friendCheckIn) {
@@ -57,15 +55,15 @@ exports.checkFriendCondition = function(_friendCheckIn) {
 var checkTypeCondition = function(_type) {
 	var checkinCount = getNumCheckinsOfType(_type);
 	Ti.API.info('checkinCount// '+_type+' = '+checkinCount);
+	var badgeEarn = false;
 	if(checkinCount==5) {
-//	if(checkinCount>=5) {
 		switch (_type){
 			//badge desc: sports fan		
 			//condition: 5 checkins in sport
 			//badge id: 4
 			case 'sport': {
 				Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 4});
-				return true;
+				badgeEarn = true;
 				break;
 			};
 			//badge desc: drama queen		
@@ -73,7 +71,7 @@ var checkTypeCondition = function(_type) {
 			//badge id: 5
 			case 'drama': {
 				Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 5});
-				return true;
+				badgeEarn = true;
 				break;
 			};
 			//badge desc: game show addict		
@@ -81,29 +79,32 @@ var checkTypeCondition = function(_type) {
 			//badge id: 6
 			case 'gameshow': {
 				Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 6});
-				return true;
+				badgeEarn = true;
 				break;
 			};			
 		}
 	}
+	return badgeEarn;
 }
 		
 var checkTimeCondition = function() {
+	var badgeEarn = false;
 	var now = moment().format('HH');
 	//badge desc: early bird	
 	//condition: checkin 5.00-7.59 am
 	//badge id: 7
 	if(now === '05' || now === '06' || now === '07') {
 		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 7});
-		return true;
+		badgeEarn = true;
 	}
 	//badge desc: insomnia		
 	//condition: checkin 1.00 - 3.59 am
 	//badge id: 8
 	if(now === '01' || now === '02' || now === '03') {
 		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 8});
-		return true;
+		badgeEarn = true;
 	}
+	return badgeEarn;
 }
 
 var determineShowBadgeId = function(_programId,_numCheckins) {

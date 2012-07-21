@@ -33,7 +33,7 @@ exports.badgeShowPermissionACS_fetchedPermission = function() {
 	         setBadgeOfShowPermission(permission);
 	    } 
 	    else {
-	        alert('badgeShowPermissionACS/fetchedPermission Error:\\n' +
+	        Ti.API.info('badgeShowPermissionACS/fetchedPermission Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
 	    	 }
 		});

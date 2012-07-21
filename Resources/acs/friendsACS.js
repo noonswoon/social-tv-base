@@ -94,7 +94,6 @@ exports.addFriendwithNoApprove = function(_userID,_callbackFn){
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
-	    	alert(e);
 	    	Ti.API.info(e);
 			// this function is called when an error occurs, including a timeout
 	        alert('An error occured: you might already request this person or there is some problem on internet connection.');

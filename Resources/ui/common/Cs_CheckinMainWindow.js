@@ -308,7 +308,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				checkinData.program_id = _tvprogramData.programId;
 				//TODO
 				isGetBadge = BadgeCondition.checkinEvent(checkinData);
-				alert('isGetBadge = '+isGetBadge);
+				Ti.API.info('isGetBadge = '+isGetBadge);
 				checkinPopup(isGetBadge);
 				
 				BadgeCondition.checkFriendCondition(numFriendsCheckin);

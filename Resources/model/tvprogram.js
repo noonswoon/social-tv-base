@@ -87,11 +87,23 @@ exports.TVProgramModel_updateCheckins = function(targetedProgramId,numCheckins,c
 		}
 	}
 	numCheckinsAndMockup = numCheckins + mockCheckin;
-
 	db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",numCheckinsAndMockup,targetedProgramId);
 	db.close();
+	Ti.App.fireEvent("numberCheckinsUpdated",{eventId: targetedProgramId, numberCheckins: numCheckinsAndMockup});
 }; 
 
+//add 1 to numbercheckins
+exports.TVProgramModel_incrementCheckins = function(_eventId) {	
+	var db = Ti.Database.open('Chatterbox'); 
+	
+	//getting start time
+	var tvprogramInfo = TVProgramModel_fetchProgramOfEventId(_eventId); 
+	if(tvprogramInfo !== null && tvprogramInfo !== undefined) {
+		var incrementNumberCheckins = tvprogramInfo.numberCheckins + 1;
+		db.execute("UPDATE tvprograms SET number_checkins = ? WHERE id = ?",incrementNumberCheckins,_eventId);
+	}
+	db.close();
+}; 
 
 exports.TVProgramModel_countCheckins = function(_eventId){
 	var db = Ti.Database.open('Chatterbox');
@@ -159,7 +171,7 @@ exports.TVProgramModel_fetchProgramsWithProgramId = function(_programId) {
 	//select some stuff from the local db..based on the future filtering
 	var fetchedPrograms = [];
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ? ORDER BY start_time ASC',_programId);
+	var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ? ORDER BY start_time DESC',_programId);
 	while(result.isValidRow()) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),

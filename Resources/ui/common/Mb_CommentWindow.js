@@ -16,7 +16,6 @@ function CommentWindow(_topicId) {
 	//OBJECTS INSTANTIATION
 	var commentHeader = new CommentHeaderTableViewRow(_topicId);
 	var usingPull2Refresh = false;
-	var topicOwnerDeviceTokenId = "";
 	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/back_button.png',
@@ -108,7 +107,6 @@ function CommentWindow(_topicId) {
 		//getting topicInfo from the db
 		
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
-		topicOwnerDeviceTokenId = curTopic.deviceTokenId;
 				
 		commentHeader._setTitle(curTopic.title);
 		
@@ -146,13 +144,8 @@ function CommentWindow(_topicId) {
 		assignRankingScores(commentsOfTopic); 
 		
 		//sort comments based on rankingScore
-		for(var i=0;i<commentsOfTopic.length;i++) {
-			Ti.API.info('pre sort: '+commentsOfTopic[i].id+ ' score '+commentsOfTopic[i].rankingScore);
-		}
 		commentsOfTopic.sort(commentSort);
-		for(var i=0;i<commentsOfTopic.length;i++) {
-			Ti.API.info('post sort: '+commentsOfTopic[i].id+ ' score '+commentsOfTopic[i].rankingScore);
-		}
+
 		//recursively build the comment lists
 		showCommentTableViewRow(0,commentRowsData,commentsOfTopic,_topicId);
 		commentsTable.setData(commentRowsData);
@@ -251,11 +244,9 @@ function CommentWindow(_topicId) {
 		
 		//getting username of the topic's owner
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
-		var topicOwnerUsername = curTopic.username;
-		if(topicOwnerUsername !== acs.getUserLoggedIn().username) { //only send if someone else (not You!) comments on the post
+		if(curTopic.userId !== acs.getUserLoggedIn().id) { //only send if someone else (not You!) comments on the post
 			var PushNotificationCTB = require('ctb/pushnotificationCTB');
-			PushNotificationCTB.pushNotificationCTB_sendPN(topicOwnerDeviceTokenId,1,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
-		
+			PushNotificationCTB.pushNotificationCTB_sendPN(curTopic.userId,1,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
 		}
 		
 		//activity on comment

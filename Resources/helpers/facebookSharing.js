@@ -80,10 +80,10 @@ exports.levelUpPopUpOnFacebook = function(_levelTitle) {
 		var user = acs.getUserLoggedIn();
 		var data = {
 			link: "http://chatterbox.mobi/",
-			name: user.first_name+" "+user.last_name+" has reach the new level!",
+			name: user.first_name+" "+user.last_name+" has reach a new TV experience level!",
 			message: "",
 			caption: "Chatterbox",
-			picture: "http://fc04.deviantart.net/fs71/f/2010/245/7/0/dango_rilakkuma_by_tristan19019-d2xtytx.gif",
+			picture: DEFAULT_CTB_IMAGE_URL,
 			description: _levelTitle
 		};
 		Titanium.Facebook.dialog("feed", data, showRequestResult);

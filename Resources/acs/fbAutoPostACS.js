@@ -10,8 +10,9 @@ exports.fbAutoPostACS_AutoPostValue = function() {
 	    	var settingHelpers = require('helpers/settingHelper');
 	    	settingHelpers.setFacebookAutoPost(e.IsFacebookAutoPost[0].isAutoPost);
 	    } else {
-	        Ti.API.info('Error: Cannot fetch from the server. ' +
+	        Debug.debug_print('Error: Cannot fetch from the server. ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	       	ErrorHandling.showNetworkError();
 	    }
 	});	
 };

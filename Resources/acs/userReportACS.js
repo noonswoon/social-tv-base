@@ -8,9 +8,14 @@ exports.userReportACS_reportObject = function(_objectId,_objectType,_objectConte
 	    }
 	}, function (e) {
 	    if (e.success) {
-	        alert("Thank you for helping us keep Chatterbox clean");
+	        var reportAlertDialog = Ti.UI.createAlertDialog({
+	        	title: 'Thank you',
+	        	message: 'For helping us keep Chatterbox clean'
+	        });
+	        reportAlertDialog.show();
 	    } else {
-	        alert('userReportACS_reportObject Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        Debug.debug_print('userReportACS_reportObject Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 };

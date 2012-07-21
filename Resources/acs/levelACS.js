@@ -15,8 +15,9 @@ exports.levelACS_fetchedLevel = function() {
 			return level;
 	    } 
 	    else {
-	        alert('LevelACS-> fetchedLevel Error:\\n' +
+	        Debug.debug_print('LevelACS-> fetchedLevel Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
-	    	 }
-		});
+	        ErrorHandling.showNetworkError();
+	   	}
+	});
 };

@@ -21,7 +21,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 				var programType = 'ETC';
 				
 				//safeguarding code
-				if(program.photo !== undefined) photoUrl = program.photo.urls.original;
+				if(program.photo !== undefined) photoUrl = program.photo.urls.thumb_100;
 	            if(program.custom_fields !== undefined) {
 	            	if(program.custom_fields.subname !== undefined) {
 	            		subname = program.custom_fields.subname;	
@@ -53,7 +53,8 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        alert('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
+	        Debug.debug_print('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
+	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

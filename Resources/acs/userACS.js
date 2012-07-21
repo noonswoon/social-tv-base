@@ -9,7 +9,8 @@ exports.userACS_fetchCurrentUser = function(_id){
     	Ti.API.info('fetch profile user: ' + user.first_name + ' ' + user.last_name);
        Ti.App.fireEvent('userLoaded'+_id,{fetchedUser: user});
     } else {
-        Ti.API.info('userACS_fetchCurrentUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+        Debug.debug_print('userACS_fetchCurrentUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+        ErrorHandling.showNetworkError();
     }
 });
 };
@@ -39,7 +40,8 @@ exports.userACS_updatedUser = function(_firstname,_lastname){
    		Ti.App.fireEvent('updateComplete',{firstName:user.first_name,lastName:user.last_name});
     } 
     else{
-      	  Ti.API.info('Error:\\n' +((e.error && e.message) || JSON.stringify(e)));
+      	  Debug.debug_print('Error:\\n' +((e.error && e.message) || JSON.stringify(e)));
+      	  ErrorHandling.showNetworkError();
     	}
 	});
 }

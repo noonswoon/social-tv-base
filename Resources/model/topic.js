@@ -86,6 +86,7 @@ exports.topicModel_updateACSObjectIdField = function(_topic) {
 exports.topicModel_add = function(_programId,_acsObjectId,_title,_content,_photo,_userId,_username,_deviceTokenId) {
 	var db = Ti.Database.open('Chatterbox');
 	var updatedAt = moment().format("YYYY-MM-DDTHH:mm:ss");
+
 	db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,content,photo,comments_count,user_id,username,device_token_id,is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,0,?,?,?,0,?)",_acsObjectId,_programId,_title,_content,_photo,_userId,_username,_deviceTokenId,updatedAt);
 	var newId = db.lastInsertRowId;
 	db.close();
@@ -108,13 +109,14 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 		var photoUrl = null;
 		if(curTopic.user.custom_fields !== undefined && curTopic.user.custom_fields.device_token_id !== undefined)
 			deviceToken = curTopic.user.custom_fields.device_token_id;
-		if(curTopic.photo !== undefined && curTopic.photo.urls !== undefined && curTopic.photo.urls.original !== undefined)
-			photoUrl = curTopic.photo.urls.original;
+		if(curTopic.photo !== undefined && curTopic.photo.urls !== undefined && curTopic.photo.urls.small_240 !== undefined)
+			photoUrl = curTopic.photo.urls.small_240;
 		
 		//check whether the inserting curTopic.id already existed in the db, if it is, do not add
 		result = db.execute('SELECT id FROM topics WHERE acs_object_id = ?',curTopic.id);
 		if(result.rowCount === 0) {
 			//only insert new topics that db doesn't have
+			
 			db.execute("INSERT INTO topics(id,acs_object_id,program_id,title,content,photo,comments_count,user_id,username,device_token_id, is_deleted,updated_at) VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)", 
 					curTopic.id,_programId,curTopic.title,curTopic.content,photoUrl,curTopic.commentsCount,curTopic.user.id, curTopic.user.username,deviceToken,curTopic.isDeleted, convertACSTimeToLocalTime(curTopic.updatedAt));
 			isTableChanged = true;

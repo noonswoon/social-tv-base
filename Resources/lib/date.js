@@ -33,7 +33,12 @@ function convertACSTimeToLocalTime(_datetimeStr) {
 		dm.add('hours',7);
 		result = dm.format("YYYY-MM-DDTHH:mm:ss");
 	} else {
-		alert('have not implementd the country: '+curCountryCode);
+		var unsupportDialog = Titanium.UI.createAlertDialog({
+			title:'Unsupported Region',
+			message:'Chatterbox has not reached your country yet. But very soon!'
+		});
+		unsupportDialog.show();
+		Debug.debug_print('have not implementd the country: '+curCountryCode);
 	}
 	return result
 };
@@ -46,7 +51,12 @@ function convertLocalTimeToACSTime(_datetimeStr) {
 		dm.subtract('hours',7);
 		result = dm.format("YYYY-MM-DDTHH:mm:ss");
 	} else {
-		alert('have not implementd the country: '+curCountryCode);
+		var unsupportDialog = Titanium.UI.createAlertDialog({
+			title:'Unsupported Region',
+			message:'Chatterbox has not reached your country yet. But very soon!'
+		});
+		unsupportDialog.show();
+		Debug.debug_print('have not implementd the country: '+curCountryCode);
 	}
 	return result
 };

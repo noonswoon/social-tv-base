@@ -155,8 +155,13 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 	    if (e.success) {
 	    	Ti.API.info('user = '+JSON.stringify(e));
 	        if(e.BannedDevices.length > 0) {
-	        	alert("Sorry, your device has been banned.");
+	        	var deviceBannedDialog = Titanium.UI.createAlertDialog({
+						title:'Your device is banned',
+						message:'Please contact admin@chatterbox.mobi for more information.'
+					});
+				deviceBannedDialog.show();
 	        } else {
+	        	Ti.API.info('pass banning device screnn test');
 	    		Cloud.Users.create({
 					email:email,
 					username:username,
@@ -174,7 +179,7 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 							callback(currentUser);
 						} else {
 							Ti.API.info('Error'+JSON.stringify(e));
-							alert(e.message);
+							Debug.debug_print(e.message);
 							loggedIn = false;
 							currentUser = null;
 							callback(false);
@@ -183,7 +188,7 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 				);
 			}    	
 	    } else {
-	        alert('acs -> createUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        Debug.debug_print('acs -> createUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
 	    }
 	});
 };

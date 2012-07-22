@@ -36,7 +36,6 @@ exports.userACS_updatedUser = function(_firstname,_lastname){
 }, function (e) {
     if(e.success){
         var user = e.users[0];
-       	// alert('Success:\\n' +'id: ' + user.id + '\\n' +'first name: ' + user.first_name + '\\n' +'last name: ' + user.last_name);
    		Ti.App.fireEvent('updateComplete',{firstName:user.first_name,lastName:user.last_name});
     } 
     else{

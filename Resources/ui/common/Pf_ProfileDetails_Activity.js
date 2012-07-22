@@ -46,7 +46,11 @@ if(_status==="me") {
 	
 	var setFriendRequestVisible = function(){
 		if (friendRequests.length == 0) userRequestView.visible = false;
-		else userRequestView.visible = true;
+		else {
+			userRequestView.visible = true;
+			requestImage.visible = true;
+			requestLabel.visible = true;
+			}
 	}	
 	
 	var createNotice = function(){
@@ -244,16 +248,19 @@ if(_status==="me") {
 			
 	});
 
-	Ti.App.addEventListener('activityDbUpdated',function() {
+	var activityDbUpdatedcallback = function() {
 		myActivity = ActivityModel.activityModel_fetchActivity(curId);
 		createActivityTable(myActivity);
-	});
+	}
+	
+	Ti.App.addEventListener('activityDbUpdated',activityDbUpdatedcallback);
 
 	Ti.App.addEventListener('activityLoaded'+curId, activityLoadedCallBack);
 	Ti.App.addEventListener('updateAnActivity'+curId,updateAnActivityCallBack);	
 		
 	var clearListeners = function() {
 		Ti.API.info('remove Eventlistener...openActivityDetail event'+curId);
+		Ti.App.removeEventListener('activityDbUpdated',activityDbUpdatedcallback);
 		Ti.App.removeEventListener('updateAnActivity'+curId,updateAnActivityCallBack);
 		Ti.App.removeEventListener('profileMainWindowClosing'+curId,clearListeners);
 	}

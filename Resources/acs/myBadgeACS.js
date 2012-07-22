@@ -26,6 +26,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
 };
 
 exports.myBadgeACS_createNewBadge = function(_userID,_badgeID){
+	Ti.API.info('myBadgeACS_createNewBadge');
 	Cloud.Objects.create({
     classname: 'BadgeUnlock',
     fields: {
@@ -35,7 +36,7 @@ exports.myBadgeACS_createNewBadge = function(_userID,_badgeID){
 	}, function (e) {
 	    if (e.success) {
 	        var badgeUnlock = e.BadgeUnlock[0];
-			Ti.App.fireEvent('newBadgeUnlock', {badgeID: badgeUnlock.badge_id});   
+			Ti.App.fireEvent('newBadgeUnlock'+_userID, {badgeID: badgeUnlock.badge_id});   
 	    } else {
 	        Debug.debug_print('myBadgeACS->createNewBadge: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));

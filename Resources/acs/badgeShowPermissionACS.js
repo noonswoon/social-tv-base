@@ -34,8 +34,7 @@ exports.badgeShowPermissionACS_fetchedPermission = function() {
 	         setBadgeOfShowPermission(permission);
 	    } 
 	    else {
-	        Debug.debug_print('badgeShowPermissionACS/fetchedPermission Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
+	        Debug.debug_print('badgeShowPermissionACS/fetchedPermission Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});

@@ -27,6 +27,8 @@ var IS_ON_DEVICE = true;
 var IS_PRODUCTION_BUILD = false;
 
 var ACS_API_KEY = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
+if(IS_PRODUCTION_BUILD)
+	ACS_API_KEY = '5va2XsGjknLebugvozPZfZr9xhSVEZl1';
 var CACHE_TIMEOUT_IN_MINUTES = 1; 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 var CONTENT_LENGTH = 160;
@@ -36,7 +38,7 @@ var DEFAULT_CTB_IMAGE_URL = 'http://a0.twimg.com/profile_images/2208934390/Scree
 
 var friendRequests = [];
 
-if(IS_PRODUCTION_BUILD) ACS_API_KEY = '5va2XsGjknLebugvozPZfZr9xhSVEZl1';
+
 
 /*
 Ti.App.addEventListener('pause', function(){

@@ -17,9 +17,47 @@ function showRequestResult(e) {
 }	
 	
 
+//tickers
+var checkinAppearOnFaceBook = function() {
+	 	var data = {
+		 tv_program: "http://chatterbox.mobi/opengraph/og_tvprogram_obj.html",
+		 access_token: Titanium.Facebook.accessToken
+		  };
+		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:check_in",data,"POST",showRequestResult);
+
+}
+exports.checkinAppearOnFaceBook = checkinAppearOnFaceBook;
+
+var newTopicAppearOnFacebook = function() {
+	var data = {
+		topic: "http://chatterbox.mobi/opengraph/og_topic_obj.html",
+		access_token: Titanium.Facebook.accessToken
+	};
+	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:create",data,"POST",showRequestResult);
+}
+exports.newTopicAppearOnFacebook = newTopicAppearOnFacebook;
+
+var unlockBadgeAppearOnFacebook = function() {
+	var data = {
+		badge: "http://chatterbox.mobi/opengraph/og_badge_obj.html",
+		access_token: Titanium.Facebook.accessToken
+	};
+	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:unlock",data,"POST",showRequestResult);
+}
+exports.unlockBadgeAppearOnFacebook = unlockBadgeAppearOnFacebook;
+
+var riseRankAppearOnFacebook = function() {
+	var data = {
+		rank: "http://chatterbox.mobi/opengraph/og_rank_obj.html",
+		access_token: Titanium.Facebook.accessToken
+	};
+	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:rise",data,"POST",showRequestResult);
+}
+exports.riseRankAppearOnFacebook = riseRankAppearOnFacebook;4
+
 exports.badgePopUpOnFacebook = function(_badgeId) {
 	var SettingHelper = require('helpers/settingHelper');
-	
+	unlockBadgeAppearOnFacebook();
 	if(_badgeId === 0 || _badgeId === '0') return; //DONT post the first badge, since the checkin already did the fb posting
 	if(_badgeId === 1 || _badgeId === '1') return; //DONT post the second badge, since the checkin already did the fb posting
 
@@ -30,7 +68,7 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 	
 		var data = {
 			link: "http://chatterbox.mobi/",
-			name: user.first_name+" "+user.last_name+" has unlocked new a badge: "+badge.title,
+			name: user.first_name+" "+user.last_name+" has unlocked a new badge: "+badge.title,
 			message: "",
 			caption: "Chatterbox",
 			picture: badge.url,
@@ -71,6 +109,7 @@ exports.checkinPopUpOnFacebook = function(_checkin,_programPhoto) {
 		};
 		if(SettingHelper.getFacebookAutoPost()) Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
 		else Titanium.Facebook.dialog("feed", data, showRequestResult);
+		checkinAppearOnFaceBook();
 	}
 }
 
@@ -87,6 +126,7 @@ exports.levelUpPopUpOnFacebook = function(_levelTitle) {
 			description: _levelTitle
 		};
 		Titanium.Facebook.dialog("feed", data, showRequestResult);
+		riseRankAppearOnFacebook();
 	}
 }
 
@@ -98,23 +138,7 @@ exports.cookAppearOnFaceBook = function() {
 		 access_token: Titanium.Facebook.accessToken
 		  };
 // 
-		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:cook",data,"POST",showRequestResult);
-
-/*	var url = "https://graph.facebook.com/me/og_chatterbox:cook&recipe=http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php";
-	var data = {
-		access_token : Ti.Facebook.accessToken
-	};
-	var xhr = Ti.Network.createHTTPClient({
-		onload: function() {
-			alert('onload: '+JSON.stringify(this));
-		},onerror: function(e) {
-			alert('onerror: '+JSON.stringify(e));
-		},
-		timeout:10000
-	});
-	xhr.open('POST', url, true);
-	xhr.send(data);
-*/	
+		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:cook",data,"POST",showRequestResult);	
 }
 
 
@@ -134,15 +158,7 @@ exports.postAppearOnFaceBook = function(_topicTitle,_topicContent,_programPhoto)
 		};
 		// Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:post",data,"POST",showRequestResult);
 		Titanium.Facebook.dialog("feed", data, showRequestResult);
+		newTopicAppearOnFacebook();
 	}
 }
 
-exports.checkinAppearOnFaceBook = function() {
-	 	var data = {
-		 tv_program: "http://chatterbox.mobi/opengraph/og_checkin_obj_dynamic.php",
-		 access_token: Titanium.Facebook.accessToken
-		  };
- 
-		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:checkin",data,"POST",showRequestResult);
-
-}

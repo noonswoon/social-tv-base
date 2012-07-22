@@ -48,6 +48,7 @@ function facebookAuthenCallback(e) {
 									maintabgroup.open();
 							    } else {
 							      	Debug.debug_print("Login failed: "+JSON.stringify(e));
+							      	ErrorHandling.showNetworkError();
 							    }
 							});
 				    	} else {
@@ -59,19 +60,25 @@ function facebookAuthenCallback(e) {
 				    	}
 				    } else {
 				    	Debug.debug_print('Users.query Error: ' +((e.error && e.message) || JSON.stringify(e)));
+				    	ErrorHandling.showNetworkError();
 				    }
 				});
 			} else if (e.error) {
 				Debug.debug_print('cannot request GraphPath: '+ JSON.stringify(e));		
+				ErrorHandling.showNetworkError();
 			} else {
 				Debug.debug_print("what the hell is going on_2? " + JSON.stringify(e));
+				ErrorHandling.showNetworkError();
 			}
 		});
 	} else if (e.error) {
 		Debug.debug_print("fb login error: ");
+		ErrorHandling.showNetworkError();
 	} else if (e.cancelled) {
 		Debug.debug_print("fb login Canceled");
+		ErrorHandling.showNetworkError();
 	} else {
 		Debug.debug_print("what the hell is going on?" + JSON.stringify(e));
+		ErrorHandling.showNetworkError();
 	}
 }

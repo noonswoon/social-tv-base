@@ -210,14 +210,15 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 var checkProgramCondition = function(_programId) {
 	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
 	var checkinCount = getNumCheckinsOfProgramId(_programId);
-	Ti.API.info('checkinCount/'+_programId+' = '+checkinCount);
+	//Ti.API.info('checkinCount/'+_programId+' = '+checkinCount);
 	if(BadgeShowPermissionACS.getBadgeOfShowPermission(_programId)) {
 		var badgeId = determineShowBadgeId(_programId,checkinCount);
-		Ti.API.info('badgeId: '+badgeId);		
+		//Ti.API.info('badgeId: '+badgeId);		
 	}
-	if(badgeId !== undefined) 
-	{Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: badgeId});
-	return true;}
+	if(badgeId !== undefined) {
+		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: badgeId});
+		return true;
+	} else return false;
 }
 
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);

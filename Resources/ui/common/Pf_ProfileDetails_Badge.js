@@ -70,7 +70,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	}
 	
 	var createBadgeView = function() {
-		Ti.API.info('createBadgeView');
+		//Ti.API.info('createBadgeView');
 		var count = 0;
 		
 		//TODO: got problem here

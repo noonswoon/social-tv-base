@@ -313,7 +313,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				//TODO
 				isGottenBadgeFromEvent = BadgeCondition.checkinEvent(checkinData);
 				isGottenBadgeFromFriends = BadgeCondition.checkFriendCondition(numFriendsCheckin);
-				Ti.API.info('isGottenBadgeFromEvent = '+isGottenBadgeFromEvent);
+				//Ti.API.info('isGottenBadgeFromEvent = '+isGottenBadgeFromEvent+', isGottenBadgeFromFriends: '+isGottenBadgeFromFriends);
 				checkinPopup(isGottenBadgeFromEvent || isGottenBadgeFromFriends);
 				
 

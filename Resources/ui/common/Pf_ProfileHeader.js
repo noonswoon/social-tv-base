@@ -48,8 +48,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		backgroundColor: 'transparent'
 	});
 
-//test push notification
-
 /*
 	profilePicture.addEventListener('click',function(){
 		//for testing stuff
@@ -59,6 +57,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 
 	});
 */
+
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,
 		width:103, height:104,

@@ -25,7 +25,8 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 			Cloud.Reviews.query({
 			    review_object_id:curCommentId,
 			    page: 1,
-			    per_page: 100
+			    per_page: 100,
+			    response_json_depth: 2
 			}, function (e) {
 			    if (e.success) {
 			    	var commentIdsWithRatingsOrComments = [];
@@ -55,8 +56,9 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 						Ti.App.fireEvent("queryReviewsOfCommentsDone");
 					}
 				} else {
-			        Ti.API.info('Getting CommentOfComment Error:\\n' +
+			        Debug.debug_print('Getting CommentOfComment Error:\\n' +
 			            ((e.error && e.message) || JSON.stringify(e)));
+			        ErrorHandling.showNetworkError();
 			    }
 			});
 		}
@@ -67,7 +69,8 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 	    post_id: topicId,
 	    page: 1,
 	    per_page: 100, 
-	    order: '-created_at'
+	    order: '-created_at',
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 	       // Ti.API.info('Reviews Count: ' + e.reviews.length);
@@ -99,8 +102,9 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 				queryCommentsOfComment(commentIdsWithRatingsOrComments);
 			}	
 	    } else {
-	        Ti.API.info('Getting Review Error:\\n' +
+	        Debug.debug_print('Getting Review Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 }
@@ -116,11 +120,12 @@ exports.commentACS_createCommentOfTopic = function(_comment,_localId,_topicId) {
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
-	        Ti.API.info('Commenting Success: id ' + review.id);
+	        Debug.debug_print('Commenting Success: id ' + review.id);
 	        Ti.App.fireEvent("commentCreatedACS",{newComment:review});	        
 	    } else {
-	        Ti.API.info('Comment Error:\\n' +
+	        Debug.debug_print('Comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 }
@@ -135,15 +140,16 @@ exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentI
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
-	        Ti.API.info('Comment of comment success: id ' + review.id);
+	        Debug.debug_print('Comment of comment success: id ' + review.id);
 	        Ti.App.fireEvent("commentOfCommentCreatedACS",{
 	        												newCommentOfComment:review, 
 	        												rowIndexToUpdateACSObjectId:_rowIndexToUpdateACSObjectId,
 	        												commentLevel:_commentLevel
 	        											});
 	    } else {
-	        Ti.API.info('Comment of comment Error:\\n' +
+	        Debug.debug_print('Comment of comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 }
@@ -158,11 +164,12 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_localId,_commentId
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
-	        Ti.API.info('Vote of comment success: id ' + review.id);
+	        Debug.debug_print('Vote of comment success: id ' + review.id);
 	        Ti.App.fireEvent("voteOfCommentCreatedACS",{newVote:review});
 	    } else {
-	        Ti.API.info('Vote of comment Error:\\n' +
+	        Debug.debug_print('Vote of comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	   		ErrorHandling.showNetworkError();
 	    }
 	});
 }
@@ -174,9 +181,10 @@ exports.commentACS_deleteComment = function(_respondToObjectId,_commentId) {
      	custom_fields: {"is_deleted": 1}
 	}, function (e) {
 	    if (e.success) {
-	        Ti.API.info("deleteCommentOfPost: update is_deleted_flag success");
+	        Debug.debug_print("deleteCommentOfPost: update is_deleted_flag success");
 	    } else {
-	        Ti.API.info("deleteCommentOfPost: update is_deleted_flag FAILED");
+	        Debug.debug_print("deleteCommentOfPost: update is_deleted_flag FAILED");
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 }
@@ -188,9 +196,10 @@ exports.commentACS_deleteCommentOfComment = function(_respondToObjectId,_comment
     	custom_fields: {"is_deleted": 1}
 	}, function (e) {
 	    if (e.success) {
-	        Ti.API.info("deleteCommentOfComment: update is_deleted_flag success");
+	        Debug.debug_print("deleteCommentOfComment: update is_deleted_flag success");
 	    } else {
-	        Ti.API.info("deleteCommentOfComment: update is_deleted_flag FAILED");
+	        Debug.debug_print("deleteCommentOfComment: update is_deleted_flag FAILED");
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 }

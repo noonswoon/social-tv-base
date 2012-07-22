@@ -85,7 +85,6 @@ function PopularWindow(_parent) {
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id;
 			var curChannelId = currentTVPrograms[i].channel_id;
-			//CheckinACS.checkinACS_fetchedCheckInOfProgram(curTVProgramId);
 			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId,curChannelId);
 		}
 	};

@@ -6,7 +6,8 @@ exports.fetchedBadges = function() {
 	Cloud.Photos.query({
 	    page: 1,
 	    per_page: 100,
-	    where: {tag: "badge"}
+	    where: {tag: "badge"},
+	    response_json_depth: 1
 	}, function (e) {
 	    if (e.success) {
 	    	var badges = [];
@@ -19,8 +20,9 @@ exports.fetchedBadges = function() {
 			Ti.App.fireEvent('badgeLoaded',{fetchedBadges:badges});
 	    }
 	    else {
-	        Ti.API.info('badgesACS fetchedBadges Error: ' +
+	        Debug.debug_print('badgesACS fetchedBadges Error: ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 };

@@ -16,6 +16,7 @@ var PullToRefresh = require('nl.icept.pull2refresh');
 var Cloud = require('ti.cloud');
 var UserCheckinTracking = require('lib/userCheckinTracking');
 var FbAutoPostACS = require('acs/fbAutoPostACS');
+var ErrorHandling = require('helpers/errorHandling');
 
 //GLOBAL VARIABLES DECARATION
 Ti.Facebook.appid = "197422093706392";

@@ -7,6 +7,7 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 	    per_page: 10,
 	    order: '-created_at',
 	    where: {"targetedUserID": {"$in": targetUser}},
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 			recentActivity = [];
@@ -17,11 +18,11 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 			}
 			Ti.App.fireEvent('activityLoaded'+_id,{fetchedActivity:recentActivity});
 	    } else {
-	        Ti.API.info('Error: Cannot fetch any activity from the server. ' +
+	        Debug.debug_print('Error: Cannot fetch any activity from the server. ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
-	    	 }
-				});
-		
+	    	ErrorHandling.showNetworkError();
+	   	}
+	});	
 };
 
 exports.activityACS_createMyActivity  = function(_activity,local_id) {
@@ -41,7 +42,8 @@ exports.activityACS_createMyActivity  = function(_activity,local_id) {
 	        Ti.App.fireEvent('updateAnActivity'+e.Activity[0].user.id,{fetchedAnActivity:activity}); //fetched back with local id:)
 
 	    } else {
-	        alert('activityACS - Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
+	        Debug.debug_print('activityACS - Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 };

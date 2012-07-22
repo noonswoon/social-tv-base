@@ -38,8 +38,9 @@ BadgeDetailWindow = function (_badge){
 		top: 285, left: 10,
 		width: 210,
 		height: 'auto',
-		color: '#d0d0d0',
-		font: {fontSize: 14}
+		color: '#999',
+		font: {fontSize: 14},
+		textAlign: 'center'
 	});	
 	
 	var badgeWinClose = Ti.UI.createButton({
@@ -81,7 +82,7 @@ BadgeDetailWindow = function (_badge){
 			badgeDesc.text = _newDesc;
 		}
 		else{
-			badgeCons.text = 'You haven\'t unlock this badge.';
+			badgeCons.text = 'Locked Badge';
 			badgeDesc.text = _newDesc;
 		}
 	};

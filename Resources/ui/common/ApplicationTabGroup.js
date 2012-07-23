@@ -74,6 +74,7 @@ function ApplicationTabGroup() {
 	self.open();
 	
 	//PROFILE: CALLING ACS
+	var CheckinModel = require('model/checkin');
 	var FriendACS = require('acs/friendsACS');
 	FriendACS.searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
@@ -117,11 +118,14 @@ function ApplicationTabGroup() {
 		productwin._removeAllPickerData();
 	};
 	
+	function checkinLoadedCompleteCallBack(e) {
+		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+	}
+	Ti.App.addEventListener('checkinLoadedComplete',checkinLoadedCompleteCallBack);
+	
 	function checkinDbLoadedCallBack(e) {			
-		var CheckinModel = require('model/checkin');
 		var TVProgramModel = require('model/tvprogram');
 
-		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday(myUserId);
 		//if checkin to at least 1 program, enable the chat/board/product bar
@@ -153,6 +157,7 @@ function ApplicationTabGroup() {
 		}
 	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+
 	
 	function updateHeaderCheckinCallback() {
 		var CheckinACS = require('acs/checkinACS');

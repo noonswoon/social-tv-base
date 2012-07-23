@@ -106,7 +106,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 		}				
 	} // end of function: createBadgeView
 	
-	Ti.App.addEventListener('badgesDBLoaded',function() {
+	Ti.App.addEventListener('badgesDbLoaded',function() {
 		badgesCollection = BadgeModel.badge_fetchBadges();
 		badgeImagesReady = true;
 		Ti.App.fireEvent('addBadgeDataReady'+_userProfile.id);

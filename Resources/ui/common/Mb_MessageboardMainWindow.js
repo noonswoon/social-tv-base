@@ -161,7 +161,7 @@ function MessageboardMainWindow(_programId) {
 			addWindow._setProgramId(currentProgramId);
 		
 			//reset data in the tableview
-			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');
+			CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated',CACHE_TIMEOUT_SHORT);
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
 	});
@@ -274,7 +274,7 @@ function MessageboardMainWindow(_programId) {
 										programData[0].number_checkins,numFriendsCheckins,programData[0].channel_id);
 			addWindow._setProgramId(_newProgramId);
 		}
-		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');	
+		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated', CACHE_TIMEOUT_SHORT);	
 	};
 	
 	self._addGuidelineWindow = function() {
@@ -444,7 +444,7 @@ function MessageboardMainWindow(_programId) {
 	});	
 
 	//just to be safe, TopicACS.topicACS_fetchAllTopicsOfProgramId should come after addEventListener; register should come before firing)
-	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated');
+	CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated',CACHE_TIMEOUT_SHORT);
 
 	return self;
 }

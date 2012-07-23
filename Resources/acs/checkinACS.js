@@ -22,7 +22,8 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 };
 
 //fetch checkin data only for today to keep in database
-exports.checkinACS_fetchedUserCheckIn = function(_id) {
+exports.checkinACS_fetchedUserCheckIn = function(_paramsArray) {
+	var userId = _paramsArray[0];
 	var startOfDayLocal = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
 	var acsConvertedStartOfDay = convertLocalTimeToACSTime(startOfDayLocal);
 	var dm = moment(acsConvertedStartOfDay, "YYYY-MM-DDTHH:mm:ss");
@@ -31,7 +32,7 @@ exports.checkinACS_fetchedUserCheckIn = function(_id) {
 	Cloud.Checkins.query({
 	    page: 1,
 	    per_page: 100,
-	    where: {user_id: _id, updated_at: {"$gte": acsConvertedStartOfDayFormatted}},  
+	    where: {user_id: userId, updated_at: {"$gte": acsConvertedStartOfDayFormatted}},  
 	    //TODO: will have issue here if we want to go back in time to test but there is 
 	    //some checkin in the future. It will result in pulling the future checkin data
 	    //and end up cannot find program data in the db since we only pull tvdata for only today
@@ -47,7 +48,7 @@ exports.checkinACS_fetchedUserCheckIn = function(_id) {
 	        	 //Ti.API.info('fetchedCheckin, id: '+curCheckin.id+', name: '+curCheckin.event.name + ', starttime: '+curCheckin.event.start_time+', recurringTime: '+curCheckin.event.recurring_until);
 	        	 checkin.push(curCheckin);
 	         }
-			Ti.App.fireEvent('checkinDbLoaded',{fetchedCheckin:checkin});
+			Ti.App.fireEvent('checkinLoadedComplete',{fetchedCheckin:checkin});
 	    } 
 	    else {
 	        Debug.debug_print('checkin Error:\\n' +

@@ -261,12 +261,9 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);
 		Ti.App.addEventListener('leaderDbUpdated',leaderDbUpdatedCallBack);		
 		
-				
-		var newProfileWin = function(e){
-			if(e.rowData.user_id!==curId) _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
-		}
-		
-		leaderTable.addEventListener('click',newProfileWin);
+		leaderTable.addEventListener('click',function(e){
+			if(e.rowData.user_id!==curId) _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));	
+		});
 		
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);

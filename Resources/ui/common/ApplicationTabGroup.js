@@ -74,23 +74,30 @@ function ApplicationTabGroup() {
 	self.open();
 	
 	//PROFILE: CALLING ACS
-	var LevelACS = require('acs/levelACS');	
-	var BadgesACS = require('acs/badgesACS');
-	var FriendACS = require('acs/friendsACS');
-	var CheckinACS = require('acs/checkinACS');	
 	var LevelModel = require('model/level');
 	var CheckinModel = require('model/checkin');
 	var TVProgramModel = require('model/tvprogram');
-	//not frequently update
-	LevelACS.levelACS_fetchedLevel();
-	BadgesACS.fetchedBadges();
-	//my user ACS
+	var CheckinACS = require('acs/checkinACS');	
 	
-	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
-	//debug why is it not showing on device
-	FriendACS.showFriendsRequest();	
+	// ///////////////////////////////////////////////////////////////	
+	var FriendACS = require('acs/friendsACS');
 	FriendACS.searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
+	// var LevelACS = require('acs/levelACS');	
+	// var BadgesACS = require('acs/badgesACS');
+	// var FriendACS = require('acs/friendsACS');
+	// var CheckinACS = require('acs/checkinACS');	
+	// //not frequently update
+	// LevelACS.levelACS_fetchedLevel();
+	// BadgesACS.fetchedBadges();
+	// //my user ACS
+// 	
+	// CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
+	// //debug why is it not showing on device
+	// FriendACS.showFriendsRequest();	
+	// FriendACS.searchFriend(myUserId);
+	// FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
+ 	// ///////////////////////////////////////////////////////////////
  	
 	function levelLoadedCallBack(e) {					
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);

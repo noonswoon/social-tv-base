@@ -30,9 +30,24 @@ function PopularWindow(_parent) {
 	
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0) && areFriendCheckinsReady) {
-			//Ti.API.info('everything is ready');
+			alert('everything is ready');
 			Ti.App.fireEvent("showDiscoveryPage");
 			hidePreloader(self);
+			
+			///////////////////////////////////////////////////////////////	
+			var LevelACS = require('acs/levelACS');	
+			var BadgesACS = require('acs/badgesACS');
+			var FriendACS = require('acs/friendsACS');
+			var CheckinACS = require('acs/checkinACS');	
+			//not frequently update
+			LevelACS.levelACS_fetchedLevel();
+			BadgesACS.fetchedBadges();
+			//my user ACS
+			var myUserId = acs.getUserId();
+			CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
+			FriendACS.showFriendsRequest();	
+		 	///////////////////////////////////////////////////////////////
+			
 		} //else Ti.API.info('thing is NOT ready yet..missing');
 	}
 	

@@ -70,10 +70,8 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	}
 	
 	var createBadgeView = function() {
-		Ti.API.info('createBadgeView');
 		var count = 0;
 		
-		//TODO: got problem here
 		for (var k in badgeView.children) {
 			if (badgeView.children.hasOwnProperty(k)) {
 				badgeView.remove(badgeView.children[k]);
@@ -94,7 +92,6 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 					var file = Titanium.Filesystem.getFile(badgesCollection[count].path);
 					if(file.exists()) badgeIndex[count].image = badgesCollection[count].path;
 					else badgeIndex[count].image = badgesCollection[count].url;
-					Ti.API.info(badgeIndex[count].image);
 				} else badgeIndex[count].image = 'images/badge/lockedbadge.png';
 				
 				badgeIndex[count].top = (i*100)+5;
@@ -168,8 +165,8 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 		FacebookSharing.badgePopUpOnFacebook(e.badgeID);
 		Ti.API.info('CONGRATS! You have unlock a new badge, check it out!');
 		Ti.App.fireEvent('updatedmyUnlockedBadges'+_userProfile.id);
-	//	createBadgeView();
 	});
+	
 	Ti.App.addEventListener('myBadgesLoaded'+_userProfile.id,myBadgesLoadedCallback);
 	Ti.App.addEventListener('addBadgeDataReady'+_userProfile.id,addBadgeDataReadyCallback);
 	Ti.App.addEventListener('updatedmyUnlockedBadges'+_userProfile.id,createBadgeView);

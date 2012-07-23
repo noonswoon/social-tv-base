@@ -11,7 +11,7 @@ exports.levelModel_updateLevelFromACS = function(_levelsCollection) {
 		db.execute("INSERT INTO levels(levelName,exp) VALUES(?,?)", curLevel.levelName,curLevel.exp);
 	}
 	db.close();
-	Ti.App.fireEvent("levelDbUpdated");
+	Ti.App.fireEvent('levelDbUpdated');
 };
 
 //select data from local database

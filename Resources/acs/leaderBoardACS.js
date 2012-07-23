@@ -5,7 +5,8 @@ exports.leaderACS_fetchedRank = function(_ids){
 	    page: 1,
 	    per_page: 100,
 	    where: {"user_id":{"$in":_ids}},
-	    //order: '-totalPoint'
+	    //order: '-totalPoint',
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 	    	var leaders = [];
@@ -17,7 +18,8 @@ exports.leaderACS_fetchedRank = function(_ids){
 	    } else {
 			Debug.debug_print('leaderboardACS-> fetchedRank: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
-	    	 }
+	        ErrorHandling.showNetworkError();
+	   	}
 	});
 };
 
@@ -42,6 +44,7 @@ exports.leaderACS_createUserInfo = function(_user){
 	    } else {
 	        Debug.debug_print('leaderboardACS 45 Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 };
@@ -61,6 +64,7 @@ exports.leaderACS_updateUserInfo = function(_id,_point){
 	    } else {
 	        Debug.debug_print('leaderboardACS 65 Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 };

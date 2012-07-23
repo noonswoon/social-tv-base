@@ -18,13 +18,11 @@ Ti.App.Chat = function(_chatParams) {
    	var TVProgram = require('model/tvprogram');
 	var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
 	var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
-		
-	var curUserInput = "";
+
     var currentChatRoom = _chatParams['programId'];
    	var currentProgramId = _chatParams['programId'];
     
-	var programData = {}; 
-	programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
+	var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 	var currentChatRoomName = programData[0].name;
 	
 	//dummy userobject
@@ -58,7 +56,8 @@ Ti.App.Chat = function(_chatParams) {
 	        callback : function(message) {
 	        	//since pubnub is a broadcaster, sender will receive his own message as well
 	        	//prevent from having the user sees his own message when it got broadcasted
-	        	if(message.text !== curUserInput) {
+	        	if(userObject.id !== message.senderId) {
+					Ti.API.info('vibrating...');
 	            	Ti.Media.vibrate(); //i love things that shake!
 	            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
 	           		var newChatRow = new ChatMessageTableViewRow(message.text,senderObj,false);
@@ -105,6 +104,9 @@ Ti.App.Chat = function(_chatParams) {
 	});
 	
 	backButton.addEventListener('click', function(){
+		//unsubscribe here...
+		Ti.API.info('unsubscribe from channel: '+currentChatRoom);
+		pubnub.unsubscribe({ channel : currentChatRoom });
    		chat_window.close();
 	});
 
@@ -228,11 +230,12 @@ Ti.App.Chat = function(_chatParams) {
 	});
 	
     sendButton.addEventListener('click', function() {
-		if(chatInputTextField.value === "") return;
+		if(chatInputTextField.value === "")
+			return;
+
 		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
         chatMessagesTableView.appendRow(newChatRow);
         		
-		curUserInput = chatInputTextField.value;
 		send_a_message(chatInputTextField.value);
 	
 		chatInputTextField.value = "";

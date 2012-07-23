@@ -9,7 +9,8 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_paramsArray) {
 	    where: {
 	        program_id: programId
 	    }, 
-	    order: '-created_at'
+	    order: '-created_at',
+	    response_json_depth: 2
 	}, function (e) {
 	    if (e.success) {
 	        for (var i = 0; i < e.posts.length; i++) {
@@ -32,7 +33,8 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_paramsArray) {
 			}
 	        Ti.App.fireEvent("topicsLoadedComplete",{topicsOfProgram:topicsOfProgram});
 	    } else {
-	        Ti.API.info('topicACS_fetchAllTopicsOfProgramId Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        Debug.debug_print('topicACS_fetchAllTopicsOfProgramId Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 }
@@ -52,7 +54,8 @@ exports.topicACS_create = function(_title,_content,_filename,_programId,_localId
 		   		Ti.API.info('Posting Success: id: ' + post.id);
 		   		Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
 		   	} else {
-		       	Ti.API.info('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
+		       	Debug.debug_print('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
+		       	ErrorHandling.showNetworkError();
 		  	}
 		});
 	} else {
@@ -67,7 +70,8 @@ exports.topicACS_create = function(_title,_content,_filename,_programId,_localId
 		   		Ti.API.info('Posting Success: id: ' + post.id);
 		   		Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
 		   	} else {
-		       	Ti.API.info('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
+		       	Debug.debug_print('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
+		       	ErrorHandling.showNetworkError();
 		 	}
 		});
 	}

@@ -2,7 +2,7 @@
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
 exports.searchFriend = function(_userID){
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +
-				'&user_id='+_userID;
+				'&user_id='+_userID;	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
@@ -37,7 +37,8 @@ exports.searchFriend = function(_userID){
 			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 		}, onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.info('friendsACS->searchFriend: Error= '+e.error);
+	        Debug.debug_print('friendsACS->searchFriend: Error= '+e.error);
+	        ErrorHandling.showNetworkError();
 	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:[]});
 	    },
 	    timeout:5000  /* in milliseconds */
@@ -57,7 +58,8 @@ exports.friendACS_fetchedUserTotalFriends = function(_id) {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
-	        Ti.API.info('friendACS_fetchedUserTotalFriends error');
+	        Debug.debug_print('friendACS_fetchedUserTotalFriends error');
+	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */
 	});
@@ -75,7 +77,8 @@ exports.addFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	       Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
+	        ErrorHandling.showNetworkError();
+	    	Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -94,8 +97,8 @@ exports.addFriendwithNoApprove = function(_userID,_callbackFn){
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
-	    	Ti.API.info(e);
 			// this function is called when an error occurs, including a timeout
+	    	ErrorHandling.showNetworkError();
 	        Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
 	    },
 	    timeout:5000  /* in milliseconds */
@@ -120,8 +123,8 @@ exports.approveFriend = function(_userID,_callbackFn){
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	         Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
+			ErrorHandling.showNetworkError();
+	        Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -163,14 +166,12 @@ exports.showFriendsRequest = function(){
 				};
 				requests.push(curRequest);
 			} 
-			Ti.API.info('requests.length: '+requests.length);
 			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:requests});
 	    },
 	    onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-			Ti.API.info('friendsACS->showFriendsRequest: Error= '+e.error);
-			Ti.API.info('error: requests.length = '+requests.length);
+			Debug.debug_print('friendsACS->showFriendsRequest: Error= '+e.error);
 			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:[]});
+			ErrorHandling.showNetworkError();
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -197,25 +198,26 @@ exports.friendsCheckins = function(_friendsList,_programsList){
 	}
 	allFriendsIdStr = allFriendsIdStr.substr(0,allFriendsIdStr.length-1);
 	
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&where={"event_id":{"$in":['+allProgramsIdStr+']},"user_id":{"$in":['+allFriendsIdStr+']}}';
-
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&response_json_depth=2&where={"event_id":{"$in":['+allProgramsIdStr+']},"user_id":{"$in":['+allFriendsIdStr+']}}';
+ 	var totalFriendCheckins = 0;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	    	responseJSON = JSON.parse(this.responseText);
-	    	var totalFriendCheckins = responseJSON.meta.total_results;	
+	    	totalFriendCheckins = responseJSON.meta.total_results;	
 		    
 		    for (var i=0;i<responseJSON.response.checkins.length;i++) {
 	           	var checkins = responseJSON.response.checkins[i];  
-		        var friendsCheckins ={
+		        var friendsCheckins = {
 		           	program: checkins.event,
 		           	friend: checkins.user,
-		          }
+		        };
 		        allFriendsCheckins.push(friendsCheckins);
 			}  	
 			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
+			ErrorHandling.showNetworkError();
 			Debug.debug_print('friendsACS->friendsCheckins: Error= '+e.error);
 			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },

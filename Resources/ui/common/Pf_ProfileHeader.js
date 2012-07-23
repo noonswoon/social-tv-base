@@ -19,15 +19,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	ActivityACS.activityACS_fetchedMyActivity(curId);
-
-	var refreshButton = Ti.UI.createImageView({
-		image: 'images/icon/refresh.png',
-		right: 10,
-		top: 5,
-		height:20,
-		width:20
-	});
-	
 	var headerView = Ti.UI.createView();
 	headerView.backgroundGradient = {
 		type: 'linear',

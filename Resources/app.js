@@ -16,6 +16,7 @@ var PullToRefresh = require('nl.icept.pull2refresh');
 var Cloud = require('ti.cloud');
 var UserCheckinTracking = require('lib/userCheckinTracking');
 var FbAutoPostACS = require('acs/fbAutoPostACS');
+var ErrorHandling = require('helpers/errorHandling');
 
 //GLOBAL VARIABLES DECARATION
 Ti.Facebook.appid = "197422093706392";
@@ -58,7 +59,7 @@ var launchTheApp = function() {
 			var userEmail = e.users[0].email;
 			Cloud.Users.logout(function (e) {
 			    if (e.success) {
-			    	Ti.API.info("logging out to login again: password: "+Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10));
+			    	Debug.debug_print("logging out to login again: password: "+Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10));
 			    	Cloud.Users.login({
 						login: userEmail,
 					    password: Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10),
@@ -74,11 +75,13 @@ var launchTheApp = function() {
 							var maintabgroup = new ApplicationTabGroup();
 							maintabgroup.open();
 						} else {
-							alert("ReloggingIn Error: "+JSON.stringify(e));
+							Debug.debug_print("ReloggingIn Error: "+JSON.stringify(e));
+							ErrorHandling.showNetworkError();
 					    }
 					}); 
 			    } else {
-			        alert('Logout Error: '+((e.error && e.message) || JSON.stringify(e)));
+			        Debug.debug_print('Logout Error: '+((e.error && e.message) || JSON.stringify(e)));
+			        ErrorHandling.showNetworkError();
 			    }
 			});
 	    } else {
@@ -119,7 +122,7 @@ var launchTheAppWrapper = function() {
 		version = Ti.Platform.version,
 		height = Ti.Platform.displayCaps.platformHeight,
 		width = Ti.Platform.displayCaps.platformWidth;
-	Ti.API.info('Welcome to Chatterbox for ' + osname);
+	//Ti.API.info('Welcome to Chatterbox for ' + osname);
 	
 	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
 	//yourself what you consider a tablet form factor for android

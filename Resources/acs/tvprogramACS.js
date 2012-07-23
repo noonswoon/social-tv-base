@@ -6,9 +6,8 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	var end_of_the_day = moment().eod().format('YYYY-MM-DD,HH:mm:ss');
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query.json?key='+ACS_API_KEY+
-			  	'&per_page=20&where={"start_time":{"$gte":"'+start_of_the_day+'","$lte":"'+end_of_the_day+'"}}';	
+			  	'&per_page=100&response_json_depth=2&where={"start_time":{"$gte":"'+start_of_the_day+'","$lte":"'+end_of_the_day+'"}}';	
 			  			  	
-	//Ti.API.info('fetchAllProgramShowingNow: '+url);	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
@@ -22,7 +21,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 				var programType = 'ETC';
 				
 				//safeguarding code
-				if(program.photo !== undefined) photoUrl = program.photo.urls.original;
+				if(program.photo !== undefined) photoUrl = program.photo.urls.thumb_100;
 	            if(program.custom_fields !== undefined) {
 	            	if(program.custom_fields.subname !== undefined) {
 	            		subname = program.custom_fields.subname;	
@@ -55,6 +54,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
+	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

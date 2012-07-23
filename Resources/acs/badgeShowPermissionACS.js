@@ -23,6 +23,7 @@ exports.badgeShowPermissionACS_fetchedPermission = function() {
 		classname: 'BadgeShowPermission',	
 	    page: 1,
 	    per_page: 100,
+	    response_json_depth: 1
 	}, function (e) {
 	    if (e.success) {
 	    	var permission =[];
@@ -33,8 +34,8 @@ exports.badgeShowPermissionACS_fetchedPermission = function() {
 	         setBadgeOfShowPermission(permission);
 	    } 
 	    else {
-	        Ti.API.info('badgeShowPermissionACS/fetchedPermission Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	    	 }
-		});
+	        Debug.debug_print('badgeShowPermissionACS/fetchedPermission Error: ' + JSON.stringify(e));
+	        ErrorHandling.showNetworkError();
+	    }
+	});
 };

@@ -28,7 +28,6 @@ exports.getNumCheckinsOfProgramId = getNumCheckinsOfProgramId;
 
 ////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
-	Ti.API.info('checkCountCondition');
 	var checkinCount = e.result;
 	//badge desc: nice to meet you
 	//condition: 1st check in
@@ -49,7 +48,12 @@ exports.checkFriendCondition = function(_friendCheckIn) {
 	//badge desc: love sharing		
 	//condition: checkin with more than 5 friends
 	//badge id: 3	
-	if(_friendCheckIn >= 5) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 3});
+	if(_friendCheckIn >= 5) {
+		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 3});
+		return true;
+	} else {
+		return false;
+	}
 }	
 	
 var checkTypeCondition = function(_type) {
@@ -206,14 +210,15 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 var checkProgramCondition = function(_programId) {
 	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
 	var checkinCount = getNumCheckinsOfProgramId(_programId);
-	Ti.API.info('checkinCount/'+_programId+' = '+checkinCount);
+	//Ti.API.info('checkinCount/'+_programId+' = '+checkinCount);
 	if(BadgeShowPermissionACS.getBadgeOfShowPermission(_programId)) {
 		var badgeId = determineShowBadgeId(_programId,checkinCount);
-		Ti.API.info('badgeId: '+badgeId);		
+		//Ti.API.info('badgeId: '+badgeId);		
 	}
-	if(badgeId !== undefined) 
-	{Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: badgeId});
-	return true;}
+	if(badgeId !== undefined) {
+		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: badgeId});
+		return true;
+	} else return false;
 }
 
 Ti.App.addEventListener('UserTotalCheckInsFromACS'+acs.getUserId(), checkCountCondition);

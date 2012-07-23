@@ -231,8 +231,9 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			height: 96, width: 243,
 			zIndex: 500,
 		});
+		
 		var popupMessage = Ti.UI.createLabel({
-			//text: 'Checkin to '+_tvprogramData.programTitle+' completed. You just earned 5 points!',
+			//text: '',
 			color: '#262a21',
 			font: {fontSize: 14},
 			top: 2,
@@ -240,11 +241,14 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			verticalAlign: 'top',
 			width: 225, height: 60,
 		});
+		
 		if(_gotbadge) {
-			popupMessage.text = 'Congratulation! You\'ve got a new badge from checking in to'+_tvprogramData.programTitle;
+			popupMessage.text = 'Congratulations! You just got a new badge from checking in to '+_tvprogramData.programTitle;
 			popupView.backgroundImage = 'images/checkin/checkin_success_badge.png';
+		} else {
+			popupMessage.text = 'Check In to '+_tvprogramData.programTitle+' completed. You just earned 5 points!';
 		}
-		else popupMessage.text = 'Checkin to '+_tvprogramData.programTitle+' completed. You just earned 5 points!';
+		
 		popupView.add(popupMessage);
 		self.add(popupView);
 		 setTimeout(function() {
@@ -265,7 +269,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		checkinView.addEventListener('touchend',function(){
 			var checkinEnable = false;
 			var now = moment().format('YYYY-MM-DDTHH:mm:ss');
-			if(now >= _tvprogramData.programStarttime && now <= _tvprogramData.programEndtime) {
+			if(_tvprogramData.programStarttime <= now && now <= _tvprogramData.programEndtime) {
 				checkinEnable = true;
 			} 
 			
@@ -307,11 +311,12 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				checkinData.program_type = _tvprogramData.programType;
 				checkinData.program_id = _tvprogramData.programId;
 				//TODO
-				isGetBadge = BadgeCondition.checkinEvent(checkinData);
-				Ti.API.info('isGetBadge = '+isGetBadge);
-				checkinPopup(isGetBadge);
+				isGottenBadgeFromEvent = BadgeCondition.checkinEvent(checkinData);
+				isGottenBadgeFromFriends = BadgeCondition.checkFriendCondition(numFriendsCheckin);
+				//Ti.API.info('isGottenBadgeFromEvent = '+isGottenBadgeFromEvent+', isGottenBadgeFromFriends: '+isGottenBadgeFromFriends);
+				checkinPopup(isGottenBadgeFromEvent || isGottenBadgeFromFriends);
 				
-				BadgeCondition.checkFriendCondition(numFriendsCheckin);
+
 								
 				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 			} else {

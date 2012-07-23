@@ -6,6 +6,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
     per_page: 20,
     order: 'badge_id',
     where: {user_id: _id},
+    response_json_depth: 1
 	}, function (e) {
 	    if (e.success) {
 	    	myBadges = [];
@@ -18,7 +19,8 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
 	    else {
 	        Debug.debug_print('myBadgeACS-> fetchedBadge Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
-	    	 }
+	        ErrorHandling.showNetworkError();
+	    }
 	});
 		
 };
@@ -38,6 +40,7 @@ exports.myBadgeACS_createNewBadge = function(_userID,_badgeID){
 	    } else {
 	        Debug.debug_print('myBadgeACS->createNewBadge: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        ErrorHandling.showNetworkError();
 	    }
 	});
 };

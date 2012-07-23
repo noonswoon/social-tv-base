@@ -1,7 +1,6 @@
 CommentHeaderTableViewRow = function(_topicId) {
 	var Topic = require('model/topic');
 	var topic = Topic.topicModel_getTopicById(_topicId);
-	
 	var headerTableData = [];
 	
 	var headerMainRow = Ti.UI.createTableViewRow({

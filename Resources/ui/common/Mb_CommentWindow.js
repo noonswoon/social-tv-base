@@ -321,7 +321,7 @@ function CommentWindow(_topicId) {
 	}
 	PullToRefresh.addASyncPullRefreshToTableView(commentsTable, function() {
 		usingPull2Refresh = true;
-		CommentACS.commentACS_fetchAllCommentsOfPostId(_topicId);
+		CommentACS.commentACS_fetchAllCommentsOfPostId([_topicId]);
 	}, { //settings
 		backgroundColor: '#959595', 
 		statusLabel: {

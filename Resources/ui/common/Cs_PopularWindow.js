@@ -100,7 +100,6 @@ function PopularWindow(_parent) {
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id;
 			var curChannelId = currentTVPrograms[i].channel_id;
-			//CheckinACS.checkinACS_fetchedCheckInOfProgram(curTVProgramId);
 			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId,curChannelId);
 		}
 	};
@@ -204,7 +203,7 @@ function PopularWindow(_parent) {
 
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
-		Ti.API.info('program_type = '+e.row.tvprogram.program_type);
+		//Ti.API.info('program_type = '+e.row.tvprogram.program_type);
 		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.id, //id of the particular show (one-time)
 			programId: e.row.tvprogram.program_id, //overall id of program id

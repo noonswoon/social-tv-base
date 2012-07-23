@@ -84,10 +84,8 @@ function ApplicationTabGroup() {
 	//not frequently update
 	LevelACS.levelACS_fetchedLevel();
 	BadgesACS.fetchedBadges();
-	//my user ACS
 	
 	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
-	//debug why is it not showing on device
 	FriendACS.showFriendsRequest();	
 	FriendACS.searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);

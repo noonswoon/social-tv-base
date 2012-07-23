@@ -74,16 +74,12 @@ function ApplicationTabGroup() {
 	self.open();
 	
 	//PROFILE: CALLING ACS
-	var LevelModel = require('model/level');
-	var CheckinModel = require('model/checkin');
-	var TVProgramModel = require('model/tvprogram');
-	var CheckinACS = require('acs/checkinACS');	
-	
 	var FriendACS = require('acs/friendsACS');
 	FriendACS.searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
  	
 	function levelLoadedCallBack(e) {					
+		var LevelModel = require('model/level');
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
 	}
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
@@ -122,6 +118,9 @@ function ApplicationTabGroup() {
 	};
 	
 	function checkinDbLoadedCallBack(e) {			
+		var CheckinModel = require('model/checkin');
+		var TVProgramModel = require('model/tvprogram');
+
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday(myUserId);
@@ -156,6 +155,7 @@ function ApplicationTabGroup() {
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
 	
 	function updateHeaderCheckinCallback() {
+		var CheckinACS = require('acs/checkinACS');
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
 	}
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);

@@ -1,25 +1,26 @@
 function PopularWindow(_parent) {
-	var TVProgramACS = require('acs/tvprogramACS');
+	var BadgesACS = require('acs/badgesACS');
+	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
 	var CheckinACS = require('acs/checkinACS');
 	var FriendsACS = require('acs/friendsACS');
-	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
+	var LevelACS = require('acs/levelACS');	
+	var TVProgramACS = require('acs/tvprogramACS');
 	var UserACS = require('acs/userACS');
-	
+
 	var CheckinModel = require('model/checkin');
-	var TVProgramModel = require('model/tvprogram');
 	var FriendModel = require('model/friend');
+	var TVProgramModel = require('model/tvprogram');
 	var UserModel = require('model/user')
 	
 	var CacheHelper = require('helpers/cacheHelper');
 	
 	var PopularWindowTableViewRow = require('ui/common/Cs_PopularWindowTableViewRow');
 	var TimeSelectionScrollView = require('ui/common/Cs_PopularWindowTimeSelectionScrollView');
-	
-		
+			
 	var areAllProgramsTitlesLoaded = false;
 	var areBadgeShowPermissionReady = false;
 	var areFriendCheckinsReady = false;
-	var numProgramsToLoadCheckins = 0;
+	var numProgramsToLoadCheckins = -1;
 	var usingPull2Refresh = false;
 	
 	//Google Analytics
@@ -39,20 +40,12 @@ function PopularWindow(_parent) {
 			hidePreloader(self);
 			Ti.App.fireEvent("showDiscoveryPage");
 
-			///////////////////////////////////////////////////////////////	
-			var LevelACS = require('acs/levelACS');	
-			var BadgesACS = require('acs/badgesACS');
-			var FriendACS = require('acs/friendsACS');
-			var CheckinACS = require('acs/checkinACS');	
-			//not frequently update
-			LevelACS.levelACS_fetchedLevel();
-			BadgesACS.fetchedBadges();
-			//my user ACS
+			//not frequently update// load after fetching tvprogram completed -- do caching too
 			var myUserId = acs.getUserId();
+			BadgesACS.fetchedBadges();
 			CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
-			FriendACS.showFriendsRequest();	
-		 	///////////////////////////////////////////////////////////////
-			
+			FriendsACS.showFriendsRequest();	
+			LevelACS.levelACS_fetchedLevel();			
 		} //else Ti.API.info('thing is NOT ready yet..missing');
 	}
 	
@@ -97,7 +90,7 @@ function PopularWindow(_parent) {
 	
 	function fetchProgramsAllCheckins() {
 		var currentTVPrograms = TVProgramModel.TVProgramModel_fetchPrograms(); 
-		numProgramsToLoadCheckins = currentTVPrograms.length;
+		numProgramsToLoadCheckins = currentTVPrograms.length; //set variable to count down num checkins
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id;
 			var curChannelId = currentTVPrograms[i].channel_id;
@@ -231,23 +224,26 @@ function PopularWindow(_parent) {
 	}, 5000);
 
 	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
-		usingPull2Refresh = true;
-		TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
-		CacheHelper.getTimeLastFetchedTVProgramACS();
-	}, {
-		backgroundColor: '#959595', 
-		statusLabel: {
-			color: 'white'
-		},
-		updateLabel: {
-			color: 'white'
+			usingPull2Refresh = true;
+			areAllProgramsTitlesLoaded = false;
+			numProgramsToLoadCheckins = -1;
+			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
+			CacheHelper.getTimeLastFetchedTVProgramACS();
+		}, {
+			backgroundColor: '#959595', 
+			statusLabel: {
+				color: 'white'
+			},
+			updateLabel: {
+				color: 'white'
+			}
 		}
-	});	
+	);	
 	
 	TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
 	CacheHelper.setTimeLastFetchedTVProgramACS();
 	BadgeShowPermissionACS.badgeShowPermissionACS_fetchedPermission();
-	
+
 	return self;
 }
 

@@ -99,7 +99,6 @@ function ProfileMainWindow(_id,_status) {
 		reset();
 	});
 	
-	showPreloader(self,'Loading...');
 	return self;
 }
 

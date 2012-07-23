@@ -24,6 +24,11 @@ function PopularWindow(_parent) {
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Popular');
+	
+	var self = Ti.UI.createWindow({
+		backgroundColor: 'orange'
+	});
+	
 	function sortByNumberCheckins(a,b) {
 		return b.number_checkins - a.number_checkins;	//if a has bigger checkins value, a should come before b
 	}
@@ -31,9 +36,9 @@ function PopularWindow(_parent) {
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0) && areFriendCheckinsReady) {
 			alert('everything is ready');
-			Ti.App.fireEvent("showDiscoveryPage");
 			hidePreloader(self);
-			
+			Ti.App.fireEvent("showDiscoveryPage");
+
 			///////////////////////////////////////////////////////////////	
 			var LevelACS = require('acs/levelACS');	
 			var BadgesACS = require('acs/badgesACS');
@@ -59,10 +64,6 @@ function PopularWindow(_parent) {
 	Ti.App.addEventListener('badgeShowPermissionLoaded',function() {
 		areBadgeShowPermissionReady = true;
 		isEverythingReady();
-	});
-	
-	var self = Ti.UI.createWindow({
-		backgroundColor: 'orange'
 	});
 	
 	var timeSelectionScrollView = new TimeSelectionScrollView();
@@ -224,7 +225,11 @@ function PopularWindow(_parent) {
 	self.hideNavBar();
 	
 	showPreloader(self,'Loading...');
-	
+	setTimeout(function() {
+		Ti.API.info('force close loading screen');
+		hidePreloader(self);
+	}, 5000);
+
 	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
 		usingPull2Refresh = true;
 		TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();

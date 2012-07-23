@@ -262,7 +262,10 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		Ti.App.addEventListener('leaderDbUpdated',leaderDbUpdatedCallBack);		
 		
 		leaderTable.addEventListener('click',function(e){
+			
 			if(e.rowData.user_id!==curId) _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));	
+	
+	
 		});
 		
 		leaderSec.add(leaderLabel);

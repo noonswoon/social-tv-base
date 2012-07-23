@@ -1,5 +1,4 @@
 var ProfileStatsView = function(_parentWindow, _userProfile, _status){
-	var LeaderACS = require('acs/leaderBoardACS');
 	var PointModel = require('model/point');
 	var LevelModel = require('model/level');
 	var FriendModel = require('model/friend');
@@ -186,8 +185,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		profileStats.height = expSec.height + leaderSec.height;
 	} //end of function: createLeaderBoardView
 
-	updateExpBar();
-
 	expSec.add(expLabel);
 	expSec.add(myLevelLabel);
 	expSec.add(expBar_light);
@@ -211,6 +208,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 				var curUser = myFriends[i].friend_id;
 				rankList.push(curUser);
 			};
+			var LeaderACS = require('acs/leaderBoardACS');
 			LeaderACS.leaderACS_fetchedRank(rankList);
 		}
 
@@ -256,22 +254,24 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			}
 		}
 		
+		Ti.App.addEventListener('levelDbUpdated', function(){
+			updateExpBar();
+		});
 		Ti.App.addEventListener('friendsLoaded',friendLoadedCallBack);
 		Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);	
 		Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);
 		Ti.App.addEventListener('leaderDbUpdated',leaderDbUpdatedCallBack);		
 		
 		leaderTable.addEventListener('click',function(e){
-			
 			if(e.rowData.user_id!==curId) _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));	
-	
-	
 		});
 		
 		leaderSec.add(leaderLabel);
 		leaderSec.add(leaderTable);
 		profileStats.add(leaderSec);
-    } //end of condition: "me"
+		
+   } else updateExpBar();
+    //end of condition: "me"
     
 	return profileStats;
 }

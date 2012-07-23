@@ -5,20 +5,14 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	var myBadgeACS = require('acs/myBadgeACS');
 	var ActivityACS = require('acs/activityACS');
 
-	var FriendsModel = require('model/friend');
-	var UserModel = require('model/user');
-	
-	var CacheHelper = require('helpers/cacheHelper');
-	var updateActivity = require('helpers/updateActivity');
-
-	var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
-
 	var currentUser = acs.getUserLoggedIn();
 	var curId = _userProfile.id;
 	var totalCheckins = 0;
 	
+	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	ActivityACS.activityACS_fetchedMyActivity(curId);
+	
 	var headerView = Ti.UI.createView();
 	headerView.backgroundGradient = {
 		type: 'linear',
@@ -211,6 +205,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  		//condition 2: there's a request from this guy	
  		else {
  			friendRequests.splice(i,1);
+ 			var FriendsModel = require('model/friend');
 			FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
 			FriendACS.approveFriend(curId,approveRequest);	
 		}	
@@ -256,8 +251,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	});
 	
 	//only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
-	
 	columnFriend.addEventListener('click',function(){
+		var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
 		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"friend"));
 	});	
  	
@@ -279,7 +274,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		profileName.text = profile.first_name + ' ' + profile.last_name;
 	};
 	*/
-	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	createHeaderView(_status);
 
 	return headerView;

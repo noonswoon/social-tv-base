@@ -34,7 +34,7 @@ Ti.App.Chat = function(_chatParams) {
 	
 	var chatMessagesTableView = Ti.UI.createTableView({
 		top:0,
-		height:370,
+		height:377,
 		backgroundColor: 'transparent',
 		separatorColor: 'transparent',
 		scrollable: true
@@ -125,7 +125,6 @@ Ti.App.Chat = function(_chatParams) {
 	
 	var chatInputView = Ti.UI.createView({
 		bottom: 0,
-	//	top: 325,
 		height: 40,
 		width: '100%',
 		zIndex: 2,
@@ -217,14 +216,29 @@ Ti.App.Chat = function(_chatParams) {
 		}
     });
 
+//animate up
+	var animateNegativeUp = Ti.UI.createAnimation({
+		top: -230,
+		duration: 200,
+		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
+	});
+	
+	var animateDown = Ti.UI.createAnimation({
+		top: 0,
+		duration: 200,
+		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
+	});
+
 	chatInputTextField.addEventListener('focus', function() {
+		chatMessagesTableView.animate(animateNegativeUp);
 		chatInputView.top = 140;
 		chatInputView.height = 60;
 		chatInputTextField.height = 40;
 	});
 	
 	chatInputTextField.addEventListener('blur', function() {
-		chatInputView.top = 370;
+		chatMessagesTableView.animate(animateDown);
+		chatInputView.top = 375;
 		chatInputView.height = 40;
 		chatInputTextField.height = 30;
 	});

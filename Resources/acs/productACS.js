@@ -17,7 +17,6 @@ exports.productACS_fetchedProductsOfProgramId = function(_paramsArray) {
 	        	 var allProducts = e.Product[i];
 	             product.push(allProducts);
 	         }
-	         Ti.API.info('products: '+JSON.stringify(product));
 	         Ti.App.fireEvent('fetchedProductsOfProgramId'+programId,{fetchedProductsOfProgramId:product});
 	    } 
 	    else {

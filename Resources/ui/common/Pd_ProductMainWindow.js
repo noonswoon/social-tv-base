@@ -9,6 +9,9 @@ function ProductMainWindow(_programId) {
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
+
+	var CacheHelper = require('helpers/cacheHelper');
+		
 	
 	var checkinguidelinewin = null;
 	//Google Analytics
@@ -188,7 +191,7 @@ function ProductMainWindow(_programId) {
 		else programName = programData[0].name;
 		selectProgramLabel.text = programName;
 		
-		ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);	
+		CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
 	};
 
 	self._addGuidelineWindow = function() {
@@ -219,7 +222,7 @@ function ProductMainWindow(_programId) {
 		if(currentProgramId !== picker.getSelectedRow(0).programId) {
 			selectProgramLabel.text = picker.getSelectedRow(0).title;
 			currentProgramId = picker.getSelectedRow(0).programId;
-			ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
+			CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
 	});
@@ -270,10 +273,10 @@ function ProductMainWindow(_programId) {
 		}
 		productTableView.setData(viewRowData);
 	}
-	Ti.App.addEventListener('productDbLoaded'+_programId, productDbLoadedCallback);	
+	Ti.App.addEventListener('productDbLoaded'+currentProgramId, productDbLoadedCallback);	
 
-	ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
-	
+	CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
+
 	return self;
 }
 

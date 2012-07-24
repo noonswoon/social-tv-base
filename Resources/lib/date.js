@@ -28,35 +28,27 @@ function since(dateMomentObj) {
 function convertACSTimeToLocalTime(_datetimeStr) {
 	var curCountryCode = Ti.Locale.getCurrentCountry(); 
 	var result = _datetimeStr; 
-	if(curCountryCode === "TH" || curCountryCode === "US") {
-		var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
-		dm.add('hours',7);
-		result = dm.format("YYYY-MM-DDTHH:mm:ss");
-	} else {
+	//if(curCountryCode === "TH" || curCountryCode === "US") {
+	var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
+	dm.add('hours',7);
+	result = dm.format("YYYY-MM-DDTHH:mm:ss");
+	/*} else {
 		var unsupportDialog = Titanium.UI.createAlertDialog({
 			title:'Unsupported Region',
 			message:'Chatterbox has not reached your country yet. But very soon!'
 		});
 		unsupportDialog.show();
 		Debug.debug_print('have not implementd the country: '+curCountryCode);
-	}
+	}*/
 	return result
 };
 
 function convertLocalTimeToACSTime(_datetimeStr) {
 	var curCountryCode = Ti.Locale.getCurrentCountry(); 
 	var result = _datetimeStr; 
-	if(curCountryCode === "TH" || curCountryCode === "US") {
-		var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
-		dm.subtract('hours',7);
-		result = dm.format("YYYY-MM-DDTHH:mm:ss");
-	} else {
-		var unsupportDialog = Titanium.UI.createAlertDialog({
-			title:'Unsupported Region',
-			message:'Chatterbox has not reached your country yet. But very soon!'
-		});
-		unsupportDialog.show();
-		Debug.debug_print('have not implementd the country: '+curCountryCode);
-	}
+	//if(curCountryCode === "TH" || curCountryCode === "US") {
+	var dm = moment(_datetimeStr, "YYYY-MM-DDTHH:mm:ss");
+	dm.subtract('hours',7);
+	result = dm.format("YYYY-MM-DDTHH:mm:ss");
 	return result
 };

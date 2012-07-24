@@ -23,6 +23,17 @@ function ChannelSelectionMainWindow(){
 		backgroundColor: '#429fc8'
 	});
 
+	var blankView = Ti.UI.createView({
+		backgroundColor: 'transparent',
+		zIndex: 0
+	});
+	blankView.backgroundGradient = {
+		type: 'linear',
+		startPoint: { x: '0%', y: '0%' },
+		endPoint: { x: '0%', y: '100%' },
+		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
+	};		
+
 	var mainView = Ti.UI.createView({
 		top: 0,
 		height: 'auto'
@@ -58,6 +69,7 @@ function ChannelSelectionMainWindow(){
 		} 	
 	});
 	
+	self.add(blankView);
 	self.add(mainView);
 	return self;
 }

@@ -140,7 +140,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 				
 		//badge desc: Woman to Woman Fan LV1; condition: 3 checkins in Woman to Woman; badge id: 15		
 		if(_numCheckins >= 3) return 15;
-	} else if(_programId >= "CH3_MNGNE") {
+	} else if(_programId >= "CH3_MNEWS") {
 		//badge desc: Morning News Fan LV3; condition: 10 checkins in Morning News; badge id: 20	
 		if(_numCheckins >= 10) return 20;
 		
@@ -167,7 +167,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 		
 		//badge desc: Jor Jai Fan LV1; condition: 3 checkins in Jor Jai; badge id: 24
 		if(_numCheckins >= 3) return 24;
-	} else if(_programId >= "CH5_SBUDS") {
+	} else if(_programId >= "CH5_SABUD") {
 		//badge desc: Sabud Show Fan LV3; condition: 10 checkins in Sabud Show; badge id: 29	
 		if(_numCheckins >= 10) return 29;
 		

@@ -31,7 +31,7 @@ ProductBuyWindow = function(_product){
 	});
 	
 	var productImage = Ti.UI.createImageView({
-		image: _product.product_image,
+		image: _product.productImage,
 		top: 0,
 		width: 181,
 		height: 237,
@@ -100,7 +100,7 @@ ProductBuyWindow = function(_product){
 	
 	var productName = Ti.UI.createLabel({
 		top: 60,
-		text: _product.product_name,
+		text: _product.productName,
 		font: { fontSize: 24, fontFamily: 'Helvetica Neue', fontWeight: 'bold'},
 		left: 15
 	});

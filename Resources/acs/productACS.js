@@ -1,10 +1,14 @@
-exports.productACS_fetchedAllProducts = function(_programId) {
+exports.productACS_fetchedProductsOfProgramId = function(_paramsArray) {
+	
+	programId = _paramsArray[0];
+	Ti.API.info('calling acs: fetchProductsOfProgramId: '+programId);
 	Cloud.Objects.query({
 		classname: 'Product',	
     	page: 1,
     	per_page: 20,
+    	response_json_depth: 1,
     	where:{
-    		program_id: _programId
+    		program_id: programId
     	}
 	}, function (e) {
 		if (e.success) {
@@ -13,10 +17,11 @@ exports.productACS_fetchedAllProducts = function(_programId) {
 	        	 var allProducts = e.Product[i];
 	             product.push(allProducts);
 	         }
-	        Ti.App.fireEvent('fetchedAllProduct',{fetchedAllProduct:product});
+	         Ti.API.info('products: '+JSON.stringify(product));
+	         Ti.App.fireEvent('fetchedProductsOfProgramId'+programId,{fetchedProductsOfProgramId:product});
 	    } 
 	    else {
-	        Debug.debug_print('productACS_fetchedAllProducts Error: ' + JSON.stringify(e));
+	        Debug.debug_print('productACS_fetchedProductsOfProgramId Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});

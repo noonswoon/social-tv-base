@@ -31,7 +31,7 @@ ProductMainWindowTableViewRow = function(_parent){
 
 	
 	row._setProductOnLeftColumn = function(_leftProduct){
-		productLeftImage.image = _leftProduct.product_image;
+		productLeftImage.image = _leftProduct.productImage;
 		productLeftImage.addEventListener('click',function(){
 			var productBuyWindow = new ProductBuyWindow(_leftProduct);
 			_parent.containingTab.open(productBuyWindow);	
@@ -39,7 +39,7 @@ ProductMainWindowTableViewRow = function(_parent){
 	}
 	
 	row._setProductOnRightColumn = function(_rightProduct){
-		productRightImage.image = _rightProduct.product_image;
+		productRightImage.image = _rightProduct.productImage;
 		productRightImage.borderColor = 'white';
 		productRightImage.borderWidth = 5;
 		

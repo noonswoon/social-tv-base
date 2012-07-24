@@ -1,10 +1,15 @@
 function ProductMainWindow(_programId) {
-	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
-	var ProductACS = require('acs/productACS');
+
 	var Checkin = require('model/checkin');
-	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
+	var ProductModel = require('model/product');
 	var TVProgram = require('model/tvprogram');
+			
+	var ProductACS = require('acs/productACS');
+	
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
+	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
+	
 	var checkinguidelinewin = null;
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Product');
@@ -183,7 +188,7 @@ function ProductMainWindow(_programId) {
 		else programName = programData[0].name;
 		selectProgramLabel.text = programName;
 		
-		ProductACS.productACS_fetchedAllProducts(currentProgramId);	
+		ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);	
 	};
 
 	self._addGuidelineWindow = function() {
@@ -214,11 +219,9 @@ function ProductMainWindow(_programId) {
 		if(currentProgramId !== picker.getSelectedRow(0).programId) {
 			selectProgramLabel.text = picker.getSelectedRow(0).title;
 			currentProgramId = picker.getSelectedRow(0).programId;
-			ProductACS.productACS_fetchedAllProducts(currentProgramId);
+			ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
-		
-		
 	});
 
 	picker.addEventListener('change',function(e) {
@@ -234,12 +237,16 @@ function ProductMainWindow(_programId) {
 		font: { fontSize: 16, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
 	});
 
-	ProductACS.productACS_fetchedAllProducts(currentProgramId);
-
-	Ti.App.addEventListener('fetchedAllProduct', function(e){
+	Ti.App.addEventListener('fetchedProductsOfProgramId'+_programId, function(e) {
 		self.remove(unavailable);
+		ProductModel.productModel_insertProductsOfProgramId(_programId, e.fetchedProductsOfProgramId);
+	}); 
+	
+	function productDbLoadedCallback() {
 		var viewRowData = [];
-		var totalProducts = e.fetchedAllProduct.length;
+		var programProducts = ProductModel.productModel_fetchProductsOfProgramId(_programId); 
+		var totalProducts = programProducts.length;
+		
 		var numRows = Math.ceil(totalProducts/2);
 
 		if(totalProducts == 0){
@@ -251,7 +258,7 @@ function ProductMainWindow(_programId) {
 					var productIndex = i*2 + j;
 					if(productIndex >= totalProducts)
 						break;
-					var curProduct = e.fetchedAllProduct[productIndex];
+					var curProduct = programProducts[productIndex];
 					if(j % 2 === 0) { //left column
 						row._setProductOnLeftColumn(curProduct);
 					} else { //right column
@@ -261,8 +268,12 @@ function ProductMainWindow(_programId) {
 				viewRowData.push(row);
 			}
 		}
-		productTableView.setData(viewRowData);	
-	});	
+		productTableView.setData(viewRowData);
+	}
+	Ti.App.addEventListener('productDbLoaded'+_programId, productDbLoadedCallback);	
+
+	ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
+	
 	return self;
 }
 

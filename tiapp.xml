@@ -13,7 +13,7 @@
         <target device="android">true</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>2.0.2.GA</sdk-version>
+    <sdk-version>2.1.0.GA</sdk-version>
     <property name="ti.android.threadstacksize" type="int">327680</property>
     <id>mobi.chatterbox.rc</id>
     <name>Chatterbox</name>
@@ -50,6 +50,6 @@
     <modules>
         <module platform="commonjs" version="2.0.1">ti.cloud</module>
         <module platform="android" version="2.0.1">ti.cloudpush</module>
-        <module platform="iphone" version="1.3">nl.icept.pull2refresh</module>
+        <module platform="iphone" version="1.6">nl.icept.pull2refresh</module>
     </modules>
 </ti:app>

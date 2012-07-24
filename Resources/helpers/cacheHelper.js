@@ -1,7 +1,6 @@
 exports.fetchACSDataOrCache = function(key, acsCallback, acsParam, eventToFire, cacheTimeout) {
-	Ti.API.info('cache testing for: '+key);
 	if(!Ti.App.Properties.hasProperty(key)) { //do some caching
-		Ti.API.info('never cache, do acs call '+key);
+		//Ti.API.info('never cache, do acs call '+key);
 		acsCallback(acsParam); //never fetch before
 		var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 
 		Ti.App.Properties.setString(key,nowStr);
@@ -10,11 +9,11 @@ exports.fetchACSDataOrCache = function(key, acsCallback, acsParam, eventToFire, 
 		var cacheDate = moment(cacheDateStr,"YYYY-MM-DDTHH:mm:ss");		
 		var elapsedTime = moment().diff(cacheDate,'minutes');
 		if (elapsedTime < cacheTimeout) { //if still in cache, just fire event
-			Ti.API.info('cache and able to bypass: '+key);
+			//Ti.API.info('cache and able to bypass: '+key);
 			Ti.App.fireEvent(eventToFire); //fire event that signifies that db already loaded
 		}
 		else { //cache is out-of-date, fetching new data from server
-			Ti.API.info('cache stale..need to do acs call: '+key);
+			//Ti.API.info('cache stale..need to do acs call: '+key);
 			acsCallback(acsParam);
 			//pull data and reset cache
 			var nowStr = moment().format("YYYY-MM-DDTHH:mm:ss"); 

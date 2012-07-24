@@ -342,7 +342,7 @@ function CommentWindow(_topicId) {
 	//just to be safe, commentACS_fetchAllCommentsOfPostId should come after addEventListener; should register before firing)
 	
 	//fetching data or get data through caching mechanism
-	CacheHelper.fetchACSDataOrCache('commentsOfTopic'+_topicId, CommentACS.commentACS_fetchAllCommentsOfPostId, [_topicId], 'commentsDbUpdated');
+	CacheHelper.fetchACSDataOrCache('commentsOfTopic'+_topicId, CommentACS.commentACS_fetchAllCommentsOfPostId, [_topicId], 'commentsDbUpdated', CACHE_TIMEOUT_SHORT);
 	return self;
 }
 module.exports = CommentWindow;

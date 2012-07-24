@@ -2,7 +2,7 @@ function badgeSort(a,b) {
 	return a.custom_fields.badgeID - b.custom_fields.badgeID;
 }
 
-exports.fetchedBadges = function() {
+exports.fetchedBadges = function(_paramsArray  /*unused*/) {
 	Cloud.Photos.query({
 	    page: 1,
 	    per_page: 100,

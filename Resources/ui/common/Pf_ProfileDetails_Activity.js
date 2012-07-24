@@ -254,13 +254,13 @@ if(_status==="me") {
 	}
 	
 	Ti.App.addEventListener('activityDbUpdated',activityDbUpdatedcallback);
-
 	Ti.App.addEventListener('activityLoaded'+curId, activityLoadedCallBack);
 	Ti.App.addEventListener('updateAnActivity'+curId,updateAnActivityCallBack);	
 		
 	var clearListeners = function() {
 		Ti.API.info('remove Eventlistener...openActivityDetail event'+curId);
 		Ti.App.removeEventListener('activityDbUpdated',activityDbUpdatedcallback);
+		Ti.App.removeEventListener('activityLoaded'+curId, activityLoadedCallBack);
 		Ti.App.removeEventListener('updateAnActivity'+curId,updateAnActivityCallBack);
 		Ti.App.removeEventListener('profileMainWindowClosing'+curId,clearListeners);
 	}

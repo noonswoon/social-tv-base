@@ -21,7 +21,9 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 				var programType = 'ETC';
 				
 				//safeguarding code
-				if(program.photo !== undefined) photoUrl = program.photo.urls.thumb_100;
+				if(program.photo !== undefined && program.photo.urls !== undefined)
+					photoUrl = program.photo.urls.thumb_100;
+					
 	            if(program.custom_fields !== undefined) {
 	            	if(program.custom_fields.subname !== undefined) {
 	            		subname = program.custom_fields.subname;	

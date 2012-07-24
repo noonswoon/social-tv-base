@@ -74,23 +74,13 @@ function ApplicationTabGroup() {
 	self.open();
 	
 	//PROFILE: CALLING ACS
-	var LevelACS = require('acs/levelACS');	
-	var BadgesACS = require('acs/badgesACS');
-	var FriendACS = require('acs/friendsACS');
-	var CheckinACS = require('acs/checkinACS');	
-	var LevelModel = require('model/level');
 	var CheckinModel = require('model/checkin');
-	var TVProgramModel = require('model/tvprogram');
-	//not frequently update
-	LevelACS.levelACS_fetchedLevel();
-	BadgesACS.fetchedBadges();
-	
-	CheckinACS.checkinACS_fetchedUserCheckIn(myUserId);
-	FriendACS.showFriendsRequest();	
+	var FriendACS = require('acs/friendsACS');
 	FriendACS.searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
  	
 	function levelLoadedCallBack(e) {					
+		var LevelModel = require('model/level');
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
 	}
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
@@ -128,8 +118,14 @@ function ApplicationTabGroup() {
 		productwin._removeAllPickerData();
 	};
 	
-	function checkinDbLoadedCallBack(e) {			
+	function checkinLoadedCompleteCallBack(e) {
 		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+	}
+	Ti.App.addEventListener('checkinLoadedComplete',checkinLoadedCompleteCallBack);
+	
+	function checkinDbLoadedCallBack(e) {			
+		var TVProgramModel = require('model/tvprogram');
+
 		//populate the current checkins of user
 		var eventsCheckedIn = CheckinModel.checkin_fetchCheckinToday(myUserId);
 		//if checkin to at least 1 program, enable the chat/board/product bar
@@ -161,8 +157,10 @@ function ApplicationTabGroup() {
 		}
 	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
+
 	
 	function updateHeaderCheckinCallback() {
+		var CheckinACS = require('acs/checkinACS');
 		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
 	}
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);

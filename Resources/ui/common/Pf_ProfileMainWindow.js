@@ -16,7 +16,6 @@ function ProfileMainWindow(_id,_status) {
 	
 	var self = Titanium.UI.createWindow({
 		barImage: 'images/nav_bg_w_pattern.png',
-	//	rightNavButton: settingButton,
 		barColor:'#489ec3'
 	});			
 	if(_status==='me') self.rightNavButton = settingButton;
@@ -82,15 +81,23 @@ function ProfileMainWindow(_id,_status) {
 		self.containingTab.open(settingwin);
 	});
 	
+	var reset = function(){
+		Ti.API.info('reset()');
+		self.close();
+		self = null;
+		headerView = null;
+		userProfileTable = null;
+		userProfile = null;
+		ProfileHeader = null;
+		ProfileDetail = null;
+	}
+	
 	//remove event listeners for all the children of ProfileMainWindow
 	self.addEventListener('close', function() {
 		Ti.API.info("closing profile main window");
 		Ti.App.fireEvent('profileMainWindowClosing'+_id);
+		reset();
 	});
-	
-	// self.addEventListener('focus', function() {
-		// profileHeader.setProfileName();
-	// });
 	
 	return self;
 }

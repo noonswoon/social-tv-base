@@ -29,7 +29,10 @@ var IS_PRODUCTION_BUILD = false;
 var ACS_API_KEY = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 if(IS_PRODUCTION_BUILD)
 	ACS_API_KEY = '5va2XsGjknLebugvozPZfZr9xhSVEZl1';
-var CACHE_TIMEOUT_IN_MINUTES = 1; 
+var CACHE_TIMEOUT_SHORT = 30;  //for topic, comments - 30 mins
+var CACHE_TIMEOUT_MEDIUM = 60 * 6;  //for tvprograms, num checkins ~ 6 hours
+var CACHE_TIMEOUT_LONG = 60 * 24 * 30;  //for levels, badges, ~ 1 month
+
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 var CONTENT_LENGTH = 160;
 

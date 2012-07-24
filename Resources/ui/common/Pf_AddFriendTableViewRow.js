@@ -78,8 +78,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 			var FriendsModel = require('model/friend');
 			var addFriendActivityData = createFriendActivity("addfriend");
 		
-			FriendsModel.friend_create(_user,_user.fb_id);
-		 	FriendACS.addFriendwithNoApprove(_user.id,addFriend);
+		 	FriendACS.addFriend(_user.id,addFriend);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
 		})
 		tableRow.add(addButton);

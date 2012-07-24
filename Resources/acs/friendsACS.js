@@ -72,7 +72,12 @@ exports.addFriend = function(_userID,_callbackFn){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
-	    	Ti.API.info("Your request has been sent.");
+	    	var successAlertDialog = Ti.UI.createAlertDialog({
+	        	title: 'Chatterbox',
+	        	message: 'Your request has been sent.'
+	        });
+	        successAlertDialog.show();
+	    	
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
@@ -89,28 +94,28 @@ exports.addFriend = function(_userID,_callbackFn){
 	};
 	xhr.send(postParameters);  // request is actually sent with this statement
 };
-
-exports.addFriendwithNoApprove = function(_userID,_callbackFn){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function(e) {
-	    	var response = _callbackFn(this.responseText);
-	    },
-	    onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	    	ErrorHandling.showNetworkError();
-	        Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
-	    },
-	    timeout:5000  /* in milliseconds */
-	});
-	xhr.open("POST", url);
-	var postParameters = {
-		key: ACS_API_KEY,
-		user_ids: String(_userID),
-		approval_required: false
-	};
-	xhr.send(postParameters);  // request is actually sent with this statement
-};
+// one direction add friends
+// exports.addFriendwithNoApprove = function(_userID,_callbackFn){
+	// var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
+	// var xhr = Ti.Network.createHTTPClient({
+	    // onload: function(e) {
+	    	// var response = _callbackFn(this.responseText);
+	    // },
+	    // onerror: function(e) {
+			// // this function is called when an error occurs, including a timeout
+	    	// ErrorHandling.showNetworkError();
+	        // Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
+	    // },
+	    // timeout:5000  /* in milliseconds */
+	// });
+	// xhr.open("POST", url);
+	// var postParameters = {
+		// key: ACS_API_KEY,
+		// user_ids: String(_userID),
+		// approval_required: false
+	// };
+	// xhr.send(postParameters);  // request is actually sent with this statement
+// };
 
 
 //approve friend /////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,19 +184,23 @@ exports.showFriendsRequest = function(){
 	xhr.send();
 };
 
-exports.friendsCheckins = function(_friendsList,_programsList){
+exports.friendsCheckins = function(_paramsArray){
+	
+	friendsList = _paramsArray[0];
+	programsList = _paramsArray[1];
+	
 	var programsCheckins = [];
 	var friendsCheckins = [];
 	var allFriendsCheckins = [];
 
-	var allProgramsId = _programsList;
+	var allProgramsId = programsList;
 	var allProgramsIdStr = '';
 	for(var i=0; i<allProgramsId.length; i++) {
 		allProgramsIdStr += '"'+allProgramsId[i]+'",';
 	}
 	allProgramsIdStr = allProgramsIdStr.substr(0,allProgramsIdStr.length-1);
 	
-	var allFriendsId = _friendsList;
+	var allFriendsId = friendsList;
 	var allFriendsIdStr = '';
 	for(var i=0; i<allFriendsId.length; i++) {
 		allFriendsIdStr += '"'+allFriendsId[i]+'",';

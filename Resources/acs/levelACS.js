@@ -1,5 +1,5 @@
 
-exports.levelACS_fetchedLevel = function() {
+exports.levelACS_fetchedLevel = function(_paramsArray  /*unused*/) {
 	Cloud.Objects.query({
 		classname: 'Level',	
 	    page: 1,

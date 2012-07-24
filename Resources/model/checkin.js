@@ -16,6 +16,7 @@ exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection) {
 		db.execute("INSERT INTO checkins(id,checkin_acs_id,event_id,score,user_id,updated_at) VALUES(NULL,?,?,?,?,?)",curCheckin.id,curCheckin.event.id,curCheckin.custom_fields.score,curCheckin.user.id,curCheckin.updated_at);
 	}
 	db.close();
+	Ti.App.fireEvent('checkinDbLoaded');
 };
 
 exports.checkin_fetchCheckinToday = function(_userId) { 

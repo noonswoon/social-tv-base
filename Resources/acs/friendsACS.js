@@ -184,19 +184,23 @@ exports.showFriendsRequest = function(){
 	xhr.send();
 };
 
-exports.friendsCheckins = function(_friendsList,_programsList){
+exports.friendsCheckins = function(_paramsArray){
+	
+	friendsList = _paramsArray[0];
+	programsList = _paramsArray[1];
+	
 	var programsCheckins = [];
 	var friendsCheckins = [];
 	var allFriendsCheckins = [];
 
-	var allProgramsId = _programsList;
+	var allProgramsId = programsList;
 	var allProgramsIdStr = '';
 	for(var i=0; i<allProgramsId.length; i++) {
 		allProgramsIdStr += '"'+allProgramsId[i]+'",';
 	}
 	allProgramsIdStr = allProgramsIdStr.substr(0,allProgramsIdStr.length-1);
 	
-	var allFriendsId = _friendsList;
+	var allFriendsId = friendsList;
 	var allFriendsIdStr = '';
 	for(var i=0; i<allFriendsId.length; i++) {
 		allFriendsIdStr += '"'+allFriendsId[i]+'",';

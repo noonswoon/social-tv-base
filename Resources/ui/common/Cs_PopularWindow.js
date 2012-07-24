@@ -171,18 +171,16 @@ function PopularWindow(_parent) {
 			var programs = allTVPrograms[i].id;
 			programsList.push(programs);
 		}
-		
-		FriendsACS.friendsCheckins(friendsList,programsList);
+		FriendsACS.friendsCheckins([friendsList,programsList]);
 		
 		Ti.App.addEventListener('friendsCheckInLoaded',function(e){
 			var friendsCheckinWithPrograms = e.fetchedAllFriendsCheckins;
 			//Ti.API.info('friendsCheckinWithPrograms data: '+JSON.stringify(friendsCheckinWithPrograms));
 			CheckinModel.checkin_insertFriendsCheckinsToday(friendsCheckinWithPrograms, myUserId);
 			
-			//will also need need to add friend user data to the user table!
+			//will also need to add friend user data to the user table!
 			for(var i=0; i < friendsCheckinWithPrograms.length; i++) {
 				var curFriendUser = friendsCheckinWithPrograms[i].friend;
-				
 				var curFriendFbId = UserACS.userACS_extractUserFbId(curFriendUser);
 				UserModel.userModel_addUser(curFriendUser.id, curFriendUser.username, curFriendFbId, curFriendUser.first_name, curFriendUser.last_name)
 			}
@@ -216,11 +214,11 @@ function PopularWindow(_parent) {
 	self.add(programListTable);
 	self.hideNavBar();
 	
-	showPreloader(self,'Loading...');
+	showPreloader(self,'Initial Loading...');
 	setTimeout(function() {
 		Ti.API.info('force close loading screen');
 		hidePreloader(self);
-	}, 5000);
+	}, 8000);
 
 	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
 			usingPull2Refresh = true;
@@ -238,8 +236,7 @@ function PopularWindow(_parent) {
 			}
 		}
 	);	
-	
-	TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
+	CacheHelper.fetchACSDataOrCache('tvprogramACS_fetchAllProgramShowingToday', TVProgramACS.tvprogramACS_fetchAllProgramShowingToday, [], 'tvprogramsTitlesLoaded', CACHE_TIMEOUT_SHORT);
 	CacheHelper.setTimeLastFetchedTVProgramACS();
 	BadgeShowPermissionACS.badgeShowPermissionACS_fetchedPermission();
 

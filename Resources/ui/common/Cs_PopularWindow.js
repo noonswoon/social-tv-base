@@ -214,7 +214,7 @@ function PopularWindow(_parent) {
 	self.add(programListTable);
 	self.hideNavBar();
 	
-	showPreloader(self,'Initial Loading...');
+	showPreloader(self,'Loading...');
 	setTimeout(function() {
 		Ti.API.info('force close loading screen');
 		hidePreloader(self);

@@ -75,9 +75,11 @@ ChatMessageTableViewRow = function(_chatMessage, _chatOwner, _isASender) {
 	self.add(userPic);
 	self.add(backgroundViewForMessage);
 	
+/*
 	userPic.addEventListener('click', function() {
 		alert('going to profile of user id: '+_chatOwner.id);
 	});
+*/
 	
 	return self;
 }

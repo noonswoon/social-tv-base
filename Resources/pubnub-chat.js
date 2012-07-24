@@ -62,7 +62,10 @@ Ti.App.Chat = function(_chatParams) {
 	            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
 	           		var newChatRow = new ChatMessageTableViewRow(message.text,senderObj,false);
 	           		chatMessagesTableView.appendRow(newChatRow);
-	           		chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
+	           	   	setTimeout(function() {
+			   			chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
+					}, 2000);
+	           		//chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount -1); //scroll to the latest row
 	           	}
 	        },
 	        error : function() {
@@ -255,7 +258,9 @@ Ti.App.Chat = function(_chatParams) {
 	
 		chatInputTextField.value = "";
     	chatInputTextField.blur();
-    	chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
+    	setTimeout(function() {
+			   	chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
+		}, 2000);
     });
     
     return this;

@@ -230,6 +230,7 @@ Ti.App.Chat = function(_chatParams) {
 	});
 
 	chatInputTextField.addEventListener('focus', function() {
+		chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1);
 		chatMessagesTableView.animate(animateNegativeUp);
 		chatInputView.top = 140;
 		chatInputView.height = 60;

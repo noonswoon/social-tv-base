@@ -11,6 +11,8 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	var TVProgram = require('model/tvprogram');
 	var myUserId = acs.getUserId();
 	
+	Ti.include('./pubnub-chat.js');
+	
 //	Ti.API.info('tvprogramData: '+JSON.stringify(_tvprogramData));
 	var numFriendsCheckin = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(_tvprogramData.eventId,myUserId);
 	
@@ -374,7 +376,14 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	chatView.addEventListener('touchend',function(){
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
-		curTabGroup.setActiveTab(1)
+
+		//open the show's chat window straight away
+		var pubnub_chat_window = Ti.App.Chat({
+		    "chat-room" : _tvprogramData.programId,
+		    "window"    : {backgroundColor:'transparent'},
+		    "programId" : _tvprogramData.programId
+		});
+		_containingTab.open(pubnub_chat_window.chat_window);
 	});
 	
 	//Product Button

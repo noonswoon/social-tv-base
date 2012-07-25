@@ -71,39 +71,46 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 	
 	var createBadgeView = function() {
 		var count = 0;
+		var childrenCount = badgeView.children.length;
 		
 		for (var k in badgeView.children) {
 			if (badgeView.children.hasOwnProperty(k)) {
-				badgeView.remove(badgeView.children[k]);
+			//	setTimeout(function() {
+			//		Ti.API.info('k: '+k);
+			//		Ti.API.info('badgeView.children.length: '+badgeView.children.length);
+					badgeView.remove(badgeView.children[k]);
+			//	},1000);			
 		  };
-		}	
+		}
 
-		for(var i=0;i<badgeRow;i++) {
-			for(var j=0;j<3;j++) {
-				badgeIndex[count] = Ti.UI.createImageView({
-					height: 100,
-					width: 100,
-					left: (j*100)+5
-				});
+		setTimeout(function(){
+			for(var i=0;i<badgeRow;i++) {
+				for(var j=0;j<3;j++) {
+					badgeIndex[count] = Ti.UI.createImageView({
+						height: 100,
+						width: 100,
+						left: (j*100)+5
+					});
+					
+					badgeIndex[count].myIndex = count;
 				
-				badgeIndex[count].myIndex = count;
-			
-				if(myUnlockedBadges[count] == 1) {
-					var file = Titanium.Filesystem.getFile(badgesCollection[count].path);
-					if(file.exists()) badgeIndex[count].image = badgesCollection[count].path;
-					else badgeIndex[count].image = badgesCollection[count].url;
-				} else badgeIndex[count].image = 'images/badge/lockedbadge.png';
-				
-				badgeIndex[count].top = (i*100)+5;
-				badgeView.add(badgeIndex[count]);
-
-				badgeIndex[count].addEventListener('click', function(e) {
-		        	var index = e.source.myIndex;
-	    	        Ti.App.fireEvent('openBadgeDetailPopupWindow'+_userProfile.id,{index:index});
-        		});
-				count++
-			}	
-		}				
+					if(myUnlockedBadges[count] == 1) {
+						var file = Titanium.Filesystem.getFile(badgesCollection[count].path);
+						if(file.exists()) badgeIndex[count].image = badgesCollection[count].path;
+						else badgeIndex[count].image = badgesCollection[count].url;
+					} else badgeIndex[count].image = 'images/badge/lockedbadge.png';
+					
+					badgeIndex[count].top = (i*100)+5;
+					badgeView.add(badgeIndex[count]);
+	
+					badgeIndex[count].addEventListener('click', function(e) {
+			        	var index = e.source.myIndex;
+		    	        Ti.App.fireEvent('openBadgeDetailPopupWindow'+_userProfile.id,{index:index});
+	        		});
+					count++
+				}	
+			}				
+		},1500);
 	} // end of function: createBadgeView
 	
 	Ti.App.addEventListener('badgesDbLoaded',function() {

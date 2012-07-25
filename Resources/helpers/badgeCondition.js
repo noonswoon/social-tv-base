@@ -112,7 +112,7 @@ var checkTimeCondition = function() {
 }
 
 var determineShowBadgeId = function(_programId,_numCheckins) {
-	Ti.API.info('_numCheckin: '+_numCheckins);
+	Ti.API.info('_programId: '+_programId+'/_numCheckin: '+_numCheckins);
 	if(_programId === "CH3_ATTEN") {
 		//badge desc: At-Ten Fan LV3; condition: 10 checkins in At-Ten; badge id: 11
 		if(_numCheckins >= 10) return 11;
@@ -131,7 +131,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 				
 		//badge desc: At-Ten Fan LV1; condition: 3 checkins in At-Ten; badge id: 12		
 		if(_numCheckins >= 3) return 12;
-	} else if(_programId >= "CH3_WMTWM") {
+	} else if(_programId === "CH3_WMTWM") {
 		//badge desc: Woman to Woman Fan LV3; condition: 10 checkins in Woman to Woman; badge id: 17			
 		if(_numCheckins >= 10) return 17;
 
@@ -140,7 +140,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 				
 		//badge desc: Woman to Woman Fan LV1; condition: 3 checkins in Woman to Woman; badge id: 15		
 		if(_numCheckins >= 3) return 15;
-	} else if(_programId >= "CH3_MNEWS") {
+	} else if(_programId === "CH3_MNEWS") {
 		//badge desc: Morning News Fan LV3; condition: 10 checkins in Morning News; badge id: 20	
 		if(_numCheckins >= 10) return 20;
 		
@@ -149,7 +149,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 		
 		//badge desc: Morning News Fan LV1; condition: 3 checkins in Morning News; badge id: 18
 		if(_numCheckins >= 3) return 18;
-	} else if(_programId >= "CH3_STSNE") {
+	} else if(_programId === "CH3_STSNE") {
 		//badge desc: Sat-Sun News Fan LV3; condition: 10 checkins in Sat-Sun News; badge id: 23	
 		if(_numCheckins >= 10) return 23;
 		
@@ -158,7 +158,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 		
 		//badge desc: Sat-Sun News Fan LV1; condition: 3 checkins in Sat-Sun News; badge id: 21
 		if(_numCheckins >= 3) return 21;
-	} else if(_programId >= "CH5_JOJAI") {
+	} else if(_programId === "CH5_JOJAI") {
 		//badge desc: Jor Jai Fan LV3; condition: 10 checkins in Jor Jai; badge id: 26	
 		if(_numCheckins >= 10) return 26;
 		
@@ -167,16 +167,15 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 		
 		//badge desc: Jor Jai Fan LV1; condition: 3 checkins in Jor Jai; badge id: 24
 		if(_numCheckins >= 3) return 24;
-	} else if(_programId >= "CH5_SABUD") {
+	} else if(_programId === "CH5_SABUD") {
 		//badge desc: Sabud Show Fan LV3; condition: 10 checkins in Sabud Show; badge id: 29	
 		if(_numCheckins >= 10) return 29;
-		
 		//badge desc: Sabud Show Fan LV2; condition: 5 checkins in Sabud Show; badge id: 28
 		if(_numCheckins >= 5) return 28;
-		
 		//badge desc: Sabud Show Fan LV1; condition: 3 checkins in Sabud Show; badge id: 27
 		if(_numCheckins >= 3) return 27;
-	} else if(_programId >= "CH9_WDYKU") {
+		
+	} else if(_programId === "CH9_WDYKU") {
 		//badge desc: Woody Talk Show Fan LV3; condition: 10 checkins in Woody Talk Show; badge id: 32	
 		if(_numCheckins >= 10) return 32;
 		
@@ -185,7 +184,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 		
 		//badge desc: Woody Talk Show Fan LV1; condition: 3 checkins in Woody Talk Show; badge id: 30
 		if(_numCheckins >= 3) return 30;
-	} else if(_programId >= "CH9_WDYMN") {
+	} else if(_programId === "CH9_WDYMN") {
 		//badge desc: Morning Woody Fan LV3; condition: 10 checkins in  Morning Woody; badge id: 35	
 		if(_numCheckins >= 10) return 35;
 		
@@ -194,7 +193,7 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 		
 		//badge desc: Morning Woody Fan LV1; condition: 3 checkins in  Morning Woody; badge id: 33
 		if(_numCheckins >= 3) return 33;
-	} else if(_programId >= "CH7_IRCHF") {
+	} else if(_programId === "CH7_IRCHF") {
 		//badge desc: Iron Chef Thailand Fan LV3; condition: 10 checkins in  Iron Chef Thailand; badge id: 38	
 		if(_numCheckins >= 10) return 38;
 		
@@ -210,10 +209,9 @@ var determineShowBadgeId = function(_programId,_numCheckins) {
 var checkProgramCondition = function(_programId) {
 	var BadgeShowPermissionACS = require('acs/badgeShowPermissionACS');
 	var checkinCount = getNumCheckinsOfProgramId(_programId);
-	//Ti.API.info('checkinCount/'+_programId+' = '+checkinCount);
+	Ti.API.info('checkinCount/'+_programId+' = '+checkinCount);
 	if(BadgeShowPermissionACS.getBadgeOfShowPermission(_programId)) {
 		var badgeId = determineShowBadgeId(_programId,checkinCount);
-		//Ti.API.info('badgeId: '+badgeId);		
 	}
 	if(badgeId !== undefined) {
 		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: badgeId});

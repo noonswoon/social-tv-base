@@ -130,7 +130,7 @@ function ProductMainWindow(_programId) {
 			var programId = currentCheckinPrograms[i];
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 			if(programInfo === undefined || programInfo[0] === undefined)
-				Ti.API.info('bad time...cannot find info for programId: '+programId);
+				Ti.API.info('product: bad time...cannot find info for programId: '+programId+', arrayOfCheckinPrograms: '+JSON.stringify(currentCheckinPrograms));
 			else programName = programInfo[0].name;
 			
 			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) {

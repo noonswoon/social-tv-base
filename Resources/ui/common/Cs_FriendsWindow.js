@@ -1,12 +1,12 @@
 FriendsWindow = function(_parent){
-	
-	var FriendsACS = require('acs/friendsACS');
-	var TVProgramModel = require('model/tvprogram');
 	var CheckinModel = require('model/checkin');
-	
-	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
-	var ProgramWithFriends = require('helpers/ProgramWithFriends');
+	var TVProgramModel = require('model/tvprogram');
+
 	var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
+	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
+	
+	var ProgramWithFriends = require('helpers/ProgramWithFriends');
+
 	
 	var myUserId = acs.getUserId();
 	
@@ -116,7 +116,6 @@ FriendsWindow = function(_parent){
 	} else {
 		createFriendCheckinRow(friendsCheckins);
 	}
-	
 	self.add(friendsTableView);
 	
 	return self;

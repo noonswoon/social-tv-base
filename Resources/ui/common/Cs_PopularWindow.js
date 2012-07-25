@@ -116,8 +116,6 @@ function PopularWindow(_parent) {
 	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var myUserId = acs.getUserId();
 		var timeIndex = e.timeIndex;
-		Ti.API.info('timeIndex: '+timeIndex);
-
 				
 		TVProgramACS.tvprogramACS_fetchProgramsShowingAt(timeIndex);
 		showPreloader(self,'Loading...');
@@ -198,7 +196,7 @@ function PopularWindow(_parent) {
 			friendsList.push(friends);
 		}
 	
-		//Get All TVProgram id
+		//Get All TVProgram Id that we are currently have
 		var programsList = [];
 		allTVPrograms = TVProgramModel.TVProgramModel_fetchPrograms();
 		for(var i = 0; i<allTVPrograms.length;i++){
@@ -206,26 +204,26 @@ function PopularWindow(_parent) {
 			programsList.push(programs);
 		}
 		FriendsACS.friendsCheckins([friendsList,programsList]);
-		
-		Ti.App.addEventListener('friendsCheckInLoaded',function(e){
-			var friendsCheckinWithPrograms = e.fetchedAllFriendsCheckins;
-			//Ti.API.info('friendsCheckinWithPrograms data: '+JSON.stringify(friendsCheckinWithPrograms));
-			CheckinModel.checkin_insertFriendsCheckinsToday(friendsCheckinWithPrograms, myUserId);
-			
-			//will also need to add friend user data to the user table!
-			for(var i=0; i < friendsCheckinWithPrograms.length; i++) {
-				var curFriendUser = friendsCheckinWithPrograms[i].friend;
-				var curFriendFbId = UserACS.userACS_extractUserFbId(curFriendUser);
-				UserModel.userModel_addUser(curFriendUser.id, curFriendUser.username, curFriendFbId, curFriendUser.first_name, curFriendUser.last_name)
-			}
-			
-			areFriendCheckinsReady = true; 
-			//Ti.API.info('friendCheckinsReady..isEverythingReady? ');
-			isEverythingReady();
-		});	
 	}
 	Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallback); //event fire from ApplicationTabGroup
 
+	Ti.App.addEventListener('friendsCheckInLoaded',function(e) {
+		var myUserId = acs.getUserId();
+		var friendsCheckinWithPrograms = e.fetchedAllFriendsCheckins;
+		
+		//Ti.API.info('friendsCheckinWithPrograms data: '+JSON.stringify(friendsCheckinWithPrograms));
+		CheckinModel.checkin_insertFriendsCheckinsToday(friendsCheckinWithPrograms, myUserId);
+	
+		//will also need to add friend user data to the user table!
+		for(var i=0; i < friendsCheckinWithPrograms.length; i++) {
+			var curFriendUser = friendsCheckinWithPrograms[i].friend;
+			var curFriendFbId = UserACS.userACS_extractUserFbId(curFriendUser);
+			UserModel.userModel_addUser(curFriendUser.id, curFriendUser.username, curFriendFbId, curFriendUser.first_name, curFriendUser.last_name)
+		}	
+		areFriendCheckinsReady = true; 
+		isEverythingReady();
+	});	
+		
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
 		//Ti.API.info('program_type = '+e.row.tvprogram.program_type);
@@ -258,6 +256,7 @@ function PopularWindow(_parent) {
 			usingPull2Refresh = true;
 			areAllProgramsTitlesLoaded = false;
 			numProgramsToLoadCheckins = -1;
+			TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
 //			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
 //			CacheHelper.getTimeLastFetchedTVProgramACS();
 		}, {

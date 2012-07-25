@@ -134,7 +134,7 @@ function ApplicationTabGroup() {
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id;
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
-			//Ti.API.info('from ACS..eventId: ' + eventId + ', programId: ' + programId);
+			Ti.API.info('from checkinDbLoadedCallback ACS..eventId: ' + eventId + ', programId: ' + programId);
 			todayCheckinPrograms.push(programId);
 		}
 		//reset currentSelectedProgram, currentCheckinPrograms when loadedup data from ACS

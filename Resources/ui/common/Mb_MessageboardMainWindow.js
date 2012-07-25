@@ -207,7 +207,7 @@ function MessageboardMainWindow(_programId) {
 			var programInfo = TVProgram.TVProgramModel_fetchProgramsWithProgramId(programId);
 			var programName = "Chatterbox";
 			if(programInfo === undefined || programInfo[0] === undefined)
-				Ti.API.info('bad time...cannot find info for programId: '+programId);
+				Ti.API.info('msgboard: bad time...cannot find info for programId: '+programId+', arrayOfCheckinPrograms: '+JSON.stringify(currentCheckinPrograms));
 			else programName = programInfo[0].name;
 			
 			if(UserCheckinTracking.getCurrentSelectedProgram() === programId) {

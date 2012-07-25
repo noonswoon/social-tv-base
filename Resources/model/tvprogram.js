@@ -136,8 +136,10 @@ exports.TVProgramModel_countCheckins = function(_eventId){
 exports.TVProgramModel_fetchPrograms = function() {
 	//select some stuff from the local db..based on the future filtering
 	var fetchedPrograms = [];
+	var startOfTheDay = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM tvprograms ORDER BY start_time ASC');
+	
+	var result = db.execute('SELECT * FROM tvprograms  WHERE start_time >= ? ORDER BY start_time',startOfTheDay);
 	while(result.isValidRow()) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),

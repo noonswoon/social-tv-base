@@ -132,7 +132,7 @@ function CommentWindow(_topicId) {
 				votesOfComments.push(curComment);
 			}
 		}
-		//Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
+		// Ti.API.info('num commentsOfTopic: '+commentsOfTopic.length);
 		//Ti.API.info('num votesOfComments: '+votesOfComments.length);
 		
 		var commentRowsData = [commentHeader];
@@ -266,8 +266,17 @@ function CommentWindow(_topicId) {
 		//3. come back and update local activity db with acs_object_id
 		ActivityACS.activityACS_createMyActivity(commentActivityData,newActivityId);
 		
+		//4. UpdateCommentNumCount
+		var totalComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
+		var curCommentNumCount = totalComments.length;
+		Topic.topicModel_updateCommentNumCount(curCommentNumCount,_topicId);
+		
+		Ti.App.fireEvent('updateCommentNumCount'+_topicId,{totalCommentNumCount: curCommentNumCount});
+		
 		commentHeader._setReplyTextArea("");
 		commentHeader._blurReplyTextArea();
+		
+
 	}
 	
 	

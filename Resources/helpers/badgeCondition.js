@@ -29,19 +29,19 @@ exports.getNumCheckinsOfProgramId = getNumCheckinsOfProgramId;
 ////////////////////////////////////////////////////////////////////////
 var checkCountCondition = function(e) {
 	var checkinCount = e.result;
-	//badge desc: nice to meet you
-	//condition: 1st check in
-	//badge id: 0
-	if(checkinCount == 1)
-		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 0});
-	//badge desc: fall for you	
-	//condition: 10th check in	
-	//badge id: 1
-	else if(checkinCount == 10) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 1});	
 	//badge desc: i'm loving it		
 	//condition: 20th check in
 	//badge id: 2
-	else if(checkinCount == 20) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 2});
+	if(checkinCount >= 20) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(), {badgeID: 2});
+	//badge desc: fall for you	
+	//condition: 10th check in	
+	//badge id: 1
+	else if(checkinCount >= 10) Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 1});	
+	//badge desc: nice to meet you
+	//condition: 1st check in
+	//badge id: 0
+	else if(checkinCount >= 1)
+		Ti.App.fireEvent('badgeConditionUpdate'+acs.getUserId(),{badgeID: 0});
 }
 
 exports.checkFriendCondition = function(_friendCheckIn) {

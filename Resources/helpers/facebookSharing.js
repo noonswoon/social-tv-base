@@ -109,8 +109,8 @@ exports.checkinPopUpOnFacebook = function(_checkin,_programPhoto) {
 		};
 		if(SettingHelper.getFacebookAutoPost()) Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
 		else Titanium.Facebook.dialog("feed", data, showRequestResult);
-		checkinAppearOnFaceBook();
 	}
+	checkinAppearOnFaceBook();
 }
 
 exports.levelUpPopUpOnFacebook = function(_levelTitle) {	
@@ -126,8 +126,8 @@ exports.levelUpPopUpOnFacebook = function(_levelTitle) {
 			description: _levelTitle
 		};
 		Titanium.Facebook.dialog("feed", data, showRequestResult);
-		riseRankAppearOnFacebook();
 	}
+	riseRankAppearOnFacebook();
 }
 
 exports.cookAppearOnFaceBook = function() {
@@ -158,7 +158,7 @@ exports.postAppearOnFaceBook = function(_topicTitle,_topicContent,_programPhoto)
 		};
 		// Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:post",data,"POST",showRequestResult);
 		Titanium.Facebook.dialog("feed", data, showRequestResult);
-		newTopicAppearOnFacebook();
 	}
+	newTopicAppearOnFacebook();
 }
 

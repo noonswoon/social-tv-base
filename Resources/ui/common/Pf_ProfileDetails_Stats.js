@@ -100,7 +100,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		disableBounce: true,
 		width: 290,
 		height: 'auto',
-		zIndex: 10,
+		zIndex: 500,
 		separatorColor: 'transparent'
 	});
 		
@@ -114,7 +114,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			}
 		};
 		for(var i=0; i<leaderBoardData.length; i++) {
-			if(leaderBoardData[i].totalPoint <= 0) break; //not including people who get 0
 			
 			var userRank = Ti.UI.createTableViewRow({
 				backgroundColor: '#eeeeee',
@@ -156,7 +155,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 
 			var userRankScore = Ti.UI.createLabel({
 				text: leaderBoardData[i].totalPoint, 
-				//top: 10,
 				right: 5,
 				width: 'auto',
 				textAlign: 'right',
@@ -183,6 +181,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		leaderTable.data = userRankInfo;
 		leaderTable.bottom = 10;
 		profileStats.height = expSec.height + leaderSec.height;
+		
 	} //end of function: createLeaderBoardView
 
 	expSec.add(expLabel);
@@ -194,6 +193,17 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	if(_status==="me") {
 		var friendLoadedCallBack = function(e){
 			FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
+			var rankList = [];
+			rankList[0] = _userProfile.id;
+			if(e.fetchedFriends.length!==0) {
+				var myFriends = e.fetchedFriends;
+				for(var i = 0; i< myFriends.length;i++) {
+					var curUser = myFriends[i].friend_id;
+					rankList.push(curUser);
+				};
+			};	
+			var LeaderACS = require('acs/leaderBoardACS');
+			LeaderACS.leaderACS_fetchedRank(rankList);
 		};
 		
 		var leaderBoardLoadedCallBack = function(e) {
@@ -215,8 +225,8 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		var leaderDbUpdatedCallBack = function() {
 			var leaderBoardData = PointModel.pointModel_fetchRank();
 			leaderBoardData.sort(totalPointSort);
+			addMoreFriend(leaderBoardData);
 	    	createLeaderBoardView(leaderBoardData);
-	    	addMoreFriend(leaderBoardData);
 	    	updateExpBar();
 	    	
 		    if(_status==="me") {
@@ -258,6 +268,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 		Ti.App.addEventListener('levelDbUpdated', function(){
 			updateExpBar();
 		});
+		
 		Ti.App.addEventListener('friendsLoaded',friendLoadedCallBack);
 		Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);	
 		Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);

@@ -51,7 +51,43 @@ Ti.App.Chat = function(_chatParams) {
 	            Ti.API.info("connecting...");
 				//reset stuff
 	            var welcomeChatRow = new ChatMessageTableViewRow("Welcome to "+currentChatRoomName+" Chat Room. Please keep our place clean.",adminUserObject,false);
-    			chatMessagesTableView.setData([loadHistoryMessagesRow,welcomeChatRow]);	            
+    			chatMessagesTableView.setData([loadHistoryMessagesRow,welcomeChatRow]);
+    			
+    			//load history messages and add in 5 latest chats    
+    			//load the last 5 messages
+				pubnub.history({
+					channel : currentChatRoom,
+					limit : 100
+				}, function(messages) {
+					// Show History
+					//Ti.API.info('first loaded history: '+messages);
+					totalHistoryMessages = messages.length;
+					//building historyMessages array
+					
+					for(var i = messages.length -1;i >= 0; i--) {
+						messageObj = {text: messages[i].text, senderId: messages[i].senderId, senderFbId: messages[i].senderFbId, time: messages[i].time };
+						historyMessages.push(messageObj);
+					}
+					
+					// add in the last 5 messages
+					var numMessagesToLoad = 5; 
+					if(messages.length < 5) {
+						numMessagesToLoad = messages.length;
+					}
+					for(var i = 0; i < numMessagesToLoad;i++) {
+						var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture?type=square'};
+						var isYourMessage = false;
+						if(historyMessages[i].senderFbId === userObject.fbId) isYourMessage = true;
+						var newChatRow = new ChatMessageTableViewRow(historyMessages[i].text,historyUserObj,isYourMessage);
+			          	chatMessagesTableView.insertRowAfter(0,newChatRow);
+					}
+					lastHistoryLoadedIndex = numMessagesToLoad - 1;
+				
+					//scroll to the last one
+					setTimeout(function() {
+						chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
+					}, 1000);
+				});      
 	        },
 	        callback : function(message) {
 	        	//since pubnub is a broadcaster, sender will receive his own message as well
@@ -89,7 +125,6 @@ Ti.App.Chat = function(_chatParams) {
             }
         });
     };
-	subscribe_chat_room();
 	
 	var backButton = Ti.UI.createButton({
         backgroundImage:'images/back_button.png',
@@ -109,6 +144,9 @@ Ti.App.Chat = function(_chatParams) {
 		//unsubscribe here...
 		Ti.API.info('unsubscribe from channel: '+currentChatRoom);
 		pubnub.unsubscribe({ channel : currentChatRoom });
+		historyMessages = [];
+		lastHistoryLoadedIndex = 0;
+		totalHistoryMessages = 0;
    		chat_window.close();
 	});
 
@@ -168,57 +206,28 @@ Ti.App.Chat = function(_chatParams) {
     this.pubnub      = pubnub;
     
     loadHistoryButton.addEventListener('click', function() {
-		if(historyMessages.length == 0) {
-			pubnub.history({
-			    channel : currentChatRoom,
-			    limit : 100
-			}, function(messages) {
-			    // Show History
-			    Ti.API.info('first loaded history: '+messages);
-				totalHistoryMessages = messages.length;
-				//building historyMessages array
-				for(var i = messages.length -1;i >= 0; i--) {
-					messageObj = {text: messages[i].text, senderId: messages[i].senderId, senderFbId: messages[i].senderFbId, time: messages[i].time };
-					historyMessages.push(messageObj);
-				}
-				// add in the last 10 messages
-				var numMessagesToLoad = 10; 
-				if(messages.length < 10) {
-					numMessagesToLoad = messages.length;
-				}
-				for(var i = 0; i < numMessagesToLoad;i++) {
-					var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture'};
-					var isYourMessage = false;
-					if(historyMessages[i].senderFbId === userObject.fbId) isYourMessage = true;
-					var newChatRow = new ChatMessageTableViewRow(historyMessages[i].text,historyUserObj,isYourMessage);
-           			chatMessagesTableView.insertRowAfter(0,newChatRow);
-				}
-				lastHistoryLoadedIndex = numMessagesToLoad - 1;
-			});
+    	//already load history when the page opens
+		var nextHistoryLoadedIndex = lastHistoryLoadedIndex + 1; 	
+		if(nextHistoryLoadedIndex >= historyMessages.length) {
+			alert("No more chat history");
+			loadHistoryButton.enabled = false;
 		} else {
-			//continue...adding from the last inserted
-			var nextHistoryLoadedIndex = lastHistoryLoadedIndex + 1; 	
-			if(nextHistoryLoadedIndex >= historyMessages.length) {
-				alert("No more chat history");
-				loadHistoryButton.enabled = false;
-			} else {
-				var historyIndexToLoadTo = nextHistoryLoadedIndex + 9; 
-				if(historyIndexToLoadTo >= historyMessages.length)
-					historyIndexToLoadTo = historyMessages.length - 1;
-				lastHistoryLoadedIndex = historyIndexToLoadTo; 
+			var historyIndexToLoadTo = nextHistoryLoadedIndex + 9; 
+			if(historyIndexToLoadTo >= historyMessages.length)
+				historyIndexToLoadTo = historyMessages.length - 1;
+			lastHistoryLoadedIndex = historyIndexToLoadTo; 
 				
-				for(var i = nextHistoryLoadedIndex; i <= historyIndexToLoadTo;i++) {
-					var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture'};
-					var isYourMessage = false;
-					if(historyMessages[i].senderFbId === userObject.fbId) isYourMessage = true;
-					var newChatRow = new ChatMessageTableViewRow(historyMessages[i].text,historyUserObj,isYourMessage);
-	          		chatMessagesTableView.insertRowAfter(0,newChatRow);
-				}
-			}				
-		}
+			for(var i = nextHistoryLoadedIndex; i <= historyIndexToLoadTo;i++) {
+				var historyUserObj = {id:historyMessages[i].senderId,fbId: historyMessages[i].senderFbId,imageUrl: 'https://graph.facebook.com/'+historyMessages[i].senderFbId+'/picture'};
+				var isYourMessage = false;
+				if(historyMessages[i].senderFbId === userObject.fbId) isYourMessage = true;
+				var newChatRow = new ChatMessageTableViewRow(historyMessages[i].text,historyUserObj,isYourMessage);
+	          	chatMessagesTableView.insertRowAfter(0,newChatRow);
+			}
+		}				
     });
 
-//animate up
+	//animate up
 	var animateNegativeUp = Ti.UI.createAnimation({
 		top: -230,
 		duration: 200,
@@ -259,9 +268,11 @@ Ti.App.Chat = function(_chatParams) {
     	chatInputTextField.blur();
     	setTimeout(function() {
 			   	chatMessagesTableView.scrollToIndex(chatMessagesTableView.data[0].rowCount - 1); //fixing stuff here scroll to the latest row
-		}, 2000);
+		}, 500);
     });
-    
+	
+	subscribe_chat_room();
+			
     return this;
 };
 

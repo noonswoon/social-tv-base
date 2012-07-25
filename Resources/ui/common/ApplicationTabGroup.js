@@ -200,8 +200,9 @@ function ApplicationTabGroup() {
 	Ti.App.addEventListener('changingCurrentSelectedProgram', changingCurrentSelectedProgramCallback);
 	
 	var testingPlaygroundCallback = function(e) {
-		Ti.API.info('productwin:numRowsInPicker: '+productwin._getNumRowsInPicker()); 
-		Ti.API.info('messageboardwin:numRowsInPicker: '+messageboardwin._getNumRowsInPicker()); 
+		var TVProgramACS = require('acs/tvprogramACS');
+		TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
+		TVProgramACS.tvprogramACS_fetchProgramsFromChannel('ch3');
 	};
 	Ti.App.addEventListener('testingPlayground', testingPlaygroundCallback);
 	
@@ -254,7 +255,8 @@ function ApplicationTabGroup() {
 		if(timeLastFetchedTVProgramACS < startOfToday) {
 			//need to reload all tvprogram data
 			var TVProgramACS = require('acs/tvprogramACS');
-			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
+			TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
+			//TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
 			CacheHelper.setTimeLastFetchedTVProgramACS();
 		} else { //if still using the same tvprogram data, reset the popular tvprogram data by calling 'showDiscoveryPage' event
 			Ti.API.info('updating data in popular tab...')

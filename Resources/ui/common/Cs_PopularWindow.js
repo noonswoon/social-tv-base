@@ -83,6 +83,8 @@ function PopularWindow(_parent) {
 		programListTable.data = [];	
 		var allPrograms = e.fetchedPrograms;
 		TVProgramModel.TVProgramModel_insertAllPrograms(allPrograms);
+		//should be insert program at the moment -- and no deletion
+		
 		Ti.App.fireEvent("tvprogramsTitlesLoaded");
 	}
 	Ti.App.addEventListener('tvprogramsLoadedComplete',tvprogramLoadedCompleteCallback);
@@ -113,17 +115,34 @@ function PopularWindow(_parent) {
 	Ti.App.addEventListener('updatePopularProgramAtTime', function(e){
 		var myUserId = acs.getUserId();
 		var timeIndex = e.timeIndex;
-		var selectedShowtime = TVProgramModel.TVProgramModel_fetchShowtimeSelection(timeIndex); 
+		Ti.API.info('timeIndex: '+timeIndex);
+
+				
+		TVProgramACS.tvprogramACS_fetchProgramsShowingAt(timeIndex);
+		showPreloader(self,'Loading...');
+		//add in loading... screen
+	});
+
+	Ti.App.addEventListener('tvprogramsAtTimeIndexLoaded', function(e) {
+		var programsAtTimeIndex = e.fetchedPrograms;
+		var timeIndex = e.timeIndex;
+		
+		//insert to db
+		TVProgramModel.TVProgramModel_insertPrograms(programsAtTimeIndex);
+		
+		var selectedShowtime = TVProgramModel.TVProgramModel_fetchShowtimeSelection(timeIndex); 		
 		selectedShowtime.sort(sortByNumberCheckins);
 		Ti.API.info('update PopularProgramAtTime');
 		var viewRowsData = [];
+		var myUserId = acs.getUserId();
 		for (var i=0;i<selectedShowtime.length;i++) {
 			var curTVProgram = selectedShowtime[i];
 			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(curTVProgram.id, myUserId);
 			var row = new PopularWindowTableViewRow(curTVProgram, numFriendsCheckins);
 			viewRowsData.push(row);
 		}
-		programListTable.setData(viewRowsData);		
+		programListTable.setData(viewRowsData);	
+		hidePreloader(self);	
 	});
 	 
 	Ti.App.addEventListener('showDiscoveryPage', function(){
@@ -224,8 +243,8 @@ function PopularWindow(_parent) {
 			usingPull2Refresh = true;
 			areAllProgramsTitlesLoaded = false;
 			numProgramsToLoadCheckins = -1;
-			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
-			CacheHelper.getTimeLastFetchedTVProgramACS();
+//			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
+//			CacheHelper.getTimeLastFetchedTVProgramACS();
 		}, {
 			backgroundColor: '#959595', 
 			statusLabel: {
@@ -236,8 +255,10 @@ function PopularWindow(_parent) {
 			}
 		}
 	);	
-	CacheHelper.fetchACSDataOrCache('tvprogramACS_fetchAllProgramShowingToday', TVProgramACS.tvprogramACS_fetchAllProgramShowingToday, [], 'tvprogramsTitlesLoaded', CACHE_TIMEOUT_SHORT);
-	CacheHelper.setTimeLastFetchedTVProgramACS();
+
+	TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
+//	CacheHelper.fetchACSDataOrCache('tvprogramACS_fetchAllProgramShowingToday', TVProgramACS.tvprogramACS_fetchAllProgramShowingToday, [], 'tvprogramsTitlesLoaded', CACHE_TIMEOUT_SHORT);
+//	CacheHelper.setTimeLastFetchedTVProgramACS();
 	BadgeShowPermissionACS.badgeShowPermissionACS_fetchedPermission();
 
 	return self;

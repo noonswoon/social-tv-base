@@ -19,6 +19,25 @@ exports.TVProgramModel_insertAllPrograms = function(_allPrograms) {
 	db.close();
 };
 
+exports.TVProgramModel_insertPrograms = function(_allPrograms) {
+	var fetchedPrograms = [];
+	var db = Ti.Database.open('Chatterbox'); 
+	var result = null;		
+	for(var i =0;i<_allPrograms.length;i++) {
+		var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ?', _allPrograms[i].program_id);
+		if(result.isValidRow()) {
+			db.execute('DELETE FROM tvprograms WHERE program_id = ?', _allPrograms[i].program_id);
+			Ti.API.info('deleting existing tvprograms: program_id: '+_allPrograms[i].program_id);
+		}
+		db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type) VALUES(?,?,?,?,?,?,?,?,?)',
+			_allPrograms[i].id, _allPrograms[i].name, _allPrograms[i].subname, _allPrograms[i].photo,
+			_allPrograms[i].start_time, _allPrograms[i].recurring_until, _allPrograms[i].channel_id,
+			_allPrograms[i].program_id, _allPrograms[i].program_type);
+	}
+	if(result !== null) result.close();
+	db.close();
+};
+
 //chat window used: pull data from currentCheckin
 exports.TVProgramModel_getPrograms = function(_programIds) {
 	var programData = [];

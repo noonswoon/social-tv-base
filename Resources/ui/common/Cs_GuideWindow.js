@@ -6,8 +6,10 @@ function GuideWindow(_channelSelectionWin) {
 	var ChannelInGuideWindow = require('ui/common/Cs_ChannelInGuideWindow');
 
 	var channelsList = ['3','5','7','9','11','ThaiPBS'];
-	var dataForTab = []; 
-	
+	//channel 3 as a default
+	var displayChannel = new ChannelInGuideWindow('ch3',_channelSelectionWin);
+ 	
+ 	
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'pink'
 	});
@@ -46,12 +48,6 @@ function GuideWindow(_channelSelectionWin) {
 		color: '#333'
 	});
 	selectChannelToolbar.add(selectChannelLabel);
-	
-	//LOGIC STUFF
-	// for(var i=0;i<channelsList.length;i++) {
-		// var curChannel = channelsList[i];
-		// dataForTab.push(curChannel);
-	// }
 
 	//Opacity window when picker is shown
 	var opacityView = Ti.UI.createView({
@@ -62,7 +58,7 @@ function GuideWindow(_channelSelectionWin) {
 		backgroundColor: '#000'
 	});
 
-//Picker
+	//Picker
 	var picker_view = Titanium.UI.createView({
 		height:251,
 		bottom:-251,
@@ -82,7 +78,6 @@ function GuideWindow(_channelSelectionWin) {
 	var spacer =  Titanium.UI.createButton({
 		systemButton:Titanium.UI.iPhone.SystemButton.FLEXIBLE_SPACE
 	});
-
 
 	var toolbar =  Titanium.UI.iOS.createToolbar({
 		top:0,
@@ -143,44 +138,33 @@ function GuideWindow(_channelSelectionWin) {
 	picker.addEventListener('change',function(e){
 		var index = e.rowIndex;
 		if(index === 0){
-			var ch3 = new ChannelInGuideWindow('ch3',_channelSelectionWin);
-			self.add(ch3);				
+			displayChannel._updateProgramContents('ch3');
 			selectChannelLabel.text = 'CH3';
 		}
 		else if(index === 1){
-			var ch5 = new ChannelInGuideWindow('ch5',_channelSelectionWin);
-			self.add(ch5);
+			displayChannel._updateProgramContents('ch5');
 			selectChannelLabel.text = 'CH5';	
 		}
 		else if(index === 2){
-			var ch7 = new ChannelInGuideWindow('ch7',_channelSelectionWin);
-			self.add(ch7);
+			displayChannel._updateProgramContents('ch7');			
 			selectChannelLabel.text = 'CH7';	
 		}
 		else if(index === 3){
-			var ch9 = new ChannelInGuideWindow('ch9',_channelSelectionWin);
-			self.add(ch9);	
+			displayChannel._updateProgramContents('ch9');			
 			selectChannelLabel.text = 'CH9';
 		}
 		else if(index === 4){
-			var ch11 = new ChannelInGuideWindow('ch11',_channelSelectionWin);
-			self.add(ch11);	
+			displayChannel._updateProgramContents('ch11');			
 			selectChannelLabel.text = 'CH11';
 		}
 		else if(index === 5){
-			var thaiPBS = new ChannelInGuideWindow('pbs',_channelSelectionWin);
-			self.add(thaiPBS);
+			displayChannel._updateProgramContents('pbs');			
 			selectChannelLabel.text = 'ThaiPBS';
 		}	
-
 	});
 
 	self.add(picker_view);
-	/////////////////////////
-	
-	// Default Channel(Ch3)
-	var defaultChannel = new ChannelInGuideWindow('ch3',_channelSelectionWin);
- 	self.add(defaultChannel);	
+	self.add(displayChannel);	
 
 	return self;
 }

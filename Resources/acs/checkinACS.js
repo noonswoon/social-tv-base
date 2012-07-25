@@ -101,7 +101,7 @@ exports.checkinACS_timeIndexGetTotalNumCheckinOfProgram = function(_eventId,_cha
 	var programs = [];
 	var eventId = _eventId;
 	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&response_json_depth=1&where={"event_id":"'+eventId+'"}&per_page=1';	
-	Ti.API.info('timeIndexGetTotalNumCheckinOfProgram url: '+url);
+	//Ti.API.info('timeIndexGetTotalNumCheckinOfProgram url: '+url);
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);

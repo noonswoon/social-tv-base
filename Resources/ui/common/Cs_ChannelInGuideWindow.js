@@ -1,38 +1,29 @@
 ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
-	
-	var TVProgram = require('model/tvprogram');
+	var TVProgramACS = require('acs/tvprogramACS');
+	var TVProgramModel = require('model/tvprogram');
 	var ChannelInGuideTableViewRow = require('ui/common/Cs_ChannelInGuideTableViewRow');
 	var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
 		
+	var currentChannelId = _channelId;
+	
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'orange',
 		top: 42
 	});
 	
-	var programsOfChannelTableView = Ti.UI.createTableView({
+	var channelProgramsTableView = Ti.UI.createTableView({
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		backgroundColor: 'transparent',
 	});
 	
-	programsOfChannelTableView.backgroundGradient = {
+	channelProgramsTableView.backgroundGradient = {
 		type: 'linear',
 		startPoint: { x: '0%', y: '0%' },
 		endPoint: { x: '0%', y: '100%' },
 		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
 	};	
-
-	var programsOfChannelData = [];		
-	var programsOfChannel = TVProgram.TVProgramModel_fetchGuideProgramsOfChannel(_channelId); 
-	for(var i=0;i<programsOfChannel.length;i++){
-		var program = programsOfChannel[i];
-		var selectedChannel = new ChannelInGuideTableViewRow(program);
-		programsOfChannelData.push(selectedChannel);
-	}
-	
-	programsOfChannelTableView.data = [];
-	programsOfChannelTableView.setData(programsOfChannelData);	
 		
-	programsOfChannelTableView.addEventListener('click',function(e){
+	channelProgramsTableView.addEventListener('click',function(e){
  		checkinmainwin = new CheckinMainWindow({
 			eventId: e.row.tvprogram.id,
 			programId: e.row.tvprogram.program_id,
@@ -47,8 +38,37 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 		}, _channelSelectionWin.containingTab);	
 		_channelSelectionWin.containingTab.open(checkinmainwin);
 	});
+	
+	self._updateProgramContents = function(_selectedChannelId) {
+		showPreloader(self,'Loading...');
+		currentChannelId = _selectedChannelId;
+		TVProgramACS.tvprogramACS_fetchProgramsFromChannel(currentChannelId);
+	};
+	
+	Ti.App.addEventListener('tvprogramsOfChannelLoaded', function(e) {
+		var channelPrograms = e.fetchedPrograms;
+		
+		//insert to db
+		TVProgramModel.TVProgramModel_insertPrograms(channelPrograms);
+		
+		var channelProgramData = [];		
+		//pull from db
+		channelPrograms = TVProgramModel.TVProgramModel_fetchGuideProgramsOfChannel(currentChannelId); 
+		for(var i=0; i < channelPrograms.length; i++){
+			var program = channelPrograms[i];
+			var rowData = new ChannelInGuideTableViewRow(program);
+			channelProgramData.push(rowData);
+		}
+		channelProgramsTableView.data = [];
+		channelProgramsTableView.setData(channelProgramData);
+		hidePreloader(self);
+	});
 
-	self.add(programsOfChannelTableView);
+	//acs data call
+	showPreloader(self,'Loading...');
+	TVProgramACS.tvprogramACS_fetchProgramsFromChannel(currentChannelId);
+	
+	self.add(channelProgramsTableView);
 	return self;
 }
 module.exports = ChannelInGuideWindow;

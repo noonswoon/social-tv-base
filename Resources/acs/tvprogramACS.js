@@ -144,14 +144,17 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	var endOfTheDay = moment().eod().format('YYYY-MM-DD,HH:mm:ss');
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=2&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'"}';	
-	Ti.API.info('fetch showing From Channel: '+url);
-/*	
+			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'"}';	
+	//Ti.API.info('fetch showing From Channel: '+url);
+
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
-	      	for (var i = 0; i < responseJSON.response.events.length; i++) {
-	            var program = responseJSON.response.events[i];  
+	      	//Ti.API.info('responseJSON: '+JSON.stringify(responseJSON));
+	      	var programEvents = responseJSON.response.event_occurrences; 
+	      	//Ti.API.info('programEvents.length: '+programEvents.length);
+	      	for (var i = 0; i < programEvents.length; i++) {
+	            var program = programEvents[i];  
 
 				var photoUrl = 'defaultProgramPic.png';
 				var subname = '';
@@ -160,48 +163,48 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 				var programType = 'ETC';
 				
 				//safeguarding code
-				if(program.photo !== undefined && program.photo.urls !== undefined)
-					photoUrl = program.photo.urls.thumb_100;
+				if(program.event != undefined && program.event.photo !== undefined && program.event.photo.urls !== undefined)
+					photoUrl = program.event.photo.urls.thumb_100;
 					
-	            if(program.custom_fields !== undefined) {
-	            	if(program.custom_fields.subname !== undefined) {
-	            		subname = program.custom_fields.subname;	
+	            if(program.event != undefined && program.event.custom_fields !== undefined) {
+	            	if(program.event.custom_fields.subname !== undefined) {
+	            		subname = program.event.custom_fields.subname;	
 	            	}
-	            	if(program.custom_fields.channel_id !== undefined) {
-	            		channelId = program.custom_fields.channel_id;	
+	            	if(program.event.custom_fields.channel_id !== undefined) {
+	            		channelId = program.event.custom_fields.channel_id;	
 	            	}
-	            	if(program.custom_fields.program_id !== undefined) {
-	            		programId = program.custom_fields.program_id;
+	            	if(program.event.custom_fields.program_id !== undefined) {
+	            		programId = program.event.custom_fields.program_id;
 	            	}
-	            	if(program.custom_fields.program_type !== undefined) {
-	            		programType = program.custom_fields.program_type;	
+	            	if(program.event.custom_fields.program_type !== undefined) {
+	            		programType = program.event.custom_fields.program_type;	
 	            	}
 	            }
 	            
 	            var curProgram = {
-	            	id: program.id,
-	            	name: program.name,
+	            	id: program.event.id,
+	            	name: program.event.name,
 	            	subname: subname,
 	            	photo: photoUrl,
 	            	start_time: program.start_time,
-	            	recurring_until: program.recurring_until,
+	            	recurring_until: program.end_time,
 	            	channel_id: channelId,
 	            	program_id: programId,
 	            	program_type: programType
 	            }
-				programs.push(curProgram);
+	            //Ti.API.info('programFrom channel: '+_channelId+'; Obj: '+JSON.stringify(curProgram));
+	            programs.push(curProgram);
 			}
-			//Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
+			Ti.App.fireEvent("tvprogramsOfChannelLoaded",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramACS_fetchProgramsFromChannel error: '+e.error);
+	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+e.error);
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  // in milliseconds 
 	});
 	xhr.open("GET", url);
 	xhr.send();
-	*/
 }
 
 exports.tvprogramACS_fetchAllProgramShowingToday = function() {

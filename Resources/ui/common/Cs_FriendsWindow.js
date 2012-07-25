@@ -109,7 +109,8 @@ FriendsWindow = function(_parent){
 		_parent.containingTab.open(checkinmainwin);
 	});
 	
-	//1. get checkins of friends
+	//Get checkins of friends
+	//Ti.API.info('calling fetchFriendsCheckin in FriendsWindow');
 	var friendsCheckins = CheckinModel.checkin_fetchFriendsCheckins(myUserId);
 	if(friendsCheckins.length === 0) {
 		createAddMoreFriendsRow();

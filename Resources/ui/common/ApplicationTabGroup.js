@@ -119,7 +119,7 @@ function ApplicationTabGroup() {
 	};
 	
 	function checkinLoadedCompleteCallBack(e) {
-		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin);
+		CheckinModel.checkinModel_updateCheckinsFromACS(e.fetchedCheckin,myUserId);
 	}
 	Ti.App.addEventListener('checkinLoadedComplete',checkinLoadedCompleteCallBack);
 	
@@ -135,7 +135,7 @@ function ApplicationTabGroup() {
 			var eventId = eventsCheckedIn[i].event_id;
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
 			Ti.API.info('from checkinDbLoadedCallback ACS..eventId: ' + eventId + ', programId: ' + programId);
-			todayCheckinPrograms.push(programId);
+			if(programId !== "") todayCheckinPrograms.push(programId);
 		}
 		//reset currentSelectedProgram, currentCheckinPrograms when loadedup data from ACS
 		Ti.API.info('get a chance to reset currentSelectedProgram');

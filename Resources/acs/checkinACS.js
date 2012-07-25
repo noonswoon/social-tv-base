@@ -96,3 +96,25 @@ exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId,_channelId) {
 	xhr.open("GET", url);
 	xhr.send();
 }
+
+exports.checkinACS_timeIndexGetTotalNumCheckinOfProgram = function(_eventId,_channelId,_timeIndex) {
+	var programs = [];
+	var eventId = _eventId;
+	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&response_json_depth=1&where={"event_id":"'+eventId+'"}&per_page=1';	
+	Ti.API.info('timeIndexGetTotalNumCheckinOfProgram url: '+url);
+	var xhr = Ti.Network.createHTTPClient({
+	    onload: function() {
+	      	responseJSON = JSON.parse(this.responseText);
+	      	var total_results = responseJSON.meta.total_results;
+	        Ti.App.fireEvent("timeIndexDoneGettingNumCheckinsOfProgramId",{targetedProgramId: eventId, numCheckins:total_results, channelId:_channelId, timeIndex:_timeIndex});
+	    },onerror: function(e) {
+			// this function is called when an error occurs, including a timeout
+	        Ti.API.debug(e.error);
+	        Debug.debug_print('checkinACS_timeIndexGetTotalNumCheckinOfProgram error');
+	        ErrorHandling.showNetworkError();
+	    },
+	    timeout:10000  /* in milliseconds */
+	});
+	xhr.open("GET", url);
+	xhr.send();
+}

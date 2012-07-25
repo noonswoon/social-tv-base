@@ -123,7 +123,7 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	            	program_id: programId,
 	            	program_type: programType
 	            }
-	            Ti.API.info('programFrom timeIndex: '+_timeIndex+'; Obj: '+JSON.stringify(curProgram));
+	            //Ti.API.info('programFrom timeIndex: '+_timeIndex+'; Obj: '+JSON.stringify(curProgram));
 	            programs.push(curProgram);
 			}
 			Ti.App.fireEvent("tvprogramsAtTimeIndexLoaded",{fetchedPrograms:programs, timeIndex:_timeIndex});

@@ -21,6 +21,7 @@ function PopularWindow(_parent) {
 	var areBadgeShowPermissionReady = false;
 	var areFriendCheckinsReady = false;
 	var numProgramsToLoadCheckins = -1;
+	var numProgramsToLoadCheckinsTimeIndex = -1;
 	var usingPull2Refresh = false;
 	
 	//Google Analytics
@@ -123,26 +124,40 @@ function PopularWindow(_parent) {
 		//add in loading... screen
 	});
 
+	Ti.App.addEventListener('timeIndexDoneGettingNumCheckinsOfProgramId', function(e) {
+		var targetedProgramId = e.targetedProgramId; 
+		var numCheckins = e.numCheckins;
+		var channelId = e.channelId;
+
+		TVProgramModel.TVProgramModel_updateCheckins(targetedProgramId, numCheckins,channelId);
+		numProgramsToLoadCheckinsTimeIndex--;
+		if(numProgramsToLoadCheckinsTimeIndex === 0) {
+			var timeIndex = e.timeIndex;
+			var selectedShowtime = TVProgramModel.TVProgramModel_fetchShowtimeSelection(timeIndex); 		
+			selectedShowtime.sort(sortByNumberCheckins);
+			var viewRowsData = [];
+			var myUserId = acs.getUserId();
+			for (var i=0;i<selectedShowtime.length;i++) {
+				var curTVProgram = selectedShowtime[i];
+				var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(curTVProgram.id, myUserId);
+				var row = new PopularWindowTableViewRow(curTVProgram, numFriendsCheckins);
+				viewRowsData.push(row);
+			}
+			programListTable.setData(viewRowsData);	
+			hidePreloader(self);
+		}
+	});
+	
 	Ti.App.addEventListener('tvprogramsAtTimeIndexLoaded', function(e) {
 		var programsAtTimeIndex = e.fetchedPrograms;
 		var timeIndex = e.timeIndex;
 		
 		//insert to db
 		TVProgramModel.TVProgramModel_insertPrograms(programsAtTimeIndex);
-		
-		var selectedShowtime = TVProgramModel.TVProgramModel_fetchShowtimeSelection(timeIndex); 		
-		selectedShowtime.sort(sortByNumberCheckins);
-		Ti.API.info('update PopularProgramAtTime');
-		var viewRowsData = [];
-		var myUserId = acs.getUserId();
-		for (var i=0;i<selectedShowtime.length;i++) {
-			var curTVProgram = selectedShowtime[i];
-			var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(curTVProgram.id, myUserId);
-			var row = new PopularWindowTableViewRow(curTVProgram, numFriendsCheckins);
-			viewRowsData.push(row);
+		numProgramsToLoadCheckinsTimeIndex = programsAtTimeIndex.length;
+		for(var i = 0; i < programsAtTimeIndex.length; i++) {
+			CheckinACS.checkinACS_timeIndexGetTotalNumCheckinOfProgram(programsAtTimeIndex[i].id, programsAtTimeIndex[i].channel_id,timeIndex);
 		}
-		programListTable.setData(viewRowsData);	
-		hidePreloader(self);	
 	});
 	 
 	Ti.App.addEventListener('showDiscoveryPage', function(){

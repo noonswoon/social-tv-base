@@ -27,7 +27,7 @@ exports.TVProgramModel_insertPrograms = function(_allPrograms) {
 		var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ?', _allPrograms[i].program_id);
 		if(result.isValidRow()) {
 			db.execute('DELETE FROM tvprograms WHERE program_id = ?', _allPrograms[i].program_id);
-			Ti.API.info('deleting existing tvprograms: program_id: '+_allPrograms[i].program_id);
+			//Ti.API.info('deleting existing tvprograms: program_id: '+_allPrograms[i].program_id);
 		}
 		db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type) VALUES(?,?,?,?,?,?,?,?,?)',
 			_allPrograms[i].id, _allPrograms[i].name, _allPrograms[i].subname, _allPrograms[i].photo,

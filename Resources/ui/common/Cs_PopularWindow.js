@@ -35,11 +35,6 @@ function PopularWindow(_parent) {
 	}
 	
 	function isEverythingReady() {
-		Ti.API.info('isEverythingReady?');
-		Ti.API.info('areAllProgramsTitlesLoaded: '+areAllProgramsTitlesLoaded);
-		Ti.API.info('areBadgeShowPermissionReady: '+areBadgeShowPermissionReady);
-		Ti.API.info('numProgramsToLoadCheckins: '+numProgramsToLoadCheckins);
-		Ti.API.info('areFriendCheckinsReady: '+areFriendCheckinsReady);
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0) && areFriendCheckinsReady) {
 			Ti.API.info('Everything\'s ready');
 			hidePreloader(self);

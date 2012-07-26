@@ -146,7 +146,7 @@ exports.showFriendsRequest = function(){
 	var requests = [];
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {
+	    onload: function() {	
 	    	responseJSON = JSON.parse(this.responseText);
 		      	for (var i = 0; i < responseJSON.response.friend_requests.length; i++) {
 	            var request = responseJSON.response.friend_requests[i]; 

@@ -23,7 +23,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 				
 				//safeguarding code
 				if(program.event != undefined && program.event.photo !== undefined && program.event.photo.urls !== undefined)
-					photoUrl = program.event.photo.urls.thumb_100;
+					photoUrl = program.event.photo.urls.original;
 					
 	            if(program.event != undefined && program.event.custom_fields !== undefined) {
 	            	if(program.event.custom_fields.subname !== undefined) {
@@ -95,7 +95,7 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 				
 				//safeguarding code
 				if(program.event != undefined && program.event.photo !== undefined && program.event.photo.urls !== undefined)
-					photoUrl = program.event.photo.urls.thumb_100;
+					photoUrl = program.event.photo.urls.original;
 					
 	            if(program.event != undefined && program.event.custom_fields !== undefined) {
 	            	if(program.event.custom_fields.subname !== undefined) {
@@ -164,7 +164,7 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 				
 				//safeguarding code
 				if(program.event != undefined && program.event.photo !== undefined && program.event.photo.urls !== undefined)
-					photoUrl = program.event.photo.urls.thumb_100;
+					photoUrl = program.event.photo.urls.original;
 					
 	            if(program.event != undefined && program.event.custom_fields !== undefined) {
 	            	if(program.event.custom_fields.subname !== undefined) {
@@ -229,7 +229,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 				
 				//safeguarding code
 				if(program.photo !== undefined && program.photo.urls !== undefined)
-					photoUrl = program.photo.urls.thumb_100;
+					photoUrl = program.photo.urls.original;
 					
 	            if(program.custom_fields !== undefined) {
 	            	if(program.custom_fields.subname !== undefined) {

@@ -12,7 +12,7 @@ exports.productModel_insertProductsOfProgramId = function(_programId, _allProduc
 	}
 	db.close();
 	
-	Ti.App.fireEvent("productDbLoaded"+_programId);
+	Ti.App.fireEvent("productDbLoaded");
 };
 
 exports.productModel_fetchProductsOfProgramId = function(_programId) {

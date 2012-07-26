@@ -6,7 +6,7 @@ function showPreloader(customWin,loadingText) {
 	loggingInView = Ti.UI.createView({
 		borderRadius : 10,
 		opacity : 0.8,
-		top : 140,
+		top : 90,
 		left : 50,
 		right : 50,
 		height : 115,

@@ -1,5 +1,4 @@
 exports.productACS_fetchedProductsOfProgramId = function(_paramsArray) {
-	
 	programId = _paramsArray[0];
 	Cloud.Objects.query({
 		classname: 'Product',	
@@ -13,13 +12,12 @@ exports.productACS_fetchedProductsOfProgramId = function(_paramsArray) {
 		if (e.success) {
 	    	var product =[];
 	        for (var i = 0; i < e.Product.length; i++) {
-	        	 var allProducts = e.Product[i];
-	             product.push(allProducts);
+	        	 product.push(e.Product[i]);
 	         }
-	         Ti.App.fireEvent('fetchedProductsOfProgramId'+programId,{fetchedProductsOfProgramId:product});
+	         Ti.App.fireEvent('productsLoadedComplete',{targetedProgramId: programId, fetchedProductsOfProgramId:product});
 	    } 
 	    else {
-	        Debug.debug_print('productACS_fetchedProductsOfProgramId Error: ' + JSON.stringify(e));
+	    	Debug.debug_print('productACS_fetchedProductsOfProgramId Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});

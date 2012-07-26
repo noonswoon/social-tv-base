@@ -9,9 +9,6 @@ function ProductMainWindow(_programId) {
 	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
 	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
-
-	var CacheHelper = require('helpers/cacheHelper');
-		
 	
 	var checkinguidelinewin = null;
 	//Google Analytics
@@ -196,14 +193,15 @@ function ProductMainWindow(_programId) {
 	};
 	
 	self._updatePageContent = function(_newProgramId) {
+		//Ti.API.info('productwin: updating content for programId: '+_newProgramId);
 		currentProgramId = _newProgramId;
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		if(programData === undefined || programData[0] === undefined) 
 			Ti.API.info('bad time man..productwin cannot find data for '+currentProgramId);
 		else programName = programData[0].name;
 		selectProgramLabel.text = programName;
-		
-		CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
+
+		ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 	};
 
 	self._addGuidelineWindow = function() {
@@ -234,7 +232,7 @@ function ProductMainWindow(_programId) {
 		if(currentProgramId !== picker.getSelectedRow(0).programId) {
 			selectProgramLabel.text = picker.getSelectedRow(0).title;
 			currentProgramId = picker.getSelectedRow(0).programId;
-			CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
+			ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
 	});
@@ -252,14 +250,15 @@ function ProductMainWindow(_programId) {
 		font: { fontSize: 16, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
 	});
 
-	Ti.App.addEventListener('fetchedProductsOfProgramId'+_programId, function(e) {
+	var productsLoadedCompleteCallback = function(e) {
 		self.remove(unavailable);
-		ProductModel.productModel_insertProductsOfProgramId(_programId, e.fetchedProductsOfProgramId);
-	}); 
+		ProductModel.productModel_insertProductsOfProgramId(e.targetedProgramId, e.fetchedProductsOfProgramId);
+	};
+	Ti.App.addEventListener('productsLoadedComplete', productsLoadedCompleteCallback);
 	
-	function productDbLoadedCallback() {
+	var productDbLoadedCallback = function () {
 		var viewRowData = [];
-		var programProducts = ProductModel.productModel_fetchProductsOfProgramId(_programId); 
+		var programProducts = ProductModel.productModel_fetchProductsOfProgramId(currentProgramId); 
 		var totalProducts = programProducts.length;
 		
 		var numRows = Math.ceil(totalProducts/2);
@@ -284,11 +283,10 @@ function ProductMainWindow(_programId) {
 			}
 		}
 		productTableView.setData(viewRowData);
-	}
-	Ti.App.addEventListener('productDbLoaded'+currentProgramId, productDbLoadedCallback);	
+	};
+	Ti.App.addEventListener('productDbLoaded', productDbLoadedCallback);	
 
-	CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
-
+	ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 	return self;
 }
 

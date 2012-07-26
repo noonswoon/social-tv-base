@@ -180,7 +180,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		var approveFriendActivityData = createFriendActivity("approvefriend");
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
-		Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
+		Ti.App.fireEvent('friendRequestsLoaded',{fetchedRequests:friendRequests});
 	}
 	
  	var createFriendActivity = function(_category){

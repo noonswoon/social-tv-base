@@ -67,7 +67,7 @@ FriendsMainView = function(_parentWindow,_window){
 	});
 		
 	self.addEventListener('close', function() {
-		Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
+		Ti.App.fireEvent('friendRequestsLoaded',{fetchedRequests:friendRequests});
 		var FriendACS = require('acs/friendsACS');
 		FriendACS.friendACS_fetchedUserTotalFriends(my_id);
 	});

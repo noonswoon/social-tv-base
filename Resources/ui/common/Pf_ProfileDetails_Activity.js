@@ -70,7 +70,7 @@ if(_status==="me") {
 		setFriendRequestVisible();
 	}
 	
-	 var requestsLoadedCallBack = function(e){
+	 var friendRequestsLoadedCallBack = function(e){
 		friendRequests = [];
 		var requestUsers = e.fetchedRequests; //update global variable - requestUsers
 		for(var i=0;i<requestUsers.length;i++) {
@@ -84,7 +84,7 @@ if(_status==="me") {
 		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"stranger"));
 	});
 	
-	Ti.App.addEventListener('requestsLoaded',requestsLoadedCallBack);
+	Ti.App.addEventListener('friendRequestsLoaded',friendRequestsLoadedCallBack);
 	
 	requestNoticeView.add(requestLabel);
 	requestNoticeView.add(requestImage);

@@ -1,6 +1,7 @@
 
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
 exports.friendsACS_searchFriend = function(_userID){
+	Ti.API.info('calling searchFriend...');
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +
 				'&user_id='+_userID;	
 	var xhr = Ti.Network.createHTTPClient({
@@ -33,7 +34,7 @@ exports.friendsACS_searchFriend = function(_userID){
 					friends.push(curFriend);
 				}
 			}
-
+			Ti.API.info('done calling searchFriend: onload');
 			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 		}, onerror: function(e) {
 	        Debug.debug_print('friendsACS->searchFriend: Error= '+e.error);
@@ -172,11 +173,11 @@ exports.friendsACS_showFriendsRequest = function(){
 				};
 				requests.push(curRequest);
 			} 
-			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:requests});
+			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:requests});
 	    },
 	    onerror: function(e) {
 			Debug.debug_print('friendsACS->showFriendsRequest: Error= '+e.error);
-			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:[]});
+			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:[]});
 			//ErrorHandling.showNetworkError();
 	    },
 	    timeout:5000  /* in milliseconds */

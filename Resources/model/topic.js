@@ -64,10 +64,10 @@ exports.topicModel_getTopicById = function(_topicACSObjectId) {
 		topic.title = result.fieldByName('title');
 		topic.content = result.fieldByName('content');
 		topic.photo = result.fieldByName('photo');
-		topic.userId = result.fieldByName('user_id'),
+		topic.userId = result.fieldByName('user_id');
 		topic.username = result.fieldByName('username');
 		topic.deviceTokenId = result.fieldByName('device_token_id');
-		topic.updatedAt = result.fieldByName('updated_at')
+		topic.updatedAt = result.fieldByName('updated_at');
 		result.next();
 	}	
 	result.close();
@@ -126,4 +126,10 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 	db.close();
 	Ti.App.fireEvent("topicsDbUpdated");
 	return isTableChanged;
+};
+
+exports.topicModel_updateCommentNumCount = function(_commentNumCount,_topicId) {
+	var db = Ti.Database.open('Chatterbox');
+	db.execute("UPDATE topics SET comments_count = ? WHERE acs_object_id = ?", _commentNumCount, _topicId);
+	db.close();
 };

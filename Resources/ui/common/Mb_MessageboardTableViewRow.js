@@ -46,6 +46,10 @@ MessageboardTableViewRow = function(_topic) {
 	else if(_topic.commentsCount>99){
 		row.numComments.right = 6;
 	}
+	
+	Ti.App.addEventListener('updateCommentNumCount'+_topic.acsObjectId, function(e){
+		row.numComments.text = e.totalCommentNumCount;
+	});
 
 	//ADDING UI COMPONENTS
 	row.add(row.topicLabel);

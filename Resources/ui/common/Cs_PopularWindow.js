@@ -45,7 +45,7 @@ function PopularWindow(_parent) {
 
 			//not frequently update// load after fetching tvprogram completed -- do caching too
 			var myUserId = acs.getUserId();
-			FriendsACS.showFriendsRequest();	 //no database for showFriendsRequest
+			FriendsACS.friendsACS_showFriendsRequest();	 //no database for showFriendsRequest
 			CacheHelper.fetchACSDataOrCache('badgesACS', BadgesACS.fetchedBadges, [], 'badgesDbLoaded', CACHE_TIMEOUT_LONG);
 			CacheHelper.fetchACSDataOrCache('levelACS', LevelACS.levelACS_fetchedLevel, [], 'levelDbUpdated', CACHE_TIMEOUT_LONG);
 			CacheHelper.fetchACSDataOrCache('checkinACS_fetchedUserCheckIn', CheckinACS.checkinACS_fetchedUserCheckIn, [myUserId], 'checkinDbLoaded', CACHE_TIMEOUT_SHORT);		
@@ -185,6 +185,7 @@ function PopularWindow(_parent) {
 			//CacheHelper.resetCacheTime('cachesomething here'+_programId);
 		}
 	});
+	
 
 	var friendsDbUpdatedCallback = function() {
 		//Send allTVProgramID and allFriends to data from ACS then pull data
@@ -206,7 +207,7 @@ function PopularWindow(_parent) {
 			var programs = allTVPrograms[i].id;
 			programsList.push(programs);
 		}
-		FriendsACS.friendsCheckins([friendsList,programsList]);
+		FriendsACS.friendsACS_friendsCheckins([friendsList,programsList]);
 	}
 	Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallback); //event fire from ApplicationTabGroup
 

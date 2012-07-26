@@ -57,7 +57,7 @@ FriendsTableViewRow = function(_user,_source) {
 			var approveFriendActivityData = createFriendActivity("approvefriend");
 			FriendModel.friend_create(_user,_user.fb_id);
  			ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
-			FriendACS.approveFriend(_user.friend_id,approveRequest);
+			FriendACS.friendsACS_approveFriend(_user.friend_id,approveRequest);
 		});
 		
 	 	tableRow.add(approveButton);

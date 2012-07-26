@@ -75,14 +75,42 @@ function ApplicationTabGroup() {
 	
 	//PROFILE: CALLING ACS
 	var CheckinModel = require('model/checkin');
+	var FriendModel = require('model/friend');
+	var PointModel = require('model/point');
+	
 	var FriendACS = require('acs/friendsACS');
-	FriendACS.searchFriend(myUserId);
+	var LeaderACS = require('acs/leaderBoardACS');
+	
+	FriendACS.friendsACS_searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
  	
-	function levelLoadedCallBack(e) {					
+	
+ 	var leaderBoardLoadedCallBack = function(e) {
+		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
+	};
+	Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);	
+
+	var friendsDbUpdatedCallBack = function() {
+		var rankList = [];
+		rankList[0] = myUserId;
+		var myFriends = FriendModel.friendModel_fetchFriend(rankList[0]);
+		for(var i = 0; i< myFriends.length;i++) {
+			var curUser = myFriends[i].friend_id;
+			rankList.push(curUser);
+		}
+		LeaderACS.leaderACS_fetchedRank(rankList);
+	};
+	Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);
+		
+ 	var friendLoadedCallBack = function(e){
+		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
+	};
+	Ti.App.addEventListener('friendsLoaded',friendLoadedCallBack);
+	
+	var levelLoadedCallBack = function(e) {					
 		var LevelModel = require('model/level');
 		LevelModel.levelModel_updateLevelFromACS(e.fetchedLevel);
-	}
+	};
 	Ti.App.addEventListener('levelLoaded',levelLoadedCallBack);
 	
 	var updateContentInAllModules = function(_targetedProgramId) {

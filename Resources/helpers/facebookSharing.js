@@ -1,5 +1,4 @@
-function showRequestResult(e) {
-	
+var showRequestResult = function(e) {
 	var s = '';
 	if (e.success) {
 		Ti.API.info(e);
@@ -8,22 +7,22 @@ function showRequestResult(e) {
 		if (e.data) s += "; " + e.data;
 		if (!e.result && !e.data) s = '"success", but no data from FB.  I am guessing you cancelled the dialog.';
 	} else
-	if (e.cancelled) s = "fb cancel dialog";
+	if (e.cancelled)
+		s = "fb cancel dialog";
 	else {
 		s = "fb FAIL dialog";
 		if (e.error) s += "; " + e.error;	
 	}
 	Ti.API.info(s);
-}	
-	
+};
 
 //tickers
 var checkinAppearOnFaceBook = function() {
-	 	var data = {
-		 tv_program: "http://chatterbox.mobi/opengraph/og_tvprogram_obj.html",
-		 access_token: Titanium.Facebook.accessToken
-		  };
-		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:check_in",data,"POST",showRequestResult);
+	var data = {
+		tv_program: "http://chatterbox.mobi/opengraph/og_tvprogram_obj.html",
+		access_token: Titanium.Facebook.accessToken
+	};
+	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:check_in",data,"POST",showRequestResult);
 
 }
 exports.checkinAppearOnFaceBook = checkinAppearOnFaceBook;
@@ -53,7 +52,7 @@ var riseRankAppearOnFacebook = function() {
 	};
 	Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:rise",data,"POST",showRequestResult);
 }
-exports.riseRankAppearOnFacebook = riseRankAppearOnFacebook;4
+exports.riseRankAppearOnFacebook = riseRankAppearOnFacebook;
 
 exports.badgePopUpOnFacebook = function(_badgeId) {
 	var SettingHelper = require('helpers/settingHelper');
@@ -74,8 +73,10 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 			picture: badge.url,
 			description: badge.desc
 		};
-		if(SettingHelper.getFacebookAutoPost()) Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
-		else Titanium.Facebook.dialog("feed", data, showRequestResult);
+		if(SettingHelper.getFacebookAutoPost())
+			Titanium.Facebook.requestWithGraphPath('me/feed', data, 'POST', showRequestResult);
+		else 
+			Titanium.Facebook.dialog("feed", data, showRequestResult);
 	}
 }
 
@@ -90,7 +91,6 @@ exports.sendRequestOnFacebook = function(_fbId) {
 	    	redirect_uri: 'http://chatterbox.mobi/',
 	    	to: _fbId
 	 	};
-	
 		Titanium.Facebook.dialog("apprequests", data, showRequestResult);
 	}
 }
@@ -129,18 +129,6 @@ exports.levelUpPopUpOnFacebook = function(_levelTitle) {
 	}
 	riseRankAppearOnFacebook();
 }
-
-exports.cookAppearOnFaceBook = function() {
-		// var SettingHelper = require('helpers/settingHelper');
-//	if(SettingHelper.getFacebookShare()) {
-	 	var data = {
-		 recipe: "http://chatterbox.mobi/opengraph/og_cook_obj_dynamic.php",
-		 access_token: Titanium.Facebook.accessToken
-		  };
-// 
-		  Titanium.Facebook.requestWithGraphPath("/me/og_chatterbox:cook",data,"POST",showRequestResult);	
-}
-
 
 exports.postAppearOnFaceBook = function(_topicTitle,_topicContent,_programPhoto) {
 	var SettingHelper = require('helpers/settingHelper');	

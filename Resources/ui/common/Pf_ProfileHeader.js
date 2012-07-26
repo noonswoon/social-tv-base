@@ -180,7 +180,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		var approveFriendActivityData = createFriendActivity("approvefriend");
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
-		Ti.App.fireEvent('requestsLoaded',{fetchedRequests:friendRequests});
+		Ti.App.fireEvent('friendRequestsLoaded',{fetchedRequests:friendRequests});
 	}
 	
  	var createFriendActivity = function(_category){
@@ -199,7 +199,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  		//condition 1: no request from this user
  		if(!isRequest) {
 		 	var addFriendActivityData = createFriendActivity("addfriend");
-		 	FriendACS.addFriend(curId,sendRequest);
+		 	FriendACS.friendsACS_addFriend(curId,sendRequest);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
  			} 			
  		//condition 2: there's a request from this guy	
@@ -207,7 +207,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  			friendRequests.splice(i,1);
  			var FriendsModel = require('model/friend');
 			FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
-			FriendACS.approveFriend(curId,approveRequest);	
+			FriendACS.friendsACS_approveFriend(curId,approveRequest);	
 		}	
 		_parentWindow.close();
  	}	

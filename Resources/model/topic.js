@@ -109,8 +109,8 @@ exports.topicModel_updateTopicsFromACS = function(_topicsCollection, _programId)
 		var photoUrl = null;
 		if(curTopic.user.custom_fields !== undefined && curTopic.user.custom_fields.device_token_id !== undefined)
 			deviceToken = curTopic.user.custom_fields.device_token_id;
-		if(curTopic.photo !== undefined && curTopic.photo.urls !== undefined && curTopic.photo.urls.small_240 !== undefined)
-			photoUrl = curTopic.photo.urls.small_240;
+		if(curTopic.photo !== undefined && curTopic.photo.urls !== undefined && curTopic.photo.urls.original !== undefined)
+			photoUrl = curTopic.photo.urls.original;
 		
 		//check whether the inserting curTopic.id already existed in the db, if it is, do not add
 		result = db.execute('SELECT id FROM topics WHERE acs_object_id = ?',curTopic.id);

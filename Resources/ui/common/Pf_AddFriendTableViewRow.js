@@ -78,7 +78,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 			var FriendsModel = require('model/friend');
 			var addFriendActivityData = createFriendActivity("addfriend");
 		
-		 	FriendACS.addFriend(_user.id,addFriend);
+		 	FriendACS.friendsACS_addFriend(_user.id,addFriend);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
 		})
 		tableRow.add(addButton);

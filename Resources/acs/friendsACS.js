@@ -1,6 +1,6 @@
 
 //import friend list///////////////////////////////////////////////////////////////////////////////////////////
-exports.searchFriend = function(_userID){
+exports.friendsACS_searchFriend = function(_userID){
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +
 				'&user_id='+_userID;	
 	var xhr = Ti.Network.createHTTPClient({
@@ -67,7 +67,7 @@ exports.friendACS_fetchedUserTotalFriends = function(_id) {
 
 };
 //add friend /////////////////////////////////////////////////////////////////////////////////////////////////
-exports.addFriend = function(_userID,_callbackFn){
+exports.friendsACS_addFriend = function(_userID,_callbackFn){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
@@ -120,7 +120,7 @@ exports.addFriendwithNoApprove = function(_userID,_callbackFn){
 
 
 //approve friend /////////////////////////////////////////////////////////////////////////////////////////////
-exports.approveFriend = function(_userID,_callbackFn){
+exports.friendsACS_approveFriend = function(_userID,_callbackFn){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/approve.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function(e) {
@@ -142,7 +142,7 @@ exports.approveFriend = function(_userID,_callbackFn){
 	xhr.send(putParameters);  // request is actually sent with this statement
 };
 //show friend request ////////////////////////////////////////////////////////////////////////////////////////
-exports.showFriendsRequest = function(){
+exports.friendsACS_showFriendsRequest = function(){
 	var requests = [];
 	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
@@ -185,7 +185,7 @@ exports.showFriendsRequest = function(){
 	xhr.send();
 };
 
-exports.friendsCheckins = function(_paramsArray){
+exports.friendsACS_friendsCheckins = function(_paramsArray){
 	
 	friendsList = _paramsArray[0];
 	programsList = _paramsArray[1];

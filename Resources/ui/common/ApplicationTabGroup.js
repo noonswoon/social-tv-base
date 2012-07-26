@@ -76,7 +76,7 @@ function ApplicationTabGroup() {
 	//PROFILE: CALLING ACS
 	var CheckinModel = require('model/checkin');
 	var FriendACS = require('acs/friendsACS');
-	FriendACS.searchFriend(myUserId);
+	FriendACS.friendsACS_searchFriend(myUserId);
 	FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
  	
 	function levelLoadedCallBack(e) {					

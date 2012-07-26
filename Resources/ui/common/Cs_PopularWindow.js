@@ -185,12 +185,7 @@ function PopularWindow(_parent) {
 			//CacheHelper.resetCacheTime('cachesomething here'+_programId);
 		}
 	});
-
-	var friendLoadedCallBack = function(e){
-		FriendModel.friendModel_updateFriendsFromACS(e.fetchedFriends);
-	};
-	Ti.API.info('registering friendsLoadedCallback');
-	Ti.App.addEventListener('friendsLoaded',friendLoadedCallBack);
+	
 
 	var friendsDbUpdatedCallback = function() {
 		//Send allTVProgramID and allFriends to data from ACS then pull data

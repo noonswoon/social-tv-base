@@ -192,21 +192,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	expSec.add(expBar_light);
 	expSec.add(expBar);
 	profileStats.add(expSec);
-	
-	var leaderBoardLoadedCallBack = function(e) {
-		PointModel.pointModel_updateLeadersFromACS(e.fetchedLeader);
-	};
-	
-	var friendsDbUpdatedCallBack = function() {
-		var rankList = [];
-		rankList[0] = _userProfile.id;
-		var myFriends = FriendModel.friendModel_fetchFriend(rankList[0]);
-		for(var i = 0; i< myFriends.length;i++) {
-			var curUser = myFriends[i].friend_id;
-			rankList.push(curUser);
-		}
-		LeaderACS.leaderACS_fetchedRank(rankList);
-	};
 
 	var leaderDbUpdatedCallBack = function() {
 		var leaderBoardData = PointModel.pointModel_fetchRank();
@@ -258,8 +243,6 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			updateExpBar();
 		});
 		
-		Ti.App.addEventListener('leaderBoardLoaded',leaderBoardLoadedCallBack);	
-		Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallBack);
 		Ti.App.addEventListener('leaderDbUpdated',leaderDbUpdatedCallBack);		
 		leaderTable.addEventListener('click',newProfileWin);
 

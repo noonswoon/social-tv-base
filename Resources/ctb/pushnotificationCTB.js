@@ -72,10 +72,10 @@ exports.pushNotificationCTB_updatePNPermission = function(_userid,_permissionVal
 exports.pushNotificationCTB_sendPN = function(_userid,_pnSendingType,_messageToSend) {
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
-			Ti.API.info('responseText: '+this.responseText);
+			Ti.API.info('send pn to userId: '+_userid+' successfully. ResponseText: '+this.responseText);
 		},
 		onerror:function(e) {
-			Ti.API.info('cannot send pn from ctb server: '+JSON.stringify(e));
+			Ti.API.info('cannot send userId: '+_userid+' a pn from ctb server: '+JSON.stringify(e));
 		}
 	}); 
 	

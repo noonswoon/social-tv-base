@@ -401,7 +401,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		var friendsList = FriendModel.friendModel_fetchFriend(myUserId);
 		for(var i=0; i<friendsList.length; i++) {
 			var textPn = currentUser.first_name+' just checked in to a TV program. Let watch together!';
-			PushNotificationCTB.pushNotificationCTB_sendPN(friendsList[i].friend_id,"2",textPn);
+			PushNotificationCTB.pushNotificationCTB_sendPN(friendsList[i].friend_id,2,textPn);
 		}
 	}
 	

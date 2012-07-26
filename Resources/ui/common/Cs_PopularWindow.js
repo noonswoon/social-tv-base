@@ -36,10 +36,9 @@ function PopularWindow(_parent) {
 	}
 	
 	function isEverythingReady() {
-		Ti.API.info('isEverythingReady? '); 
 		Ti.API.info('areAllProgramsTitlesLoaded: '+areAllProgramsTitlesLoaded+', areBadgeShowPermissionReady: '+areBadgeShowPermissionReady+', numProgramsToLoadCheckins: '+numProgramsToLoadCheckins+', areFriendCheckinsReady: '+areFriendCheckinsReady); 
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0) && areFriendCheckinsReady) {
-			Ti.API.info('Everything\'s ready');
+			Ti.API.info('Everything ready');
 			hidePreloader(self);
 			Ti.App.fireEvent("showDiscoveryPage");
 

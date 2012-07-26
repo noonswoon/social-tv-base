@@ -35,11 +35,9 @@ exports.leaderACS_createUserInfo = function(_user){
 	}, function (e) {
 	    if (e.success) {
 	        var user = e.LeaderBoard[0];
-	      Ti.API.info('Success:\\n' +
+	      	Ti.API.info('Success:\\n' +
 	            'username: ' + e.LeaderBoard[0].user.username + '\\n' +
-	            'totalPoint: ' + e.LeaderBoard[0].totalPoint + '\\n' +
-	            'created_at: ' + e.LeaderBoard[0].created_at + '\\n' +
-	            'facebookid: ' + e.LeaderBoard[0].user.external_accounts.external_id);
+	            'totalPoint: ' + e.LeaderBoard[0].totalPoint);
 			Ti.App.fireEvent("createLeaderBoardUser",{fetchedUser: user});
 	    } else {
 	        Debug.debug_print('leaderboardACS 45 Error:\\n' +

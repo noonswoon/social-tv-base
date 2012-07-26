@@ -37,6 +37,7 @@ function PopularWindow(_parent) {
 	
 	function isEverythingReady() {
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0) && areFriendCheckinsReady) {
+			Ti.API.info('Everything\'s ready');
 			hidePreloader(self);
 			Ti.App.fireEvent("showDiscoveryPage");
 

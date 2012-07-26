@@ -36,7 +36,6 @@ exports.searchFriend = function(_userID){
 
 			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 		}, onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('friendsACS->searchFriend: Error= '+e.error);
 	        //ErrorHandling.showNetworkError();
 	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:[]});
@@ -57,7 +56,7 @@ exports.friendACS_fetchedUserTotalFriends = function(_id) {
 			Ti.App.fireEvent('UserTotalFriendsFromACS', {result: total_results});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Ti.API.debug(e.error);
+	        //Ti.API.debug(e.error);
 	        Debug.debug_print('friendACS_fetchedUserTotalFriends error');
 	        //ErrorHandling.showNetworkError();
 	    },
@@ -131,7 +130,7 @@ exports.approveFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			//ErrorHandling.showNetworkError();
-	        //Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
+			Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -228,7 +227,7 @@ exports.friendsCheckins = function(_paramsArray){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-			ErrorHandling.showNetworkError();
+			//ErrorHandling.showNetworkError();
 			Debug.debug_print('friendsACS->friendsCheckins: Error= '+e.error);
 			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },

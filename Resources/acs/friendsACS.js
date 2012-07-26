@@ -38,7 +38,7 @@ exports.searchFriend = function(_userID){
 		}, onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('friendsACS->searchFriend: Error= '+e.error);
-	        ErrorHandling.showNetworkError();
+	        //ErrorHandling.showNetworkError();
 	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:[]});
 	    },
 	    timeout:5000  /* in milliseconds */
@@ -59,7 +59,7 @@ exports.friendACS_fetchedUserTotalFriends = function(_id) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
 	        Debug.debug_print('friendACS_fetchedUserTotalFriends error');
-	        ErrorHandling.showNetworkError();
+	        //ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */
 	});
@@ -82,7 +82,7 @@ exports.addFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        ErrorHandling.showNetworkError();
+	        //ErrorHandling.showNetworkError();
 	    	Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
 	    },
 	    timeout:5000  /* in milliseconds */
@@ -95,27 +95,29 @@ exports.addFriend = function(_userID,_callbackFn){
 	xhr.send(postParameters);  // request is actually sent with this statement
 };
 // one direction add friends
-// exports.addFriendwithNoApprove = function(_userID,_callbackFn){
-	// var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
-	// var xhr = Ti.Network.createHTTPClient({
-	    // onload: function(e) {
-	    	// var response = _callbackFn(this.responseText);
-	    // },
-	    // onerror: function(e) {
-			// // this function is called when an error occurs, including a timeout
-	    	// ErrorHandling.showNetworkError();
-	        // Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
-	    // },
-	    // timeout:5000  /* in milliseconds */
-	// });
-	// xhr.open("POST", url);
-	// var postParameters = {
-		// key: ACS_API_KEY,
-		// user_ids: String(_userID),
-		// approval_required: false
-	// };
-	// xhr.send(postParameters);  // request is actually sent with this statement
-// };
+/* unused for now..will be using for celebrity
+exports.addFriendwithNoApprove = function(_userID,_callbackFn){
+	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
+	var xhr = Ti.Network.createHTTPClient({
+	    onload: function(e) {
+	    	var response = _callbackFn(this.responseText);
+	    },
+	    onerror: function(e) {
+			// this function is called when an error occurs, including a timeout
+	    	ErrorHandling.showNetworkError();
+	        Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
+	    },
+	    timeout:5000 
+	});
+	xhr.open("POST", url);
+	var postParameters = {
+		key: ACS_API_KEY,
+		user_ids: String(_userID),
+		approval_required: false
+	};
+	xhr.send(postParameters);  // request is actually sent with this statement
+};
+*/
 
 
 //approve friend /////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,8 +130,8 @@ exports.approveFriend = function(_userID,_callbackFn){
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
-			ErrorHandling.showNetworkError();
-	        Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
+			//ErrorHandling.showNetworkError();
+	        //Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -176,7 +178,7 @@ exports.showFriendsRequest = function(){
 	    onerror: function(e) {
 			Debug.debug_print('friendsACS->showFriendsRequest: Error= '+e.error);
 			Ti.App.fireEvent("requestsLoaded",{fetchedRequests:[]});
-			ErrorHandling.showNetworkError();
+			//ErrorHandling.showNetworkError();
 	    },
 	    timeout:5000  /* in milliseconds */
 	});

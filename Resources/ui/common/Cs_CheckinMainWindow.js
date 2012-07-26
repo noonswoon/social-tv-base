@@ -302,7 +302,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				TVProgram.TVProgramModel_incrementCheckins(_tvprogramData.eventId);
 
 				//require callback from acs
-				CheckinACS.checkinACS_createCheckin(checkinData,checkinId);//UPDATE DONE:)
+				CheckinACS.checkinACS_createCheckin(checkinData,checkinId);
 				ActivityACS.activityACS_createMyActivity(activityData,activityId);		
 				
 				// done after adding to acs
@@ -312,13 +312,11 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 				//check badge condition from checkin
 				checkinData.program_type = _tvprogramData.programType;
 				checkinData.program_id = _tvprogramData.programId;
-				//TODO
+
 				isGottenBadgeFromEvent = BadgeCondition.checkinEvent(checkinData);
 				isGottenBadgeFromFriends = BadgeCondition.checkFriendCondition(numFriendsCheckin);
 				//Ti.API.info('isGottenBadgeFromEvent = '+isGottenBadgeFromEvent+', isGottenBadgeFromFriends: '+isGottenBadgeFromFriends);
 				checkinPopup(isGottenBadgeFromEvent || isGottenBadgeFromFriends);
-				
-
 								
 				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 			} else {

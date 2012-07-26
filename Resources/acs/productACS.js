@@ -1,7 +1,6 @@
 exports.productACS_fetchedProductsOfProgramId = function(_paramsArray) {
 	
 	programId = _paramsArray[0];
-	Ti.API.info('calling acs: fetchProductsOfProgramId: '+programId);
 	Cloud.Objects.query({
 		classname: 'Product',	
     	page: 1,

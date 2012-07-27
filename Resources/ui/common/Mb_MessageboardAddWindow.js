@@ -29,7 +29,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	});
 	
 	var titleLabel = Ti.UI.createLabel({
-		text: 'Title',
+		text: L('Title'),
 		top: 10,
 		left: 10,
 		font:{fontWeight:'bold',fontSize:14},
@@ -47,7 +47,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	textAndButtonView.add(titleTextFieldInput);
 	
 	var contentLabel = Ti.UI.createLabel({
-		text: 'Content',
+		text: L('Content'),
 		top: 80,
 		left: 10,
 		font:{fontWeight:'bold',fontSize:14},
@@ -70,7 +70,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	textAndButtonView.add(contentTextAreaInput);
 	
 	var addImageButton = Ti.UI.createButton({
-		title: 'Add Image',
+		title: L('Add Image'),
 		top: 200,
 		width: 120,
 		height: 40,
@@ -79,7 +79,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	textAndButtonView.add(addImageButton);
 	
 	var thumbnailLabel = Ti.UI.createLabel({
-		text: 'No Image',
+		text: L('No Image'),
 		top: 200,
 		width: 120,
 		height: 40,
@@ -97,7 +97,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 	textAndButtonView.add(thumbnail);
 	
 	var postButton = Ti.UI.createButton({
-		title: 'Post!',
+		title: L('Post!'),
 		top: 250,
 		left: 10,
 		width: 300,

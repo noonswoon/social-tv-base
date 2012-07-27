@@ -2,7 +2,7 @@ var ProfileRewardView = function(){
 	var rewardView = Ti.UI.createView();
 
 	var detail = Ti.UI.createLabel({
-		text: 'Coming Soon...',
+		text: L('Coming Soon...'),
 		color: '#fff'
 	});
 	rewardView.add(detail);

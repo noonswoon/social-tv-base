@@ -21,7 +21,7 @@ function MessageboardMainWindow(_programId) {
 	var self = Titanium.UI.createWindow({
 		backgroundImage: 'images/messageboard/appBG.png',
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: "Message Board",
+		title: L("Message Board"),
 	});
 	
 	//OBJECTS INSTANTIATION		
@@ -41,7 +41,7 @@ function MessageboardMainWindow(_programId) {
 		var myUserId = acs.getUserId();
 		var program = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 		//race condition..do not have data for currentProgramId...?
-		if(program[0] === undefined) alert('bad stuff...from: '+currentProgramId);
+		if(program[0] === undefined) alert(L('bad stuff...from: ')+currentProgramId);
 		programPhoto = program[0].photo;
 		var numFriendsCheckins = CheckinModel.checkin_fetchNumFriendsCheckinsOfProgram(program[0].id, myUserId);
 		messageboardHeader._setHeader(program[0].name,program[0].subname,program[0].photo,program[0].number_checkins,numFriendsCheckins, program[0].channel_id);	
@@ -75,7 +75,7 @@ function MessageboardMainWindow(_programId) {
 		backgroundImage: 'images/messageboard/test2.png',
         backgroundRepeat:true,
 		showCancel:false,
-		hintText:'Search here...',
+		hintText:L('Search here...'),
 		barColor:'#43a5cf',
 	});
 
@@ -333,7 +333,7 @@ function MessageboardMainWindow(_programId) {
 			height:50,
 			backgroundColor: '#eeeeee',
 			allowsSelection: true,
-			title: '                  Load more...',
+			title: L('                  Load more...'),
 			color: 'gray'
 		});
 		viewRowsData.push(fetchMoreTopicsRow);
@@ -397,8 +397,8 @@ function MessageboardMainWindow(_programId) {
 				messageboardACSPageIndex++; 
 			} else {
 				var noMoreDialog = Titanium.UI.createAlertDialog({
-					title:'Nothing more to load',
-					message:'You have seen all the topics. Create a new one!'
+					title:L('Nothing more to load'),
+					message:L('You have seen all the topics. Create a new one!')
 				});
 				noMoreDialog.show();	
 			}

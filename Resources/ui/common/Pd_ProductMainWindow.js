@@ -20,7 +20,7 @@ function ProductMainWindow(_programId) {
 	var self = Titanium.UI.createWindow({
 		backgroundImage: 'images/messageboard/appBG.png',
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: "Product"
+		title: L("Product")
 	});
 	
 	var programName = "Something";

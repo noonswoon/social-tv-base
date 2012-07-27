@@ -15,7 +15,7 @@ function ChannelSelectionMainWindow(){
 	var friendswin = null;// new FriendsWindow();
 
 	var tabBar = Ti.UI.iOS.createTabbedBar({
-		labels: ['Popular','Guide','Friends'],
+		labels: [L('Popular'),L('Guide'),L('Friends')],
 		style:Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		height:30,
 		width:200,

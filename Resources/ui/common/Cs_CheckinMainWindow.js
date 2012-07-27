@@ -22,7 +22,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	});
 	
 	var self = Ti.UI.createWindow({
-		title: 'Selected Program',
+		title: L('Selected Program'),
 		barImage: 'images/nav_bg_w_pattern.png',
 	 	leftNavButton:backButton
 	});
@@ -322,13 +322,13 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			} else {
 			var checkinWarningMessage = "";
 				if(now < _tvprogramData.programStarttime)
-					checkinWarningMessage = "The program hasn't started yet!";
+					checkinWarningMessage = L("The program hasn't started yet!");
 				else if(now > _tvprogramData.programEndtime)
-					checkinWarningMessage = "The program is already finished!"
-				else checkinWarningMessage = "Please try again later.";
+					checkinWarningMessage = L("The program is already finished!");
+				else checkinWarningMessage = L("Please try again later.");
 				
 				var checkinWarningDialog = Titanium.UI.createAlertDialog({
-		       		title:'You cannot Check In',
+		       		title:L('You cannot Check In'),
 		         	message:checkinWarningMessage
 		       	});
 		       	checkinWarningDialog.show();
@@ -400,7 +400,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		var FriendModel = require('model/friend');
 		var friendsList = FriendModel.friendModel_fetchFriend(myUserId);
 		for(var i=0; i<friendsList.length; i++) {
-			var textPn = currentUser.first_name+' just checked in to a TV program. Let watch together!';
+			var textPn = currentUser.first_name+L(' just checked in to a TV program. Let watch together!');
 			PushNotificationCTB.pushNotificationCTB_sendPN(friendsList[i].friend_id,2,textPn);
 		}
 	}

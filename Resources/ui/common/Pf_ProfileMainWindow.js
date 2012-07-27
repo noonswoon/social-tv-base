@@ -40,7 +40,7 @@ function ProfileMainWindow(_id,_status) {
 			
 	var createProfileView = function(userProfile){
 		if(_status==="me"){
-			self.title = 'My Profile';
+			self.title = L('My Profile');
 		}
 		else self.title = userProfile.first_name + ' ' + userProfile.last_name;
 			

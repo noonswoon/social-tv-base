@@ -29,7 +29,7 @@ FriendsTableViewRow = function(_user,_source) {
 	});
 	
 	var approveRequest = function(_response) {
-		alert('Approve '+_user.first_name + ' ' + _user.last_name+ ' as a friend.');
+		alert(L('Approve ')+_user.first_name + ' ' + _user.last_name+ L(' as a friend.'));
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());
 		Ti.API.info(_response);
 	}

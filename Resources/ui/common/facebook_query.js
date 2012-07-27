@@ -57,7 +57,7 @@ function runQuery()
 			if (r.error) {
 				alert(r.error);
 			} else {
-				alert("call was unsuccessful");
+				alert(L("call was unsuccessful"));
 			}
 			return;
 		}
@@ -120,7 +120,7 @@ b1.addEventListener('click', function()
 {
 	if (!Titanium.Facebook.loggedIn)
 	{
-		Ti.UI.createAlertDialog({title:'Facebook', message:'Login before running query'}).show();
+		Ti.UI.createAlertDialog({title:'Facebook', message:L('Login before running query')}).show();
 		return;
 	}
 

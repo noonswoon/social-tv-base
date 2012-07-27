@@ -91,7 +91,7 @@ var LoginFbOnlyWindow = function() {
 	}
 	
 	function errorNotifCallback(e) {
-    	alert("Error during registration: " + e.error);
+    	alert(L("Error during registration: ") + e.error);
 	}
 	
 	function messageNotifCallback(e) {

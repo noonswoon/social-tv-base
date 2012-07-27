@@ -14,7 +14,7 @@ Am_SettingWindowSocialsharing = function(){
 	var self = Ti.UI.createWindow({
 		backgroundImage: '/images/admin/cb_back.png',
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: 'Social Sharing',
+		title: L('Social Sharing'),
 		leftNavButton: backButton
 	});
 
@@ -23,7 +23,7 @@ Am_SettingWindowSocialsharing = function(){
 	});
 	
 	var headerLabel = Ti.UI.createLabel({
-		text: 'Share your action to ...',
+		text: L('Share your action to ...'),
 		color: 'white',
 		font:{fontWeight:'bold',fontSize:16},
 		left: 20,
@@ -47,7 +47,7 @@ Am_SettingWindowSocialsharing = function(){
 	});
 	
 	var facebookLabel = Ti.UI.createLabel({
-		text: 'Share on Facebook',
+		text: L('Share on Facebook'),
 		font:{fontWeight:'bold',fontSize:16},
 		left: 10
 	});

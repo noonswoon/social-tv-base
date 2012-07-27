@@ -73,7 +73,7 @@ b1.addEventListener('click', function()
 	
 	if (!Titanium.Facebook.loggedIn)
 	{
-		Ti.UI.createAlertDialog({title:'Facebook', message:'Login before accessing properties'}).show();
+		Ti.UI.createAlertDialog({title:'Facebook', message:L('Login before accessing properties')}).show();
 		return;
 	}
 	loggedIn.text = "Logged In = " + Ti.Facebook.loggedIn;

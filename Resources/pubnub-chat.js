@@ -50,7 +50,7 @@ Ti.App.Chat = function(_chatParams) {
 	        connect  : function() {
 	            Ti.API.info("connecting...");
 				//reset stuff
-	            var welcomeChatRow = new ChatMessageTableViewRow("Welcome to "+currentChatRoomName+" Chat Room. Please keep our place clean.",adminUserObject,false);
+	            var welcomeChatRow = new ChatMessageTableViewRow(L("Welcome to")+" "+currentChatRoomName+" "+L("Chat Room. Please keep our place clean."),adminUserObject,false);
     			chatMessagesTableView.setData([loadHistoryMessagesRow,welcomeChatRow]);
     			
     			//load history messages and add in 5 latest chats    
@@ -209,7 +209,7 @@ Ti.App.Chat = function(_chatParams) {
     	//already load history when the page opens
 		var nextHistoryLoadedIndex = lastHistoryLoadedIndex + 1; 	
 		if(nextHistoryLoadedIndex >= historyMessages.length) {
-			alert("No more chat history");
+			alert(L("No more chat history"));
 			loadHistoryButton.enabled = false;
 		} else {
 			var historyIndexToLoadTo = nextHistoryLoadedIndex + 9; 

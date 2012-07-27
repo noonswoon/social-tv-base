@@ -72,7 +72,7 @@ exports.friendsACS_addFriend = function(_userID,_callbackFn){
 	    onload: function(e) {
 	    	var successAlertDialog = Ti.UI.createAlertDialog({
 	        	title: 'Chatterbox',
-	        	message: 'Your request has been sent.'
+	        	message: L('Your request has been sent.')
 	        });
 	        successAlertDialog.show();
 	    	

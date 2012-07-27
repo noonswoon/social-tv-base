@@ -118,7 +118,7 @@ function CommentWindow(_topicId) {
 		//namely, the 'MMM D, YYYY hh:mm:ss' format
 		var dm = moment(curTopic.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 		var submitDateStr = since(dm);
-		commentHeader._setSubmissionTime("Submitted "+submitDateStr+" by "+curTopic.username);
+		commentHeader._setSubmissionTime(L("Submitted")+" "+submitDateStr+" "+L("by")+" "+curTopic.username);
 		//retrieve from db
 		var allComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
 		var commentsOfTopic = [];

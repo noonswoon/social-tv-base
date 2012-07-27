@@ -25,7 +25,7 @@ function ApplicationTabGroup() {
 	
 	var tabIndexToComeBack = 0;
 	var selectionTab = Ti.UI.createTab({
-		title: 'Discover',
+		title: L('Discover'),
 		icon: '/images/discover.png',
 		window: selectionwin
 	});
@@ -33,28 +33,28 @@ function ApplicationTabGroup() {
 	selectionTab.tabGroup = self; 
 	
     var chatTab = Titanium.UI.createTab({  
-    	title: 'Chat',
+    	title: L('Chat'),
     	icon: '/images/chat-2.png',
      	window: chatwin
 	});
     chatwin.containingTab = chatTab;
   
     var messageboardTab = Titanium.UI.createTab({
-    	title: 'Board',
+    	title: L('Board'),
     	icon: '/images/messageboard.png',
     	window: messageboardwin
     });
     messageboardwin.containingTab = messageboardTab;
 
 	var productTab = Ti.UI.createTab({
-		title: 'Product',
+		title: L('Product'),
 		icon: '/images/product.png',
 		window: productwin
 	});
 	productwin.containingTab = productTab;
 	
 	var profileTab = Ti.UI.createTab({
-		title: 'Me',
+		title: L('Me'),
 		icon: '/images/me.png',
 		window: profilewin
  	});
@@ -248,7 +248,7 @@ function ApplicationTabGroup() {
 		if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {
 			var connectivityWarningDialog = Titanium.UI.createAlertDialog({
 				title:'No Internet Connection',
-				message:'Please come online and join the Chatterbox experience.'
+				message:L('Please come online and join the Chatterbox experience.')
 			});
 			connectivityWarningDialog.show();
 			nointernetwin = new NoInternetWindow();

@@ -114,7 +114,7 @@ var LoginWindow = function() {
 			loginOrOutButton.title = 'Logout';
 			fbLoginOrOutButton.title = 'fb_logout';
 		} else {
-			alert("nope..wrong username/password");
+			alert(L("nope..wrong username/password"));
 		}
 	}
 	

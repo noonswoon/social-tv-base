@@ -12,7 +12,7 @@ function ChatMainWindow(_programId) {
 	
 	var self = Titanium.UI.createWindow({
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: 'Group Chat'
+		title: L('Group Chat')
 	});	
 	
 	var programsTableView = Ti.UI.createTableView({

@@ -16,7 +16,7 @@ var Am_SettingWindowAccount = function(){
 	var self = Ti.UI.createWindow({
 		backgroundImage: '/images/admin/cb_back.png',
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: 'Account Setting',
+		title: L('Account Setting'),
 		leftNavButton: backButton
 	});
 
@@ -39,7 +39,7 @@ var Am_SettingWindowAccount = function(){
 	});
 	
 	var firstNameLabel = Ti.UI.createLabel({
-		text: 'First Name',
+		text: L('First Name'),
 		font:{fontWeight:'bold',fontSize:16},
 		left: 10
 	});
@@ -63,7 +63,7 @@ var Am_SettingWindowAccount = function(){
 	});
 	
 	var lastNameLabel = Ti.UI.createLabel({
-		text: 'Last Name',
+		text: L('Last Name'),
 		font:{fontWeight:'bold',fontSize:16},
 		left: 10
 	});
@@ -88,7 +88,7 @@ var Am_SettingWindowAccount = function(){
 	});
 	
 	var saveButtonLabel = Ti.UI.createLabel({
-		text: 'Save Changes',
+		text: L('Save Changes'),
 		font:{fontWeight:'bold',fontSize:16}
 	});
 	saveButtonTableViewRow.add(saveButtonLabel);
@@ -113,7 +113,7 @@ var Am_SettingWindowAccount = function(){
 	});
 	
 	Ti.App.addEventListener('updateComplete',function(e){
-		alert('Save Complete');
+		alert(L('Save Complete'));
 		acs.getUserLoggedIn().first_name = e.firstName;
 		acs.getUserLoggedIn().last_name = e.lastName;
 	});

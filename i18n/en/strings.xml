@@ -19,7 +19,6 @@
 	<string name="hr">hr</string>
 	<string name="year">year</string>
 	<string name="day">day</string>
-	<string name="s">s</string>
 	<string name="ago">ago</string>
 	<string name="                  Load more...">                  Load more...</string>
 	<string name="just now">just now</string>
@@ -107,7 +106,9 @@
 	<string name="1.) It makes it super fast to sign up and create a Chatterbox profile">1.) It makes it super fast to sign up and create a Chatterbox profile</string>
 	<string name="2.) It allows you to see what friends you have in common with other Chatterbox users">2.) It allows you to see what friends you have in common with other Chatterbox users</string>
 	<string name="3.) It helps ensure that people are using their real identities">3.) It helps ensure that people are using their real identities</string>
-	<string name="We really want to earn your trust and we will not misuse your personal information in any way.">We really want to earn your trust and we will not misuse your personal information in any way.ี</string>
+	<string name="We really want to earn your trust and we will not misuse your personal information in any way.">We really want to earn your trust and we will not misuse your personal information in any way.</string>
 	<string name="Please let us know if you\'d like more login options or have feedback on this. Thanks!">Please let us know if you\'d like more login options or have feedback on this. Thanks!</string>
 	<string name="Products will be available soon!">Products will be available soon!</string>
+	<string name=" approved "> approved </string>
+	<string name=" as a friend"> as a friend</string>	
 </resources>

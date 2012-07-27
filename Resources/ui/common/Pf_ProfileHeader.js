@@ -216,6 +216,10 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		_parentWindow.close();
  	};	
  	
+ 	var UserTotalFriendsFromACSCallback = function(e) {
+ 		columnFriendCount.text = e.result;
+ 	};
+ 	
 	//Create view for header
 	var createHeaderView = function(status){
 		profilePictureContain.add(profilePicture);
@@ -229,32 +233,28 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 			columnIsFriend.add(columnIsFriendImage);
 			columnIsFriend.add(columnIsFriendLabel);
 			headerView.add(columnIsFriend);
-		} else 
-		if(status === "stranger") {
+		} else  if(status === "stranger") {
 			columnNotFriend.add(columnNotFriendImage);
 			columnNotFriend.add(columnNotFriendLabel);
 			headerView.add(columnNotFriend);
 			columnAddFriend.add(columnAddFriendImage);
 			columnAddFriend.add(columnAddFriendLabel);
 			headerView.add(columnAddFriend);
-		} else 
-		if(status === "me") {
+		} else if(status === "me") {
 			columnFriend.add(columnFriendImage);
 			columnFriend.add(columnFriendCount);	
 			headerView.add(columnFriend);
 			
-			Ti.App.addEventListener('UserTotalFriendsFromACS', function(e){ 
-				columnFriendCount.text = e.result;
-			});
-			
+			Ti.App.addEventListener('UserTotalFriendsFromACS', UserTotalFriendsFromACSCallback); 
 			Ti.App.addEventListener('updateName'+curId, updateNameCallback);
 		};
 	};
 	
 	// respond in total result only
-	Ti.App.addEventListener('UserTotalCheckInsFromACS'+curId, function(e) {
+	var UserTotalCheckInsFromACSCallback = function(e) {
 		columnCheckInCount.text = e.result;
-	});
+	}; 
+	Ti.App.addEventListener('UserTotalCheckInsFromACS'+curId,UserTotalCheckInsFromACSCallback);
 	
 	//only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
 	columnFriend.addEventListener('click',function(){
@@ -292,6 +292,11 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 
 	var clearListeners = function() {
 		Ti.App.removeEventListener('resume',resumeCallback);
+		Ti.App.removeEventListener('UserTotalCheckInsFromACS'+curId, UserTotalCheckInsFromACSCallback);
+		if(_status === "me") {
+			Ti.App.removeEventListener('UserTotalFriendsFromACS', UserTotalFriendsFromACSCallback); 
+			Ti.App.removeEventListener('updateName'+curId, updateNameCallback);
+		}
 		Ti.App.removeEventListener('profileMainWindowClosing'+curId, clearListeners);
 	};
 	Ti.App.addEventListener('profileMainWindowClosing'+curId, clearListeners);

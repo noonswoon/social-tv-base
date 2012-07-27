@@ -292,7 +292,6 @@ function ApplicationTabGroup() {
 		}
 		FriendACS.friendsACS_searchFriend(myUserId);
 		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
-		
 	};
 	Ti.App.addEventListener('resume', resumeCallback);
 	

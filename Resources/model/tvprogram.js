@@ -210,6 +210,7 @@ exports.TVProgramModel_fetchProgramsWithProgramId = function(_programId) {
 	}	
 	result.close();
 	db.close();
+
 	return fetchedPrograms;
 };
 

@@ -6,6 +6,7 @@
     <property name="acs-oauth-secret-production" type="string">nhpKlnrmp9nW6blY57LYnvM6mVHvSaQG</property>
     <property name="acs-oauth-key-production" type="string">AKs6IoQoz7aq7j0X87007HeFoh83XrGu</property>
     <property name="acs-api-key-production" type="string">5va2XsGjknLebugvozPZfZr9xhSVEZl1</property>
+    <prerendered-icon>true</prerendered-icon>
     <deployment-targets>
         <target device="mobileweb">false</target>
         <target device="iphone">true</target>
@@ -15,7 +16,7 @@
     </deployment-targets>
     <sdk-version>2.1.0.GA</sdk-version>
     <property name="ti.android.threadstacksize" type="int">327680</property>
-    <id>com.chatterbox.beta</id>
+    <id>mobi.chatterbox.rc</id>
     <name>Chatterbox</name>
     <version>1.0</version>
     <publisher>Chatterbox Team</publisher>

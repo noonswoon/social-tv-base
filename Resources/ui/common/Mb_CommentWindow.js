@@ -270,7 +270,7 @@ function CommentWindow(_topicId) {
 		var totalComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
 		var curCommentNumCount = totalComments.length;
 		Topic.topicModel_updateCommentNumCount(curCommentNumCount,_topicId);
-		
+
 		Ti.App.fireEvent('updateCommentNumCount'+_topicId,{totalCommentNumCount: curCommentNumCount});
 		
 		commentHeader._setReplyTextArea("");

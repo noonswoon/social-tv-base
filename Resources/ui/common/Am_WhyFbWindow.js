@@ -17,7 +17,7 @@ var WhyFbWindow = function() {
 		color: '#fff',
 		textAlign: 'center',
 		font: { fontSize: 20, fontFamily: 'Helvetica Neue', fontWeight:'bold'},
-		text: 	'Why we use Facebook'
+		text:L('Why we use Facebook')
 	});
 	
 	var fbExplPrelim = Ti.UI.createLabel({
@@ -25,7 +25,7 @@ var WhyFbWindow = function() {
 		left: 5,
 		color: '#fff',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'Using Facebook as our login system helps improve the user experience in a number of ways:'
+		text: 	L('Using Facebook as our login system helps improve the user experience in a number of ways:')
 	});
 	
 	var fbExplFirst = Ti.UI.createLabel({
@@ -33,7 +33,7 @@ var WhyFbWindow = function() {
 		left: 20,
 		color: '#fff',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'1.) It makes it super fast to sign up and create a Chatterbox profile'
+		text: 	L('1.) It makes it super fast to sign up and create a Chatterbox profile')
 	});
 	
 	var fbExplSecond = Ti.UI.createLabel({
@@ -41,7 +41,7 @@ var WhyFbWindow = function() {
 		left: 20,
 		color: '#fff',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'2.) It allows you to see what friends you have in common with other Chatterbox users'
+		text: 	L('2.) It allows you to see what friends you have in common with other Chatterbox users')
 	});
 	
 	var fbExplThird = Ti.UI.createLabel({
@@ -49,7 +49,7 @@ var WhyFbWindow = function() {
 		left: 20,
 		color: '#fff',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'3.) It helps ensure that people are using their real identities'
+		text: 	L('3.) It helps ensure that people are using their real identities')
 	});
 	
 	var fbExplConclude = Ti.UI.createLabel({
@@ -57,7 +57,7 @@ var WhyFbWindow = function() {
 		left: 5,
 		color: '#fff',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 	'We really want to earn your trust and we will not misuse your personal information in any way.'
+		text: 	L('We really want to earn your trust and we will not misuse your personal information in any way.')
 	});
 	
 	var fbExplContact = Ti.UI.createLabel({
@@ -65,7 +65,7 @@ var WhyFbWindow = function() {
 		left: 5,
 		color: '#fff',
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue'},
-		text: 'Please let us know if you\'d like more login options or have feedback on this. Thanks!'
+		text: L('Please let us know if you\'d like more login options or have feedback on this. Thanks!')
 	});
 	
 	win.add(fbExplHeader);

@@ -245,7 +245,7 @@ function ProductMainWindow(_programId) {
 ///////////////////////////////////////////////////////////////
 
 	var unavailable = Ti.UI.createLabel({
-		text: 'Products will be available soon!',
+		text: L('Products will be available soon!'),
 		color: 'white',
 		font: { fontSize: 16, fontFamily: 'Helvetica Neue', fontWeight: 'bold' }
 	});

@@ -102,4 +102,12 @@
 	<string name="Send an Invite">Send an Invite</string>
 	<string name="Search...">Search...</string>
 	<string name="My Friends">My Friends</string>
+	<string name="Why we use Facebook">Why we use Facebook</string>
+	<string name="Using Facebook as our login system helps improve the user experience in a number of ways:">Using Facebook as our login system helps improve the user experience in a number of ways:</string>			
+	<string name="1.) It makes it super fast to sign up and create a Chatterbox profile">1.) It makes it super fast to sign up and create a Chatterbox profile</string>
+	<string name="2.) It allows you to see what friends you have in common with other Chatterbox users">2.) It allows you to see what friends you have in common with other Chatterbox users</string>
+	<string name="3.) It helps ensure that people are using their real identities">3.) It helps ensure that people are using their real identities</string>
+	<string name="We really want to earn your trust and we will not misuse your personal information in any way.">We really want to earn your trust and we will not misuse your personal information in any way.ี</string>
+	<string name="Please let us know if you\'d like more login options or have feedback on this. Thanks!">Please let us know if you\'d like more login options or have feedback on this. Thanks!</string>
+	<string name="Products will be available soon!">Products will be available soon!</string>
 </resources>

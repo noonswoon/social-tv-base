@@ -187,7 +187,7 @@ if(_status==="me") {
 				if(name ===L("You")) _name = L("you");
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png';
-				activityInfo.text = myActivity[i].additionalData + ' approved '+_name+' as a friend';
+				activityInfo.text = myActivity[i].additionalData + L(' approved ')+_name+L(' as a friend');
 			} else if (myActivity[i].category==='comment') {
 				activityType.image= 'images/icon/act_chat.png'
 				activityInfo.text = L('Someone commented on your post: ')+myActivity[i].additionalData;

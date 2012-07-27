@@ -102,6 +102,7 @@
 	<string name="Send an Invite">ชวนเพื่อน</string>
 	<string name="Search...">ค้นหา...</string>
 	<string name="My Friends">เพื่อนของฉัน</string>
+<<<<<<< HEAD
 	<string name="Why we use Facebook">ทำไมเราถึงใช้ Facebook</string>
 	<string name="Using Facebook as our login system helps improve the user experience in a number of ways:">การใช้ Facebook ในการล็อกอินจะทำให้ประสบการณ์ การใช้งานดีขึ้น เพราะ</string>			
 	<string name="1.) It makes it super fast to sign up and create a Chatterbox profile">1.) สะดวกรวดเร็วในการลงทะเบียน สามารถใช้ Chatterbox ได้ภายใน 10 วินาที</string>
@@ -110,4 +111,16 @@
 	<string name="We really want to earn your trust and we will not misuse your personal information in any way.">ทีมงานพร้อมที่จะให้ความเชื่อมั่นแก่ผู้ใช้ และจะปกปิดข้อมูลส่วนตัวของท่านในทุกกรณี</string>
 	<string name="Please let us know if you\'d like more login options or have feedback on this. Thanks!">หากมีข้อสงสัย แนะนำหรือติชมเพิ่มเติม สามารถติดต่อทีมงานได้โตยตรงค่ะที่ support@chatterbox.mobi</string>
 	<string name="Products will be available soon!">อดใจ รออีกนิด สินค้าจะมาเร็วๆนี้</string>
+=======
+	<string name="Why we use Facebook">ทำไมถึงใช้ Facebook</string>
+	<string name="Using Facebook as our login system helps improve the user experience in a number of ways:">การใช้ Facebook ในการล็อกอินจะช่วยให้ง่ายและสะดวกในการใช้งาน อาทิ เช่น</string>			
+	<string name="1.) It makes it super fast to sign up and create a Chatterbox profile">1.) สะดวกรวดเร็วในการลงทะเบียนในการใช้งาน Chatterbox</string>
+	<string name="2.) It allows you to see what friends you have in common with other Chatterbox users">2.) สามารถเห็นเพื่อนบน Facebook ที่ใช้งานแอพพลิเคชั่นอยู่</string>
+	<string name="3.) It helps ensure that people are using their real identities">3.) ช่วยในการระบุตัวตนในการใช้งาน</string>
+	<string name="We really want to earn your trust and we will not misuse your personal information in any way.">ทีมงานพร้อมที่จะให้ความเชื่อมั่นแก่ผู้ใช้ ในการปกปิดข้อมูลส่วนตัวและไม่นำข้อมูลส่วนตัวไปใช้ในทุกกรณี</string>
+	<string name="Please let us know if you\'d like more login options or have feedback on this. Thanks!">หากมีข้อสงสัย แนะนำหรือติชมเพิ่มเติม สามารถติดต่อทีมงานได้โตยตรง ทางเราหวังเป็นอย่างยิ่งว่าจะมอบประสบการณ์ที่ดีในการดูทีวีให้สนุก!แก่คุณ</string>
+	<string name="Products will be available soon!">อดใจรออีกนิด สินค้ามาเร็วๆนี้</string>
+	<string name=" approved "> ได้ตอบรับ </string>
+	<string name=" as a friend"> เป็นเพื่อน</string>
+>>>>>>> Update localization and fix file's name
 </resources>

@@ -116,6 +116,8 @@ var Am_SettingWindowAccount = function(){
 		alert('Save Complete');
 		acs.getUserLoggedIn().first_name = e.firstName;
 		acs.getUserLoggedIn().last_name = e.lastName;
+		var newName = e.firstName+' '+e.lastName;
+		Ti.App.fireEvent('updateName'+acs.getUserId(),{name: newName});
 	});
 	
 	

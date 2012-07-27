@@ -169,6 +169,10 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		bottom: 5
 	});
 	
+ 	var updateNameCallback = function(e){
+		profileName.text = e.name;
+ 	};
+	
 	var sendRequest = function(_response){
 		Ti.API.info(_response);
 	}
@@ -210,7 +214,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 			FriendACS.friendsACS_approveFriend(curId,approveRequest);	
 		}	
 		_parentWindow.close();
- 	}	
+ 	};	
  	
 	//Create view for header
 	var createHeaderView = function(status){
@@ -242,6 +246,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 			Ti.App.addEventListener('UserTotalFriendsFromACS', function(e){ 
 				columnFriendCount.text = e.result;
 			});
+			
+			Ti.App.addEventListener('updateName'+curId, updateNameCallback);
 		};
 	};
 	

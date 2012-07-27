@@ -37,7 +37,7 @@ var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in 
 var CONTENT_LENGTH = 160;
 
 var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
-var DEFAULT_CTB_IMAGE_URL = 'http://a0.twimg.com/profile_images/2208934390/Screen_Shot_2012-05-11_at_3.43.35_PM.png';
+var DEFAULT_CTB_IMAGE_URL = 'http://chatterbox.mobi/images/cbDefault.png';
 
 var friendRequests = [];
 

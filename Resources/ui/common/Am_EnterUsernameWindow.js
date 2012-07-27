@@ -65,7 +65,8 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 	enterUsername.addEventListener('click', function() {
 		Ti.API.info('usernameTextField.value = '+usernameTextField.value);
 		//TODO: log the user not to space or keep the textfield blank:(
-		if(usernameTextField.value===''|| usernameTextField.value.length<5 ||usernameTextField.value===undefined||!usernameTextField.value) alert(L('Choose your username between 5 and 16 characters in length'));
+		if(usernameTextField.value===''|| usernameTextField.value.length<5 ||usernameTextField.value===undefined||!usernameTextField.value) 
+			alert(L('Choose your username between 5 and 16 characters in length'));
 		else {
 			var providedUsername = usernameTextField.value;
 			Debug.debug_print("Creating new user");
@@ -107,7 +108,8 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 							var maintabgroup = new ApplicationTabGroup();
 							maintabgroup.open();
 					    } else {
-					        alert(L('Linking external acct Error: ') + ((e.error && e.message) || JSON.stringify(e)));
+					    	Debug.debug_print(L('Linking external acct Error: ') + JSON.stringify(e));
+					    	ErrorHandling.showNetworkError();
 					    }
 					});
 			    } else {

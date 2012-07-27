@@ -156,8 +156,8 @@ exports.createUser = function(email,username, password,macAddress, callback) {
 	    	Ti.API.info('user = '+JSON.stringify(e));
 	        if(e.BannedDevices.length > 0) {
 	        	var deviceBannedDialog = Titanium.UI.createAlertDialog({
-						title:'Your device is banned',
-						message:'Please contact admin@chatterbox.mobi for more information.'
+						title:L('Your device is banned'),
+						message:L('Please contact admin@chatterbox.mobi for more information.')
 					});
 				deviceBannedDialog.show();
 	        } else {

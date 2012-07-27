@@ -14,7 +14,7 @@ Am_SettingWindowNotification = function(){
 	var self = Ti.UI.createWindow({
 		backgroundImage: '/images/admin/cb_back.png',
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: 'Notifications',
+		title: L('Notifications'),
 		leftNavButton: backButton
 	});
 
@@ -23,7 +23,7 @@ Am_SettingWindowNotification = function(){
 	});
 
 	var headerLabel = Ti.UI.createLabel({
-		text: 'Receive a push notification when ...',
+		text: L('Receive a push notification when ...'),
 		color: 'white',
 		font:{fontWeight:'bold',fontSize:16},
 		left: 20,
@@ -47,7 +47,7 @@ Am_SettingWindowNotification = function(){
 	});
 
 	var getCommentPNLabel = Ti.UI.createLabel({
-		text: 'Your post gets comments',
+		text: L('Your post gets comments'),
 		font:{fontWeight:'bold',fontSize:14},
 		left: 10
 	});
@@ -63,7 +63,7 @@ Am_SettingWindowNotification = function(){
 	});
 	
 	var friendCheckinPNLabel = Ti.UI.createLabel({
-		text: 'Your friends checkin to a program',
+		text: L('Your friends checkin to a program'),
 		width: 170,
 		left: 10,
 		textAlign: 'left',

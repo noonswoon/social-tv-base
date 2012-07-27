@@ -82,7 +82,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		usernameStr = 'you';
 	
 	var commentDetail = Ti.UI.createLabel({
-		text: 'by '+usernameStr+', '+submitDateStr,
+		text: L('by')+" "+usernameStr+', '+submitDateStr,
 		color: '#999999',
 		font:{fontWeight:'bold',fontSize:12},
 		top: 5,
@@ -122,7 +122,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	var replyTextField = Ti.UI.createTextField({
 		top: 0,
 		height: 28,
-		hintText: "Reply here...",
+		hintText: L("Reply here..."),
 		left: nestedOffset,
 		right: 10,
     	borderStyle: Titanium.UI.INPUT_BORDERSTYLE_ROUNDED,
@@ -304,8 +304,8 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			row._hideToolbar(row.index);
 		} else {
 			var voteWarningDialog = Titanium.UI.createAlertDialog({
-				title:'Hold on!',
-				message:'You already voted on this comment.'
+				title:L('Hold on!'),
+				message:L('You already voted on this comment.')
 			});
 			voteWarningDialog.show();
 		}

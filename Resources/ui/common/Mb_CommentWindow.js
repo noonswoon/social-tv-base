@@ -118,7 +118,7 @@ function CommentWindow(_topicId) {
 		//namely, the 'MMM D, YYYY hh:mm:ss' format
 		var dm = moment(curTopic.updatedAt, "YYYY-MM-DDTHH:mm:ss");
 		var submitDateStr = since(dm);
-		commentHeader._setSubmissionTime("Submitted "+submitDateStr+" by "+curTopic.username);
+		commentHeader._setSubmissionTime(L("Submitted")+" "+submitDateStr+" "+L("by")+" "+curTopic.username);
 		//retrieve from db
 		var allComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
 		var commentsOfTopic = [];
@@ -270,7 +270,7 @@ function CommentWindow(_topicId) {
 		var totalComments = Comment.commentModel_fetchReviewsFromTopicId(_topicId);
 		var curCommentNumCount = totalComments.length;
 		Topic.topicModel_updateCommentNumCount(curCommentNumCount,_topicId);
-		
+
 		Ti.App.fireEvent('updateCommentNumCount'+_topicId,{totalCommentNumCount: curCommentNumCount});
 		
 		commentHeader._setReplyTextArea("");
@@ -321,6 +321,10 @@ function CommentWindow(_topicId) {
 	
 	//PAGE LOGIC/CONTROLLER
 	showPreloader(self,'Loading...');
+	setTimeout(function() {
+		Ti.API.info('force close loading screen');
+		hidePreloader(self);
+	}, 8000);
 
 	//pull2refresh module
 	var lastUpdatedDateObj = CacheHelper.getCacheTime('commentsOfTopic'+_topicId);

@@ -61,7 +61,7 @@ if(_status==="me") {
 	
 	var createNotice = function(){
 		if (friendRequests.length !== 0){
-			requestLabel.text = 'You have got '+friendRequests.length+' friend request(s).',
+			requestLabel.text = L('You have got ')+friendRequests.length+L(' friend request(s).'),
 			userActivityView.top = 40;
 			activityView.height = 350;
 		} else {
@@ -94,7 +94,7 @@ if(_status==="me") {
 }
 //ACTIVITY////////////////////////////////////////////////////
 	var ActivityLabel = Ti.UI.createLabel({
-		text: 'ACTIVITY',
+		text: L('ACTIVITY'),
 		font: {fontSize: 14, fontWeight: 'bold'},
 		color: '#fff',
 		height: 30,
@@ -129,7 +129,7 @@ if(_status==="me") {
 		
 		emptyActivity.visible = false;
 		
-		if(_status==="me") name = "You";
+		if(_status==="me") name = L("You");
 		else name = _userProfile.first_name;
 		
 		if(myActivity.length < numLoops) {
@@ -179,24 +179,24 @@ if(_status==="me") {
 			userActivityRow.category = myActivity[i].category;			
 
 			if(myActivity[i].category==='addfriend') {
-				if(name ==="You") _name = "you";
+				if(name ===L("You")) _name = L("you");
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png'
-				activityInfo.text = myActivity[i].additionalData + ' sent '+_name+' a friend request';
+				activityInfo.text = myActivity[i].additionalData + L(' sent ')+_name+L(' a friend request');
 			} else if (myActivity[i].category==='approvefriend') {
-				if(name ==="You") _name = "you";
+				if(name ===L("You")) _name = L("you");
 				else _name = name;
 				activityType.image= 'images/icon/act_add.png';
 				activityInfo.text = myActivity[i].additionalData + ' approved '+_name+' as a friend';
 			} else if (myActivity[i].category==='comment') {
 				activityType.image= 'images/icon/act_chat.png'
-				activityInfo.text = 'Someone commented on your post: '+myActivity[i].additionalData;
+				activityInfo.text = L('Someone commented on your post: ')+myActivity[i].additionalData;
 			} else if (myActivity[i].category==='getbadge') {
 				activityType.image= 'images/icon/act_badge.png';
-				activityInfo.text = name + ' have got a new badge: ' + myActivity[i].additionalData;
+				activityInfo.text = name + L(' have got a new badge: ') + myActivity[i].additionalData;
 			} else if (myActivity[i].category==='checkin') {
 				activityType.image= 'images/icon/act_tv.png';
-				activityInfo.text = name + ' have checked in to ' + myActivity[i].additionalData;
+				activityInfo.text = name + L(' have checked in to ') + myActivity[i].additionalData;
 			};
 			
 			activityTime.text = activityDateStr;

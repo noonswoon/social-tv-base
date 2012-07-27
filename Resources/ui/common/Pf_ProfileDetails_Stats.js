@@ -85,7 +85,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	}
 
 	var leaderLabel = Ti.UI.createLabel({
-		text:'LEADERBOARD',
+		text:L('LEADERBOARD'),
 		font: {fontSize: 14, fontWeight: 'bold'},
 		color: '#eeeeee',
 		height:30,
@@ -210,7 +210,7 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 	var addMoreFriend = function(_data) {
 		if(_data.length<=10 &&_data.length>=0) {
 			var addFriendLabel = Ti.UI.createLabel({
-				text: ' + add friends...',
+				text: L(' + add friends...'),
 				top: 0,
 				font: {fontSize: 14, fontWeight: 'bold'},
 				color: '#fff',

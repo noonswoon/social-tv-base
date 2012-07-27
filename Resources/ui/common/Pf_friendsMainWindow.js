@@ -47,7 +47,7 @@ FriendsMainView = function(_parentWindow,_window){
 
 	var createFriendsMainView = function(){
 		if(_window === "friend"){
-			self.title = "My Friends";
+			self.title = L("My Friends");
 			var myFriends = FriendModel.friendModel_fetchFriend(my_id);
 			createFriendTable(myFriends);
 		}

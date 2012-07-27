@@ -9,8 +9,8 @@ exports.userReportACS_reportObject = function(_objectId,_objectType,_objectConte
 	}, function (e) {
 	    if (e.success) {
 	        var reportAlertDialog = Ti.UI.createAlertDialog({
-	        	title: 'Thank you',
-	        	message: 'For helping us keep Chatterbox clean'
+	        	title: L('Thank you'),
+	        	message: L('For helping us keep Chatterbox clean')
 	        });
 	        reportAlertDialog.show();
 	    } else {

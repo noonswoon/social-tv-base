@@ -6,9 +6,9 @@ var SettingWindow = function(_containingTab) {
 	var SettingWindowNotification = require('ui/common/Am_SettingWindowNotification');
 	
 	var setting = [
-	{title:'Account Setting', hasChild:true},
-	{title:'Social Sharing', hasChild:true},
-	{title:'Notifications', hasChild:true}
+	{title:L('Account Setting'), hasChild:true},
+	{title:L('Social Sharing'), hasChild:true},
+	{title:L('Notifications'), hasChild:true}
 	]
 	
 	var backButton = Ti.UI.createButton({
@@ -19,7 +19,7 @@ var SettingWindow = function(_containingTab) {
 	var self = Ti.UI.createWindow({
 		backgroundImage: '/images/admin/cb_back.png',
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: "Setting",
+		title: L("Setting"),
 		leftNavButton: backButton
 	});
 	self.containingTab = _containingTab;
@@ -44,7 +44,7 @@ var SettingWindow = function(_containingTab) {
 	});
 	
 	var fbLogoutButtonLabel = Ti.UI.createLabel({
-		text: 'Logout',
+		text: L('Logout'),
 		font:{fontWeight:'bold',fontSize:16}
 	});
 	fbLogoutButtonTableViewRow.add(fbLogoutButtonLabel);

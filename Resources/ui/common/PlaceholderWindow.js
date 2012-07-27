@@ -290,7 +290,7 @@ var PlaceholderWindow = function(_parnetWindow) {
 	b1.addEventListener('click', function() {
 		if (!Titanium.Facebook.loggedIn)
 		{
-			Ti.UI.createAlertDialog({title:'Chatterbox', message:'Login before running query'}).show();
+			Ti.UI.createAlertDialog({title:'Chatterbox', message:L('Login before running query')}).show();
 			return;
 		}
 		runQuery();

@@ -102,7 +102,7 @@ var launchTheAppWrapper = function() {
 	if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {
 		var connectivityWarningDialog = Titanium.UI.createAlertDialog({
 			title:'No Internet Connection',
-			message:'Please come online and join the Chatterbox experience.'
+			message:L('Please come online and join the Chatterbox experience.')
 		});
 		nointernetwin = new NoInternetWindow();
 		nointernetwin.open();
@@ -134,7 +134,7 @@ var launchTheAppWrapper = function() {
 	if(Titanium.Network.networkType == Titanium.Network.NETWORK_NONE) {
 		var connectivityWarningDialog = Titanium.UI.createAlertDialog({
 			title:'No Internet Connection',
-			message:'Please come online and join the Chatterbox experience.'
+			message:L('Please come online and join the Chatterbox experience.')
 		});
 		connectivityWarningDialog.show();
 		Ti.App.addEventListener('resume', launchTheAppWrapper);

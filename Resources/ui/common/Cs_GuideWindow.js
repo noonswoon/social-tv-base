@@ -36,7 +36,7 @@ function GuideWindow(_channelSelectionWin) {
 		height: 50,
 		right: 55,
 		textAlign: 'right',
-		text: 'PICK A CHANNEL',
+		text: L('PICK A CHANNEL'),
 		font:{fontSize: 11}
 	});
 	selectChannelToolbar.add(pickChannelLabel);

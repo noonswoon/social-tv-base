@@ -145,7 +145,7 @@ CommentHeaderTableViewRow = function(_topicId) {
 		right: 10,
 		width: 300,
 		height: 50,
-		value: "Write your comment here...",
+		value: L("Write your comment here..."),
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		keyboardToolbar : [cancelButton, spacer, replyButton], //this is iOS only
     	backgroundColor: 'transparent',

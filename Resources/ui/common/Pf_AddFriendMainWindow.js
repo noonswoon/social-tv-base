@@ -6,7 +6,7 @@ AddFriendsMainView = function(_parentWindow) {
 	var self = Titanium.UI.createWindow({
 		barColor:'#489ec3',
 		barImage: 'images/nav_bg_w_pattern.png',
-		title: 'Add Friends'
+		title: L('Add Friends')
 	});		
 
 //////////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@ AddFriendsMainView = function(_parentWindow) {
 	});
 //////////////////////////////////////////////////////////////////
 	var friendTab = Titanium.UI.iOS.createTabbedBar({
-		labels: ['Already have Chatterbox', 'Send an Invite'],
+		labels: [L('Already have Chatterbox'), L('Send an Invite')],
 		backgroundColor: '#43a5cf',
 		style: Titanium.UI.iPhone.SystemButtonStyle.BAR,
 		height: 40,
@@ -41,7 +41,7 @@ AddFriendsMainView = function(_parentWindow) {
 	var appFriendSearch = Titanium.UI.createSearchBar({
 		barColor:'#43a5cf',
 		showCancel:false,
-		hintText:'Search...',
+		hintText:L('Search...'),
 		backgroundImage: 'images/searchbar_white.png',
 		borderWidth: 0,
 	});
@@ -104,7 +104,7 @@ AddFriendsMainView = function(_parentWindow) {
 	}
 	
 	var facebookFriendQuery = function() {
-		if (!Titanium.Facebook.loggedIn) Ti.UI.createAlertDialog({title:'Chatterbox', message:'Login before running query'}).show();
+		if (!Titanium.Facebook.loggedIn) Ti.UI.createAlertDialog({title:'Chatterbox', message:L('Login before running query')}).show();
 		//run query
 		else{	
 			// run query, populate table view and open window

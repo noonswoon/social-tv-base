@@ -112,9 +112,9 @@ var SignupWindow = function(_containingTab) {
 	//CALLBACK FUNCTIONS
 	function cb() {
 		if(acs.isLoggedIn()===true) {
-			alert("successfully signup.")
+			alert(L("successfully signup."))
 		} else {
-			alert('something wrong during signup process');
+			alert(L('something wrong during signup process'));
 		}
 	}
 		
@@ -122,7 +122,7 @@ var SignupWindow = function(_containingTab) {
 	signupButton.addEventListener('click',function() {
 		if(password.value === confirm.value)
 			acs.createUser(email.value,username.value,password.value,Ti.Platform.macaddress,cb);
-		else alert("Passwords do not match. Try again.");
+		else alert(L("Passwords do not match. Try again."));
 	});
 	
 	fbConnectButton.addEventListener('click', function() {

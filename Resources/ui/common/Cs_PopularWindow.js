@@ -122,6 +122,10 @@ function PopularWindow(_parent) {
 		TVProgramACS.tvprogramACS_fetchProgramsShowingAt(timeIndex);
 		showPreloader(self,'Loading...');
 		//add in loading... screen
+		setTimeout(function() {
+			Ti.API.info('force close loading screen');
+			hidePreloader(self);
+		}, 10000);
 	});
 
 	Ti.App.addEventListener('timeIndexDoneGettingNumCheckinsOfProgramId', function(e) {
@@ -253,7 +257,7 @@ function PopularWindow(_parent) {
 	setTimeout(function() {
 		Ti.API.info('force close loading screen');
 		hidePreloader(self);
-	}, 8000);
+	}, 10000);
 
 	PullToRefresh.addASyncPullRefreshToTableView(programListTable, function() {
 			usingPull2Refresh = true;

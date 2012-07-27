@@ -321,6 +321,10 @@ function CommentWindow(_topicId) {
 	
 	//PAGE LOGIC/CONTROLLER
 	showPreloader(self,'Loading...');
+	setTimeout(function() {
+		Ti.API.info('force close loading screen');
+		hidePreloader(self);
+	}, 8000);
 
 	//pull2refresh module
 	var lastUpdatedDateObj = CacheHelper.getCacheTime('commentsOfTopic'+_topicId);

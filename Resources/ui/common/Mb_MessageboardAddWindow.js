@@ -212,9 +212,9 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		//Post appear on Facebook
 		FacebookSharing.postAppearOnFaceBook(titleTextFieldInput.value,contentTextAreaInput.value,_programPhoto);
 		
-		var sleepTime = 2000;
+		var sleepTime = 5000;
 		showPreloader(self,'Loading...');
-		if(filename !== null)  sleepTime = 5000; //give more sleep time for photo uploaded
+		if(filename !== null)  sleepTime = 10000; //give more sleep time for photo uploaded
 		setTimeout(function(e) {
 			hidePreloader(self);
 			self.close();

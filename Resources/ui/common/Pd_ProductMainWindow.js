@@ -200,11 +200,6 @@ function ProductMainWindow(_programId) {
 			Ti.API.info('bad time man..productwin cannot find data for '+currentProgramId);
 		else programName = programData[0].name;
 		selectProgramLabel.text = programName;
-<<<<<<< HEAD
-
-=======
-		//CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
->>>>>>> bwahhh?
 		ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 	};
 
@@ -236,10 +231,7 @@ function ProductMainWindow(_programId) {
 		if(currentProgramId !== picker.getSelectedRow(0).programId) {
 			selectProgramLabel.text = picker.getSelectedRow(0).title;
 			currentProgramId = picker.getSelectedRow(0).programId;
-<<<<<<< HEAD
-=======
-			//CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
->>>>>>> bwahhh?
+
 			ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:currentProgramId});
 		}
@@ -270,7 +262,6 @@ function ProductMainWindow(_programId) {
 		var totalProducts = programProducts.length;
 		
 		var numRows = Math.ceil(totalProducts/2);
-		alert('create product main window table view row');
 		if(totalProducts == 0){
 			self.add(unavailable);
 		} else {
@@ -291,16 +282,9 @@ function ProductMainWindow(_programId) {
 			}
 		}
 		productTableView.setData(viewRowData);
-<<<<<<< HEAD
 	};
 	Ti.App.addEventListener('productDbLoaded', productDbLoadedCallback);	
 
-=======
-	}
-	Ti.App.addEventListener('productDbLoaded'+currentProgramId, productDbLoadedCallback);	
-
-	//CacheHelper.fetchACSDataOrCache('fetchedProductsOfProgramId'+currentProgramId, ProductACS.productACS_fetchedProductsOfProgramId, [currentProgramId], 'productDbLoaded'+currentProgramId,CACHE_TIMEOUT_MEDIUM);
->>>>>>> bwahhh?
 	ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 	return self;
 }

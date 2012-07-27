@@ -75,14 +75,9 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 		
 		for (var k in badgeView.children) {
 			if (badgeView.children.hasOwnProperty(k)) {
-			//	setTimeout(function() {
-			//		Ti.API.info('k: '+k);
-			//		Ti.API.info('badgeView.children.length: '+badgeView.children.length);
 					badgeView.remove(badgeView.children[k]);
-			//	},1000);			
 		  };
 		}
-
 		setTimeout(function(){
 			for(var i=0;i<badgeRow;i++) {
 				for(var j=0;j<3;j++) {
@@ -110,7 +105,7 @@ var ProfileBadgeView = function(_parent, _userProfile, _status) {
 					count++
 				}	
 			}				
-		},1500);
+		},2000);
 	} // end of function: createBadgeView
 	
 	Ti.App.addEventListener('badgesDbLoaded',function() {

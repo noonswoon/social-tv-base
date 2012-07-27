@@ -290,6 +290,9 @@ function ApplicationTabGroup() {
 			Ti.API.info('updating data in popular tab...')
 			Ti.App.fireEvent('showDiscoveryPage');
 		}
+		FriendACS.friendsACS_searchFriend(myUserId);
+		FriendACS.friendACS_fetchedUserTotalFriends(myUserId);
+		
 	};
 	Ti.App.addEventListener('resume', resumeCallback);
 	

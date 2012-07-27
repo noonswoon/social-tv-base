@@ -274,7 +274,21 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		profileName.text = profile.first_name + ' ' + profile.last_name;
 	};
 	*/
+
 	createHeaderView(_status);
+
+	var resumeCallback = function(){
+		CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+		myBadgeACS.myBadgeACS_fetchedBadge(curId);
+		ActivityACS.activityACS_fetchedMyActivity(curId);
+	};
+	Ti.App.addEventListener('resume', resumeCallback);
+
+	var clearListeners = function() {
+		Ti.App.removeEventListener('resume',resumeCallback);
+		Ti.App.removeEventListener('profileMainWindowClosing'+curId, clearListeners);
+	};
+	Ti.App.addEventListener('profileMainWindowClosing'+curId, clearListeners);
 
 	return headerView;
 }

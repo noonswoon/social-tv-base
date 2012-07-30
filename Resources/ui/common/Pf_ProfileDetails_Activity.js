@@ -80,8 +80,8 @@ if(_status==="me") {
 	 }
 	 
 	requestNoticeView.addEventListener('click', function(){
-		var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
-		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"stranger"));
+		var FriendMainWindow = require('ui/common/Pf_FriendMainWindow');
+		_parentWindow.containingTab.open(new FriendMainWindow(_parentWindow,"stranger"));
 	});
 	
 	Ti.App.addEventListener('friendRequestsLoaded',friendRequestsLoadedCallBack);

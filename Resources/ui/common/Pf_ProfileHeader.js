@@ -258,8 +258,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	//only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
 	columnFriend.addEventListener('click',function(){
-		var FriendsMainWindow = require('ui/common/Pf_FriendsMainWindow');
-		_parentWindow.containingTab.open(new FriendsMainWindow(_parentWindow,"friend"));
+		var FriendMainWindow = require('ui/common/Pf_FriendMainWindow');
+		_parentWindow.containingTab.open(new FriendMainWindow(_parentWindow,"friend"));
 	});	
  	
  	columnAddFriend.addEventListener('click',function(){

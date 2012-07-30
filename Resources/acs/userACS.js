@@ -10,6 +10,7 @@ exports.userACS_fetchCurrentUser = function(_id){
        Ti.App.fireEvent('userLoaded'+_id,{fetchedUser: user});
     } else {
         Debug.debug_print('userACS_fetchCurrentUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
+        alert('userACS_fetchCurrentUser Error: ' + ((e.error && e.message) || JSON.stringify(e)));
         ErrorHandling.showNetworkError();
     }
 });
@@ -40,6 +41,7 @@ exports.userACS_updatedUser = function(_firstname,_lastname){
     } 
     else{
       	  Debug.debug_print('Error:\\n' +((e.error && e.message) || JSON.stringify(e)));
+      	  alert('Error:\\n' +((e.error && e.message) || JSON.stringify(e)));
       	  ErrorHandling.showNetworkError();
     	}
 	});

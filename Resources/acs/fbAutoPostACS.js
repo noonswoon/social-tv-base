@@ -12,6 +12,7 @@ exports.fbAutoPostACS_AutoPostValue = function() {
 	    } else {
 	        Debug.debug_print('Error: Cannot fetch from the server. ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	            alert('ERROR: '+'fbAutoPostACS_AutoPostValue');
 	       	ErrorHandling.showNetworkError();
 	    }
 	});	

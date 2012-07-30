@@ -17,6 +17,7 @@ exports.levelACS_fetchedLevel = function(_paramsArray  /*unused*/) {
 	    else {
 	        Debug.debug_print('LevelACS-> fetchedLevel Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	            alert('ERROR: '+'LevelACS-> fetchedLevel');
 	        ErrorHandling.showNetworkError();
 	   	}
 	});

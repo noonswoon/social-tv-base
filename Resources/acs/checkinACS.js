@@ -12,6 +12,7 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('checkinACS_fetchedUserTotalCheckIns error: '+JSON.stringify(e));
+	        alert('ERROR: '+'checkinACS_fetchedUserTotalCheckIns');
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */
@@ -53,6 +54,7 @@ exports.checkinACS_fetchedUserCheckIn = function(_paramsArray) {
 	    else {
 	        Debug.debug_print('checkin Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        alert('ERROR: '+'checkinACS_fetchedUserCheckIn');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -70,6 +72,7 @@ exports.checkinACS_createCheckin = function(checkinData,local_id){
 			Ti.App.fireEvent('update1checkin',{fetchedACheckin:checkin}); //fetched back with local id:)
 		} else {
 			Debug.debug_print('checkinACS_createCheckin Error: ' + JSON.stringify(e));
+			alert('ERROR: '+'checkinACS_createCheckin');
 			ErrorHandling.showNetworkError();
 		}
 	});
@@ -89,6 +92,7 @@ exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId,_channelId) {
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
 	        Debug.debug_print('checkinACS_getTotalNumCheckinOfProgram error');
+	        alert('ERROR: '+'checkinACS_getTotalNumCheckinOfProgram');
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */
@@ -111,6 +115,7 @@ exports.checkinACS_timeIndexGetTotalNumCheckinOfProgram = function(_eventId,_cha
 			// this function is called when an error occurs, including a timeout
 	        Ti.API.debug(e.error);
 	        Debug.debug_print('checkinACS_timeIndexGetTotalNumCheckinOfProgram error');
+	        alert('ERROR: '+'checkinACS_timeIndexGetTotalNumCheckinOfProgram');
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */

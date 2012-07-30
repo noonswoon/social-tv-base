@@ -19,6 +19,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
 	    else {
 	        Debug.debug_print('myBadgeACS-> fetchedBadge Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	       alert('ERROR: '+'myBadgeACS-> fetchedBadge');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -40,6 +41,7 @@ exports.myBadgeACS_createNewBadge = function(_userID,_badgeID){
 	    } else {
 	        Debug.debug_print('myBadgeACS->createNewBadge: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	             alert('ERROR: '+'myBadgeACS->createNewBadge');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

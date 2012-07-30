@@ -57,6 +57,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('tvprogramACS_fetchProgramsShowingNow error: '+e.error);
+	        alert('ERROR: '+'tvprogramACS_fetchProgramsShowingNow');
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  // in milliseconds 
@@ -130,6 +131,7 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+e.error);
+	        alert('ERROR: '+'tvprogramsAtTimeIndexLoaded');
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  // in milliseconds 
@@ -199,6 +201,7 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+e.error);
+	        alert('ERROR: '+'tvprogramsAtTimeIndexLoaded');
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  // in milliseconds 
@@ -263,6 +266,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
+	        alert('ERROR: '+'tvprogramACS_fetchAllProgramShowingToday');
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */

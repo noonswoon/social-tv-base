@@ -18,6 +18,7 @@ exports.productACS_fetchedProductsOfProgramId = function(_paramsArray) {
 	    } 
 	    else {
 	    	Debug.debug_print('productACS_fetchedProductsOfProgramId Error: ' + JSON.stringify(e));
+	         alert('ERROR: '+'productACS_fetchedProductsOfProgramId');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

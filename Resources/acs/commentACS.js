@@ -58,6 +58,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 				} else {
 			        Debug.debug_print('Getting CommentOfComment Error:\\n' +
 			            ((e.error && e.message) || JSON.stringify(e)));
+			        alert('ERROR: '+'Getting CommentOfComment Error');
 			        ErrorHandling.showNetworkError();
 			    }
 			});
@@ -104,6 +105,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 	    } else {
 	        Debug.debug_print('Getting Review Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        alert('ERROR: '+'Getting Review Error');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -125,6 +127,7 @@ exports.commentACS_createCommentOfTopic = function(_comment,_localId,_topicId) {
 	    } else {
 	        Debug.debug_print('Comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	            alert('ERROR: '+'Comment Error');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -149,6 +152,7 @@ exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentI
 	    } else {
 	        Debug.debug_print('Comment of comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	            alert('ERROR: '+'comment of comment Error');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -169,6 +173,7 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_localId,_commentId
 	    } else {
 	        Debug.debug_print('Vote of comment Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	            alert('ERROR: '+'vote for comment Error');
 	   		ErrorHandling.showNetworkError();
 	    }
 	});
@@ -184,6 +189,7 @@ exports.commentACS_deleteComment = function(_respondToObjectId,_commentId) {
 	        Debug.debug_print("deleteCommentOfPost: update is_deleted_flag success");
 	    } else {
 	        Debug.debug_print("deleteCommentOfPost: update is_deleted_flag FAILED");
+	        alert('ERROR: '+'delete comment of post Error');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -199,6 +205,7 @@ exports.commentACS_deleteCommentOfComment = function(_respondToObjectId,_comment
 	        Debug.debug_print("deleteCommentOfComment: update is_deleted_flag success");
 	    } else {
 	        Debug.debug_print("deleteCommentOfComment: update is_deleted_flag FAILED");
+	        alert('ERROR: '+'delete comment of comment Error');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

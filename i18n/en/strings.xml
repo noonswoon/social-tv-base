@@ -81,7 +81,8 @@
 	<string name="The program is already finished!">The program is already finished!</string>
 	<string name="Please try again later.">Please try again later.</string>
 	<string name="You cannot Check In">You cannot Check In</string>
-	<string name=" just checked in to a TV program. Let watch together!"> just checked in to a TV program. Let watch together!</string>	
+	<string name=" just checked in to "> just checked in to </string>	
+	<string name=". Let watch together!">. Let watch together!</string>	
 	<string name="Login before accessing properties">Login before accessing properties</string>	
 	<string name="call was unsuccessful">call was unsuccessful</string>
 	<string name="Login before running query">Login before running query</string>	

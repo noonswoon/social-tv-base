@@ -18,6 +18,7 @@ exports.leaderACS_fetchedRank = function(_ids){
 	    } else {
 			Debug.debug_print('leaderboardACS-> fetchedRank: Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        alert('ERROR: '+'leaderACS_fetchedRank');
 	        ErrorHandling.showNetworkError();
 	   	}
 	});
@@ -42,6 +43,7 @@ exports.leaderACS_createUserInfo = function(_user){
 	    } else {
 	        Debug.debug_print('leaderboardACS 45 Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	            alert('ERROR: '+'leaderACS_createUserInfo');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -62,6 +64,7 @@ exports.leaderACS_updateUserInfo = function(_id,_point){
 	    } else {
 	        Debug.debug_print('leaderboardACS 65 Error:\\n' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	            alert('ERROR: '+'leaderACS_updateUserInfo');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

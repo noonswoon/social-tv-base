@@ -20,6 +20,7 @@ exports.activityACS_fetchedMyActivity = function(_id) {
 	    } else {
 	        Debug.debug_print('Error: Cannot fetch any activity from the server. ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	    	alert('ERROR: '+'activityACS_fetchedMyActivity');
 	    	ErrorHandling.showNetworkError();
 	   	}
 	});	
@@ -43,6 +44,7 @@ exports.activityACS_createMyActivity  = function(_activity,local_id) {
 
 	    } else {
 	        Debug.debug_print('activityACS - Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
+	        alert('ERROR: '+'activityACS_createMyActivity');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

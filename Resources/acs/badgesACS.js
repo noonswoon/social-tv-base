@@ -22,6 +22,7 @@ exports.fetchedBadges = function(_paramsArray  /*unused*/) {
 	    else {
 	        Debug.debug_print('badgesACS fetchedBadges Error: ' +
 	            ((e.error && e.message) || JSON.stringify(e)));
+	        alert('ERROR: '+'badgesACS_fetchedBadges');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

@@ -15,6 +15,7 @@ exports.userReportACS_reportObject = function(_objectId,_objectType,_objectConte
 	        reportAlertDialog.show();
 	    } else {
 	        Debug.debug_print('userReportACS_reportObject Error: ' + JSON.stringify(e));
+	        alert('userReportACS_reportObject Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});

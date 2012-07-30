@@ -82,7 +82,8 @@
 	<string name="The program is already finished!">รายการนี้จบไปแล้ว!</string>
 	<string name="Please try again later.">กรุณาลองใหม่อีกครั้ง</string>
 	<string name="You cannot Check In">คุณไม่สามารถเช็คอินได้</string>
-	<string name=" just checked in to a TV program. Let watch together!">เพิ่งเช็คอินรายการทีวี มาดูพร้อมกันเถอะ</string>	
+	<string name=" just checked in to ">เพิ่งเช็คอินรายการ </string>
+	<string name=". Let watch together!"> มาดูทีวีด้วยกันเถอะ!</string>	
 	<string name="Login before accessing properties">กรุณาล็อกอินก่อน</string>	
 	<string name="call was unsuccessful">การเชื่อมต่อข้อมูลขัดข้อง</string>
 	<string name="Login before running query">กรุณาล็อกอินก่อน</string>	

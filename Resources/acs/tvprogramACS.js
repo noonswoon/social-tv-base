@@ -3,8 +3,8 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	var now_full = moment().format('YYYY-MM-DD,HH:mm:ss');
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$lte":"'+now_full+'"},"end_time":{"$gte":"'+now_full+'"}}';	
-	//Ti.API.info('fetch showing now: '+url);
+			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$lte":"'+now_full+'"},"end_time":{"$gte":"'+now_full+'"},"program_country":"th"}';	
+	Ti.API.info('fetch showing now: '+url);
 	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
@@ -55,7 +55,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	            	program_type: programType,
 	            	program_country: programCountry
 	            }
-				alert(programCountry);
+
 	            programs.push(curProgram);
 			}
 			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
@@ -79,10 +79,11 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	var timeIndexStr = _timeIndex + "";
 	if(_timeIndex < 10) timeIndexStr = "0"+timeIndexStr;
 	timeIndexStr = nowYMD + ',' + timeIndexStr+':00:00';
-	var whereCondition = '{"start_time":{"$lte":"'+timeIndexStr+'"}, "end_time": {"$gte":"'+timeIndexStr+'"}}';
+	var whereCondition = '{"start_time":{"$lte":"'+timeIndexStr+'"}, "end_time": {"$gte":"'+timeIndexStr+'"},"program_country":"th"}';
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=3&where='+whereCondition;	
+			  	'&per_page=100&response_json_depth=3&where='+whereCondition;
+
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
@@ -153,7 +154,7 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	var endOfTheDay = moment().eod().format('YYYY-MM-DD,HH:mm:ss');
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'"}';	
+			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'","program_country":"th"}';	
 	//Ti.API.info('fetch showing From Channel: '+url);
 
 	var xhr = Ti.Network.createHTTPClient({
@@ -226,7 +227,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	var end_of_the_day = moment().eod().format('YYYY-MM-DD,HH:mm:ss');
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=2&where={"start_time":{"$gte":"'+start_of_the_day+'","$lte":"'+end_of_the_day+'"}}';	
+			  	'&per_page=100&response_json_depth=2&where={"start_time":{"$gte":"'+start_of_the_day+'","$lte":"'+end_of_the_day+'"},"program_country":"th"}';	
 	Ti.API.info('tvprogram fetch url: '+url);
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {

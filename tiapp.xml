@@ -18,7 +18,7 @@
     <property name="ti.android.threadstacksize" type="int">327680</property>
     <id>mobi.chatterbox.rc</id>
     <name>Chatterbox</name>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <publisher>Chatterbox Team</publisher>
     <url>http://chatterbox.mobi</url>
     <description>Changing the way you watch TV with Chatterbox</description>

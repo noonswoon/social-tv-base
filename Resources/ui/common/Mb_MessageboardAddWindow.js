@@ -60,7 +60,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		left: 10,
 		right: 10,
 		width: 300,
-		height: 60,
+		height: 85,
 		borderRadius: 5,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		textAlign: 'left',

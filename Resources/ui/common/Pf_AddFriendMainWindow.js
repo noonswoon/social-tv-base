@@ -122,13 +122,17 @@ AddFriendsMainView = function(_parentWindow) {
 				Cloud.SocialIntegrations.searchFacebookFriends(function (e) {
 			    	if (e.success) {
 			    		friendWithApp = attachFbId(e.users);
-			    		var friendWithNoApp = [];
+			    		var friendWithNoApp = result;
 				    	for(var i=0;i<result.length;i++) {
 							for(j=0;j<friendWithApp.length;j++) {
-								if(friendWithApp[j].fb_id !== String(result[i].uid)) {
-									friendWithNoApp.push(result[i]);
+								if(friendWithApp[j].fb_id === String(result[i].uid)) {
+									friendWithNoApp.splice(i,1);
 									break;
 								}
+								// if(friendWithApp[j].fb_id !== String(result[i].uid)) {
+									// friendWithNoApp.push(result[i]);
+									// break;
+								//}
 							}
 						}
 						var friendOnFbRows = createFriendTable(friendWithNoApp,"facebook");

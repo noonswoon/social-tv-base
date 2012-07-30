@@ -217,10 +217,11 @@ if(_status==="me") {
 		else activityView.height = userActivityView.height;
 	}	// end of function: createActivityTable
 		
-	var checkFriend = function() {
+	var checkFriend = function(_friendId) {
 		var user_status = "friend";
+		Ti.API.info(friendRequests);
  		for(i=0;i<friendRequests.length;i++) {
- 			if (friendRequests[i].friend_id) {
+ 			if (_friendId === friendRequests[i].friend_id) {
  				user_status = "stranger";
  				break;
  			}
@@ -238,7 +239,7 @@ if(_status==="me") {
 	}
 			
 	userActivity.addEventListener('click',function(e) {
-		var userStatus = checkFriend();	// add friend / approve friend
+		var userStatus = checkFriend(e.rowData.target_id);	// add friend / approve friend
 		if(e.rowData.target_id !== acs.getUserId() && (e.rowData.category === 'addfriend' || e.rowData.category === 'approvefriend')) {
 			Ti.API.info('userStatus = '+userStatus);
 			Ti.API.info('e.rowData.target_id = '+e.rowData.target_id);

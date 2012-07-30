@@ -1,7 +1,7 @@
 //bootstrap database
 
 var db = Ti.Database.open('Chatterbox');
-db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, subname TEXT, photo TEXT, start_time TEXT, recurring_until TEXT, number_checkins INTEGER, channel_id TEXT, program_id TEXT, program_type TEXT);');
+db.execute('CREATE TABLE IF NOT EXISTS tvprograms(id TEXT PRIMARY KEY, name TEXT, subname TEXT, photo TEXT, start_time TEXT, recurring_until TEXT, number_checkins INTEGER, channel_id TEXT, program_id TEXT, program_type TEXT, program_country TEXT);');
 db.close();
 
 exports.TVProgramModel_insertAllPrograms = function(_allPrograms) {
@@ -11,10 +11,10 @@ exports.TVProgramModel_insertAllPrograms = function(_allPrograms) {
 	db.execute('DELETE FROM tvprograms');
 	
 	for(var i =0;i<_allPrograms.length;i++) {
-		db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type) VALUES(?,?,?,?,?,?,?,?,?)',
+		db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type, program_country) VALUES(?,?,?,?,?,?,?,?,?,?)',
 			_allPrograms[i].id, _allPrograms[i].name, _allPrograms[i].subname, _allPrograms[i].photo,
 			_allPrograms[i].start_time, _allPrograms[i].recurring_until, _allPrograms[i].channel_id,
-			_allPrograms[i].program_id, _allPrograms[i].program_type);
+			_allPrograms[i].program_id, _allPrograms[i].program_type, _allPrograms[i].program_country);
 	}
 	db.close();
 };
@@ -27,10 +27,10 @@ exports.TVProgramModel_insertPrograms = function(_allPrograms) {
 		var result = db.execute('SELECT * FROM tvprograms WHERE program_id = ?', _allPrograms[i].program_id);
 		if(!result.isValidRow()) {
 			//only insert if the record doesn't exist
-			db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type) VALUES(?,?,?,?,?,?,?,?,?)',
+			db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type, program_country) VALUES(?,?,?,?,?,?,?,?,?,?)',
 				_allPrograms[i].id, _allPrograms[i].name, _allPrograms[i].subname, _allPrograms[i].photo,
 				_allPrograms[i].start_time, _allPrograms[i].recurring_until, _allPrograms[i].channel_id,
-				_allPrograms[i].program_id, _allPrograms[i].program_type);			
+				_allPrograms[i].program_id, _allPrograms[i].program_type, _allPrograms[i].program_country);			
 		}
 	}
 	if(result !== null) result.close();
@@ -56,6 +56,7 @@ exports.TVProgramModel_getPrograms = function(_programIds) {
 				channel_id: result.fieldByName('channel_id'),
 				program_id: result.fieldByName('program_id'),
 				program_type: result.fieldByName('program_type'),
+				program_country: result.fieldByName('program_country'),
 				hasChild:true				
 			});
 			result.next();

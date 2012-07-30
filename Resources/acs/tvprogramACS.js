@@ -20,7 +20,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 				var channelId = 'CTB_CNL';
 				var programId = 'CTB_PUBLIC';
 				var programType = 'ETC';
-				
+
 				//safeguarding code
 				if(program.event != undefined && program.event.photo !== undefined && program.event.photo.urls !== undefined)
 					photoUrl = program.event.photo.urls.original;
@@ -38,6 +38,9 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	            	if(program.event.custom_fields.program_type !== undefined) {
 	            		programType = program.event.custom_fields.program_type;	
 	            	}
+	            	if(program.event.custom_fields.program_country !== undefined) {
+	            		programCountry = program.event.custom_fields.program_country;	
+	            	}
 	            }
 	            
 	            var curProgram = {
@@ -49,8 +52,10 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	            	recurring_until: program.end_time,
 	            	channel_id: channelId,
 	            	program_id: programId,
-	            	program_type: programType
+	            	program_type: programType,
+	            	program_country: programCountry
 	            }
+				alert(programCountry);
 	            programs.push(curProgram);
 			}
 			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
@@ -110,6 +115,9 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	            	if(program.event.custom_fields.program_type !== undefined) {
 	            		programType = program.event.custom_fields.program_type;	
 	            	}
+	            	if(program.event.custom_fields.program_country !== undefined) {
+	            		programCountry = program.event.custom_fields.program_country;	
+	            	}
 	            }
 	            
 	            var curProgram = {
@@ -121,7 +129,8 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	            	recurring_until: program.end_time,
 	            	channel_id: channelId,
 	            	program_id: programId,
-	            	program_type: programType
+	            	program_type: programType,
+	            	program_country: programCountry
 	            }
 	            //Ti.API.info('programFrom timeIndex: '+_timeIndex+'; Obj: '+JSON.stringify(curProgram));
 	            programs.push(curProgram);
@@ -179,6 +188,9 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	            	if(program.event.custom_fields.program_type !== undefined) {
 	            		programType = program.event.custom_fields.program_type;	
 	            	}
+	            	if(program.event.custom_fields.program_country !== undefined) {
+	            		programCountry = program.event.custom_fields.program_country;	
+	            	}
 	            }
 	            
 	            var curProgram = {
@@ -190,7 +202,8 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	            	recurring_until: program.end_time,
 	            	channel_id: channelId,
 	            	program_id: programId,
-	            	program_type: programType
+	            	program_type: programType,
+	            	program_country: programCountry
 	            }
 	            //Ti.API.info('programFrom channel: '+_channelId+'; Obj: '+JSON.stringify(curProgram));
 	            programs.push(curProgram);
@@ -244,6 +257,9 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	            	if(program.custom_fields.program_type !== undefined) {
 	            		programType = program.custom_fields.program_type;	
 	            	}
+	            	if(program.custom_fields.program_country !== undefined) {
+	            		programCountry = program.custom_fields.program_country;	
+	            	}
 	            }
 	            
 	            var curProgram = {
@@ -255,7 +271,8 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	            	recurring_until: program.recurring_until,
 	            	channel_id: channelId,
 	            	program_id: programId,
-	            	program_type: programType
+	            	program_type: programType,
+	            	program_country: programCountry
 	            }
 				programs.push(curProgram);
 			}

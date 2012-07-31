@@ -69,6 +69,18 @@ function ChannelSelectionMainWindow(){
 		} 	
 	});
 	
+	self.addEventListener('focus', function() {
+		if(popularwin !== null) popularwin._enableOpenCheckinWindow();
+		if(guidewin !== null) guidewin._enableOpenCheckinWindow();
+		if(friendwin !== null) friendwin._enableOpenCheckinWindow();
+	});
+	
+	Ti.App.addEventListener('resume', function() {
+		if(popularwin !== null) popularwin._enableOpenCheckinWindow();
+		if(guidewin !== null) guidewin._enableOpenCheckinWindow();
+		if(friendwin !== null) friendwin._enableOpenCheckinWindow();
+	});
+	
 	self.add(blankView);
 	self.add(mainView);
 	return self;

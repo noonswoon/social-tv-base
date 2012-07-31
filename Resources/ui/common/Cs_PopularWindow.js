@@ -23,6 +23,7 @@ function PopularWindow(_parent) {
 	var numProgramsToLoadCheckins = -1;
 	var numProgramsToLoadCheckinsTimeIndex = -1;
 	var usingPull2Refresh = false;
+	var canOpenWindow = true;
 	
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Popular');
@@ -230,23 +231,30 @@ function PopularWindow(_parent) {
 		areFriendCheckinsReady = true; 
 		isEverythingReady();
 	});	
-		
+	
+	self._enableOpenCheckinWindow = function() {
+		canOpenWindow = true;
+	};
+	
 	programListTable.addEventListener('click',function(e){
 		var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
 		//Ti.API.info('program_type = '+e.row.tvprogram.program_type);
-		checkinmainwin = new CheckinMainWindow({
-			eventId: e.row.tvprogram.id, //id of the particular show (one-time)
-			programId: e.row.tvprogram.program_id, //overall id of program id
-			programTitle: e.row.tvprogram.name,
-			programSubname: e.row.tvprogram.subname,
-			programImage: e.row.tvprogram.photo,
-			programChannel: e.row.tvprogram.channel_id,
-			programType: e.row.tvprogram.program_type,
-			programStarttime: e.row.tvprogram.start_time,
-			programEndtime: e.row.tvprogram.recurring_until,
-			programNumCheckin: e.row.tvprogram.number_checkins
-		}, _parent.containingTab);
-		_parent.containingTab.open(checkinmainwin);
+		if(canOpenWindow) {
+			checkinmainwin = new CheckinMainWindow({
+				eventId: e.row.tvprogram.id, //id of the particular show (one-time)
+				programId: e.row.tvprogram.program_id, //overall id of program id
+				programTitle: e.row.tvprogram.name,
+				programSubname: e.row.tvprogram.subname,
+				programImage: e.row.tvprogram.photo,
+				programChannel: e.row.tvprogram.channel_id,
+				programType: e.row.tvprogram.program_type,
+				programStarttime: e.row.tvprogram.start_time,
+				programEndtime: e.row.tvprogram.recurring_until,
+				programNumCheckin: e.row.tvprogram.number_checkins
+			}, _parent.containingTab);
+			_parent.containingTab.open(checkinmainwin);
+			canOpenWindow = false;
+		}
 	});
 	
 	self.add(timeSelectionView);
@@ -275,7 +283,7 @@ function PopularWindow(_parent) {
 				color: 'white'
 			}
 		}
-	);	
+	);
 
 	TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
 //	CacheHelper.fetchACSDataOrCache('tvprogramACS_fetchAllProgramShowingToday', TVProgramACS.tvprogramACS_fetchAllProgramShowingToday, [], 'tvprogramsTitlesLoaded', CACHE_TIMEOUT_SHORT);

@@ -4,7 +4,6 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
 			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$lte":"'+now_full+'"},"end_time":{"$gte":"'+now_full+'"},"program_country":"th"}';	
-	Ti.API.info('fetch showing now: '+url);
 	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
@@ -155,7 +154,6 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
 			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'","program_country":"th"}';	
-	//Ti.API.info('fetch showing From Channel: '+url);
 
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {

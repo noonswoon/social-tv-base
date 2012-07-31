@@ -6,7 +6,7 @@ FriendsWindow = function(_parent){
 	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
 	
 	var ProgramWithFriends = require('helpers/ProgramWithFriends');
-
+	var canOpenWindow = true;
 	
 	var myUserId = acs.getUserId();
 	

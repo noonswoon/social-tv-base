@@ -5,6 +5,7 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 	var CheckinMainWindow = require('ui/common/Cs_CheckinMainWindow');
 		
 	var currentChannelId = _channelId;
+	var canOpenWindow = true;
 	
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'orange',
@@ -22,21 +23,28 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 		endPoint: { x: '0%', y: '100%' },
 		colors: [{ color: '#d2d1d0', offset: 0.0}, { color: '#fffefd', offset: 1.0 }]
 	};	
-		
+
+	self._enableOpenCheckinWindow = function() {
+		canOpenWindow = true;	
+	};
+	
 	channelProgramsTableView.addEventListener('click',function(e){
- 		checkinmainwin = new CheckinMainWindow({
-			eventId: e.row.tvprogram.id,
-			programId: e.row.tvprogram.program_id,
-			programTitle: e.row.tvprogram.name,
-			programSubname: e.row.tvprogram.subname,
-			programImage: e.row.tvprogram.photo,
-			programChannel: e.row.tvprogram.channel_id,
-			programType: e.row.tvprogram.program_type,
-			programStarttime: e.row.tvprogram.start_time,
-			programEndtime: e.row.tvprogram.recurring_until,
-			programNumCheckin: e.row.tvprogram.number_checkins
-		}, _channelSelectionWin.containingTab);	
-		_channelSelectionWin.containingTab.open(checkinmainwin);
+ 		if(canOpenWindow) {
+	 		checkinmainwin = new CheckinMainWindow({
+				eventId: e.row.tvprogram.id,
+				programId: e.row.tvprogram.program_id,
+				programTitle: e.row.tvprogram.name,
+				programSubname: e.row.tvprogram.subname,
+				programImage: e.row.tvprogram.photo,
+				programChannel: e.row.tvprogram.channel_id,
+				programType: e.row.tvprogram.program_type,
+				programStarttime: e.row.tvprogram.start_time,
+				programEndtime: e.row.tvprogram.recurring_until,
+				programNumCheckin: e.row.tvprogram.number_checkins
+			}, _channelSelectionWin.containingTab);	
+			_channelSelectionWin.containingTab.open(checkinmainwin);
+			canOpenWindow = false;
+		}
 	});
 	
 	self._updateProgramContents = function(_selectedChannelId) {

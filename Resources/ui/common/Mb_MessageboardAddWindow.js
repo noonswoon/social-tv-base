@@ -60,7 +60,7 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		left: 10,
 		right: 10,
 		width: 300,
-		height: 80,
+		height: 85,
 		borderRadius: 5,
 		font: { fontSize: 14, fontFamily: 'Helvetica Neue' },
 		textAlign: 'left',
@@ -104,6 +104,27 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		height: 40,
 	});
 	textAndButtonView.add(postButton);
+	
+	//animate up
+	var animateNegativeUp_chatView = Ti.UI.createAnimation({
+		top: -20,
+		duration: 300,
+		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
+	});
+	
+	var animateDown_chatView = Ti.UI.createAnimation({
+		top: 49,
+		duration: 350,
+		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
+	});
+
+	contentTextAreaInput.addEventListener('focus', function() {
+		textAndButtonView.animate(animateNegativeUp_chatView);
+	});
+	
+	contentTextAreaInput.addEventListener('blur', function() {
+		textAndButtonView.animate(animateDown_chatView);
+	});
 	
 	var addImageDialog = Titanium.UI.createOptionDialog({
 		options: ['Take a Picture','Choose from Gallery']

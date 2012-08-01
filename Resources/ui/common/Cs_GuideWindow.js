@@ -9,7 +9,6 @@ function GuideWindow(_channelSelectionWin) {
 	//channel 3 as a default
 	var displayChannel = new ChannelInGuideWindow('ch3',_channelSelectionWin);
  	
- 	
 	var self = Ti.UI.createWindow({
 		backgroundColor: 'pink'
 	});
@@ -119,6 +118,10 @@ function GuideWindow(_channelSelectionWin) {
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
 	var slide_out =  Titanium.UI.createAnimation({bottom:-251});
+
+	self._enableOpenCheckinWindow = function() {
+		displayChannel._enableOpenCheckinWindow();
+	};
 
 	selectChannelButton.addEventListener('click',function() {
 		picker_view.animate(slide_in);

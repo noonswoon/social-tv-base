@@ -6,7 +6,7 @@ FriendsWindow = function(_parent){
 	var FriendsWindowTableViewRow = require('ui/common/Cs_FriendsWindowTableViewRow');
 	
 	var ProgramWithFriends = require('helpers/ProgramWithFriends');
-
+	var canOpenWindow = true;
 	
 	var myUserId = acs.getUserId();
 	
@@ -92,21 +92,28 @@ FriendsWindow = function(_parent){
 		}
 		friendsTableView.setData(viewRowData);	
 	}
+	
+	self._enableOpenCheckinWindow = function() {
+		canOpenWindow = true;
+	};
 		
 	friendsTableView.addEventListener('click',function(e){
 		//Ti.API.info('click on row: '+JSON.stringify(e));
- 		checkinmainwin = new CheckinMainWindow({
-			eventId: e.row.tvprogram.eventId,
-			programTitle: e.row.tvprogram.programName,
-			programSubname: e.row.tvprogram.programSubname,
-			programImage: e.row.tvprogram.programImage,
-			programChannel: e.row.tvprogram.programChannelId,
-			programNumCheckin: e.row.tvprogram.numberCheckins,
-			programStarttime: e.row.tvprogram.programStartTime,
-			programEndtime: e.row.tvprogram.programEndTime,
-			programId: e.row.tvprogram.programId,
-		}, _parent.containingTab);	
-		_parent.containingTab.open(checkinmainwin);
+		if(canOpenWindow) {
+ 			checkinmainwin = new CheckinMainWindow({
+				eventId: e.row.tvprogram.eventId,
+				programTitle: e.row.tvprogram.programName,
+				programSubname: e.row.tvprogram.programSubname,
+				programImage: e.row.tvprogram.programImage,
+				programChannel: e.row.tvprogram.programChannelId,
+				programNumCheckin: e.row.tvprogram.numberCheckins,
+				programStarttime: e.row.tvprogram.programStartTime,
+				programEndtime: e.row.tvprogram.programEndTime,
+				programId: e.row.tvprogram.programId,
+			}, _parent.containingTab);	
+			_parent.containingTab.open(checkinmainwin);
+			canOpenWindow = false;
+		}
 	});
 	
 	//Get checkins of friends

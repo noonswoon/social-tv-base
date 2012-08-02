@@ -63,7 +63,7 @@ exports.registerDeviceToken = function(_deviceToken) {
 	var registerParameters = {
 	    // "alias": "mickey_id",
 	    "tags": [
-	        "v1_release",
+	        "v1_0_1_release",
 	        "comment_friendcheckin"
 	    ],
 	    // "badge": 2,

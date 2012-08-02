@@ -95,6 +95,7 @@ FriendsWindow = function(_parent){
 	
 	self._enableOpenCheckinWindow = function() {
 		canOpenWindow = true;
+		//Ti.API.info('enable to open checkin window again - friend');
 	};
 		
 	friendsTableView.addEventListener('click',function(e){
@@ -113,6 +114,7 @@ FriendsWindow = function(_parent){
 			}, _parent.containingTab);	
 			_parent.containingTab.open(checkinmainwin);
 			canOpenWindow = false;
+			//Ti.API.info('canOpenCheckin Window set to false - friend');
 		}
 	});
 	

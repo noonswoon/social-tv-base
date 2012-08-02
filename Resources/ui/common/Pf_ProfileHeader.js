@@ -9,6 +9,8 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	var curId = _userProfile.id;
 	var totalCheckins = 0;
 	
+	var canOpenWindow = true;
+	
 	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	ActivityACS.activityACS_fetchedMyActivity(curId);
@@ -256,10 +258,19 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	}; 
 	Ti.App.addEventListener('UserTotalCheckInsFromACS'+curId,UserTotalCheckInsFromACSCallback);
 	
+	headerView._enableOpenFriendWindow = function() {
+		//Ti.API.info('enable to open friend window again - profileHeader');
+		canOpenWindow = true;
+	};
+	
 	//only listen to when ApplicationTabGroup is open, only the current user will get to fire the friendACS event
 	columnFriend.addEventListener('click',function(){
-		var FriendMainWindow = require('ui/common/Pf_FriendMainWindow');
-		_parentWindow.containingTab.open(new FriendMainWindow(_parentWindow,"friend"));
+		if(canOpenWindow) {
+			var FriendMainWindow = require('ui/common/Pf_FriendMainWindow');
+			_parentWindow.containingTab.open(new FriendMainWindow(_parentWindow,"friend"));
+			canOpenWindow = false;
+			//Ti.API.info('canOpen FriendMain Window set to false - profileHeader');
+		}
 	});	
  	
  	columnAddFriend.addEventListener('click',function(){

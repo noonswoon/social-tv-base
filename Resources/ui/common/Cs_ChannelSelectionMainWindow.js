@@ -69,13 +69,7 @@ function ChannelSelectionMainWindow(){
 		} 	
 	});
 	
-	self.addEventListener('focus', function() {
-		if(popularwin !== null) popularwin._enableOpenCheckinWindow();
-		if(guidewin !== null) guidewin._enableOpenCheckinWindow();
-		if(friendswin !== null) friendswin._enableOpenCheckinWindow();
-	});
-	
-	Ti.App.addEventListener('resume', function() {
+	self.addEventListener('focus', function() { //prevent openning multiple checkin windows when things are slow
 		if(popularwin !== null) popularwin._enableOpenCheckinWindow();
 		if(guidewin !== null) guidewin._enableOpenCheckinWindow();
 		if(friendswin !== null) friendswin._enableOpenCheckinWindow();

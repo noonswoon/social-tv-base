@@ -26,6 +26,7 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 
 	self._enableOpenCheckinWindow = function() {
 		canOpenWindow = true;	
+		//Ti.API.info('enable to open checkin window again - guide');
 	};
 	
 	channelProgramsTableView.addEventListener('click',function(e){
@@ -44,6 +45,7 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 			}, _channelSelectionWin.containingTab);	
 			_channelSelectionWin.containingTab.open(checkinmainwin);
 			canOpenWindow = false;
+			//Ti.API.info('canOpenCheckin Window set to false - guide');
 		}
 	});
 	
@@ -51,6 +53,10 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 		showPreloader(self,'Loading...');
 		currentChannelId = _selectedChannelId;
 		TVProgramACS.tvprogramACS_fetchProgramsFromChannel(currentChannelId);
+		setTimeout(function() {
+			Ti.API.info('force close loading screen');
+			hidePreloader(self);
+		}, 10000);
 	};
 	
 	Ti.App.addEventListener('tvprogramsOfChannelLoaded', function(e) {
@@ -75,6 +81,10 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 	//acs data call
 	showPreloader(self,'Loading...');
 	TVProgramACS.tvprogramACS_fetchProgramsFromChannel(currentChannelId);
+	setTimeout(function() {
+		Ti.API.info('force close loading screen');
+		hidePreloader(self);
+	}, 10000);
 	
 	self.add(channelProgramsTableView);
 	return self;

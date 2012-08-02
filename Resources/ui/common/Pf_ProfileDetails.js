@@ -69,6 +69,10 @@ var ProfileDetailView = function(_parent,_userProfile,_status){
 	profileDetail.add(profileDetailScroll);
 	detail.headerView = profileMenu;
 	detail.add(profileDetail);
+	
+	detail._enableOpenFriendWindow = function() {
+		profileStatsView._enableOpenFriendWindow();
+	};
 
 	return detail;
 }

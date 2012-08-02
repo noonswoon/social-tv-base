@@ -39,7 +39,6 @@ function PopularWindow(_parent) {
 	function isEverythingReady() {
 		Ti.API.info('areAllProgramsTitlesLoaded: '+areAllProgramsTitlesLoaded+', areBadgeShowPermissionReady: '+areBadgeShowPermissionReady+', numProgramsToLoadCheckins: '+numProgramsToLoadCheckins+', areFriendCheckinsReady: '+areFriendCheckinsReady); 
 		if(areAllProgramsTitlesLoaded && areBadgeShowPermissionReady && (numProgramsToLoadCheckins === 0) && areFriendCheckinsReady) {
-			Ti.API.info('Everything ready');
 			hidePreloader(self);
 			Ti.App.fireEvent("showDiscoveryPage");
 
@@ -234,6 +233,7 @@ function PopularWindow(_parent) {
 	
 	self._enableOpenCheckinWindow = function() {
 		canOpenWindow = true;
+		//Ti.API.info('enable to open checkin window again - popular');
 	};
 	
 	programListTable.addEventListener('click',function(e){
@@ -254,6 +254,7 @@ function PopularWindow(_parent) {
 			}, _parent.containingTab);
 			_parent.containingTab.open(checkinmainwin);
 			canOpenWindow = false;
+			//Ti.API.info('canOpenCheckin Window set to false - popular');
 		}
 	});
 	

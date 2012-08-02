@@ -167,8 +167,8 @@ AddFriendsMainView = function(_parentWindow) {
 				//Ti.API.info('friendWithApp.length: '+friendWithApp.length);
 				for(var k=0; k<friendWithApp.length;k++) {
 					var isFriend = checkAlreadyFriend(myfriends,friendWithApp[k].id);
-					if(isFriend) Ti.API.info(friendWithApp[k].first_name+' is already friend');
-					else notYetFriendinCB.push(friendWithApp[k]);
+					if(!isFriend)
+						notYetFriendinCB.push(friendWithApp[k]);
 				}
 				
 				//Ti.API.info('Friends with App Count: ' + friendWithApp.length);

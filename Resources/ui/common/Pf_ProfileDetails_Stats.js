@@ -6,7 +6,8 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 
 	var ProfileMainWindow = require('ui/common/Pf_ProfileMainWindow');
 	var curId = _userProfile.id;
-
+	var canOpenWindow = true;
+	
 	var profileStats = Ti.UI.createView({
 		backgroundColor: 'transparent',
 		bottom: 10,
@@ -206,6 +207,11 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			CacheHelper.levelUpCache("level"+acs.getUserId(),myLevel);
 		}	
 	};
+	
+	profileStats._enableOpenFriendWindow = function() {
+		//Ti.API.info('enable to open friend window again: view Stats');
+		canOpenWindow = true;
+	};
 
 	var addMoreFriend = function(_data) {
 		if(_data.length<=10 &&_data.length>=0) {
@@ -227,15 +233,25 @@ var ProfileStatsView = function(_parentWindow, _userProfile, _status){
 			addFriendView.add(addFriendLabel);	
 			leaderSec.add(addFriendView);
 			addFriendLabel.addEventListener('click',function() {
-				var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
-				var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
-				_parentWindow.containingTab.open(addFriendMainWindow);
+				if(canOpenWindow) {
+					var AddFriendMainWindow = require('ui/common/Pf_AddFriendMainWindow');
+					var addFriendMainWindow = new AddFriendMainWindow(_parentWindow);
+					_parentWindow.containingTab.open(addFriendMainWindow);
+					canOpenWindow = false;
+					//Ti.API.info('canOpenAddFriend Window set to false - profileStats');
+				}
 			});
 		}
 	};
 	
 	var newProfileWin = function(e){
-		if(e.rowData.user_id!==curId) _parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
+		if(e.rowData.user_id!==curId) {
+			if(canOpenWindow) {
+				_parentWindow.containingTab.open(new ProfileMainWindow(e.rowData.user_id,"friend"));
+				canOpenWindow = false;
+				//Ti.API.info('canOpenProfileMain Window set to false - profileStats');
+			}
+		}
 	};
 
 	if(_status==="me") {

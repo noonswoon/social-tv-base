@@ -8,6 +8,9 @@ function ProfileMainWindow(_id,_status) {
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Profile');
 	
+	var profileHeader = null; 
+	var profileDetail = null;
+		
 	var settingButton = Titanium.UI.createButton({
 		backgroundImage: 'images/setting.png',
 		width: 39,
@@ -45,8 +48,8 @@ function ProfileMainWindow(_id,_status) {
 		else self.title = userProfile.first_name + ' ' + userProfile.last_name;
 			
 		var header = Ti.UI.createTableViewSection();
-		var profileHeader = new ProfileHeader(self, userProfile, _status);
-		var profileDetail = new ProfileDetail(self, userProfile, _status);
+		profileHeader = new ProfileHeader(self, userProfile, _status);
+		profileDetail = new ProfileDetail(self, userProfile, _status);
 		var userProfileData=[];
 		
 		headerView.add(profileHeader);
@@ -91,6 +94,11 @@ function ProfileMainWindow(_id,_status) {
 		ProfileHeader = null;
 		ProfileDetail = null;
 	}
+	
+	self.addEventListener('focus', function() {
+		if(profileHeader !== null) profileHeader._enableOpenFriendWindow();
+		if(profileDetail !== null) profileDetail._enableOpenFriendWindow();
+	});
 	
 	//remove event listeners for all the children of ProfileMainWindow
 	self.addEventListener('close', function() {

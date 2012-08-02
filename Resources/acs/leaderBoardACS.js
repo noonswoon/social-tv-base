@@ -16,9 +16,7 @@ exports.leaderACS_fetchedRank = function(_ids){
 	         }
 			Ti.App.fireEvent('leaderBoardLoaded',{fetchedLeader:leaders});
 	    } else {
-			Debug.debug_print('leaderboardACS-> fetchedRank: Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	        alert('ERROR: '+'leaderACS_fetchedRank');
+			Debug.debug_print('leaderboardACS-> fetchedRank: Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	   	}
 	});
@@ -41,9 +39,7 @@ exports.leaderACS_createUserInfo = function(_user){
 	            'totalPoint: ' + e.LeaderBoard[0].totalPoint);
 			Ti.App.fireEvent("createLeaderBoardUser",{fetchedUser: user});
 	    } else {
-	        Debug.debug_print('leaderboardACS 45 Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	            alert('ERROR: '+'leaderACS_createUserInfo');
+	        Debug.debug_print('leaderACS_createUserInfo Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -60,11 +56,9 @@ exports.leaderACS_updateUserInfo = function(_id,_point){
 	}, function (e) {
 	    if (e.success) {
 	        var leaderBoard = e.LeaderBoard[0];
-//	        Ti.API.info('Success: ' + 'totalPoint: ' + leaderBoard.totalPoint);
+	        Ti.API.info('Success: ' + 'totalPoint: ' + leaderBoard.totalPoint);
 	    } else {
-	        Debug.debug_print('leaderboardACS 65 Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	            alert('ERROR: '+'leaderACS_updateUserInfo');
+	        Debug.debug_print('leaderACS_updateUserInfo Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});

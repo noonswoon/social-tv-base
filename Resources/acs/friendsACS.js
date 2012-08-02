@@ -35,8 +35,7 @@ exports.friendsACS_searchFriend = function(_userID){
 			}
 			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
 		}, onerror: function(e) {
-	        Debug.debug_print('friendsACS->searchFriend: Error= '+e.error);
-	        //ErrorHandling.showNetworkError();
+	        Debug.debug_print('friendsACS->searchFriend: Error= '+ JSON.stringify(e));
 	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:[]});
 	    },
 	    timeout:5000  /* in milliseconds */
@@ -55,9 +54,7 @@ exports.friendACS_fetchedUserTotalFriends = function(_id) {
 			Ti.App.fireEvent('UserTotalFriendsFromACS', {result: total_results});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        //Ti.API.debug(e.error);
-	        Debug.debug_print('friendACS_fetchedUserTotalFriends error');
-	        //ErrorHandling.showNetworkError();
+	        Debug.debug_print('friendACS_fetchedUserTotalFriends error: '+JSON.stringify(e));
 	    },
 	    timeout:10000  /* in milliseconds */
 	});
@@ -80,8 +77,7 @@ exports.friendsACS_addFriend = function(_userID,_callbackFn){
 	    },
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        //ErrorHandling.showNetworkError();
-	    	Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
+	    	Debug.debug_print('AddFriend: already request/e :'+JSON.stringify(e));
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -128,8 +124,7 @@ exports.friendsACS_approveFriend = function(_userID,_callbackFn){
 	    	var response = _callbackFn(this.responseText);
 	    },
 	    onerror: function(e) {
-			//ErrorHandling.showNetworkError();
-			Debug.debug_print('friendsACS->approveFriend: Error= '+e.error);
+			Debug.debug_print('friendsACS->approveFriend: Error= '+ JSON.stringify(e));
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -174,9 +169,8 @@ exports.friendsACS_showFriendsRequest = function(){
 			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:requests});
 	    },
 	    onerror: function(e) {
-			Debug.debug_print('friendsACS->showFriendsRequest: Error= '+e.error);
+			Debug.debug_print('friendsACS->showFriendsRequest: Error= '+ JSON.stringify(e));
 			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:[]});
-			//ErrorHandling.showNetworkError();
 	    },
 	    timeout:5000  /* in milliseconds */
 	});
@@ -227,7 +221,7 @@ exports.friendsACS_friendsCheckins = function(_paramsArray){
 	    onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 			//ErrorHandling.showNetworkError();
-			Debug.debug_print('friendsACS->friendsCheckins: Error= '+e.error);
+			Debug.debug_print('friendsACS->friendsCheckins: Error= '+ JSON.stringify(e));
 			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
 	    timeout:5000  /* in milliseconds */

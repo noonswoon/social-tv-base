@@ -272,7 +272,6 @@ function PopularWindow(_parent) {
 			areAllProgramsTitlesLoaded = false;
 			numProgramsToLoadCheckins = -1;
 			TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
-//			TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
 //			CacheHelper.getTimeLastFetchedTVProgramACS();
 		}, {
 			backgroundColor: '#959595', 
@@ -286,7 +285,6 @@ function PopularWindow(_parent) {
 	);
 
 	TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
-//	CacheHelper.fetchACSDataOrCache('tvprogramACS_fetchAllProgramShowingToday', TVProgramACS.tvprogramACS_fetchAllProgramShowingToday, [], 'tvprogramsTitlesLoaded', CACHE_TIMEOUT_SHORT);
 //	CacheHelper.setTimeLastFetchedTVProgramACS();
 	BadgeShowPermissionACS.badgeShowPermissionACS_fetchedPermission();
 

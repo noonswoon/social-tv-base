@@ -1,4 +1,3 @@
-
 exports.levelACS_fetchedLevel = function(_paramsArray  /*unused*/) {
 	Cloud.Objects.query({
 		classname: 'Level',	
@@ -15,9 +14,7 @@ exports.levelACS_fetchedLevel = function(_paramsArray  /*unused*/) {
 			return level;
 	    } 
 	    else {
-	        Debug.debug_print('LevelACS-> fetchedLevel Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	            alert('ERROR: '+'LevelACS-> fetchedLevel');
+	        Debug.debug_print('LevelACS-> fetchedLevel Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	   	}
 	});

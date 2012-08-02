@@ -33,8 +33,7 @@ exports.topicACS_fetchAllTopicsOfProgramId = function(_paramsArray) {
 			}
 	        Ti.App.fireEvent("topicsLoadedComplete",{topicsOfProgram:topicsOfProgram});
 	    } else {
-	        Debug.debug_print('topicACS_fetchAllTopicsOfProgramId Error: ' + ((e.error && e.message) || JSON.stringify(e)));
-	        alert('ERROR: '+'topicACS_fetchAllTopicsOfProgramId');
+	        Debug.debug_print('topicACS_fetchAllTopicsOfProgramId Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -55,8 +54,7 @@ exports.topicACS_create = function(_title,_content,_filename,_programId,_localId
 		   		Ti.API.info('Posting Success: id: ' + post.id);
 		   		Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
 		   	} else {
-		       	Debug.debug_print('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
-		       	alert('ERROR: '+'topicACS_create');
+		       	Debug.debug_print('topicACS_create Error: '+ JSON.stringify(e));
 		       	ErrorHandling.showNetworkError();
 		  	}
 		});
@@ -72,8 +70,7 @@ exports.topicACS_create = function(_title,_content,_filename,_programId,_localId
 		   		Ti.API.info('Posting Success: id: ' + post.id);
 		   		Ti.App.fireEvent("topicCreatedACS",{newTopic:post});
 		   	} else {
-		       	Debug.debug_print('topicACS_create Error: '+((e.error && e.message) || JSON.stringify(e)));
-		       	alert('ERROR: '+'topicACS_create');
+		       	Debug.debug_print('topicACS_create Error: '+ JSON.stringify(e));
 		       	ErrorHandling.showNetworkError();
 		 	}
 		});

@@ -17,10 +17,8 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
 			Ti.App.fireEvent('myBadgesLoaded'+_id,{fetchedMyUnlockBadges:myBadges});
 	    } 
 	    else {
-	        Debug.debug_print('myBadgeACS-> fetchedBadge Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	       alert('ERROR: '+'myBadgeACS-> fetchedBadge');
-	        ErrorHandling.showNetworkError();
+	        Debug.debug_print('myBadgeACS-> fetchedBadge Error: ' + JSON.stringify(e));
+	       	ErrorHandling.showNetworkError();
 	    }
 	});
 		
@@ -39,9 +37,7 @@ exports.myBadgeACS_createNewBadge = function(_userID,_badgeID){
 	        var badgeUnlock = e.BadgeUnlock[0];
 			Ti.App.fireEvent('newBadgeUnlock'+_userID, {badgeID: badgeUnlock.badge_id});   
 	    } else {
-	        Debug.debug_print('myBadgeACS->createNewBadge: Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	             alert('ERROR: '+'myBadgeACS->createNewBadge');
+	        Debug.debug_print('myBadgeACS->createNewBadge: Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});

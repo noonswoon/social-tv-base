@@ -10,10 +10,7 @@ exports.fbAutoPostACS_AutoPostValue = function() {
 	    	var settingHelpers = require('helpers/settingHelper');
 	    	settingHelpers.setFacebookAutoPost(e.IsFacebookAutoPost[0].isAutoPost);
 	    } else {
-	        Debug.debug_print('Error: Cannot fetch from the server. ' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	            alert('ERROR: '+'fbAutoPostACS_AutoPostValue');
-	       	ErrorHandling.showNetworkError();
+	        Debug.debug_print('fbAutoPostACS_AutoPostValue Error: ' + JSON.stringify(e));
 	    }
 	});	
 };

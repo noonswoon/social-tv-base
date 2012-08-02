@@ -98,7 +98,6 @@ exports.commentModel_canUserVote = function(_targetedCommentId,username) {
 	var result = db.execute('SELECT * FROM comments WHERE response_to_object_id = ? AND username = ? AND is_a_vote = 1',_targetedCommentId,username);
 	var canUserVote = true;
 	if(result.isValidRow()) {
-		//alert('already vote: '+result.fieldByName('content')+', rating: '+result.fieldByName('rating'));
 		canUserVote = false;
 	} 
 	result.close();

@@ -284,7 +284,6 @@ function ApplicationTabGroup() {
 			//need to reload all tvprogram data
 			var TVProgramACS = require('acs/tvprogramACS');
 			TVProgramACS.tvprogramACS_fetchProgramsShowingNow();
-			//TVProgramACS.tvprogramACS_fetchAllProgramShowingToday();
 			CacheHelper.setTimeLastFetchedTVProgramACS();
 		} else { //if still using the same tvprogram data, reset the popular tvprogram data by calling 'showDiscoveryPage' event
 			Ti.API.info('updating data in popular tab...')

@@ -35,7 +35,6 @@ exports.badgeShowPermissionACS_fetchedPermission = function() {
 	    } 
 	    else {
 	        Debug.debug_print('badgeShowPermissionACS/fetchedPermission Error: ' + JSON.stringify(e));
-	        alert('ERROR: '+'badgeShowPermissionACS_fetchedPermission');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

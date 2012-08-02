@@ -33,8 +33,6 @@ function LoginTabGroup() {
    	
    	self.addEventListener('close', function() {
    		//remove event listener of facebook login
-   		//alert('Am_LoginTabGroup.js -> removeEventListener: Fb login');
-   		//Ti.include('helpers/facebookAuthenListeners.js'); //fb authen functionality	
    		Ti.Facebook.removeEventListener("login",facebookAuthenCallback);
    	});
     return self;

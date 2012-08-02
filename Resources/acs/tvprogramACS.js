@@ -60,8 +60,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramACS_fetchProgramsShowingNow error: '+e.error);
-	        alert('ERROR: '+'tvprogramACS_fetchProgramsShowingNow');
+	        Debug.debug_print('tvprogramACS_fetchProgramsShowingNow error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  // in milliseconds 
@@ -74,7 +73,6 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	var programs = [];
 	
 	var nowYMD = moment().format('YYYY-MM-DD');
-	var now_full = moment().format('YYYY-MM-DD,HH:mm:ss');
 	
 	var timeIndexStr = _timeIndex + "";
 	if(_timeIndex < 10) timeIndexStr = "0"+timeIndexStr;
@@ -139,8 +137,7 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 			Ti.App.fireEvent("tvprogramsAtTimeIndexLoaded",{fetchedPrograms:programs, timeIndex:_timeIndex});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+e.error);
-	        alert('ERROR: '+'tvprogramsAtTimeIndexLoaded');
+	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  // in milliseconds 
@@ -160,9 +157,7 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
-	      	//Ti.API.info('responseJSON: '+JSON.stringify(responseJSON));
 	      	var programEvents = responseJSON.response.event_occurrences; 
-	      	//Ti.API.info('programEvents.length: '+programEvents.length);
 	      	for (var i = 0; i < programEvents.length; i++) {
 	            var program = programEvents[i];  
 
@@ -212,8 +207,7 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 			Ti.App.fireEvent("tvprogramsOfChannelLoaded",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+e.error);
-	        alert('ERROR: '+'tvprogramsAtTimeIndexLoaded');
+	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  // in milliseconds 
@@ -222,6 +216,7 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	xhr.send();
 }
 
+/* no longer used -- too expensive when pulling all data */
 exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	var programs = [];
 	var start_of_the_day = moment().sod().format('YYYY-MM-DD,HH:mm:ss');
@@ -281,8 +276,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramACS_fetchAllProgramShowingToday error: '+e.error);
-	        alert('ERROR: '+'tvprogramACS_fetchAllProgramShowingToday');
+	        Debug.debug_print('tvprogramACS_fetchAllProgramShowingToday error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */

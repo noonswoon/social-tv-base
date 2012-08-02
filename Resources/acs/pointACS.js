@@ -11,11 +11,8 @@ exports.pointACS_createPoint = function(_point,_objId,_earnedby){
 	}, function (e) {
 	    if (e.success) {
 	        var curPoint = e.Points[0];
-	        //Ti.API.info('pointsCreated Success');
 	    } else {
-	        Debug.debug_print('pointACS_createPoint Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	         alert('ERROR: '+'pointACS_createPoint');    
+	        Debug.debug_print('pointACS_createPoint Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});

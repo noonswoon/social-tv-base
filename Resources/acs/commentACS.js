@@ -56,9 +56,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 						Ti.App.fireEvent("queryReviewsOfCommentsDone");
 					}
 				} else {
-			        Debug.debug_print('Getting CommentOfComment Error:\\n' +
-			            ((e.error && e.message) || JSON.stringify(e)));
-			        alert('ERROR: '+'Getting CommentOfComment Error');
+			        Debug.debug_print('Getting CommentOfComment Error: ' + JSON.stringify(e));
 			        ErrorHandling.showNetworkError();
 			    }
 			});
@@ -103,9 +101,7 @@ exports.commentACS_fetchAllCommentsOfPostId = function(_paramsArray) {
 				queryCommentsOfComment(commentIdsWithRatingsOrComments);
 			}	
 	    } else {
-	        Debug.debug_print('Getting Review Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	        alert('ERROR: '+'Getting Review Error');
+	        Debug.debug_print('queryCommentsOfComment Getting Review Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -122,12 +118,10 @@ exports.commentACS_createCommentOfTopic = function(_comment,_localId,_topicId) {
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
-	        Debug.debug_print('Commenting Success: id ' + review.id);
+	        Ti.API.info('Commenting Success: id ' + review.id);
 	        Ti.App.fireEvent("commentCreatedACS",{newComment:review});	        
 	    } else {
-	        Debug.debug_print('Comment Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	            alert('ERROR: '+'Comment Error');
+	        Debug.debug_print('commentACS_createCommentOfTopic Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -143,16 +137,14 @@ exports.commentACS_createCommentOfComment = function(_comment,_localId,_commentI
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
-	        Debug.debug_print('Comment of comment success: id ' + review.id);
+	        Ti.API.info('Comment of comment success: id ' + review.id);
 	        Ti.App.fireEvent("commentOfCommentCreatedACS",{
 	        												newCommentOfComment:review, 
 	        												rowIndexToUpdateACSObjectId:_rowIndexToUpdateACSObjectId,
 	        												commentLevel:_commentLevel
 	        											});
 	    } else {
-	        Debug.debug_print('Comment of comment Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	            alert('ERROR: '+'comment of comment Error');
+	        Debug.debug_print('Comment of comment Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -168,12 +160,10 @@ exports.commentACS_createVoteOfComment = function(_voteScore,_localId,_commentId
 	}, function (e) {
 	    if (e.success) {
 	        var review = e.reviews[0];
-	        Debug.debug_print('Vote of comment success: id ' + review.id);
+	        Ti.API.info('Vote of comment success: id ' + review.id);
 	        Ti.App.fireEvent("voteOfCommentCreatedACS",{newVote:review});
 	    } else {
-	        Debug.debug_print('Vote of comment Error:\\n' +
-	            ((e.error && e.message) || JSON.stringify(e)));
-	            alert('ERROR: '+'vote for comment Error');
+	        Debug.debug_print('Vote of comment Error: ' + JSON.stringify(e));
 	   		ErrorHandling.showNetworkError();
 	    }
 	});
@@ -186,10 +176,9 @@ exports.commentACS_deleteComment = function(_respondToObjectId,_commentId) {
      	custom_fields: {"is_deleted": 1}
 	}, function (e) {
 	    if (e.success) {
-	        Debug.debug_print("deleteCommentOfPost: update is_deleted_flag success");
+	        Ti.API.info("deleteCommentOfPost: update is_deleted_flag success");
 	    } else {
 	        Debug.debug_print("deleteCommentOfPost: update is_deleted_flag FAILED");
-	        alert('ERROR: '+'delete comment of post Error');
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -202,10 +191,9 @@ exports.commentACS_deleteCommentOfComment = function(_respondToObjectId,_comment
     	custom_fields: {"is_deleted": 1}
 	}, function (e) {
 	    if (e.success) {
-	        Debug.debug_print("deleteCommentOfComment: update is_deleted_flag success");
+	        Ti.API.info("deleteCommentOfComment: update is_deleted_flag success");
 	    } else {
 	        Debug.debug_print("deleteCommentOfComment: update is_deleted_flag FAILED");
-	        alert('ERROR: '+'delete comment of comment Error');
 	        ErrorHandling.showNetworkError();
 	    }
 	});

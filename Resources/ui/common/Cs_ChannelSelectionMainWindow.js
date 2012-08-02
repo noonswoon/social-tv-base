@@ -72,13 +72,13 @@ function ChannelSelectionMainWindow(){
 	self.addEventListener('focus', function() {
 		if(popularwin !== null) popularwin._enableOpenCheckinWindow();
 		if(guidewin !== null) guidewin._enableOpenCheckinWindow();
-		if(friendwin !== null) friendwin._enableOpenCheckinWindow();
+		if(friendswin !== null) friendswin._enableOpenCheckinWindow();
 	});
 	
 	Ti.App.addEventListener('resume', function() {
 		if(popularwin !== null) popularwin._enableOpenCheckinWindow();
 		if(guidewin !== null) guidewin._enableOpenCheckinWindow();
-		if(friendwin !== null) friendwin._enableOpenCheckinWindow();
+		if(friendswin !== null) friendswin._enableOpenCheckinWindow();
 	});
 	
 	self.add(blankView);

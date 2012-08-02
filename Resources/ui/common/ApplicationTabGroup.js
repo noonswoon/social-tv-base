@@ -260,7 +260,9 @@ function ApplicationTabGroup() {
 				nointernetwin = null;
 				Ti.API.info('closing no internet window: ApplicationTabGroup');
 			}
-			FbAutoPostACS.fbAutoPostACS_AutoPostValue();
+			setTimeout(function() {
+				FbAutoPostACS.fbAutoPostACS_AutoPostValue();
+			}, 3000);	
 		}
 		
 		//1.

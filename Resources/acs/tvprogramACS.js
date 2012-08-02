@@ -81,7 +81,6 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
 			  	'&per_page=100&response_json_depth=3&where='+whereCondition;
-
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);

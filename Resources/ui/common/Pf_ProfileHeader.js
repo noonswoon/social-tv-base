@@ -295,9 +295,13 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	createHeaderView(_status);
 
 	var resumeCallback = function(){
-		CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
-		myBadgeACS.myBadgeACS_fetchedBadge(curId);
-		ActivityACS.activityACS_fetchedMyActivity(curId);
+		if(Titanium.Network.networkType !== Titanium.Network.NETWORK_NONE) {
+			setTimeout(function() {
+				CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+				myBadgeACS.myBadgeACS_fetchedBadge(curId);
+				ActivityACS.activityACS_fetchedMyActivity(curId);				
+			}, 3000);
+		}
 	};
 	Ti.App.addEventListener('resume', resumeCallback);
 

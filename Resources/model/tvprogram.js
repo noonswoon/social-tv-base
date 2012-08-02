@@ -302,27 +302,15 @@ exports.TVProgramModel_fetchPopularPrograms = function() {
 
 exports.TVProgramModel_fetchShowtimeSelection = function(_startTimeIndex){
 	var fetchedPrograms = [];
-	var now = moment(); 
-	var year = now.year();
-	var month = now.month();
-	month+=1;
-	var day = now.date();
-	var endTimeIndex = _startTimeIndex + 1;
-	var startTimeIndexStr = _startTimeIndex.toString();
-	var endTimeIndexStr = endTimeIndex.toString();
+	var nowYMD = moment().format('YYYY-MM-DD');
 	
-	if(_startTimeIndex < 10) startTimeIndexStr = '0' + startTimeIndexStr;
-	if(endTimeIndex < 10) endTimeIndexStr = '0' + endTimeIndexStr;
-	
-	var startTimeStr = year+'-0'+month+'-'+day+'T'+startTimeIndexStr+':00:00+0000';
-	var endTimeStr = year+'-0'+month+'-'+day+'T'+endTimeIndexStr+':00:00+0000';
-	if(endTimeIndex > 23) endTimeStr = startTimeStr; //special case for program after 11pm
-	
-	// Ti.API.info('startTimeStr: '+startTimeStr);
-	// Ti.API.info('endTimeStr: '+endTimeStr);
+	var timeIndexStr = _startTimeIndex + "";
+	if(_startTimeIndex < 10) timeIndexStr = "0"+timeIndexStr;
+	timeIndexStr = nowYMD + 'T' + timeIndexStr+':00:00+0000';
 	
 	var db = Ti.Database.open('Chatterbox'); 
-	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', startTimeStr,endTimeStr);
+	
+	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', timeIndexStr,timeIndexStr);
 	while(result.isValidRow()) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),

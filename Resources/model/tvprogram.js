@@ -308,9 +308,14 @@ exports.TVProgramModel_fetchShowtimeSelection = function(_startTimeIndex){
 	if(_startTimeIndex < 10) timeIndexStr = "0"+timeIndexStr;
 	timeIndexStr = nowYMD + 'T' + timeIndexStr+':00:00+0000';
 	
+	var nextSlotTimeIndex = _startTimeIndex + 1;
+	var nextSlotTimeIndexStr = nextSlotTimeIndex  + "";
+	if(nextSlotTimeIndex < 10) nextSlotTimeIndexStr = "0" + nextSlotTimeIndexStr;
+	nextSlotTimeIndexStr = nowYMD + 'T' + nextSlotTimeIndexStr+':00:00+0000';
+	
 	var db = Ti.Database.open('Chatterbox'); 
 	
-	var result = db.execute('SELECT * FROM tvprograms WHERE start_time <= ? AND ? <= recurring_until ORDER BY start_time ASC', timeIndexStr,timeIndexStr);
+	var result = db.execute('SELECT * FROM tvprograms WHERE (start_time <= ? AND ? <= recurring_until) OR ( ? <= start_time AND start_time <= ? ) ORDER BY start_time ASC', timeIndexStr,timeIndexStr, timeIndexStr, nextSlotTimeIndexStr);
 	while(result.isValidRow()) {
 		fetchedPrograms.push({
 			id: result.fieldByName('id'),

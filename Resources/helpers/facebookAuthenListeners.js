@@ -73,12 +73,9 @@ function facebookAuthenCallback(e) {
 		});
 	} else if (e.error) {
 		Debug.debug_print("fb login error: ");
-		ErrorHandling.showNetworkError();
 	} else if (e.cancelled) {
 		Debug.debug_print("fb login Canceled");
-		ErrorHandling.showNetworkError();
 	} else {
-		Debug.debug_print("what the hell is going on?" + JSON.stringify(e));
-		ErrorHandling.showNetworkError();
+		alert("Facebook Login Error...please try again");
 	}
 }

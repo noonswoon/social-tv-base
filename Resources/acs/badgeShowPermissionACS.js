@@ -1,21 +1,14 @@
 
 var setBadgeOfShowPermission = function(_permissions) {
 	for(var i=0;i<_permissions.length;i++) {
-		if(!Ti.App.Properties.hasProperty(_permissions[i].program_id+'allowance')) {
-			Ti.App.Properties.setBool(_permissions[i].program_id+'allowance',_permissions[i].isAllowed);
-		} else {
-			var permission = Ti.App.Properties.getBool(_permissions[i].program_id+'allowance');
-			if(permission!==_permissions[i].isAllowed) 
-				Ti.App.Properties.setBool(_permissions[i].program_id+'allowance',_permissions[i].isAllowed);
-		}
+		Ti.App.Properties.setBool(_permissions[i].program_id+'allowance',_permissions[i].isAllowed);
 	}
 	Ti.App.fireEvent('badgeShowPermissionLoaded');
 }
 
 exports.getBadgeOfShowPermission = function(_programId) {
 	var permission = Ti.App.Properties.getBool(_programId+'allowance');
-	if(permission) return true;
-	else return false;
+	return permission;
 }
 
 exports.badgeShowPermissionACS_fetchedPermission = function() {

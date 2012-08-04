@@ -91,14 +91,14 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 					var PushNotificationCTB = require('ctb/pushnotificationCTB');
 					leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
 					PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());				
-					//
+					
 					Cloud.SocialIntegrations.externalAccountLink({
 					    type: 'facebook',
 					    token: Ti.Facebook.accessToken
 					}, function (e) {
 					    if (e.success) {
-					    	Debug.debug_print("successfully linked with fb acct");
-					    	//Ti.API.info('link external acct successful');
+					    	Ti.Analytics.featureEvent('RegistrationDone');
+					    	
 					    	acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
 							
@@ -109,7 +109,8 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 							maintabgroup.open();
 					    } else {
 					    	Debug.debug_print(L('Linking external acct Error: ') + JSON.stringify(e));
-					    	ErrorHandling.showNetworkError();
+					    	Ti.Analytics.featureEvent('RegistrationError');
+					    	//ErrorHandling.showNetworkError();
 					    }
 					});
 			    } else {

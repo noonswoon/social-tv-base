@@ -1,5 +1,7 @@
 var LoginFbOnlyWindow = function() {
-		
+	
+	Ti.Analytics.featureEvent('OnFbLoginPage');
+	
 	//UI STUFF
 	var self = Ti.UI.createWindow({
 		backgroundColor:'transparent',

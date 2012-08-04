@@ -9,12 +9,11 @@ AddFriendsMainView = function(_parentWindow) {
 		title: L('Add Friends')
 	});		
 
-//////////////////////////////////////////////////////////////////
 	var mainView = Ti.UI.createView({
 		top: 0,
 		backgroundColor: '#fff'
 	});
-//////////////////////////////////////////////////////////////////
+
 	var friendTab = Titanium.UI.iOS.createTabbedBar({
 		labels: [L('Already have Chatterbox'), L('Send an Invite')],
 		backgroundColor: '#43a5cf',
@@ -88,8 +87,6 @@ AddFriendsMainView = function(_parentWindow) {
 			friendScrollView.add(facebookFriend);
 		}
 	});
-
-//////////////////////////////////////////////////////////////////////////////////////
 	
 	var attachFbId = function(_friendList) {
 		for (var i = 0; i < _friendList.length; i++) {

@@ -207,13 +207,15 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		 	var addFriendActivityData = createFriendActivity("addfriend");
 		 	FriendACS.friendsACS_addFriend(curId,sendRequest);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
- 			} 			
+			Ti.Analytics.featureEvent('sendFriendRequest', {userId: acs.getUserId(), friendId: curId});
+ 		} 			
  		//condition 2: there's a request from this guy	
  		else {
  			friendRequests.splice(i,1);
  			var FriendsModel = require('model/friend');
 			FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
-			FriendACS.friendsACS_approveFriend(curId,approveRequest);	
+			FriendACS.friendsACS_approveFriend(curId,approveRequest);
+			Ti.Analytics.featureEvent('approveFriendRequest', {userId: acs.getUserId(),friendId: curId});
 		}	
 		_parentWindow.close();
  	};	

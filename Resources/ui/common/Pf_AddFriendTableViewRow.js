@@ -32,17 +32,18 @@ AddFriendsTableViewRow = function(_user,_category) {
 			backgroundImage: 'images/button/button_invite@2x.png',
 		});
 	
+		var inviteFriend = function(_fbId) {
+			var FacebookSharing = require('helpers/facebookSharing');	
+			FacebookSharing.sendRequestOnFacebook(_fbId);
+		};		
 		
-	var inviteFriend = function(_fbId) {
-		var FacebookSharing = require('helpers/facebookSharing');	
-		FacebookSharing.sendRequestOnFacebook(_fbId);
-	}		
-		
-	inviteButton.addEventListener('click', function(){
+		inviteButton.addEventListener('click', function(){
 			inviteFriend(_user.uid);
-		})
+			Ti.Analytics.featureEvent('sendFbInvite', {userId: acs.getUserId(), fbInvitee: _user.uid});
+		});
+		
 		tableRow.add(inviteButton);
-	};
+	}
 
 	if(_category==="withApp") {
 		imageView.image = acs.getUserImageSquareOfFbId(_user.fb_id);
@@ -54,7 +55,6 @@ AddFriendsTableViewRow = function(_user,_category) {
 			width: 61,
 			right: 10,
 			image: 'images/button/button_add@2x.png',
-			
 		});
 		
 		var createFriendActivity = function(_category){
@@ -71,7 +71,8 @@ AddFriendsTableViewRow = function(_user,_category) {
 		
 		var addFriend = function(_response){
 			Ti.API.info(_response);
-		}
+		};
+		
 		addButton.addEventListener('click', function(){
 			var FriendACS = require('acs/friendsACS');
 			var ActivityACS = require('acs/activityACS');
@@ -80,6 +81,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 			
 		 	FriendACS.friendsACS_addFriend(_user.id,addFriend);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
+			Ti.Analytics.featureEvent('sendFriendRequest', {userId: acs.getUserId(), friendId: _user.id});
 		})
 		tableRow.add(addButton);
 	};

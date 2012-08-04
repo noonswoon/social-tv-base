@@ -58,6 +58,7 @@ FriendsTableViewRow = function(_user,_source) {
 			FriendModel.friend_create(_user,_user.fb_id);
  			ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
 			FriendACS.friendsACS_approveFriend(_user.friend_id,approveRequest);
+			Ti.Analytics.featureEvent('approveFriendRequest', {userId: acs.getUserId()});
 		});
 		
 	 	tableRow.add(approveButton);

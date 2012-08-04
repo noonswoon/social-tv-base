@@ -235,7 +235,12 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		
 		var sleepTime = 5000;
 		showPreloader(self,'Loading...');
-		if(filename !== null)  sleepTime = 10000; //give more sleep time for photo uploaded
+		if(filename !== null) { 
+			sleepTime = 10000; //give more sleep time for photo uploaded
+			Ti.Analytics.featureEvent('postTopicWithPhoto', {userId: acs.getUserLoggedIn().id, programId: programId});
+		} else {
+			Ti.Analytics.featureEvent('postTopicNoPhoto', {userId: acs.getUserLoggedIn().id, programId: programId});
+		}
 		setTimeout(function(e) {
 			hidePreloader(self);
 			self.close();

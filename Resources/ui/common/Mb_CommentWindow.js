@@ -276,7 +276,7 @@ function CommentWindow(_topicId) {
 		commentHeader._setReplyTextArea("");
 		commentHeader._blurReplyTextArea();
 		
-
+		Ti.Analytics.featureEvent('commentOnTopic', {userId: acs.getUserId(), topicId: _topicId});
 	}
 	
 	

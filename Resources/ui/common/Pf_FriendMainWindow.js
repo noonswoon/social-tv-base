@@ -59,7 +59,6 @@ FriendsMainView = function(_parentWindow,_window){
 
 	friendsTable.addEventListener('click',function(e) {
 		if(String(e.source) ==="[object TiUIImageView]") {
-			Ti.API.info('approve friend from friendsMainwindow');
 			friendsTable.deleteRow(e.index);
 			friendRequests.splice(e.index,1);
 		}

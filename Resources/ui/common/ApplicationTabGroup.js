@@ -120,15 +120,15 @@ function ApplicationTabGroup() {
 	};
 	
 	var addGuidelineWindowInAllModules = function() {
-		chatwin._addGuidelineWindow();
-		messageboardwin._addGuidelineWindow();	
-		productwin._addGuidelineWindow();	
+		chatwin._addGuidelineView();
+		messageboardwin._addGuidelineView();	
+		productwin._addGuidelineView();	
 	};
 	
 	var removeGuidelineWindowInAllModules = function() {
-		chatwin._removeGuidelineWindow();
-		messageboardwin._removeGuidelineWindow();
-		productwin._removeGuidelineWindow();
+		chatwin._removeGuidelineView();
+		messageboardwin._removeGuidelineView();
+		productwin._removeGuidelineView();
 	};
 	
 	var initializePickerInAllModules = function() {
@@ -142,8 +142,8 @@ function ApplicationTabGroup() {
 	};
 	
 	var clearPickerDataInAllModules = function() {
-		messageboardwin._removeAllPickerData();	
 		productwin._removeAllPickerData();
+		messageboardwin._removeAllPickerData();
 	};
 	
 	function checkinLoadedCompleteCallBack(e) {
@@ -159,7 +159,6 @@ function ApplicationTabGroup() {
 		//if checkin to at least 1 program, enable the chat/board/product bar
 		
 		var todayCheckinPrograms = [];
-		Ti.API.info('numPrograms checkedIn today: '+eventsCheckedIn.length);
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id;
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
@@ -186,7 +185,6 @@ function ApplicationTabGroup() {
 		} else {
 			addGuidelineWindowInAllModules();
 			clearPickerDataInAllModules();
-			Ti.API.info('cleaning up checkin program...');
 		}
 	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);
@@ -287,6 +285,7 @@ function ApplicationTabGroup() {
 		//4.
 		var CacheHelper = require('helpers/cacheHelper');
 		var timeLastFetchedTVProgramACS = CacheHelper.getTimeLastFetchedTVProgramACS();
+		
 		if(timeLastFetchedTVProgramACS < startOfToday) {
 			//need to reload all tvprogram data
 			var TVProgramACS = require('acs/tvprogramACS');

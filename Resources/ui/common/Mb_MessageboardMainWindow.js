@@ -10,8 +10,8 @@ function MessageboardMainWindow(_programId) {
 	var MessageboardAddWindow = require('ui/common/Mb_MessageboardAddWindow');
 	var CommentWindow = require('ui/common/Mb_CommentWindow');
 	var CacheHelper = require('helpers/cacheHelper');
-	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
-	var checkinguidelinewin = null;
+	var CheckinGuidelineView = require('ui/common/Am_CheckinGuideline');
+	var checkinguidelineview = null;
 	var messageboardACSPageIndex = 1;
 	var hasMoreTopics = true; 
 	var allTopicTableY = -0;	
@@ -33,9 +33,8 @@ function MessageboardMainWindow(_programId) {
 	var programPhoto = DEFAULT_CTB_IMAGE_URL;	
 	
 	if(currentProgramId === '') { //have not checkedin to any program yet
-		var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
-		checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
-		self.add(checkinguidelinewin);
+		checkinguidelineview = new CheckinGuidelineView('messageboard');
+		self.add(checkinguidelineview);
 		currentProgramId = 'CTB_PUBLIC';
 		messageboardHeader._setHeader('Chatterbox','CTB subname','ctbdummy.png',435,2,'ch3');
 	} else {
@@ -133,7 +132,7 @@ function MessageboardMainWindow(_programId) {
 		top:43
 	});
 		
-	picker.selectionIndicator=true;	
+	picker.selectionIndicator = true;	
 	pickerView.add(toolbar);
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
@@ -264,13 +263,15 @@ function MessageboardMainWindow(_programId) {
 	};
 	
 	self._removeAllPickerData = function() {
-		var pickerColumn = picker.columns[0];
-    	var numRows = pickerColumn.rowCount;
-    	for(var i = numRows-1; i >= 0; i-- ){
-        	var curRow = pickerColumn.rows[i]
-        	pickerColumn.removeRow(curRow);
-    	}
-    	picker.reloadColumn(pickerColumn);
+		if(picker.columns.length > 0) {
+			var pickerColumn = picker.columns[0];
+			var numRows = pickerColumn.rowCount;
+	    	for(var i = numRows-1; i >= 0; i-- ){
+	        	var curRow = pickerColumn.rows[i]
+	        	pickerColumn.removeRow(curRow);
+	    	}
+	    	picker.reloadColumn(pickerColumn);
+	    } 
 	};
 	
 	self._updatePageContent = function(_newProgramId) {
@@ -289,17 +290,16 @@ function MessageboardMainWindow(_programId) {
 		CacheHelper.fetchACSDataOrCache('topicsOfProgram'+currentProgramId, TopicACS.topicACS_fetchAllTopicsOfProgramId, [currentProgramId,messageboardACSPageIndex], 'topicsDbUpdated', CACHE_TIMEOUT_SHORT);	
 	};
 	
-	self._addGuidelineWindow = function() {
-		if(checkinguidelinewin === null)
-			checkinguidelinewin = new CheckinGuidelineWindow('messageboard');
-		self.add(checkinguidelinewin);
+	self._addGuidelineView = function() {
+		if(checkinguidelineview === null)
+			checkinguidelineview = new CheckinGuidelineView('messageboard');
+		self.add(checkinguidelineview);
 	};
 	
-	self._removeGuidelineWindow = function() {
-		if(checkinguidelinewin !== null) {
-			self.remove(checkinguidelinewin);
-			checkinguidelinewin.close();
-			checkinguidelinewin = null;
+	self._removeGuidelineView = function() {
+		if(checkinguidelineview !== null) {
+			self.remove(checkinguidelineview);
+			checkinguidelineview = null;
 		}	
 	};
 	

@@ -6,11 +6,11 @@ function ProductMainWindow(_programId) {
 			
 	var ProductACS = require('acs/productACS');
 	
-	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
+	var CheckinGuidelineView = require('ui/common/Am_CheckinGuideline');
 	var ProductMainWindowTableViewRow = require('ui/common/Pd_ProductMainWindowTableViewRow');
 	var ProductTabTableViewRow = require('ui/common/Pd_ProductTabTableViewRow');
 	
-	var checkinguidelinewin = null;
+	var checkinguidelineview = null;
 	//Google Analytics
 	Titanium.App.Analytics.trackPageview('/Product');
 	
@@ -25,8 +25,8 @@ function ProductMainWindow(_programId) {
 	
 	var programName = "Something";
 	if(currentProgramId === '') { //have not checkedin to any program yet
-		checkinguidelinewin = new CheckinGuidelineWindow('product');
-		self.add(checkinguidelinewin);
+		checkinguidelineview = new CheckinGuidelineView('product');
+		self.add(checkinguidelineview);
 		currentProgramId = 'CTB_PUBLIC';
 	} else {
 		var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
@@ -106,7 +106,7 @@ function ProductMainWindow(_programId) {
 		top:43
 	});
 		
-	picker.selectionIndicator=true;	
+	picker.selectionIndicator = true;	
 	pickerView.add(toolbar);
 
 	var slide_in =  Titanium.UI.createAnimation({bottom:0});
@@ -183,13 +183,15 @@ function ProductMainWindow(_programId) {
 	};
 	
 	self._removeAllPickerData = function() {
-		var pickerColumn = picker.columns[0];
-    	var numRows = pickerColumn.rowCount;
-    	for(var i = numRows-1; i >= 0; i-- ){
-        	var curRow = pickerColumn.rows[i]
-        	pickerColumn.removeRow(curRow);
-    	}
-    	picker.reloadColumn(pickerColumn);
+		if(picker.columns.length > 0) {	
+			var pickerColumn = picker.columns[0];
+	    	var numRows = pickerColumn.rowCount;
+	    	for(var i = numRows-1; i >= 0; i-- ){
+	        	var curRow = pickerColumn.rows[i]
+	        	pickerColumn.removeRow(curRow);
+	    	}
+	    	picker.reloadColumn(pickerColumn);
+	    }
 	};
 	
 	self._updatePageContent = function(_newProgramId) {
@@ -203,17 +205,16 @@ function ProductMainWindow(_programId) {
 		ProductACS.productACS_fetchedProductsOfProgramId([currentProgramId]);
 	};
 
-	self._addGuidelineWindow = function() {
-		if(checkinguidelinewin === null)
-			checkinguidelinewin = new CheckinGuidelineWindow('product');
-		self.add(checkinguidelinewin);
+	self._addGuidelineView = function() {
+		if(checkinguidelineview === null)
+			checkinguidelineview = new CheckinGuidelineView('product');
+		self.add(checkinguidelineview);
 	};
 		
-	self._removeGuidelineWindow = function() {
-		if(checkinguidelinewin !== null) {
-			self.remove(checkinguidelinewin);
-			checkinguidelinewin.close();
-			checkinguidelinewin = null;
+	self._removeGuidelineView = function() {
+		if(checkinguidelineview !== null) {
+			self.remove(checkinguidelineview);
+			checkinguidelineview = null;
 		}
 	};
 	

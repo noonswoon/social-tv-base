@@ -6,11 +6,15 @@ db.close();
 
 exports.TVProgramModel_insertAllPrograms = function(_allPrograms) {
 	var fetchedPrograms = [];
+
 	var db = Ti.Database.open('Chatterbox'); 
-	
-	db.execute('DELETE FROM tvprograms');
+	var startOfTheDay = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
+	db.execute('DELETE FROM tvprograms WHERE start_time < ?',startOfTheDay); //delete programs except today programs
+
 	
 	for(var i =0;i<_allPrograms.length;i++) {
+		db.execute('DELETE FROM tvprograms WHERE id = ?',_allPrograms[i].id); //delete previously loaded program
+		
 		db.execute('INSERT INTO tvprograms(id,name,subname, photo,start_time,recurring_until,channel_id,program_id, program_type, program_country) VALUES(?,?,?,?,?,?,?,?,?,?)',
 			_allPrograms[i].id, _allPrograms[i].name, _allPrograms[i].subname, _allPrograms[i].photo,
 			_allPrograms[i].start_time, _allPrograms[i].recurring_until, _allPrograms[i].channel_id,
@@ -222,7 +226,7 @@ exports.TVProgramModel_fetchProgramIdOfEventId = function(_eventId) {
 	var result = db.execute('SELECT program_id FROM tvprograms WHERE id = ?',_eventId);
 	if(result.isValidRow()) {
 		programId = result.fieldByName('program_id');
-	}	
+	}
 	result.close();
 	db.close();
 	return programId;

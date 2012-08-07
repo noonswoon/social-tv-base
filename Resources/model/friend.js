@@ -10,7 +10,6 @@ db.close();
 
 // create data for local database
 exports.friendModel_updateFriendsFromACS = function(_friendsCollection) {
-	Ti.API.info('call updateFriendsFromACS with friendsArray: '+JSON.stringify(_friendsCollection));
 	var db = Ti.Database.open('Chatterbox');
 	db.execute('DELETE FROM friends');
 	for(var i=0;i < _friendsCollection.length; i++) {

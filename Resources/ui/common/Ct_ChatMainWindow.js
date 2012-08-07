@@ -1,8 +1,8 @@
 function ChatMainWindow(_programId) {
 
 	var TVProgram = require('model/tvprogram');
-	var CheckinGuidelineWindow = require('ui/common/Am_CheckinGuideline');
-	var checkinguidelinewin = null;
+	var CheckinGuidelineView = require('ui/common/Am_CheckinGuideline');
+	var checkinguidelineview = null;
 		
     // INCLUDE PUBNUB CHAT MODULE -- ALL the Chatterbox Chat UI is in pubnub-chat.js
 	Ti.include('./pubnub-chat.js'); 
@@ -44,24 +44,23 @@ function ChatMainWindow(_programId) {
 	};
 	
 	if(currentProgramId === '') { //have not checkedin to any program yet
-		checkinguidelinewin = new CheckinGuidelineWindow('chat');
-		self.add(checkinguidelinewin);
+		checkinguidelineview = new CheckinGuidelineView('chat');
+		self.add(checkinguidelineview);
 		currentProgramId = 'CTB_PUBLIC';
 	} else {
 		self._updatePageContent();
 	}
 	
-	self._addGuidelineWindow = function() {
-		if(checkinguidelinewin === null)
-			checkinguidelinewin = new CheckinGuidelineWindow('chat');
-		self.add(checkinguidelinewin);
+	self._addGuidelineView = function() {
+		if(checkinguidelineview === null)
+			checkinguidelineview = new CheckinGuidelineView('chat');
+		self.add(checkinguidelineview);
 	};
 	
-	self._removeGuidelineWindow = function() {
-		if(checkinguidelinewin !== null) {
-			self.remove(checkinguidelinewin);
-			checkinguidelinewin.close();
-			checkinguidelinewin = null;
+	self._removeGuidelineView = function() {
+		if(checkinguidelineview !== null) {
+			self.remove(checkinguidelineview);
+			checkinguidelineview = null;
 		}		
 	};	
 	

@@ -276,7 +276,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 		row._hideToolbar(row.index);
 		
 		Ti.Analytics.featureEvent('messageboard.coc', {userId: userId, topicId: _comment.topicId});
-		Titanium.App.Analytics.trackPageview('messageboard.coc');
+		Titanium.App.Analytics.trackPageview('/messageboard.coc');
 	});
 	
 	function handleVote(_isUpVote) {
@@ -306,7 +306,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 			replyTextField.value = "";
 			row._hideToolbar(row.index);
 			Ti.Analytics.featureEvent('messageboard.vote', {userId: userId, topicId: _comment.topicId});
-			Titanium.App.Analytics.trackPageview('messageboard.vote');
+			Titanium.App.Analytics.trackPageview('/messageboard.vote');
 		} else {
 			var voteWarningDialog = Titanium.UI.createAlertDialog({
 				title:L('Hold on!'),
@@ -326,7 +326,7 @@ CommentReplyTableViewRow = function(_comment, _level) {
 	reportButton.addEventListener('click', function() {
 		UserReportACS.userReportACS_reportObject(_comment.id,'comment',_comment.content);
 		Ti.Analytics.featureEvent('messageboard.report', {userId: userId, topicId: _comment.topicId, commentId: _comment.id});
-		Titanium.App.Analytics.trackPageview('messageboard.report');
+		Titanium.App.Analytics.trackPageview('/messageboard.report');
 	});
 	
 	deleteButton.addEventListener('click', function() {

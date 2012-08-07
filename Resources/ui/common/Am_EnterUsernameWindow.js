@@ -98,7 +98,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 					}, function (e) {
 					    if (e.success) {
 					    	Ti.Analytics.featureEvent('registration.success');
-					    	Titanium.App.Analytics.trackPageview('registration.success');
+					    	Titanium.App.Analytics.trackPageview('/registration.success');
 					    	
 					    	acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
@@ -111,7 +111,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 					    } else {
 					    	Debug.debug_print(L('Linking external acct Error: ') + JSON.stringify(e));
 					    	Ti.Analytics.featureEvent('registration.error');
-					    	Titanium.App.Analytics.trackPageview('registration.error');
+					    	Titanium.App.Analytics.trackPageview('/registration.error');
 					    	//ErrorHandling.showNetworkError();
 					    }
 					});

@@ -98,7 +98,7 @@ Ti.App.Chat = function(_chatParams) {
 					Ti.Media.vibrate(); //i love things that shake!
 					if(hasNotReceived) {
 						Ti.Analytics.featureEvent('chat.receive', {receiverId: userObject.id});
-						Titanium.App.Analytics.trackPageview('chat.receive');
+						Titanium.App.Analytics.trackPageview('/chat.receive');
 	            		hasNotReceived = false; //already received
 	   	 	        }
 	            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
@@ -283,7 +283,7 @@ Ti.App.Chat = function(_chatParams) {
 		
 		if(hasNotSent) {
 			Ti.Analytics.featureEvent('chat.send', {userId: userObject.id});
-			Titanium.App.Analytics.trackPageview('chat.send');
+			Titanium.App.Analytics.trackPageview('/chat.send');
 			hasNotSent = false;
 		}
 		

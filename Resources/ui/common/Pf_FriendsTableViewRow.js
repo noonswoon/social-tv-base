@@ -59,7 +59,7 @@ FriendsTableViewRow = function(_user,_source) {
  			ActivityACS.activityACS_createMyActivity(approveFriendActivityData);
 			FriendACS.friendsACS_approveFriend(_user.friend_id,approveRequest);
 			Ti.Analytics.featureEvent('viral.friendapprove', {userId: acs.getUserId()});
-			Titanium.App.Analytics.trackPageview('viral.friendapprove');
+			Titanium.App.Analytics.trackPageview('/viral.friendapprove');
 		});
 		
 	 	tableRow.add(approveButton);

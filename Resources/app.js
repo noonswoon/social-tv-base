@@ -24,7 +24,7 @@ Ti.Facebook.permissions = ['publish_actions', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
 var IS_ON_DEVICE = true;
-var IS_PRODUCTION_BUILD = false;
+var IS_PRODUCTION_BUILD = true;
 
 var ACS_API_KEY = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 if(IS_PRODUCTION_BUILD)

@@ -408,6 +408,7 @@ function MessageboardMainWindow(_programId) {
 		}
 	});		
 
+/* //scrolling the header up...still glitches
 	var animateUp_messageboardHeader = Ti.UI.createAnimation({
 		top: -121,
 		duration: 300,
@@ -454,6 +455,7 @@ function MessageboardMainWindow(_programId) {
 			allTopicTableY = e.contentOffset.y;
 		}
 	});
+*/
 
 	Ti.App.addEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);
 	Ti.App.addEventListener("topicsDbUpdated", topicsDbUpdatedCallback);

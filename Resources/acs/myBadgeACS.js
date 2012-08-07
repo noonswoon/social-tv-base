@@ -18,7 +18,7 @@ exports.myBadgeACS_fetchedBadge = function(_id) {
 	    } 
 	    else {
 	        Debug.debug_print('myBadgeACS-> fetchedBadge Error: ' + JSON.stringify(e));
-	       	ErrorHandling.showNetworkError();
+	       	//ErrorHandling.showNetworkError();
 	    }
 	});
 		

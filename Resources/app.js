@@ -30,7 +30,7 @@ var ACS_API_KEY = '8bKXN3OKNtoE1mBMR4Geo4kIY4bm9xqr';
 if(IS_PRODUCTION_BUILD)
 	ACS_API_KEY = '5va2XsGjknLebugvozPZfZr9xhSVEZl1';
 
-var CACHE_TIMEOUT_SHORT = 1;  //for topic, comments - 30 mins
+var CACHE_TIMEOUT_SHORT = 5;  //for topic, comments - 30 mins
 var CACHE_TIMEOUT_MEDIUM = 60 * 6;  //for tvprograms, num checkins ~ 6 hours
 var CACHE_TIMEOUT_LONG = 60 * 24 * 30;  //for levels, badges, ~ 1 month
 
@@ -41,8 +41,6 @@ var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
 var DEFAULT_CTB_IMAGE_URL = 'http://chatterbox.mobi/images/cbDefault.png';
 
 var friendRequests = [];
-
-
 
 /*
 Ti.App.addEventListener('pause', function(){

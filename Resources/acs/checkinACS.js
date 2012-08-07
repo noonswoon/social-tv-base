@@ -12,7 +12,7 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	    },onerror: function(e) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('checkinACS_fetchedUserTotalCheckIns error: '+JSON.stringify(e));
-	        ErrorHandling.showNetworkError();
+	        //ErrorHandling.showNetworkError();
 	    },
 	    timeout:10000  /* in milliseconds */
 	});

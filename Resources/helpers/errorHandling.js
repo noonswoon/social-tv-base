@@ -4,5 +4,5 @@ exports.showNetworkError = function(){
 			message:L('Please try again')
 	});
 	networkErrorDialog.show();
-}
+};
 

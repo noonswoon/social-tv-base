@@ -66,7 +66,7 @@ exports.badgePopUpOnFacebook = function(_badgeId) {
 		var badge = BadgeModel.fetchedBadgeSearch(String(_badgeId));
 	
 		var data = {
-			link: "http://chatterbox.mobi/",
+			link: "http://chatterbox.mobi/lp.php",
 			name: user.first_name+" "+user.last_name+" has unlocked a new badge: "+badge.title,
 			message: "",
 			caption: "Chatterbox",
@@ -86,9 +86,9 @@ exports.sendRequestOnFacebook = function(_fbId) {
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 	 	var data = {
-	 		app_id: '269019986525306',
+	 		app_id: '197422093706392',
 	    	message: 'Check out this apps!',
-	    	redirect_uri: 'http://chatterbox.mobi/',
+	    	redirect_uri: 'http://chatterbox.mobi/lp.php',
 	    	to: _fbId
 	 	};
 		Titanium.Facebook.dialog("apprequests", data, showRequestResult);
@@ -100,7 +100,7 @@ exports.checkinPopUpOnFacebook = function(_checkin,_programPhoto) {
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 		var data = {
-			link: "http://chatterbox.mobi/",
+			link: "http://chatterbox.mobi/lp.php",
 			name: user.first_name+" "+user.last_name+" has checked in to "+_checkin.event.name,
 			message: "",
 			caption: "Chatterbox",
@@ -118,7 +118,7 @@ exports.levelUpPopUpOnFacebook = function(_levelTitle) {
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 		var data = {
-			link: "http://chatterbox.mobi/",
+			link: "http://chatterbox.mobi/lp.php",
 			name: user.first_name+" "+user.last_name+" has reach a new TV experience level!",
 			message: "",
 			caption: "Chatterbox",
@@ -135,7 +135,7 @@ exports.postAppearOnFaceBook = function(_topicTitle,_topicContent,_programPhoto)
 	if(SettingHelper.getFacebookShare()) {
 		var user = acs.getUserLoggedIn();
 		var data = {
-			link: "http://chatterbox.mobi/",
+			link: "http://chatterbox.mobi/lp.php",
 			name: user.first_name+" posted a new discussion '"+_topicTitle+"'",
 			message: "",
 			caption: "",

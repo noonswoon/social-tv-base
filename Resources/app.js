@@ -20,7 +20,7 @@ var ErrorHandling = require('helpers/errorHandling');
 
 //GLOBAL VARIABLES DECARATION
 Ti.Facebook.appid = "197422093706392";
-Ti.Facebook.permissions = ['publish_stream','publish_actions', 'email'];
+Ti.Facebook.permissions = ['publish_actions', 'email'];
 Ti.Facebook.forceDialogAuth = true; //fb sso not working on actual device
 
 var IS_ON_DEVICE = true;

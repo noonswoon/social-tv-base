@@ -1,6 +1,6 @@
 var LoginFbOnlyWindow = function() {
 	
-	Ti.Analytics.featureEvent('OnFbLoginPage');
+	Ti.Analytics.featureEvent('fb.loginpage');
 	
 	//UI STUFF
 	var self = Ti.UI.createWindow({

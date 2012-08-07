@@ -97,7 +97,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 					    token: Ti.Facebook.accessToken
 					}, function (e) {
 					    if (e.success) {
-					    	Ti.Analytics.featureEvent('RegistrationDone');
+					    	Ti.Analytics.featureEvent('registration.success');
 					    	
 					    	acs.setUserLoggedIn(e.users[0]);
 							acs.setLoggedInStatus(true);
@@ -109,7 +109,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 							maintabgroup.open();
 					    } else {
 					    	Debug.debug_print(L('Linking external acct Error: ') + JSON.stringify(e));
-					    	Ti.Analytics.featureEvent('RegistrationError');
+					    	Ti.Analytics.featureEvent('registration.error');
 					    	//ErrorHandling.showNetworkError();
 					    }
 					});

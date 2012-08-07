@@ -31,6 +31,8 @@ Ti.App.Chat = function(_chatParams) {
 	var historyMessages = [];
 	var lastHistoryLoadedIndex = 0;
 	var totalHistoryMessages = 0;
+	var hasNotSent = true;
+	var hasNotReceived = true;
 	
 	var chatMessagesTableView = Ti.UI.createTableView({
 		top:0,
@@ -94,7 +96,10 @@ Ti.App.Chat = function(_chatParams) {
 	        	//prevent from having the user sees his own message when it got broadcasted
 	        	if(userObject.id !== message.senderId) {
 					Ti.Media.vibrate(); //i love things that shake!
-					Ti.Analytics.featureEvent('receiveChatMsg', {receiverId: userObject.id});
+					if(hasNotReceived) {
+						Ti.Analytics.featureEvent('chat.receive', {receiverId: userObject.id});
+	            		hasNotReceived = false; //already received
+	   	 	        }
 	            	var senderObj = {id: message.senderId, fbId: message.senderFbId, imageUrl: 'https://graph.facebook.com/'+message.senderFbId+'/picture',time:message.time }
 	           		var newChatRow = new ChatMessageTableViewRow(message.text,senderObj,false);
 	           		chatMessagesTableView.appendRow(newChatRow);
@@ -274,7 +279,12 @@ Ti.App.Chat = function(_chatParams) {
     sendButton.addEventListener('click', function() {
 		if(chatInputTextField.value === "")
 			return;
-		Ti.Analytics.featureEvent('sendChatMsg', {userId: userObject.id});
+		
+		if(hasNotSent) {
+			Ti.Analytics.featureEvent('chat.send', {userId: userObject.id});
+			hasNotSent = false;
+		}
+		
 		var newChatRow = new ChatMessageTableViewRow(chatInputTextField.value,userObject,true);
         chatMessagesTableView.appendRow(newChatRow);
         		

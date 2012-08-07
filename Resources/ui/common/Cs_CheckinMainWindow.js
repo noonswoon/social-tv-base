@@ -276,7 +276,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 			} 
 			
 			if(checkinEnable) {	
-				Ti.Analytics.featureEvent('CheckinProgram',{user:myUserId, tvprogram: _tvprogramData});
+				Ti.Analytics.featureEvent('checkin.program',{user:myUserId, tvprogram: _tvprogramData});
 				Titanium.Media.vibrate();
 				//changeImage of checkin here
 				remote.backgroundImage = 'images/checkin/checkin_remote.png';
@@ -321,7 +321,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 								
 				Ti.App.fireEvent('checkinToProgram', {'checkinProgramId': _tvprogramData.programId, 'checkinProgramName':_tvprogramData.programTitle});
 			} else {
-			Ti.Analytics.featureEvent('InvalidCheckinProgram',{user:myUserId, tvprogram: _tvprogramData});
+			Ti.Analytics.featureEvent('checkin.program.timeinvalid',{user:myUserId, tvprogram: _tvprogramData});
 			var checkinWarningMessage = "";
 				if(now < _tvprogramData.programStarttime)
 					checkinWarningMessage = L("The program hasn't started yet!");

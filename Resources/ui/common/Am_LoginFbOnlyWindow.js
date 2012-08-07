@@ -1,6 +1,7 @@
 var LoginFbOnlyWindow = function() {
 	
 	Ti.Analytics.featureEvent('fb.loginpage');
+	Titanium.App.Analytics.trackPageview('fb.loginpage');
 	
 	//UI STUFF
 	var self = Ti.UI.createWindow({

@@ -2,6 +2,8 @@ function facebookAuthenCallback(e) {
 	Debug.debug_print("in fbAuthenCallback");
 	if (e.success) {
 		Ti.Analytics.featureEvent('fb.login.success');
+		Titanium.App.Analytics.trackPageview('fb.login.success');
+		
 		//Successfully login to facebook
 		//1. check if this fb user already has an account >> need to do this just to make Friend Module works
 		//2. if so, get the email address and authtoken (as a password) and then login 
@@ -57,6 +59,7 @@ function facebookAuthenCallback(e) {
 				    		Debug.debug_print("No email: new user registration");
 				    		var EnterUsernameWindow = require('ui/common/Am_EnterUsernameWindow');
 				    		Ti.Analytics.featureEvent('registration.start');
+				    		Titanium.App.Analytics.trackPageview('registration.start');
 				    		var enterusernamewin = new EnterUsernameWindow(email,firstName,lastName);
 				    		enterusernamewin.open();
 				    	}
@@ -67,22 +70,27 @@ function facebookAuthenCallback(e) {
 				});
 			} else if (e.error) {
 				Ti.Analytics.featureEvent('fb.login.error');
+				Titanium.App.Analytics.trackPageview('fb.login.error');
 				Debug.debug_print('cannot request GraphPath: '+ JSON.stringify(e));		
 				//ErrorHandling.showNetworkError();
 			} else {
 				Ti.Analytics.featureEvent('fb.login.error');
+				Titanium.App.Analytics.trackPageview('fb.login.error');
 				Debug.debug_print("what the hell is going on_2? " + JSON.stringify(e));
 				//ErrorHandling.showNetworkError();
 			}
 		});
 	} else if (e.error) {
 		Ti.Analytics.featureEvent('fb.login.error');
+		Titanium.App.Analytics.trackPageview('fb.login.error');
 		Debug.debug_print("fb login error: ");
 	} else if (e.cancelled) {
 		Ti.Analytics.featureEvent('fb.login.cancel');
+		Titanium.App.Analytics.trackPageview('fb.login.cancel');
 		Debug.debug_print("fb login Canceled");
 	} else {
 		Ti.Analytics.featureEvent('fb.login.error');
+		Titanium.App.Analytics.trackPageview('fb.login.error');
 		alert("Facebook Login Error...please try again");
 	}
 }

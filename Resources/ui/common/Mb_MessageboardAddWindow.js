@@ -238,8 +238,10 @@ function MessageboardAddWindow(_programId,_programPhoto) {
 		if(filename !== null) { 
 			sleepTime = 10000; //give more sleep time for photo uploaded
 			Ti.Analytics.featureEvent('messageboard.ctwp', {userId: acs.getUserLoggedIn().id, programId: programId});
+			Titanium.App.Analytics.trackPageview('messageboard.ctwp');
 		} else {
 			Ti.Analytics.featureEvent('messageboard.ctnp', {userId: acs.getUserLoggedIn().id, programId: programId});
+			Titanium.App.Analytics.trackPageview('messageboard.ctnp');
 		}
 		setTimeout(function(e) {
 			hidePreloader(self);

@@ -277,6 +277,7 @@ function CommentWindow(_topicId) {
 		commentHeader._blurReplyTextArea();
 		
 		Ti.Analytics.featureEvent('messageboard.cot', {userId: acs.getUserId(), topicId: _topicId});
+		Titanium.App.Analytics.trackPageview('messageboard.cot');
 	}
 	
 	

@@ -40,6 +40,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 		inviteButton.addEventListener('click', function(){
 			inviteFriend(_user.uid);
 			Ti.Analytics.featureEvent('viral.fbinvite', {userId: acs.getUserId(), fbInvitee: _user.uid});
+			Titanium.App.Analytics.trackPageview('viral.fbinvite');
 		});
 		
 		tableRow.add(inviteButton);
@@ -82,6 +83,7 @@ AddFriendsTableViewRow = function(_user,_category) {
 		 	FriendACS.friendsACS_addFriend(_user.id,addFriend);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
 			Ti.Analytics.featureEvent('viral.friendrequest', {userId: acs.getUserId(), friendId: _user.id});
+			Titanium.App.Analytics.trackPageview('viral.friendrequest');
 		})
 		tableRow.add(addButton);
 	};

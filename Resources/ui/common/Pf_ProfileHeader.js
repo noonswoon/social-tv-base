@@ -208,6 +208,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		 	FriendACS.friendsACS_addFriend(curId,sendRequest);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
 			Ti.Analytics.featureEvent('viral.friendrequest', {userId: acs.getUserId(), friendId: curId});
+			Titanium.App.Analytics.trackPageview('viral.friendrequest');
  		} 			
  		//condition 2: there's a request from this guy	
  		else {
@@ -216,6 +217,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 			FriendsModel.friend_create(_userProfile,_userProfile.fb_id);
 			FriendACS.friendsACS_approveFriend(curId,approveRequest);
 			Ti.Analytics.featureEvent('viral.friendapprove', {userId: acs.getUserId(),friendId: curId});
+			Titanium.App.Analytics.trackPageview('viral.friendapprove');
 		}	
 		_parentWindow.close();
  	};	

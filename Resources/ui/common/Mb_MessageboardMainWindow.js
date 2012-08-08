@@ -296,8 +296,11 @@ function MessageboardMainWindow(_programId) {
 	};
 	
 	self._removeGuidelineWindow = function() {
-		if(checkinguidelinewin !== null)
-			self.remove(checkinguidelinewin);	
+		if(checkinguidelinewin !== null) {
+			self.remove(checkinguidelinewin);
+			checkinguidelinewin.close();
+			checkinguidelinewin = null;
+		}	
 	};
 	
 	//CALLBACK FUNCTIONS

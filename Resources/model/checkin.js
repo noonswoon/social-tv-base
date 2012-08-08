@@ -5,7 +5,7 @@ db.close();
 // MY CHECKIN PART
 // create data for local database
 exports.checkinModel_updateCheckinsFromACS = function(_checkinsCollection, _userId) {
-//	Ti.API.info('checkinModel_updateCheckinsFromACS');
+	Ti.API.info('calling MODEL: checkinModel_updateCheckinsFromACS');
 	var db = Ti.Database.open('Chatterbox'); 
 	//need to clear records with the given programId
 	db.execute('DELETE FROM checkins WHERE user_id = ?', _userId);

@@ -159,10 +159,11 @@ function ApplicationTabGroup() {
 		//if checkin to at least 1 program, enable the chat/board/product bar
 		
 		var todayCheckinPrograms = [];
+		Ti.API.info('numPrograms checkedIn today: '+eventsCheckedIn.length);
 		for(var i=0 ;i<eventsCheckedIn.length;i++) {
 			var eventId = eventsCheckedIn[i].event_id;
 			var programId = TVProgramModel.TVProgramModel_fetchProgramIdOfEventId(eventId);
-			//Ti.API.info('from checkinDbLoadedCallback ACS..eventId: ' + eventId + ', programId: ' + programId);
+			Ti.API.info('from checkinDbLoadedCallback ACS..eventId: ' + eventId + ', programId: ' + programId);
 			if(programId !== "") todayCheckinPrograms.push(programId);
 		}
 		//reset currentSelectedProgram, currentCheckinPrograms when loadedup data from ACS
@@ -182,6 +183,10 @@ function ApplicationTabGroup() {
 			//number_checkins column will get populated again by the fn TVProgramModel_updateCheckins
 			updateContentInAllModules(UserCheckinTracking.getCurrentSelectedProgram()); 
 			initializePickerInAllModules();
+		} else {
+			addGuidelineWindowInAllModules();
+			clearPickerDataInAllModules();
+			Ti.API.info('cleaning up checkin program...');
 		}
 	}	
 	Ti.App.addEventListener('checkinDbLoaded',checkinDbLoadedCallBack);

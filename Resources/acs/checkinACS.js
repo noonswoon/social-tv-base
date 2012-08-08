@@ -29,6 +29,7 @@ exports.checkinACS_fetchedUserCheckIn = function(_paramsArray) {
 	var dm = moment(acsConvertedStartOfDay, "YYYY-MM-DDTHH:mm:ss");
 	var acsConvertedStartOfDayFormatted = dm.format('YYYY-MM-DD, HH:mm:ss');
 	
+	Ti.API.info('calling checkinACS_fetchedUserCheckin..');
 	Cloud.Checkins.query({
 	    page: 1,
 	    per_page: 100,
@@ -43,6 +44,7 @@ exports.checkinACS_fetchedUserCheckIn = function(_paramsArray) {
 	}, function (e) {
 	    if (e.success) {
 	        var checkin =[];
+	        Ti.API.info('checkedin program from ACS: '+e.checkins.length);
 	        for (var i = 0; i < e.checkins.length; i++) {
 	        	 var curCheckin = e.checkins[i];
 	        	 //Ti.API.info('fetchedCheckin, id: '+curCheckin.id+', name: '+curCheckin.event.name + ', starttime: '+curCheckin.event.start_time+', recurringTime: '+curCheckin.event.recurring_until);

@@ -47,7 +47,8 @@ function PopularWindow(_parent) {
 			FriendsACS.friendsACS_showFriendsRequest();	 //no database for showFriendsRequest
 			CacheHelper.fetchACSDataOrCache('badgesACS', BadgesACS.fetchedBadges, [], 'badgesDbLoaded', CACHE_TIMEOUT_LONG);
 			CacheHelper.fetchACSDataOrCache('levelACS', LevelACS.levelACS_fetchedLevel, [], 'levelDbUpdated', CACHE_TIMEOUT_LONG);
-			CacheHelper.fetchACSDataOrCache('checkinACS_fetchedUserCheckIn', CheckinACS.checkinACS_fetchedUserCheckIn, [myUserId], 'checkinDbLoaded', CACHE_TIMEOUT_SHORT);		
+			CheckinACS.checkinACS_fetchedUserCheckIn([myUserId]);
+			//CacheHelper.fetchACSDataOrCache('checkinACS_fetchedUserCheckIn', CheckinACS.checkinACS_fetchedUserCheckIn, [myUserId], 'checkinDbLoaded', CACHE_TIMEOUT_SHORT);		
 		} //else Ti.API.info('thing is NOT ready yet..missing');
 	}
 	

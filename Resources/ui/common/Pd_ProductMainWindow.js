@@ -210,8 +210,11 @@ function ProductMainWindow(_programId) {
 	};
 		
 	self._removeGuidelineWindow = function() {
-		if(checkinguidelinewin !== null)
+		if(checkinguidelinewin !== null) {
 			self.remove(checkinguidelinewin);
+			checkinguidelinewin.close();
+			checkinguidelinewin = null;
+		}
 	};
 	
 	callPicker.addEventListener('click',function() {

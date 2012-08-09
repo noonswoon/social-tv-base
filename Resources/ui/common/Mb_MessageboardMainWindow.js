@@ -411,55 +411,6 @@ function MessageboardMainWindow(_programId) {
 		}
 	});		
 
-/* //scrolling the header up...still glitches
-	var animateUp_messageboardHeader = Ti.UI.createAnimation({
-		top: -121,
-		duration: 300,
-		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
-	});
-	var animateDown_messageboardHeader = Ti.UI.createAnimation({
-		top: 0,
-		duration: 300,
-		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
-	});
-
-	var animateUp_searchView = Ti.UI.createAnimation({
-		top: 0,
-		duration: 300,
-		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
-	});
-	var animateDown_searchView = Ti.UI.createAnimation({
-		top: 121,
-		duration: 300,
-		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
-	});
-
-	var animateUp_allTopicTable = Ti.UI.createAnimation({
-		top: 47,
-		duration: 300,
-		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
-	});
-	var animateDown_allTopicTable = Ti.UI.createAnimation({
-		top: 165,
-		duration: 300,
-		curve: Ti.UI.ANIMATION_CURVE_EASE_OUT,
-	});
-
-	allTopicTable.addEventListener('scroll',function(e){
-		if(allTopicTableY<=e.contentOffset.y && e.contentOffset.y > 100) {
-			messageboardHeader.animate(animateUp_messageboardHeader);
-			searchView.animate(animateUp_searchView);
-			allTopicTable.animate(animateUp_allTopicTable);
-			allTopicTableY = e.contentOffset.y;
-		} else if(e.contentOffset.y <= 100){
-			messageboardHeader.animate(animateDown_messageboardHeader);	
-			searchView.animate(animateDown_searchView);
-			allTopicTable.animate(animateDown_allTopicTable);
-			allTopicTableY = e.contentOffset.y;
-		}
-	});
-*/
-
 	Ti.App.addEventListener("topicsLoadedComplete", topicsLoadedCompleteCallback);
 	Ti.App.addEventListener("topicsDbUpdated", topicsDbUpdatedCallback);
 	Ti.App.addEventListener("insertingTopicTableViewRow", addNewTopicTableViewRowCallback);

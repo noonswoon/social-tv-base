@@ -370,7 +370,8 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	messageboardView.addEventListener('touchend',function(){
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
 		curTabGroup.setActiveTab(2);
-		Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:_tvprogramData.programId});
+		if(UserCheckinTracking.getCurrentSelectedProgram() !== _tvprogramData.programId)
+			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:_tvprogramData.programId});
 	});
 	
 	//Chat Button
@@ -396,7 +397,8 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 	productView.addEventListener('touchend',function(){
 		remote.backgroundImage = 'images/checkin/checkin_remote.png';
 		curTabGroup.setActiveTab(3)
-		Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:_tvprogramData.programId});
+		if(UserCheckinTracking.getCurrentSelectedProgram() !== _tvprogramData.programId)
+			Ti.App.fireEvent('changingCurrentSelectedProgram',{newSelectedProgram:_tvprogramData.programId});
 	});
 	
 	var notifyFriendsAboutCheckin = function(){

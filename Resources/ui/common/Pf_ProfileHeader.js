@@ -29,6 +29,12 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		height: 88,
 		backgroundColor: 'transparent'
 	});
+	
+	profilePicture.addEventListener('click', function() {
+		//TESTING AREA
+		var ChatroomManagerCTB = require('ctb/chatroommanagerCTB');
+		ChatroomManagerCTB.chatroomManagerCTB_updateNumberUsers('CH2_DAYSW',-1);
+	});
 
 	var profilePictureContain = Ti.UI.createView({
 		top: 10, left: 10,

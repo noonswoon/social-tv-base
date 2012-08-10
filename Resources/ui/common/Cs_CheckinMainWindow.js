@@ -409,7 +409,7 @@ CheckinMainWindow = function (_tvprogramData, _containingTab){
 		for(var i=0; i<friendsList.length; i++) {
 			var textPn = currentUser.first_name+L(' just checked in to ')+_tvprogramData.programTitle+L('. Let watch together!');
 			//Ti.API.info('sending pn: '+textPn);
-			PushNotificationCTB.pushNotificationCTB_sendPN(friendsList[i].friend_id,2,textPn);
+			PushNotificationCTB.pushNotificationCTB_sendPN(CTB_HEROKU_SERVER, CTB_HEROKU_ACCESS,friendsList[i].friend_id,2,textPn);
 		}
 	}
 	

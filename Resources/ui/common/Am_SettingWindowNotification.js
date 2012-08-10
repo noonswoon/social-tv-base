@@ -3,7 +3,7 @@ Am_SettingWindowNotification = function(){
 	var userId = acs.getUserId();
 	var dataForSetting = [];
 	
-	PushNotificationCTB.pushNotificationCTB_getPNPermissions(userId);
+	PushNotificationCTB.pushNotificationCTB_getPNPermissions(CTB_HEROKU_SERVER, CTB_HEROKU_ACCESS, userId);
 	
 	
 	var backButton = Ti.UI.createButton({
@@ -92,12 +92,12 @@ Am_SettingWindowNotification = function(){
 	
 	getCommentPNSwitch.addEventListener('change',function(e){
 		var notifyWhenGetComment = e.value;
-		PushNotificationCTB.pushNotificationCTB_updatePNPermission(userId, notifyWhenGetComment,1);
+		PushNotificationCTB.pushNotificationCTB_updatePNPermission(CTB_HEROKU_SERVER, CTB_HEROKU_ACCESS, userId, notifyWhenGetComment,1);
 	});
 	
 	friendCheckinPNSwitch.addEventListener('change',function(e){
 		var notifyWhenFriendCheckin = e.value;
-		PushNotificationCTB.pushNotificationCTB_updatePNPermission(userId, notifyWhenFriendCheckin,2);
+		PushNotificationCTB.pushNotificationCTB_updatePNPermission(CTB_HEROKU_SERVER, CTB_HEROKU_ACCESS, userId, notifyWhenFriendCheckin,2);
 	});
 
 	return self;

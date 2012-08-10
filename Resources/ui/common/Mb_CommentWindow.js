@@ -246,7 +246,7 @@ function CommentWindow(_topicId) {
 		var curTopic = Topic.topicModel_getTopicById(_topicId);
 		if(curTopic.userId !== acs.getUserLoggedIn().id) { //only send if someone else (not You!) comments on the post
 			var PushNotificationCTB = require('ctb/pushnotificationCTB');
-			PushNotificationCTB.pushNotificationCTB_sendPN(curTopic.userId,1,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
+			PushNotificationCTB.pushNotificationCTB_sendPN(CTB_HEROKU_SERVER, CTB_HEROKU_ACCESS,curTopic.userId,1,acs.getUserLoggedIn().first_name+" just commented on your topic of "+commentHeader._getTitle());
 		}
 		
 		//activity on comment

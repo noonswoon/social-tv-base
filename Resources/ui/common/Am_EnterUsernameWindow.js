@@ -90,7 +90,7 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 					var leaderBoardACS = require('acs/leaderBoardACS');
 					var PushNotificationCTB = require('ctb/pushnotificationCTB');
 					leaderBoardACS.leaderACS_createUserInfo(e.users[0]);
-					PushNotificationCTB.pushNotificationCTB_createUserInfo(e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());				
+					PushNotificationCTB.pushNotificationCTB_createUserInfo(CTB_HEROKU_SERVER, CTB_HEROKU_ACCESS, e.users[0].id, e.users[0].username,UrbanAirship.getDeviceToken());				
 					
 					Cloud.SocialIntegrations.externalAccountLink({
 					    type: 'facebook',

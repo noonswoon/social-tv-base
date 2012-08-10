@@ -1,10 +1,5 @@
-//create for user in the first time log in
-var chatterboxBackendAccess = 'chatterbox:d1srupt'
-var pnServer = 'http://localhost:3000/';//'http://morning-cloud-6017.herokuapp.com/';
-
-exports.chatroomManagerCTB_getChatroomData = function(_chatroomId){
-	Ti.API.info('pnServer: '+pnServer+', chatterboxBackendAccess: '+chatterboxBackendAccess);
-	var url = pnServer+'chatroom_managers/get_chatroom_number_users/'+_chatroomId+'.json';
+exports.chatroomManagerCTB_getChatroomData = function(_serverUrl, _serverAccess, _chatroomId){
+	var url = _serverUrl +'chatroom_managers/get_chatroom_number_users/'+_chatroomId+'.json';
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			var responseJSON = JSON.parse(this.responseText); 
@@ -19,14 +14,14 @@ exports.chatroomManagerCTB_getChatroomData = function(_chatroomId){
 
 	xhr.open('GET', url, true);
 	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxBackendAccess));
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(_serverAccess));
 	xhr.send();
 };
 
-exports.chatroomManagerCTB_updateNumberUsers = function(_chatroomId,_value) {
-	var url = pnServer+'chatroom_managers/increment_number_users/'+_chatroomId+'.json';
+exports.chatroomManagerCTB_updateNumberUsers = function(_serverUrl, _serverAccess, _chatroomId,_value) {
+	var url = _serverUrl+'chatroom_managers/increment_number_users/'+_chatroomId+'.json';
 	if(_value < 0)
-		url = pnServer+'chatroom_managers/decrement_number_users/'+_chatroomId+'.json';
+		url = _serverUrl+'chatroom_managers/decrement_number_users/'+_chatroomId+'.json';
 
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
@@ -39,6 +34,6 @@ exports.chatroomManagerCTB_updateNumberUsers = function(_chatroomId,_value) {
 	// Register device token with UA
 	xhr.open('PUT', url, true);
 	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxBackendAccess));	
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(_serverAccess));	
 	xhr.send();
 };

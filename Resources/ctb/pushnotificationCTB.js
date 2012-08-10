@@ -1,8 +1,4 @@
-//create for user in the first time log in
-var chatterboxBackendAccess = 'chatterbox:d1srupt'
-var pnServer = 'http://localhost:3000/';//'http://morning-cloud-6017.herokuapp.com/';
-
-exports.pushNotificationCTB_createUserInfo = function(_userid,_username,_pnDeviceToken) {
+exports.pushNotificationCTB_createUserInfo = function(_serverUrl, _serverAccess, _userid,_username,_pnDeviceToken) {
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			Ti.API.info(this.responseText);
@@ -13,9 +9,9 @@ exports.pushNotificationCTB_createUserInfo = function(_userid,_username,_pnDevic
 	}); 
 	
 	// Register device token with UA
-	xhr.open('POST', pnServer+'push_notification_details/create.json', true);
+	xhr.open('POST', _serverUrl+'push_notification_details/create.json', true);
 	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxBackendAccess));
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(_serverAccess));
 	
 	var sendParameters = {
 	    'userid': _userid,
@@ -25,8 +21,8 @@ exports.pushNotificationCTB_createUserInfo = function(_userid,_username,_pnDevic
 	xhr.send(JSON.stringify(sendParameters));
 };
 
-exports.pushNotificationCTB_getPNPermissions = function(_userid){
-	var url = pnServer+'push_notification_details/get_pn_permissions/'+_userid+'.json';
+exports.pushNotificationCTB_getPNPermissions = function(_serverUrl, _serverAccess, _userid){
+	var url = _serverUrl+'push_notification_details/get_pn_permissions/'+_userid+'.json';
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			var responseJSON = JSON.parse(this.responseText); 
@@ -41,12 +37,12 @@ exports.pushNotificationCTB_getPNPermissions = function(_userid){
 
 	xhr.open('GET', url, true);
 	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxBackendAccess));
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(_serverAccess));
 	xhr.send();
 };
 
-exports.pushNotificationCTB_updatePNPermission = function(_userid,_permissionValue,_permissionType) {
-	var url = pnServer+'push_notification_details/update_notify_permission/'+_userid+'.json';
+exports.pushNotificationCTB_updatePNPermission = function(_serverUrl, _serverAccess, _userid,_permissionValue,_permissionType) {
+	var url = _serverUrl+'push_notification_details/update_notify_permission/'+_userid+'.json';
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			Ti.API.info('update pnPermission (type='+_permissionType+') success for '+_userid);
@@ -58,7 +54,7 @@ exports.pushNotificationCTB_updatePNPermission = function(_userid,_permissionVal
 	// Register device token with UA
 	xhr.open('PUT', url, true);
 	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxBackendAccess));
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(_serverAccess));
 	
 	var sendParameters = null; 
 	if(_permissionType === 1) //getCommentPermission
@@ -69,7 +65,7 @@ exports.pushNotificationCTB_updatePNPermission = function(_userid,_permissionVal
 	xhr.send(JSON.stringify(sendParameters));
 };
 
-exports.pushNotificationCTB_sendPN = function(_userid,_pnSendingType,_messageToSend) {
+exports.pushNotificationCTB_sendPN = function(_serverUrl, _serverAccess, _userid,_pnSendingType,_messageToSend) {
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			//Ti.API.info('send pn to userId: '+_userid+' successfully. ResponseText: '+this.responseText);
@@ -80,9 +76,9 @@ exports.pushNotificationCTB_sendPN = function(_userid,_pnSendingType,_messageToS
 	}); 
 	
 	// Register device token with UA
-	xhr.open('POST', pnServer+'push_notification_details/send_notification.json', true);
+	xhr.open('POST', _serverUrl+'push_notification_details/send_notification.json', true);
 	xhr.setRequestHeader("Content-Type","application/json");
-	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(chatterboxBackendAccess));
+	xhr.setRequestHeader('Authorization','Basic '  + Titanium.Utils.base64encode(_serverAccess));
 	
 	var sendParameters = {
 	    'userid': _userid,

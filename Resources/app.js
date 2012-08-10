@@ -40,6 +40,9 @@ var CONTENT_LENGTH = 160;
 var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
 var DEFAULT_CTB_IMAGE_URL = 'http://chatterbox.mobi/images/cbDefault.png';
 
+var CTB_HEROKU_SERVER = 'http://morning-cloud-6017.herokuapp.com/';
+var CTB_HEROKU_ACCESS = 'chatterbox:d1srupt'
+
 var friendRequests = [];
 
 /*

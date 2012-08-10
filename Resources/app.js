@@ -36,11 +36,12 @@ var CACHE_TIMEOUT_LONG = 60 * 24 * 30;  //for levels, badges, ~ 1 month
 
 var ONE_LINE_LENGTH = 300; //use for determining the topic's height (#lines) in messageboard
 var CONTENT_LENGTH = 160;
+var MAX_NUM_PEOPLE_PER_CHATROOM = 3; 
 
 var CHARACTER_PER_LINE = 40; //use for commentReplyTableViewRow
 var DEFAULT_CTB_IMAGE_URL = 'http://chatterbox.mobi/images/cbDefault.png';
 
-var CTB_HEROKU_SERVER = 'http://morning-cloud-6017.herokuapp.com/';
+var CTB_HEROKU_SERVER = 'http://localhost:3000/'; //'http://morning-cloud-6017.herokuapp.com/';
 var CTB_HEROKU_ACCESS = 'chatterbox:d1srupt'
 
 var friendRequests = [];

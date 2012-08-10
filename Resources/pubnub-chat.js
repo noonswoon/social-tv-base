@@ -14,13 +14,15 @@
 	});
 	
 Ti.App.Chat = function(_chatParams) {    
-    
+    var ChatroomManagerCTB = require('ctb/chatroommanagerCTB');
    	var TVProgram = require('model/tvprogram');
 	var ChatParticipantsScrollView = require('ui/common/Ct_ChatParticipantsScrollView');
 	var ChatMessageTableViewRow = require('ui/common/Ct_ChatMessageTableViewRow');
-
-    var currentChatRoom = _chatParams['programId'];
+	
    	var currentProgramId = _chatParams['programId'];
+	ChatroomManagerCTB.chatroomManagerCTB_getChatroomData(CTB_HEROKU_SERVER,CTB_HEROKU_ACCESS,currentProgramId);
+	
+    var currentChatRoom = ""; //POPULATE on line 304
     
 	var programData = TVProgram.TVProgramModel_fetchProgramsWithProgramId(currentProgramId);
 	var currentChatRoomName = programData[0].name;
@@ -45,14 +47,16 @@ Ti.App.Chat = function(_chatParams) {
     // ----------------------------------
     // LISTEN FOR MESSAGES
     // ----------------------------------
-    var subscribe_chat_room = function() {
+    var subscribe_chat_room = function(_totalChatters) {
 		//clear data
-    	pubnub.subscribe({
+		pubnub.subscribe({
 	        channel  : currentChatRoom,
 	        connect  : function() {
 	            Ti.API.info("connecting...");
+	            
+	            ChatroomManagerCTB.chatroomManagerCTB_updateNumberUsers(CTB_HEROKU_SERVER,CTB_HEROKU_ACCESS,currentProgramId,1);
 				//reset stuff
-	            var welcomeChatRow = new ChatMessageTableViewRow(L("Welcome to")+" "+currentChatRoomName+" "+L("Chat Room. Please keep our place clean."),adminUserObject,false);
+	            var welcomeChatRow = new ChatMessageTableViewRow(L("Welcome to")+" "+currentChatRoomName+" Chat Room. There are "+_totalChatters+" active chatters. Please keep our room clean.",adminUserObject,false);
     			chatMessagesTableView.setData([loadHistoryMessagesRow,welcomeChatRow]);
     			
     			//load history messages and add in 5 latest chats    
@@ -144,16 +148,6 @@ Ti.App.Chat = function(_chatParams) {
 		barColor:'#489ec3',
 		leftNavButton: backButton,
 		tabBarHidden: true
-	});
-	
-	backButton.addEventListener('click', function(){
-		//unsubscribe here...
-		Ti.API.info('unsubscribe from channel: '+currentChatRoom);
-		pubnub.unsubscribe({ channel : currentChatRoom });
-		historyMessages = [];
-		lastHistoryLoadedIndex = 0;
-		totalHistoryMessages = 0;
-   		chat_window.close();
 	});
 
 	var loadHistoryMessagesRow = Ti.UI.createTableViewRow({
@@ -298,8 +292,25 @@ Ti.App.Chat = function(_chatParams) {
 		}, 500);
     });
 	
-	subscribe_chat_room();
-			
+	var fetchedChatNumberUsersCallback = function(e) {
+		var chatNumberUsers = e.numberUsers; 
+		var channelNumber = Math.floor(chatNumberUsers / MAX_NUM_PEOPLE_PER_CHATROOM);
+		currentChatRoom = currentProgramId + channelNumber;
+		subscribe_chat_room(chatNumberUsers + 1); //+1 including you
+	};
+	Ti.App.addEventListener('fetchedChatNumberUsers', fetchedChatNumberUsersCallback);
+
+	backButton.addEventListener('click', function(){
+		//unsubscribe here...
+		Ti.API.info('unsubscribe from channel: '+currentChatRoom);
+		pubnub.unsubscribe({ channel : currentChatRoom });
+		historyMessages = [];
+		lastHistoryLoadedIndex = 0;
+		totalHistoryMessages = 0;
+		ChatroomManagerCTB.chatroomManagerCTB_updateNumberUsers(CTB_HEROKU_SERVER,CTB_HEROKU_ACCESS,currentProgramId,-1);
+   		Ti.App.removeEventListener('fetchedChatNumberUsers', fetchedChatNumberUsersCallback);
+   		chat_window.close();
+	});	
     return this;
 };
 

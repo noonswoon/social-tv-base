@@ -3,9 +3,9 @@ exports.chatroomManagerCTB_getChatroomData = function(_serverUrl, _serverAccess,
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
 			var responseJSON = JSON.parse(this.responseText); 
-			var chatroomNumberUsers = responseJSON['chatroom_number_users'];
-			Ti.API.info('chatroomId: '+_chatroomId+' has active users: '+chatroomNumberUsers);
-//			Ti.App.fireEvent('fetchedUserPNPermissions',{userPNPermissions:userPNPermissions});
+			var numberUsers = responseJSON['chatroom_number_users'];
+			Ti.API.info('chatroomId: '+_chatroomId+' has active users: '+numberUsers);
+			Ti.App.fireEvent('fetchedChatNumberUsers',{chatroomId:_chatroomId, numberUsers:numberUsers});
 		},
 		onerror:function(e) {
 			Ti.API.info('cannot get data from chatroomId: '+_chatroomId+', error: '+JSON.stringify(e));
@@ -25,7 +25,7 @@ exports.chatroomManagerCTB_updateNumberUsers = function(_serverUrl, _serverAcces
 
 	var xhr = Titanium.Network.createHTTPClient({
 		onload:function(e) {
-			Ti.API.info('increment userNumbers in '+_chatroomId);
+			Ti.API.info('update userNumbers in '+_chatroomId);
 		},
 		onerror:function(e) {
 			Ti.API.info('cannot update userNumbers in '+_chatroomId+', error: '+JSON.stringify(e));

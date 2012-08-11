@@ -56,7 +56,13 @@ Ti.App.Chat = function(_chatParams) {
 	            
 	            ChatroomManagerCTB.chatroomManagerCTB_updateNumberUsers(CTB_HEROKU_SERVER,CTB_HEROKU_ACCESS,currentProgramId,1);
 				//reset stuff
-	            var welcomeChatRow = new ChatMessageTableViewRow(L("Welcome to")+" "+currentChatRoomName+" Chat Room. There are "+_totalChatters+" active chatters. Please keep our room clean.",adminUserObject,false);
+				var welcomeChatRow = null;
+				if(_totalChatters === 1)
+	            	welcomeChatRow = new ChatMessageTableViewRow(L("Welcome to")+" "+currentChatRoomName+" "+L("Chat Room. There is")+" "+_totalChatters+" "+L("active chatter. Please keep our room clean."), 
+	            													adminUserObject, false);
+	            else 
+	            	welcomeChatRow = new ChatMessageTableViewRow(L("Welcome to")+" "+currentChatRoomName+" "+L("Chat Room. There are")+" "+_totalChatters+" "+L("active chatters. Please keep our room clean."), 
+	            													adminUserObject, false);
     			chatMessagesTableView.setData([loadHistoryMessagesRow,welcomeChatRow]);
     			
     			//load history messages and add in 5 latest chats    

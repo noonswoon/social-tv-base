@@ -4,7 +4,7 @@ exports.chatroomManagerCTB_getChatroomData = function(_serverUrl, _serverAccess,
 		onload:function(e) {
 			var responseJSON = JSON.parse(this.responseText); 
 			var numberUsers = responseJSON['chatroom_number_users'];
-			Ti.API.info('chatroomId: '+_chatroomId+' has active users: '+numberUsers);
+			Ti.API.info('chatroomId: '+_chatroomId+' has active users (not including you): '+numberUsers);
 			Ti.App.fireEvent('fetchedChatNumberUsers',{chatroomId:_chatroomId, numberUsers:numberUsers});
 		},
 		onerror:function(e) {

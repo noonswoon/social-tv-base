@@ -49,7 +49,10 @@
 	<string name="Setting">Setting</string>
 	<string name="Logout">Logout</string>
 	<string name="Welcome to">Welcome to</string>
-	<string name="Chat Room. Please keep our place clean.">Chat Room. Please keep our place clean.</string>
+	<string name="Chat Room. There is">Chat Room. There is</string>
+	<string name="Chat Room. There are">Chat Room. There are</string>
+	<string name="active chatter. Please keep our room clean.">active chatter. Please keep our room clean.</string>
+	<string name="active chatters. Please keep our room clean.">active chatters. Please keep our room clean.</string>
 	<string name="LEADERBOARD">LEADERBOARD</string>
 	<string name=" + add friends..."> + add friends...</string>
 	<string name="ACTIVITY">ACTIVITY</string>

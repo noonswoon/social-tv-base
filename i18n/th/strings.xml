@@ -52,8 +52,8 @@
 	<string name="Welcome to">ยินดีต้อนรับสู่ห้อง</string>
 	<string name="Chat Room. There is">ขณะนี้มี</string>
 	<string name="Chat Room. There are">ขณะนี้มี</string>
-	<string name="active chatter. Please keep our room clean.">ที่กำลังคุยกันอยู่ กรุณาพูดคุยกันอย่างสุภาพ ขอบคุณค่ะ</string>
-	<string name="active chatters. Please keep our room clean.">ที่กำลังคุยกันอยู่ กรุณาพูดคุยกันอย่างสุภาพ ขอบคุณค่ะ</string>
+	<string name="active chatter. Please keep our room clean.">คน ที่กำลังเม้าท์กันอยู่ กรุณาพูดคุยกันอย่างสุภาพ ขอบคุณค่ะ</string>
+	<string name="active chatters. Please keep our room clean.">คน ที่กำลังเม้าท์กันอยู่ กรุณาพูดคุยกันอย่างสุภาพ ขอบคุณค่ะ</string>
 	<string name="LEADERBOARD">ตารางคะแนน</string>
 	<string name=" + add friends..."> + ชวนเพื่อน...</string>
 	<string name="ACTIVITY">กิจกรรม</string>

@@ -116,11 +116,16 @@ var EnterUsernameWindow = function(_email,_firstName,_lastName) {
 					    }
 					});
 			    } else {
+			    	acs.logout(function(e) { 
+			    		Ti.API.info('logout in enterusername screen');
+			    	}); //logout from chatterbox
+			    	
 			    	var a = Titanium.UI.createAlertDialog({
 			       				title:L('Please try again'),
 			         			message:e.message
 			       			});
 			       	a.show();
+
 			    }
 			});
 		}

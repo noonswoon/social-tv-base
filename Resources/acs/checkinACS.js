@@ -14,7 +14,7 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
 	        Debug.debug_print('checkinACS_fetchedUserTotalCheckIns error: '+JSON.stringify(e));
 	        //ErrorHandling.showNetworkError();
 	    },
-	    timeout:10000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -92,7 +92,7 @@ exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId,_channelId) {
 	        Debug.debug_print('checkinACS_getTotalNumCheckinOfProgram error');
 	        ErrorHandling.showNetworkError();
 	    },
-	    timeout:10000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -114,7 +114,7 @@ exports.checkinACS_timeIndexGetTotalNumCheckinOfProgram = function(_eventId,_cha
 	        Debug.debug_print('checkinACS_timeIndexGetTotalNumCheckinOfProgram error');
 	        ErrorHandling.showNetworkError();
 	    },
-	    timeout:10000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();

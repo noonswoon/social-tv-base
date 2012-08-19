@@ -38,7 +38,7 @@ exports.friendsACS_searchFriend = function(_userID){
 	        Debug.debug_print('friendsACS->searchFriend: Error= '+ JSON.stringify(e));
 	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:[]});
 	    },
-	    timeout:5000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -56,7 +56,7 @@ exports.friendACS_fetchedUserTotalFriends = function(_id) {
 			// this function is called when an error occurs, including a timeout
 	        Debug.debug_print('friendACS_fetchedUserTotalFriends error: '+JSON.stringify(e));
 	    },
-	    timeout:10000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -79,7 +79,7 @@ exports.friendsACS_addFriend = function(_userID,_callbackFn){
 			// this function is called when an error occurs, including a timeout
 	    	Debug.debug_print('AddFriend: already request/e :'+JSON.stringify(e));
 	    },
-	    timeout:5000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("POST", url);
 	var postParameters = {
@@ -126,7 +126,7 @@ exports.friendsACS_approveFriend = function(_userID,_callbackFn){
 	    onerror: function(e) {
 			Debug.debug_print('friendsACS->approveFriend: Error= '+ JSON.stringify(e));
 	    },
-	    timeout:5000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("PUT", url);
 	var putParameters = {
@@ -172,7 +172,7 @@ exports.friendsACS_showFriendsRequest = function(){
 			Debug.debug_print('friendsACS->showFriendsRequest: Error= '+ JSON.stringify(e));
 			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:[]});
 	    },
-	    timeout:5000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -224,7 +224,7 @@ exports.friendsACS_friendsCheckins = function(_paramsArray){
 			Debug.debug_print('friendsACS->friendsCheckins: Error= '+ JSON.stringify(e));
 			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
 	    },
-	    timeout:5000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();

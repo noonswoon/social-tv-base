@@ -63,7 +63,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	        Debug.debug_print('tvprogramACS_fetchProgramsShowingNow error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
-	    timeout:10000  // in milliseconds 
+	    timeout:50000  // in milliseconds 
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -139,7 +139,7 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
-	    timeout:10000  // in milliseconds 
+	    timeout:50000  // in milliseconds 
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -209,7 +209,7 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
-	    timeout:10000  // in milliseconds 
+	    timeout:50000  // in milliseconds 
 	});
 	xhr.open("GET", url);
 	xhr.send();
@@ -278,7 +278,7 @@ exports.tvprogramACS_fetchAllProgramShowingToday = function() {
 	        Debug.debug_print('tvprogramACS_fetchAllProgramShowingToday error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    },
-	    timeout:10000  /* in milliseconds */
+	    timeout:50000  /* in milliseconds */
 	});
 	xhr.open("GET", url);
 	xhr.send();

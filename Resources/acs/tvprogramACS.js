@@ -8,7 +8,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
-	      	//Ti.API.info('responseJSON: '+JSON.stringify(responseJSON));
+	      	Ti.API.info('fetchProgramsShowingNow-->responseJSON: '+JSON.stringify(responseJSON));
 	      	var programEvents = responseJSON.response.event_occurrences; 
 	      	//Ti.API.info('programEvents.length: '+programEvents.length);
 	      	for (var i = 0; i < programEvents.length; i++) {
@@ -66,6 +66,7 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	    timeout:50000  // in milliseconds 
 	});
 	xhr.open("GET", url);
+	xhr.setRequestHeader('Accept-Encoding', 'gzip,deflate');
 	xhr.send();
 }
 
@@ -148,11 +149,11 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	var programs = [];
 	var startOfTheDay = moment().sod().format('YYYY-MM-DD,HH:mm:ss');
-	var endOfTheDay = moment().eod().format('YYYY-MM-DD,HH:mm:ss');
+	var endOfTheDay = moment().eod().format('YYYY-MM-DD,HH:mm:ss'); 
 	
 	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'","program_country":"th"}';	
-
+			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'","program_country":"th"}';
+			  	
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);

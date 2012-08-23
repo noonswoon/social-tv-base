@@ -2,14 +2,17 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	var programs = [];
 	var now_full = moment().format('YYYY-MM-DD,HH:mm:ss');
 	
-	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$lte":"'+now_full+'"},"end_time":{"$gte":"'+now_full+'"},"program_country":"th"}';	
-	
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {
-	      	responseJSON = JSON.parse(this.responseText);
-	      	var programEvents = responseJSON.response.event_occurrences; 
-	      	//Ti.API.info('programEvents.length: '+programEvents.length);
+	Cloud.Events.queryOccurrences({
+		where: {
+				"start_time" : {"$lte":now_full},
+	    		"end_time" : {"$gte":now_full}, 
+	    		"program_country": "th"
+	    },
+		per_page: 100, 
+		response_json_depth: 3, 
+	}, function (e) {
+		if (e.success) {
+           	var programEvents = e.event_occurrences; 
 	      	for (var i = 0; i < programEvents.length; i++) {
 	            var program = programEvents[i];  
 
@@ -53,22 +56,16 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	            	program_type: programType,
 	            	program_country: programCountry
 	            }
-
 	            programs.push(curProgram);
 			}
 			Ti.App.fireEvent("tvprogramsLoadedComplete",{fetchedPrograms:programs});
-	    },onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramACS_fetchProgramsShowingNow error: '+ JSON.stringify(e));
+        } else {
+            Debug.debug_print('tvprogramACS_fetchProgramsShowingNow error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
-	    },
-	    timeout:50000  // in milliseconds 
-	});
-	xhr.open("GET", url);
-	xhr.setRequestHeader('Accept-Encoding', 'gzip,deflate');
-	xhr.send();
+        }
+    });	
 }
-
+		
 exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	var programs = [];
 	
@@ -77,15 +74,18 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	var timeIndexStr = _timeIndex + "";
 	if(_timeIndex < 10) timeIndexStr = "0"+timeIndexStr;
 	timeIndexStr = nowYMD + ',' + timeIndexStr+':00:00';
-	var whereCondition = '{"start_time":{"$lte":"'+timeIndexStr+'"}, "end_time": {"$gte":"'+timeIndexStr+'"},"program_country":"th"}';
 	
-	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=3&where='+whereCondition;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {
-	      	responseJSON = JSON.parse(this.responseText);
-	      	//Ti.API.info('responseJSON: '+JSON.stringify(responseJSON));
-	      	var programEvents = responseJSON.response.event_occurrences; 
+	Cloud.Events.queryOccurrences({
+		where: {
+				"start_time" : {"$lte":timeIndexStr},
+	    		"end_time" : {"$gte":timeIndexStr}, 
+	    		"program_country": "th"
+	    },
+		per_page: 100, 
+		response_json_depth: 3, 
+	}, function (e) {
+		if (e.success) {
+			var programEvents = e.event_occurrences;
 	      	//Ti.API.info('programEvents.length: '+programEvents.length);
 	      	for (var i = 0; i < programEvents.length; i++) {
 	            var program = programEvents[i];  
@@ -134,15 +134,11 @@ exports.tvprogramACS_fetchProgramsShowingAt = function(_timeIndex) {
 	            programs.push(curProgram);
 			}
 			Ti.App.fireEvent("tvprogramsAtTimeIndexLoaded",{fetchedPrograms:programs, timeIndex:_timeIndex});
-	    },onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+ JSON.stringify(e));
+	    } else {
+	    	Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
-	    },
-	    timeout:50000  // in milliseconds 
-	});
-	xhr.open("GET", url);
-	xhr.send();
+        }
+    });	
 }
 
 exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
@@ -150,13 +146,18 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	var startOfTheDay = moment().sod().format('YYYY-MM-DD,HH:mm:ss');
 	var endOfTheDay = moment().eod().format('YYYY-MM-DD,HH:mm:ss'); 
 	
-	var url = 'https://api.cloud.appcelerator.com/v1/events/query/occurrences.json?key='+ACS_API_KEY+
-			  	'&per_page=100&response_json_depth=3&where={"start_time":{"$gte":"'+startOfTheDay+'", "$lte":"'+endOfTheDay+'"},"channel_id":"'+_channelId+'","program_country":"th"}';
-			  	
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {
-	      	responseJSON = JSON.parse(this.responseText);
-	      	var programEvents = responseJSON.response.event_occurrences; 
+	Cloud.Events.queryOccurrences({
+		where: {
+				"start_time" : {"$gte":startOfTheDay},
+	    		"end_time" : {"$lte":endOfTheDay}, 
+	    		"channel_id": _channelId,
+	    		"program_country": "th"
+	    },
+		per_page: 100, 
+		response_json_depth: 3, 
+	}, function (e) {
+		if (e.success) {
+			var programEvents = e.event_occurrences; 
 	      	for (var i = 0; i < programEvents.length; i++) {
 	            var program = programEvents[i];  
 
@@ -204,15 +205,11 @@ exports.tvprogramACS_fetchProgramsFromChannel = function(_channelId) {
 	            programs.push(curProgram);
 			}
 			Ti.App.fireEvent("tvprogramsOfChannelLoaded",{fetchedPrograms:programs});
-	    },onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('tvprogramsAtTimeIndexLoaded error: '+ JSON.stringify(e));
+        } else {
+            Debug.debug_print('tvprogramsOfChannelLoaded error: '+ JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
-	    },
-	    timeout:50000  // in milliseconds 
-	});
-	xhr.open("GET", url);
-	xhr.send();
+        }
+    });	
 }
 
 /* no longer used -- too expensive when pulling all data */

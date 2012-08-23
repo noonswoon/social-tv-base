@@ -1,5 +1,5 @@
 //this function give only total results for checkins
-exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
+exports.checkinACS_fetchUserTotalCheckIns = function(_id) {
 	Cloud.Checkins.query({
 	    where: {"user_id": _id},
         page: 1,
@@ -10,13 +10,13 @@ exports.checkinACS_fetchedUserTotalCheckIns = function(_id) {
             var totalResults = e.meta.total_results;
             Ti.App.fireEvent('UserTotalCheckInsFromACS'+_id, {result: totalResults});
         } else {
-            Debug.debug_print('checkinACS_fetchedUserTotalCheckIns error: '+JSON.stringify(e));
+            Debug.debug_print('checkinACS_fetchUserTotalCheckIns error: '+JSON.stringify(e));
         }
     });
 };
 
 //fetch checkin data only for today to keep in database
-exports.checkinACS_fetchedUserCheckIn = function(_paramsArray) {
+exports.checkinACS_fetchUserCheckIn = function(_paramsArray) {
 	var userId = _paramsArray[0];
 	var startOfDayLocal = moment().sod().format('YYYY-MM-DDTHH:mm:ss');
 	var acsConvertedStartOfDay = convertLocalTimeToACSTime(startOfDayLocal);
@@ -45,7 +45,7 @@ exports.checkinACS_fetchedUserCheckIn = function(_paramsArray) {
 			Ti.App.fireEvent('checkinLoadedComplete',{fetchedCheckin:checkin});
 	    } 
 	    else {
-	        Debug.debug_print('checkinACS_fetchedUserCheckIn Error: ' + JSON.stringify(e));
+	        Debug.debug_print('checkinACS_fetchUserCheckIn Error: ' + JSON.stringify(e));
 	        ErrorHandling.showNetworkError();
 	    }
 	});
@@ -67,7 +67,7 @@ exports.checkinACS_createCheckin = function(checkinData,local_id){
 	});
 };
 
-exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId,_channelId) {
+exports.checkinACS_fetchTotalNumCheckinOfProgram = function(_eventId,_channelId) {
 	Cloud.Checkins.query({
 	    where: {"event_id": _eventId},
         page: 1,
@@ -78,12 +78,12 @@ exports.checkinACS_getTotalNumCheckinOfProgram = function(_eventId,_channelId) {
             var totalResults = e.meta.total_results;
             Ti.App.fireEvent("doneGettingNumCheckinsOfProgramId",{targetedProgramId: _eventId, numCheckins:totalResults, channelId:_channelId});
         } else {
-            Debug.debug_print('checkinACS_getTotalNumCheckinOfProgram error');
+            Debug.debug_print('checkinACS_fetchTotalNumCheckinOfProgram error');
         }
     });
 }
 
-exports.checkinACS_timeIndexGetTotalNumCheckinOfProgram = function(_eventId,_channelId,_timeIndex) {	
+exports.checkinACS_timeIndexFetchTotalNumCheckinOfProgram = function(_eventId,_channelId,_timeIndex) {	
 	Cloud.Checkins.query({
 	    where: {"event_id": _eventId},
         page: 1,
@@ -94,52 +94,33 @@ exports.checkinACS_timeIndexGetTotalNumCheckinOfProgram = function(_eventId,_cha
             var totalResults = e.meta.total_results;
             Ti.App.fireEvent("timeIndexDoneGettingNumCheckinsOfProgramId",{targetedProgramId: _eventId, numCheckins:totalResults, channelId:_channelId, timeIndex:_timeIndex});
         } else {
-        	Debug.debug_print('checkinACS_timeIndexGetTotalNumCheckinOfProgram error');
+        	Debug.debug_print('checkinACS_timeIndexFetchTotalNumCheckinOfProgram error');
         }
     });
 }
 
 exports.checkinACS_fetchFriendsCheckins = function(_paramsArray){
-	Ti.API.info('calling..checkinACS_fetchFriendsCheckins');
+
 	friendsList = _paramsArray[0];
 	programsList = _paramsArray[1];
 
 	var totalFriendCheckins = 0;	
-	var programsCheckins = [];
-	var friendsCheckins = [];
 	var allFriendsCheckins = [];
-
-	var allProgramsId = programsList;
-	var allProgramsIdStr = '';
-	for(var i=0; i<allProgramsId.length; i++) {
-		allProgramsIdStr += '"'+allProgramsId[i]+'",';
-	}
-	allProgramsIdStr = allProgramsIdStr.substr(0,allProgramsIdStr.length-1);
-	
-	var allFriendsId = friendsList;
-	var allFriendsIdStr = '';
-	for(var i=0; i<allFriendsId.length; i++) {
-		allFriendsIdStr += '"'+allFriendsId[i]+'",';
-	}
-	allFriendsIdStr = allFriendsIdStr.substr(0,allFriendsIdStr.length-1);
-	
-	Ti.API.info('allProgramsIdStr: '+allProgramsIdStr);
-	Ti.API.info('allFriendsIdStr: '+allFriendsIdStr);
 	
 	Cloud.Checkins.query({
-	    where: {"event_id" : {"$in":[allProgramsIdStr]},
-	    		"user_id" : {"$in":[allFriendsIdStr]}
+	    where: {"event_id" : {"$in":programsList},
+	    		"user_id" : {"$in":friendsList}
 	    		},
         response_json_depth: 2
     }, function (e) {
         if (e.success) {
-        	Ti.API.info('***success: '+JSON.stringify(e));
         	totalFriendCheckins = e.meta.total_results;	
+        	
 			for (var i = 0; i < e.checkins.length; i++) {
 	           	var curCheckin = e.checkins[i];
 	           	var friendCheckins = {
-		           	program: checkins.event,
-		           	friend: checkins.user,
+		           	program: curCheckin.event,
+		           	friend: curCheckin.user,
 		        };
 		        allFriendsCheckins.push(friendCheckins);
 			}  	

@@ -47,8 +47,8 @@ function PopularWindow(_parent) {
 			FriendsACS.friendsACS_showFriendsRequest();	 //no database for showFriendsRequest
 			CacheHelper.fetchACSDataOrCache('badgesACS', BadgesACS.fetchedBadges, [], 'badgesDbLoaded', CACHE_TIMEOUT_LONG);
 			CacheHelper.fetchACSDataOrCache('levelACS', LevelACS.levelACS_fetchedLevel, [], 'levelDbUpdated', CACHE_TIMEOUT_LONG);
-			CheckinACS.checkinACS_fetchedUserCheckIn([myUserId]);
-			//CacheHelper.fetchACSDataOrCache('checkinACS_fetchedUserCheckIn', CheckinACS.checkinACS_fetchedUserCheckIn, [myUserId], 'checkinDbLoaded', CACHE_TIMEOUT_SHORT);		
+			CheckinACS.checkinACS_fetchUserCheckIn([myUserId]);
+			//CacheHelper.fetchACSDataOrCache('checkinACS_fetchUserCheckIn', CheckinACS.checkinACS_fetchUserCheckIn, [myUserId], 'checkinDbLoaded', CACHE_TIMEOUT_SHORT);		
 		} //else Ti.API.info('thing is NOT ready yet..missing');
 	}
 	
@@ -99,7 +99,7 @@ function PopularWindow(_parent) {
 		for(var i=0;i<currentTVPrograms.length;i++){
 			var curTVProgramId = currentTVPrograms[i].id;
 			var curChannelId = currentTVPrograms[i].channel_id;
-			CheckinACS.checkinACS_getTotalNumCheckinOfProgram(curTVProgramId,curChannelId);
+			CheckinACS.checkinACS_fetchTotalNumCheckinOfProgram(curTVProgramId,curChannelId);
 		}
 	};
 	
@@ -161,7 +161,7 @@ function PopularWindow(_parent) {
 		TVProgramModel.TVProgramModel_insertPrograms(programsAtTimeIndex);
 		numProgramsToLoadCheckinsTimeIndex = programsAtTimeIndex.length;
 		for(var i = 0; i < programsAtTimeIndex.length; i++) {
-			CheckinACS.checkinACS_timeIndexGetTotalNumCheckinOfProgram(programsAtTimeIndex[i].id, programsAtTimeIndex[i].channel_id,timeIndex);
+			CheckinACS.checkinACS_timeIndexFetchTotalNumCheckinOfProgram(programsAtTimeIndex[i].id, programsAtTimeIndex[i].channel_id,timeIndex);
 		}
 	});
 	 

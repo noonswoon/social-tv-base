@@ -11,7 +11,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	
 	var canOpenWindow = true;
 	
-	CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+	CheckinACS.checkinACS_fetchUserTotalCheckIns(curId);	
 	myBadgeACS.myBadgeACS_fetchedBadge(curId);
 	ActivityACS.activityACS_fetchedMyActivity(curId);
 	
@@ -302,7 +302,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 	var resumeCallback = function(){
 		if(Titanium.Network.networkType !== Titanium.Network.NETWORK_NONE) {
 			setTimeout(function() {
-				CheckinACS.checkinACS_fetchedUserTotalCheckIns(curId);	
+				CheckinACS.checkinACS_fetchUserTotalCheckIns(curId);	
 				myBadgeACS.myBadgeACS_fetchedBadge(curId);
 				ActivityACS.activityACS_fetchedMyActivity(curId);				
 			}, 3000);

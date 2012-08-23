@@ -191,7 +191,7 @@ function ApplicationTabGroup() {
 	
 	function updateHeaderCheckinCallback() {
 		var CheckinACS = require('acs/checkinACS');
-		CheckinACS.checkinACS_fetchedUserTotalCheckIns(myUserId);
+		CheckinACS.checkinACS_fetchUserTotalCheckIns(myUserId);
 	}
 	Ti.App.addEventListener('updateHeaderCheckin',updateHeaderCheckinCallback);
 	

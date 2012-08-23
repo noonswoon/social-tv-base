@@ -60,37 +60,15 @@ var launchTheApp = function() {
 	FbAutoPostACS.fbAutoPostACS_AutoPostValue();
 	Cloud.Users.showMe(function (e) {        
 		if (e.success) {
-			Debug.debug_print("should go to maintab screen");
-			
-			var userEmail = e.users[0].email;
-			Cloud.Users.logout(function (e) {
-			    if (e.success) {
-			    	Debug.debug_print("logging out to login again: password: "+Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10));
-			    	Cloud.Users.login({
-						login: userEmail,
-					    password: Ti.Utils.md5HexDigest(userEmail+"ch@tterb0x").substr(0,10),
-					}, function (e) {
-						if (e.success) {
-							Debug.debug_print("logging in again..successful");
+			acs.setUserLoggedIn(e.users[0]);
+			acs.setLoggedInStatus(true);
 							
-							acs.setUserLoggedIn(e.users[0]);
-							acs.setLoggedInStatus(true);
-							
-							var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
-							Debug.debug_print("app.js - creating new appTabGroup [watchout!]");
-							var maintabgroup = new ApplicationTabGroup();
-							maintabgroup.open();
-						} else {
-							Debug.debug_print("ReloggingIn Error: "+JSON.stringify(e));
-							ErrorHandling.showNetworkError();
-					    }
-					}); 
-			    } else {
-			        Debug.debug_print('Logout Error: '+((e.error && e.message) || JSON.stringify(e)));
-			        ErrorHandling.showNetworkError();
-			    }
-			});
-	    } else {
+			var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+			Debug.debug_print("app.js - creating new appTabGroup [watchout!]");
+			var maintabgroup = new ApplicationTabGroup();
+			maintabgroup.open();
+	
+		} else {
 	    	Debug.debug_print("should go to login screen");
 			Ti.Facebook.logout(); //just to be save
 			var LoginTabGroup = require('ui/common/Am_LoginTabGroup');

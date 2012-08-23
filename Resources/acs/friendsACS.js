@@ -1,120 +1,72 @@
-
-//import friend list///////////////////////////////////////////////////////////////////////////////////////////
-exports.friendsACS_searchFriend = function(_userID){
-	var url = 	'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +
-				'&user_id='+_userID;	
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {
-	    	responseJSON = JSON.parse(this.responseText);
-		    var friends = [];
-		    if(responseJSON.response.users.length){
-			    for (var i = 0; i < responseJSON.response.users.length; i++) {
-					var friend = responseJSON.response.users[i];     
-			        var fbId = 0;
-					var numExternalAccounts = friend.external_accounts.length;
-						
-					for(var j=0;j < numExternalAccounts; j++) {
-						var curExternalAccount = friend.external_accounts[j];
-						if(curExternalAccount.external_type === "facebook") {
-							fbId = curExternalAccount.external_id;
-							break;
-						}
+exports.friendsACS_searchFriend = function(_userId){
+	Cloud.Friends.search({
+        user_id: _userId
+        //experiment with response_json_depth:2, per_page: xxx
+    }, function (e) {
+        if (e.success) {
+            var friends = [];
+            for (var i = 0; i < e.users.length; i++) {
+                var friend = e.users[i];
+                    
+               	var fbId = 0;
+				var numExternalAccounts = friend.external_accounts.length;			
+				for(var j=0;j < numExternalAccounts; j++) {
+					var curExternalAccount = friend.external_accounts[j];
+					if(curExternalAccount.external_type === "facebook") {
+						fbId = curExternalAccount.external_id;
+						break;
 					}
+				}	
 					
-					var curFriend = {
-						my_id: _userID,
-						friend_id: friend.id,
-						fb_id: fbId,
-						username: friend.username,
-						first_name: friend.first_name,
-						last_name: friend.last_name,
-						email: friend.email
-					};
-					friends.push(curFriend);
-				}
-			}
-			Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
-		}, onerror: function(e) {
-	        Debug.debug_print('friendsACS->searchFriend: Error= '+ JSON.stringify(e));
+				var curFriend = {
+					my_id: _userId,
+					friend_id: friend.id,
+					fb_id: fbId,
+					username: friend.username,
+					first_name: friend.first_name,
+					last_name: friend.last_name,
+					email: friend.email
+				};
+				friends.push(curFriend);     
+            }
+           	Ti.App.fireEvent("friendsLoaded",{fetchedFriends:friends});
+        } else {
 	        Ti.App.fireEvent("friendsLoaded",{fetchedFriends:[]});
-	    },
-	    timeout:50000  /* in milliseconds */
-	});
-	xhr.open("GET", url);
-	xhr.send();
+        }
+    });
 };
-//return total friends ///////////////////////////////////////////////////////////////////////////////////////
-//this function give only total results
-exports.friendACS_fetchedUserTotalFriends = function(_id) {
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/search.json?key=' + ACS_API_KEY +'&user_id='+ _id;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {
-			responseJSON = JSON.parse(this.responseText);
-	      	var total_results = Number(responseJSON.meta.total_results);
-			Ti.App.fireEvent('UserTotalFriendsFromACS', {result: total_results});
-	    },onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	        Debug.debug_print('friendACS_fetchedUserTotalFriends error: '+JSON.stringify(e));
-	    },
-	    timeout:50000  /* in milliseconds */
-	});
-	xhr.open("GET", url);
-	xhr.send();
 
+exports.friendACS_fetchedUserTotalFriends = function(_userId) {
+	Cloud.Friends.search({
+        user_id: _userId,
+        per_page: 1
+    }, function (e) {
+        if (e.success) {
+	      	var totalFriends = e.meta.total_results;
+	      	Ti.App.fireEvent('UserTotalFriendsFromACS', {result: totalFriends});
+        } else {
+	        Debug.debug_print('friendACS_fetchedUserTotalFriends error: '+JSON.stringify(e));
+        }
+    });
 };
-//add friend /////////////////////////////////////////////////////////////////////////////////////////////////
-exports.friendsACS_addFriend = function(_userID,_callbackFn){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function(e) {
-	    	var successAlertDialog = Ti.UI.createAlertDialog({
+
+exports.friendsACS_addFriend = function(_userId){
+	Cloud.Friends.add({
+        user_ids: _userId
+    }, function (e) {
+        if (e.success) {
+            var successAlertDialog = Ti.UI.createAlertDialog({
 	        	title: 'Chatterbox',
 	        	message: L('Your request has been sent.')
 	        });
 	        successAlertDialog.show();
-	    	
-	    	var response = _callbackFn(this.responseText);
-	    },
-	    onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	    	Debug.debug_print('AddFriend: already request/e :'+JSON.stringify(e));
-	    },
-	    timeout:50000  /* in milliseconds */
-	});
-	xhr.open("POST", url);
-	var postParameters = {
-		key: ACS_API_KEY,
-		user_ids: String(_userID),
-	};
-	xhr.send(postParameters);  // request is actually sent with this statement
+	        Ti.API.info('addFriend success: '+JSON.stringify(e));
+        } else {
+        	Debug.debug_print('AddFriend error: '+JSON.stringify(e));
+        }
+    });
 };
-// one direction add friends
-/* unused for now..will be using for celebrity
-exports.addFriendwithNoApprove = function(_userID,_callbackFn){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/add.json?key='+ACS_API_KEY;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function(e) {
-	    	var response = _callbackFn(this.responseText);
-	    },
-	    onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-	    	ErrorHandling.showNetworkError();
-	        Debug.debug_print('An error occured: you might already request this person or there is some problem on internet connection.');
-	    },
-	    timeout:5000 
-	});
-	xhr.open("POST", url);
-	var postParameters = {
-		key: ACS_API_KEY,
-		user_ids: String(_userID),
-		approval_required: false
-	};
-	xhr.send(postParameters);  // request is actually sent with this statement
-};
-*/
 
-
-//approve friend /////////////////////////////////////////////////////////////////////////////////////////////
 exports.friendsACS_approveFriend = function(_userID,_callbackFn){
 	var url = 'https://api.cloud.appcelerator.com/v1/friends/approve.json?key='+ACS_API_KEY;
 	var xhr = Ti.Network.createHTTPClient({
@@ -135,17 +87,15 @@ exports.friendsACS_approveFriend = function(_userID,_callbackFn){
 	};
 	xhr.send(putParameters);  // request is actually sent with this statement
 };
-//show friend request ////////////////////////////////////////////////////////////////////////////////////////
+    
 exports.friendsACS_showFriendsRequest = function(){
 	var requests = [];
-	var url = 	'https://api.cloud.appcelerator.com/v1/friends/requests.json?key='+ACS_API_KEY;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {	
-	    	responseJSON = JSON.parse(this.responseText);
-		      	for (var i = 0; i < responseJSON.response.friend_requests.length; i++) {
-	            var request = responseJSON.response.friend_requests[i]; 
-	            
-	            var fbId = 0;
+	Cloud.Friends.requests(function (e) {
+        if (e.success) {
+            for (var i = 0; i < e.friend_requests.length; i++) {
+                var request = e.friend_requests[i];
+                
+                var fbId = 0;
 				var numExternalAccounts = request.user.external_accounts.length; //friend.external_accounts.length;
 					
 				for(var j=0;j < numExternalAccounts; j++) {
@@ -165,17 +115,14 @@ exports.friendsACS_showFriendsRequest = function(){
 					fb_id: fbId
 				};
 				requests.push(curRequest);
-			} 
-			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:requests});
-	    },
-	    onerror: function(e) {
-			Debug.debug_print('friendsACS->showFriendsRequest: Error= '+ JSON.stringify(e));
+            }
+            Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:requests});
+            Ti.API.info('SUCCESSFUL friendsACS showFriendsRequest');
+        } else {
+            Debug.debug_print('friendsACS->showFriendsRequest: Error= '+ JSON.stringify(e));
 			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:[]});
-	    },
-	    timeout:50000  /* in milliseconds */
-	});
-	xhr.open("GET", url);
-	xhr.send();
+        }
+    });
 };
 
 exports.friendsACS_friendsCheckins = function(_paramsArray){

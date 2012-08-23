@@ -126,10 +126,6 @@ AddFriendsMainView = function(_parentWindow) {
 									friendWithNoApp.splice(i,1);
 									break;
 								}
-								// if(friendWithApp[j].fb_id !== String(result[i].uid)) {
-									// friendWithNoApp.push(result[i]);
-									// break;
-								//}
 							}
 						}
 						var friendOnFbRows = createFriendTable(friendWithNoApp,"facebook");
@@ -137,7 +133,9 @@ AddFriendsMainView = function(_parentWindow) {
 						facebookFriend.setSearch(facebookFriendSearch);
 						facebookFriend.setFilterAttribute('filter');
 			    	}
-					else Ti.API.info('SearchFriendsWithApp Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
+					else {
+						Ti.API.info('SearchFriendsWithApp Error:\\n' + ((e.error && e.message) || JSON.stringify(e)));
+					}
 				});					
 			});
 		}	

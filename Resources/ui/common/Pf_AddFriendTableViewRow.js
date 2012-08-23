@@ -70,17 +70,13 @@ AddFriendsTableViewRow = function(_user,_category) {
 	 		return  friendActivityData;
  		}		
 		
-		var addFriend = function(_response){
-			Ti.API.info(_response);
-		};
-		
 		addButton.addEventListener('click', function(){
 			var FriendACS = require('acs/friendsACS');
 			var ActivityACS = require('acs/activityACS');
 			var FriendsModel = require('model/friend');
 			var addFriendActivityData = createFriendActivity("addfriend");
 			
-		 	FriendACS.friendsACS_addFriend(_user.id,addFriend);
+		 	FriendACS.friendsACS_addFriend(_user.id);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
 			Ti.Analytics.featureEvent('viral.friendrequest', {userId: acs.getUserId(), friendId: _user.id});
 			Titanium.App.Analytics.trackPageview('/viral.friendrequest');

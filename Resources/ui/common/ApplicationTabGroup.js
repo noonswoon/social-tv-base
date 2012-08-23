@@ -1,7 +1,6 @@
 function ApplicationTabGroup() {
     // create tab group, create module instance
-    var self = Titanium.UI.createTabGroup({
-    });
+    var self = Titanium.UI.createTabGroup({});
 		
 	var ChannelSelectionMainWindow = require('ui/common/Cs_ChannelSelectionMainWindow');
 	var ChatMainWindow = require('ui/common/Ct_ChatMainWindow'); 

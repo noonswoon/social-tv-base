@@ -8,7 +8,6 @@ exports.tvprogramACS_fetchProgramsShowingNow = function() {
 	var xhr = Ti.Network.createHTTPClient({
 	    onload: function() {
 	      	responseJSON = JSON.parse(this.responseText);
-	      	Ti.API.info('fetchProgramsShowingNow-->responseJSON: '+JSON.stringify(responseJSON));
 	      	var programEvents = responseJSON.response.event_occurrences; 
 	      	//Ti.API.info('programEvents.length: '+programEvents.length);
 	      	for (var i = 0; i < programEvents.length; i++) {

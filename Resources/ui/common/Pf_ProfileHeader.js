@@ -181,10 +181,6 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
 		profileName.text = e.name;
  	};
 	
-	var sendRequest = function(_response){
-		Ti.API.info(_response);
-	}
-	
  	var approveRequest = function(_response){
 		alert(L('You have approved the request'));
 		Ti.API.info(_response);
@@ -211,7 +207,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  		//condition 1: no request from this user
  		if(!isRequest) {
 		 	var addFriendActivityData = createFriendActivity("addfriend");
-		 	FriendACS.friendsACS_addFriend(curId,sendRequest);
+		 	FriendACS.friendsACS_addFriend(curId);
 			ActivityACS.activityACS_createMyActivity(addFriendActivityData);
 			Ti.Analytics.featureEvent('viral.friendrequest', {userId: acs.getUserId(), friendId: curId});
 			Titanium.App.Analytics.trackPageview('/viral.friendrequest');

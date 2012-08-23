@@ -34,11 +34,11 @@ function facebookAuthenCallback(e) {
 				    if (e.success) {
 				    	Debug.debug_print("pass querying email..try to logging in");
 				    	if(e.users.length > 0) {
-							Cloud.Users.login({
-							    login: email,
-							    password: Ti.Utils.md5HexDigest(email+"ch@tterb0x").substr(0,10)
-							}, function (e) {
-							    if (e.success) {
+				    		Cloud.SocialIntegrations.externalAccountLogin({
+        						type: 'facebook',
+						        token: Ti.Facebook.accessToken
+						    }, function (e) {
+						        if (e.success) {
 							    	Debug.debug_print("Done login..redirect to maintabgroup");
 									acs.setUserLoggedIn(e.users[0]);
 									acs.setLoggedInStatus(true);

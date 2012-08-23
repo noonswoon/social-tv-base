@@ -98,3 +98,55 @@ exports.checkinACS_timeIndexGetTotalNumCheckinOfProgram = function(_eventId,_cha
         }
     });
 }
+
+exports.checkinACS_fetchFriendsCheckins = function(_paramsArray){
+	Ti.API.info('calling..checkinACS_fetchFriendsCheckins');
+	friendsList = _paramsArray[0];
+	programsList = _paramsArray[1];
+
+	var totalFriendCheckins = 0;	
+	var programsCheckins = [];
+	var friendsCheckins = [];
+	var allFriendsCheckins = [];
+
+	var allProgramsId = programsList;
+	var allProgramsIdStr = '';
+	for(var i=0; i<allProgramsId.length; i++) {
+		allProgramsIdStr += '"'+allProgramsId[i]+'",';
+	}
+	allProgramsIdStr = allProgramsIdStr.substr(0,allProgramsIdStr.length-1);
+	
+	var allFriendsId = friendsList;
+	var allFriendsIdStr = '';
+	for(var i=0; i<allFriendsId.length; i++) {
+		allFriendsIdStr += '"'+allFriendsId[i]+'",';
+	}
+	allFriendsIdStr = allFriendsIdStr.substr(0,allFriendsIdStr.length-1);
+	
+	Ti.API.info('allProgramsIdStr: '+allProgramsIdStr);
+	Ti.API.info('allFriendsIdStr: '+allFriendsIdStr);
+	
+	Cloud.Checkins.query({
+	    where: {"event_id" : {"$in":[allProgramsIdStr]},
+	    		"user_id" : {"$in":[allFriendsIdStr]}
+	    		},
+        response_json_depth: 2
+    }, function (e) {
+        if (e.success) {
+        	Ti.API.info('***success: '+JSON.stringify(e));
+        	totalFriendCheckins = e.meta.total_results;	
+			for (var i = 0; i < e.checkins.length; i++) {
+	           	var curCheckin = e.checkins[i];
+	           	var friendCheckins = {
+		           	program: checkins.event,
+		           	friend: checkins.user,
+		        };
+		        allFriendsCheckins.push(friendCheckins);
+			}  	
+			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
+        } else {
+        	Debug.debug_print('friendsACS->friendsCheckins: Error= '+ JSON.stringify(e));
+			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
+        }
+    });
+};

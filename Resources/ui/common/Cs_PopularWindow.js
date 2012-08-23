@@ -211,7 +211,7 @@ function PopularWindow(_parent) {
 			var programs = allTVPrograms[i].id;
 			programsList.push(programs);
 		}
-		FriendsACS.friendsACS_friendsCheckins([friendsList,programsList]);
+		CheckinACS.checkinACS_fetchFriendsCheckins([friendsList,programsList]);
 	}
 	Ti.App.addEventListener('friendsDbUpdated',friendsDbUpdatedCallback); //event fire from ApplicationTabGroup
 

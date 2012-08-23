@@ -182,8 +182,7 @@ var ProfileHeaderView = function(_parentWindow, _userProfile, _status) {
  	};
 	
  	var approveRequest = function(_response){
-		alert(L('You have approved the request'));
-		Ti.API.info(_response);
+		Ti.API.info('approveRequest: '+_response);
 		var FriendACS = require('acs/friendsACS');
 		var approveFriendActivityData = createFriendActivity("approvefriend");
 		FriendACS.friendACS_fetchedUserTotalFriends(acs.getUserId());

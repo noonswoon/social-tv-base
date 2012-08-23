@@ -54,38 +54,22 @@ exports.friendsACS_addFriend = function(_userId){
 	Cloud.Friends.add({
         user_ids: _userId
     }, function (e) {
-        if (e.success) {
-            var successAlertDialog = Ti.UI.createAlertDialog({
-	        	title: 'Chatterbox',
-	        	message: L('Your request has been sent.')
-	        });
-	        successAlertDialog.show();
-	        Ti.API.info('addFriend success: '+JSON.stringify(e));
-        } else {
-        	Debug.debug_print('AddFriend error: '+JSON.stringify(e));
-        }
+        if (e.success) { /* do nothing */ } 
+        else Debug.debug_print('AddFriend error: '+JSON.stringify(e));
     });
 };
 
-exports.friendsACS_approveFriend = function(_userID,_callbackFn){
-	var url = 'https://api.cloud.appcelerator.com/v1/friends/approve.json?key='+ACS_API_KEY;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function(e) {
-	    	//responseJSON = JSON.parse(this.responseText);
-	    	Ti.API.info('approved friend: '+_userID);
-	    	var response = _callbackFn(this.responseText);
-	    },
-	    onerror: function(e) {
-			Debug.debug_print('friendsACS->approveFriend: Error= '+ JSON.stringify(e));
-	    },
-	    timeout:50000  /* in milliseconds */
-	});
-	xhr.open("PUT", url);
-	var putParameters = {
-		key: ACS_API_KEY,
-		user_ids: _userID,
-	};
-	xhr.send(putParameters);  // request is actually sent with this statement
+exports.friendsACS_approveFriend = function(_userId,_callbackFn){
+	Cloud.Friends.approve({
+        user_ids: _userId,
+    }, function (e) {
+        if (e.success) {
+        	Ti.API.info('approved friend: '+_userId);
+        	_callbackFn(JSON.stringify(e));
+        } else {
+        	Debug.debug_print('friendsACS->approveFriend: Error= '+ JSON.stringify(e));
+        }
+    });
 };
     
 exports.friendsACS_showFriendsRequest = function(){
@@ -117,62 +101,9 @@ exports.friendsACS_showFriendsRequest = function(){
 				requests.push(curRequest);
             }
             Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:requests});
-            Ti.API.info('SUCCESSFUL friendsACS showFriendsRequest');
         } else {
             Debug.debug_print('friendsACS->showFriendsRequest: Error= '+ JSON.stringify(e));
 			Ti.App.fireEvent("friendRequestsLoaded",{fetchedRequests:[]});
         }
     });
-};
-
-exports.friendsACS_friendsCheckins = function(_paramsArray){
-	
-	friendsList = _paramsArray[0];
-	programsList = _paramsArray[1];
-	
-	var programsCheckins = [];
-	var friendsCheckins = [];
-	var allFriendsCheckins = [];
-
-	var allProgramsId = programsList;
-	var allProgramsIdStr = '';
-	for(var i=0; i<allProgramsId.length; i++) {
-		allProgramsIdStr += '"'+allProgramsId[i]+'",';
-	}
-	allProgramsIdStr = allProgramsIdStr.substr(0,allProgramsIdStr.length-1);
-	
-	var allFriendsId = friendsList;
-	var allFriendsIdStr = '';
-	for(var i=0; i<allFriendsId.length; i++) {
-		allFriendsIdStr += '"'+allFriendsId[i]+'",';
-	}
-	allFriendsIdStr = allFriendsIdStr.substr(0,allFriendsIdStr.length-1);
-	
-	var url = 'https://api.cloud.appcelerator.com/v1/checkins/query.json?key='+ACS_API_KEY+'&response_json_depth=2&where={"event_id":{"$in":['+allProgramsIdStr+']},"user_id":{"$in":['+allFriendsIdStr+']}}';
- 	var totalFriendCheckins = 0;
-	var xhr = Ti.Network.createHTTPClient({
-	    onload: function() {
-	    	responseJSON = JSON.parse(this.responseText);
-	    	totalFriendCheckins = responseJSON.meta.total_results;	
-		    
-		    for (var i=0;i<responseJSON.response.checkins.length;i++) {
-	           	var checkins = responseJSON.response.checkins[i];  
-		        var friendsCheckins = {
-		           	program: checkins.event,
-		           	friend: checkins.user,
-		        };
-		        allFriendsCheckins.push(friendsCheckins);
-			}  	
-			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
-	    },
-	    onerror: function(e) {
-			// this function is called when an error occurs, including a timeout
-			//ErrorHandling.showNetworkError();
-			Debug.debug_print('friendsACS->friendsCheckins: Error= '+ JSON.stringify(e));
-			Ti.App.fireEvent("friendsCheckInLoaded",{fetchedAllFriendsCheckins:allFriendsCheckins, fetchedTotalFriendCheckins:totalFriendCheckins});
-	    },
-	    timeout:50000  /* in milliseconds */
-	});
-	xhr.open("GET", url);
-	xhr.send();
 };

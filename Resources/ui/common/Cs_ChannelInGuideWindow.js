@@ -8,7 +8,6 @@ ChannelInGuideWindow = function (_channelId,_channelSelectionWin){
 	var canOpenWindow = true;
 	
 	var self = Ti.UI.createWindow({
-		backgroundColor: 'orange',
 		top: 42
 	});
 	
